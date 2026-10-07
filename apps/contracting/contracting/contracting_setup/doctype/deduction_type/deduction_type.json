@@ -1,0 +1,90 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2026-09-08 00:00:00.000000",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "company",
+  "code",
+  "deduction_name",
+  "deduction_class",
+  "account",
+  "active"
+ ],
+ "fields": [
+  {
+   "fieldname": "company",
+   "fieldtype": "Link",
+   "label": "Company",
+   "options": "Company",
+   "reqd": 1
+  },
+  {
+   "fieldname": "code",
+   "fieldtype": "Data",
+   "label": "Code",
+   "reqd": 1,
+   "unique": 1
+  },
+  {
+   "fieldname": "deduction_name",
+   "fieldtype": "Data",
+   "label": "Name",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "deduction_class",
+   "fieldtype": "Select",
+   "label": "Deduction Class",
+   "options": "Retention\nAdvance\nTax\nInsurance\nTemporary\nOther",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "account",
+   "fieldtype": "Link",
+   "label": "Account",
+   "options": "Account"
+  },
+  {
+   "fieldname": "active",
+   "fieldtype": "Check",
+   "label": "Active",
+   "default": "1"
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "is_submittable": 0,
+ "issingle": 0,
+ "istable": 0,
+ "links": [],
+ "modified": "2026-09-08 00:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Contracting Setup",
+ "name": "Deduction Type",
+ "owner": "Administrator",
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "track_changes": 1,
+ "autoname": "field:code",
+ "title_field": "deduction_name",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1,
+   "submit": 0,
+   "cancel": 0
+  }
+ ]
+}

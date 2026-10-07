@@ -1,0 +1,67 @@
+// ===========================================================================
+// Readability tuning — text-token darkening + targeted weight bumps
+// ===========================================================================
+// Two independent knobs, both intentionally small:
+//
+//   1. Darken the neutral text tokens by one shade. Frappe/upstream aim at
+//      Stripe-ish grays (#3C4257 body, #697386 muted) that read light on the
+//      #F6F9FC desk background — measured at ~10.5:1 for body and ~5.4:1 for
+//      muted, so muted small text just barely clears AA. Dropping ~10 lightness
+//      units on each token nudges body → ~13.2:1 and muted → ~6.8:1 without
+//      touching the palette (--primary, --heading-color, --card-bg …) or the
+//      dark theme's inversion logic. Symmetric lightening applied in dark.
+//
+//   2. Bump form field labels and workspace sidebar links from Frappe's default
+//      400 to 500. IBM Plex Sans Arabic ships DESIGNED 400/500/600/700 cuts,
+//      so 500 is a real weight — no synthesised smear. 400 → 500 is one step,
+//      the minimum that visibly matters; anything larger would push toward the
+//      "everything is bold" trap. Deliberately NOT applied to datatable body
+//      cells because report_autofit.js measures column widths at build time
+//      and re-weighting the body would silently truncate borderline columns.
+//
+// Loaded after _legacy.scss so these token redeclarations win at equal
+// specificity, per the theme's flat-cascade / source-order rule.
+
+:root,
+[data-theme="light"] {
+	// Body copy — measurably darker without going full black.
+	--text-color:   #2E3441;
+	--text-neutral: #2E3441;
+	// Muted text (help hints, table meta, timeline captions).
+	--text-muted:   #54607A;
+	--text-light:   #5A6577;
+	// Keep the ink-gray scale internally consistent with the new muted floor.
+	--ink-gray-5:   #54607A;
+}
+
+[data-theme="dark"] {
+	// Symmetric brightening — dark theme reads too dim at the upstream values
+	// against #0D1117 (measured muted at ~6.1:1; needs closer to 8:1 for the
+	// same felt legibility as light-theme muted).
+	--text-color:   #DDE3EA;
+	--text-neutral: #DDE3EA;
+	--text-muted:   #A5B0BC;
+	--text-light:   #8B949E;
+	--ink-gray-5:   #A5B0BC;
+}
+
+// Targeted weight bumps.
+//
+// Form field labels — the one place users tend to scan first, and the exact
+// class the standard sidebar workspace links also use. Bumping ONLY the
+// labels, not their inputs, avoids affecting datatable/list-view rows.
+.frappe-control .control-label,
+.frappe-control .label-area .label,
+.checkbox label,
+.checkbox .label-area .label,
+.control-label {
+	font-weight: 500;
+}
+
+// Workspace sidebar links — currently render at 400 in the light body and
+// blur into the panel background. 500 is enough to sit forward without
+// competing with the workspace TITLE (which is 600).
+.body-sidebar .sidebar-item-container .standard-sidebar-item .sidebar-item-label,
+.body-sidebar .sidebar-item-container .standard-sidebar-item .item-anchor {
+	font-weight: 500;
+}

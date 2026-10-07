@@ -1,0 +1,433 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2025-11-05 17:44:25.583856",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "section_break_ubdl",
+  "enable_changai",
+  "gemini_authentication_free_tier",
+  "gemini_api_key",
+  "server_section",
+  "remote",
+  "from_language",
+  "to_language",
+  "models_section",
+  "embedder",
+  "qwen3_4b_instruct",
+  "llm",
+  "column_break_irkb",
+  "dataset_repo",
+  "qwen25_15b",
+  "gemini_authentication_section",
+  "gemini_location",
+  "gemini_project_id",
+  "gemini_json_content",
+  "section_break_gnue",
+  "retain_memory",
+  "last_schema_sync",
+  "last_masterdata_sync",
+  "testing_section",
+  "retriever_structure",
+  "result_formatting",
+  "remote_server_tab",
+  "replicate_section",
+  "column_break_enbc",
+  "column_break_nomz",
+  "prediction_url",
+  "deploy_url",
+  "llm_version_id",
+  "embedder_version_id",
+  "api_token",
+  "column_break_qwoc",
+  "deploy",
+  "entity_retriever",
+  "openai_api_key",
+  "claude_api_key",
+  "support_tab",
+  "support_section",
+  "support_url",
+  "get_ticket_details_url",
+  "training_tab",
+  "training_section",
+  "choose_file_size",
+  "create_train_data",
+  "module_and_description",
+  "master_table_and_schema_updation_section",
+  "update_masterdata_file",
+  "update_schema_file",
+  "voice_and_speech_settings_tab",
+  "section_break_qwlc",
+  "enable_voice_chat",
+  "tts_provider",
+  "aws_access_key_id",
+  "aws_secret_access_key",
+  "aws_region",
+  "polly_voice_id",
+  "polly_engine"
+ ],
+ "fields": [
+  {
+   "fieldname": "server_section",
+   "fieldtype": "Section Break",
+   "label": "Server"
+  },
+  {
+   "default": "0",
+   "fieldname": "remote",
+   "fieldtype": "Check",
+   "label": "Remote"
+  },
+  {
+   "fieldname": "models_section",
+   "fieldtype": "Section Break",
+   "label": "HUGGING FACE Models & Datasets Repo"
+  },
+  {
+   "default": "hyrinmansoor/changAI-nomic-embed-text-v1.5-finetuned",
+   "fieldname": "embedder",
+   "fieldtype": "Data",
+   "label": "Embedder Repo"
+  },
+  {
+   "default": "hyrinmansoor/qwen3-4b-instruct-2507",
+   "fieldname": "qwen3_4b_instruct",
+   "fieldtype": "Data",
+   "label": "QWEN3-4b Instruct"
+  },
+  {
+   "default": "Gemini",
+   "fieldname": "llm",
+   "fieldtype": "Select",
+   "label": "LLM",
+   "options": "QWEN3\nGemini"
+  },
+  {
+   "fieldname": "column_break_irkb",
+   "fieldtype": "Column Break"
+  },
+  {
+   "default": "hyrinmansoor/ERP-retrieval-data-modernbert",
+   "fieldname": "dataset_repo",
+   "fieldtype": "Data",
+   "label": "Dataset Repo"
+  },
+  {
+   "default": "hyrinmansoor/qwen2.5-1.5b-instruct",
+   "fieldname": "qwen25_15b",
+   "fieldtype": "Data",
+   "label": "QWEN2.5-1.5b Instruct"
+  },
+  {
+   "depends_on": "eval:doc.llm == \"Gemini\"",
+   "fieldname": "gemini_authentication_section",
+   "fieldtype": "Section Break",
+   "label": "Gemini Authentication (Paid Tier)"
+  },
+  {
+   "depends_on": "eval:doc.llm == \"Gemini\"",
+   "fieldname": "gemini_location",
+   "fieldtype": "Data",
+   "label": "Gemini_location"
+  },
+  {
+   "fieldname": "gemini_project_id",
+   "fieldtype": "Data",
+   "label": "Gemini project ID"
+  },
+  {
+   "fieldname": "section_break_gnue",
+   "fieldtype": "Section Break"
+  },
+  {
+   "default": "1",
+   "fieldname": "retain_memory",
+   "fieldtype": "Check",
+   "label": "Retain Memory"
+  },
+  {
+   "fieldname": "testing_section",
+   "fieldtype": "Section Break"
+  },
+  {
+   "default": "multi line",
+   "fieldname": "retriever_structure",
+   "fieldtype": "Select",
+   "label": "Retriever_structure",
+   "options": "single line\nmulti line"
+  },
+  {
+   "fieldname": "remote_server_tab",
+   "fieldtype": "Tab Break",
+   "label": "Remote Server"
+  },
+  {
+   "fieldname": "replicate_section",
+   "fieldtype": "Section Break",
+   "label": "Remote - Replicate"
+  },
+  {
+   "default": "https://api.replicate.com/v1/predictions",
+   "fieldname": "prediction_url",
+   "fieldtype": "Data",
+   "label": "Replicate Prediction Url (Optional)"
+  },
+  {
+   "fieldname": "deploy_url",
+   "fieldtype": "Data",
+   "label": "Replicate Deploy Url"
+  },
+  {
+   "fieldname": "llm_version_id",
+   "fieldtype": "Data",
+   "label": "SQL Generator LLM Version id"
+  },
+  {
+   "fieldname": "embedder_version_id",
+   "fieldtype": "Data",
+   "label": "Schema Retriever Version ID"
+  },
+  {
+   "fieldname": "api_token",
+   "fieldtype": "Data",
+   "label": "Replicate API token"
+  },
+  {
+   "fieldname": "column_break_qwoc",
+   "fieldtype": "Column Break"
+  },
+  {
+   "default": "0",
+   "fieldname": "deploy",
+   "fieldtype": "Check",
+   "label": "Deploy"
+  },
+  {
+   "fieldname": "entity_retriever",
+   "fieldtype": "Data",
+   "label": "Entity Retriever Version ID"
+  },
+  {
+   "fieldname": "openai_api_key",
+   "fieldtype": "Data",
+   "label": "OpenAI API key"
+  },
+  {
+   "fieldname": "claude_api_key",
+   "fieldtype": "Data",
+   "label": "Claude API Key"
+  },
+  {
+   "fieldname": "support_tab",
+   "fieldtype": "Tab Break",
+   "label": "Support"
+  },
+  {
+   "fieldname": "support_section",
+   "fieldtype": "Section Break",
+   "label": "Support"
+  },
+  {
+   "fieldname": "support_url",
+   "fieldtype": "Data",
+   "label": "Create Ticket URL"
+  },
+  {
+   "fieldname": "get_ticket_details_url",
+   "fieldtype": "Data",
+   "label": "Get Ticket Details URL"
+  },
+  {
+   "fieldname": "training_tab",
+   "fieldtype": "Tab Break",
+   "label": "Training"
+  },
+  {
+   "fieldname": "training_section",
+   "fieldtype": "Section Break",
+   "label": "Training Data creation"
+  },
+  {
+   "description": "Choose a record size between 1000 to 1500.",
+   "fieldname": "choose_file_size",
+   "fieldtype": "Int",
+   "label": "Train Records"
+  },
+  {
+   "fieldname": "create_train_data",
+   "fieldtype": "Button",
+   "label": "Create training data"
+  },
+  {
+   "fieldname": "master_table_and_schema_updation_section",
+   "fieldtype": "Section Break",
+   "label": "Master file and Schema Updation"
+  },
+  {
+   "default": "0",
+   "fieldname": "update_masterdata_file",
+   "fieldtype": "Button",
+   "label": "Update MasterData file"
+  },
+  {
+   "default": "0",
+   "fieldname": "update_schema_file",
+   "fieldtype": "Button",
+   "label": "Update Schema file"
+  },
+  {
+   "fieldname": "module_and_description",
+   "fieldtype": "Table",
+   "label": "Module and Description",
+   "options": "Module Selection"
+  },
+  {
+   "fieldname": "gemini_json_content",
+   "fieldtype": "Code",
+   "label": "Service Account Credentials",
+   "options": "JSON"
+  },
+  {
+   "fieldname": "gemini_api_key",
+   "fieldtype": "Data",
+   "label": "Gemini api key"
+  },
+  {
+   "fieldname": "from_language",
+   "fieldtype": "Link",
+   "label": "From Language",
+   "options": "Language"
+  },
+  {
+   "fieldname": "to_language",
+   "fieldtype": "Link",
+   "label": "To Language",
+   "options": "Language"
+  },
+  {
+   "fieldname": "section_break_qwlc",
+   "fieldtype": "Section Break",
+   "label": "Voice & Speech Settings"
+  },
+  {
+   "depends_on": "eval:doc.tts_provider == \"polly\" && doc.enable_voice_chat == 1",
+   "fieldname": "aws_access_key_id",
+   "fieldtype": "Data",
+   "label": "AWS Access key id"
+  },
+  {
+   "depends_on": "eval:doc.tts_provider == \"polly\" && doc.enable_voice_chat == 1",
+   "fieldname": "aws_secret_access_key",
+   "fieldtype": "Data",
+   "label": "AWS secret access key "
+  },
+  {
+   "default": "1",
+   "fieldname": "enable_voice_chat",
+   "fieldtype": "Check",
+   "label": "Enable Voice Chat"
+  },
+  {
+   "default": "browser",
+   "depends_on": "eval:doc.enable_voice_chat == 1",
+   "fieldname": "tts_provider",
+   "fieldtype": "Select",
+   "label": "TTS Provider",
+   "options": "browser\npolly"
+  },
+  {
+   "default": "us-east-1",
+   "depends_on": "eval:doc.tts_provider == \"polly\" && doc.enable_voice_chat == 1",
+   "fieldname": "aws_region",
+   "fieldtype": "Data",
+   "label": "AWS Region (Optional)"
+  },
+  {
+   "default": "Joanna",
+   "depends_on": "eval:doc.tts_provider == \"polly\" && doc.enable_voice_chat == 1",
+   "fieldname": "polly_voice_id",
+   "fieldtype": "Data",
+   "label": "Polly Voice ID (Optional)"
+  },
+  {
+   "default": "neural",
+   "depends_on": "eval:doc.tts_provider == \"polly\" && doc.enable_voice_chat == 1",
+   "fieldname": "polly_engine",
+   "fieldtype": "Select",
+   "label": "Polly Engine (Optional)",
+   "options": "standard\nneural"
+  },
+  {
+   "fieldname": "voice_and_speech_settings_tab",
+   "fieldtype": "Tab Break",
+   "label": "Voice and Speech Settings"
+  },
+  {
+   "default": "Model",
+   "fieldname": "result_formatting",
+   "fieldtype": "Select",
+   "label": "Result Formatting",
+   "options": "Model\nLocal"
+  },
+  {
+   "fieldname": "last_schema_sync",
+   "fieldtype": "Datetime",
+   "label": "Last schema sync"
+  },
+  {
+   "fieldname": "last_masterdata_sync",
+   "fieldtype": "Datetime",
+   "label": "Last Master data sync "
+  },
+  {
+   "default": "1",
+   "fieldname": "enable_changai",
+   "fieldtype": "Check",
+   "label": "Enable changAI"
+  },
+  {
+   "fieldname": "section_break_ubdl",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "column_break_enbc",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "column_break_nomz",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "gemini_authentication_free_tier",
+   "fieldtype": "Section Break",
+   "label": "Gemini Authentication (Free Tier)"
+  }
+ ],
+ "grid_page_length": 50,
+ "index_web_pages_for_search": 1,
+ "issingle": 1,
+ "links": [],
+ "modified": "2026-06-24 13:36:59.025672",
+ "modified_by": "Administrator",
+ "module": "Changai",
+ "name": "ChangAI Settings",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "print": 1,
+   "read": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "row_format": "Dynamic",
+ "rows_threshold_for_grid_search": 20,
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}

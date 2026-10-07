@@ -1,0 +1,180 @@
+{
+ "actions": [],
+ "creation": "2026-09-28 00:00:00",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "warranty",
+  "customer",
+  "optical_order",
+  "claim_date",
+  "claim_col",
+  "claim_type",
+  "status",
+  "approved_by",
+  "cost",
+  "issue_section",
+  "issue",
+  "remake"
+ ],
+ "fields": [
+  {
+   "fieldname": "warranty",
+   "fieldtype": "Link",
+   "label": "Warranty",
+   "options": "Optical Warranty",
+   "reqd": 1,
+   "in_list_view": 1,
+   "set_only_once": 1
+  },
+  {
+   "fieldname": "customer",
+   "fieldtype": "Link",
+   "label": "Customer",
+   "options": "Customer",
+   "fetch_from": "warranty.customer",
+   "read_only": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "optical_order",
+   "fieldtype": "Link",
+   "label": "Optical Order",
+   "options": "Optical Order",
+   "fetch_from": "warranty.optical_order",
+   "read_only": 1
+  },
+  {
+   "fieldname": "claim_date",
+   "fieldtype": "Date",
+   "label": "Claim Date",
+   "default": "Today",
+   "reqd": 1
+  },
+  {
+   "fieldname": "claim_col",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "claim_type",
+   "fieldtype": "Select",
+   "label": "Claim Type",
+   "options": "Repair\nReplacement\nRemake",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "status",
+   "fieldtype": "Select",
+   "label": "Status",
+   "options": "Pending\nApproved\nRejected\nCompleted",
+   "default": "Pending",
+   "in_list_view": 1,
+   "in_standard_filter": 1
+  },
+  {
+   "fieldname": "approved_by",
+   "fieldtype": "Link",
+   "label": "Approved By",
+   "options": "User",
+   "read_only": 1
+  },
+  {
+   "fieldname": "cost",
+   "fieldtype": "Currency",
+   "label": "Cost"
+  },
+  {
+   "fieldname": "issue_section",
+   "fieldtype": "Section Break",
+   "label": "Issue"
+  },
+  {
+   "fieldname": "issue",
+   "fieldtype": "Small Text",
+   "label": "Issue Description",
+   "reqd": 1
+  },
+  {
+   "fieldname": "remake",
+   "fieldtype": "Link",
+   "label": "Optical Remake",
+   "options": "Optical Remake",
+   "read_only": 1,
+   "no_copy": 1
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2026-09-28 00:00:00",
+ "modified_by": "Administrator",
+ "module": "Optical",
+ "name": "Optical Warranty Claim",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "role": "System Manager",
+   "read": 1,
+   "report": 1,
+   "export": 1,
+   "print": 1,
+   "email": 1,
+   "share": 1,
+   "write": 1,
+   "create": 1,
+   "delete": 1
+  },
+  {
+   "role": "Optical Manager",
+   "read": 1,
+   "report": 1,
+   "export": 1,
+   "print": 1,
+   "email": 1,
+   "share": 1,
+   "write": 1,
+   "create": 1,
+   "delete": 1
+  },
+  {
+   "role": "Optical Branch Manager",
+   "read": 1,
+   "report": 1,
+   "export": 1,
+   "print": 1,
+   "email": 1,
+   "share": 1,
+   "write": 1,
+   "create": 1
+  },
+  {
+   "role": "Optical Cashier",
+   "read": 1,
+   "report": 1,
+   "export": 1,
+   "print": 1,
+   "email": 1,
+   "share": 1,
+   "write": 1,
+   "create": 1
+  },
+  {
+   "role": "Optician",
+   "read": 1,
+   "report": 1,
+   "export": 1,
+   "print": 1,
+   "email": 1,
+   "share": 1,
+   "write": 1,
+   "create": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "track_changes": 1,
+ "autoname": "format:OPT-WCL-{YYYY}-{#####}",
+ "naming_rule": "Expression",
+ "title_field": "customer"
+}

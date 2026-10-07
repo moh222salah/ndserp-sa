@@ -1,0 +1,214 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2026-09-08 00:00:00.000000",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "naming_series",
+  "company",
+  "title",
+  "customer",
+  "reference",
+  "version_no",
+  "tnd_cb",
+  "tender_date",
+  "submission_date",
+  "currency",
+  "markup_percent",
+  "status",
+  "tnd_ind",
+  "indirect_costs",
+  "tnd_sum",
+  "total_direct_cost",
+  "total_indirect_cost",
+  "total_estimated_cost",
+  "tnd_sum_cb",
+  "tender_price",
+  "planned_profit",
+  "planned_margin",
+  "tnd_desc",
+  "description"
+ ],
+ "fields": [
+  {
+   "fieldname": "naming_series",
+   "fieldtype": "Select",
+   "label": "Series",
+   "options": "CT-TND-.#####",
+   "default": "CT-TND-.#####",
+   "hidden": 1
+  },
+  {
+   "fieldname": "company",
+   "fieldtype": "Link",
+   "label": "Company",
+   "options": "Company",
+   "reqd": 1
+  },
+  {
+   "fieldname": "title",
+   "fieldtype": "Data",
+   "label": "Title",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "customer",
+   "fieldtype": "Link",
+   "label": "Customer",
+   "options": "Customer",
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "reference",
+   "fieldtype": "Data",
+   "label": "Client Reference"
+  },
+  {
+   "fieldname": "version_no",
+   "fieldtype": "Int",
+   "label": "Version",
+   "default": "1",
+   "description": "Version counter; prior versions kept via document history."
+  },
+  {
+   "fieldname": "tnd_cb",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "tender_date",
+   "fieldtype": "Date",
+   "label": "Tender Date",
+   "reqd": 1,
+   "default": "Today"
+  },
+  {
+   "fieldname": "submission_date",
+   "fieldtype": "Date",
+   "label": "Submission Date"
+  },
+  {
+   "fieldname": "currency",
+   "fieldtype": "Link",
+   "label": "Currency",
+   "options": "Currency",
+   "reqd": 1
+  },
+  {
+   "fieldname": "markup_percent",
+   "fieldtype": "Percent",
+   "label": "Markup %",
+   "default": "0",
+   "description": "Commercial markup; not part of cost."
+  },
+  {
+   "fieldname": "status",
+   "fieldtype": "Select",
+   "label": "Status",
+   "options": "Draft\nPreparing\nReview\nApproved\nSubmitted\nAwarded\nLost\nClosed",
+   "default": "Draft",
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "tnd_ind",
+   "fieldtype": "Section Break",
+   "label": "Indirect Costs"
+  },
+  {
+   "fieldname": "indirect_costs",
+   "fieldtype": "Table",
+   "label": "Indirect Costs",
+   "options": "Tender Indirect Cost"
+  },
+  {
+   "fieldname": "tnd_sum",
+   "fieldtype": "Section Break",
+   "label": "Commercial Summary"
+  },
+  {
+   "fieldname": "total_direct_cost",
+   "fieldtype": "Currency",
+   "label": "Total Direct Cost",
+   "read_only": 1
+  },
+  {
+   "fieldname": "total_indirect_cost",
+   "fieldtype": "Currency",
+   "label": "Total Indirect Cost",
+   "read_only": 1
+  },
+  {
+   "fieldname": "total_estimated_cost",
+   "fieldtype": "Currency",
+   "label": "Total Estimated Cost",
+   "read_only": 1
+  },
+  {
+   "fieldname": "tnd_sum_cb",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "tender_price",
+   "fieldtype": "Currency",
+   "label": "Tender Price",
+   "read_only": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "planned_profit",
+   "fieldtype": "Currency",
+   "label": "Planned Profit",
+   "read_only": 1
+  },
+  {
+   "fieldname": "planned_margin",
+   "fieldtype": "Percent",
+   "label": "Planned Margin %",
+   "read_only": 1
+  },
+  {
+   "fieldname": "tnd_desc",
+   "fieldtype": "Section Break",
+   "label": "Description"
+  },
+  {
+   "fieldname": "description",
+   "fieldtype": "Text",
+   "label": "Description"
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "is_submittable": 0,
+ "issingle": 0,
+ "istable": 0,
+ "links": [],
+ "modified": "2026-09-08 00:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Contracting Tender",
+ "name": "Tender",
+ "owner": "Administrator",
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "track_changes": 1,
+ "autoname": "naming_series:",
+ "title_field": "title",
+ "search_fields": "title,customer,status",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1,
+   "submit": 0,
+   "cancel": 0
+  }
+ ]
+}

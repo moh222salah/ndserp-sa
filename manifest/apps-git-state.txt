@@ -1,0 +1,209 @@
+APP_GIT_STATE
+==============================
+
+----- amir_theme_v16 -----
+PATH=/home/frappe/frappe/frappe-bench/apps/amir_theme_v16
+BRANCH=main
+COMMIT=4d5dc7395084120e05241e9cbb2781a73989413e
+ M amir_theme_v16/hooks.py
+?? amir_theme_v16/.desk-ui-backups/
+?? amir_theme_v16/.language-session-backups/
+?? amir_theme_v16/.login-ui-backups/
+?? amir_theme_v16/.logo-ui-backups/
+
+----- changai -----
+PATH=/home/frappe/frappe/frappe-bench/apps/changai
+BRANCH=main
+COMMIT=cf4e0f83f8d44af7e4ed9dbf26e6bc93d35b497f
+ M changai/changai/api/v2/schema_utils.py
+ M changai/public/js/ai_translate.js
+
+----- contracting -----
+PATH=/home/frappe/frappe/frappe-bench/apps/contracting
+BRANCH=main
+COMMIT=c60ed8cf02cb582f7373f16c8f8392ff1aa3b24d
+?? contracting/contracting_setup/workspace/
+
+----- crm -----
+PATH=/home/frappe/frappe/frappe-bench/apps/crm
+BRANCH=develop
+COMMIT=2f6435d105f8b127cf802deaae9fa12a20374ee5
+ M crm/locale/ar.po
+?? frontend/auto-imports.d.ts
+
+----- erpnext -----
+PATH=/home/frappe/frappe/frappe-bench/apps/erpnext
+BRANCH=version-16
+COMMIT=af63cde4941570ec7b9e12422c68302762cfcf91
+?? erpnext/accounts/print_format/bank_and_cash_payment_voucher/bank_and_cash_payment_voucher.html.bak-20260927_165355
+?? erpnext/accounts/print_format/bank_and_cash_payment_voucher/bank_and_cash_payment_voucher.html.bak-pre-signatures-20260927_165437
+?? erpnext/accounts/print_format/bank_and_cash_payment_voucher/bank_and_cash_payment_voucher.html.bak-signatures-20260927_165517
+?? erpnext/accounts/print_format/bank_and_cash_payment_voucher/bank_and_cash_payment_voucher.html.bak-signatures-20260927_165630
+?? erpnext/accounts/print_format/bank_and_cash_payment_voucher/bank_and_cash_payment_voucher.html.bak-signatures-align-20260927_170254
+?? erpnext/accounts/print_format/bank_and_cash_payment_voucher/bank_and_cash_payment_voucher.html.bak-signatures-clean-20260927_170020
+?? erpnext/accounts/print_format/bank_and_cash_payment_voucher/bank_and_cash_payment_voucher.html.bak-signatures-final-20260927_170138
+?? erpnext/accounts/print_format/bank_and_cash_payment_voucher/bank_and_cash_payment_voucher.html.bak-signatures-polished-20260927_170213
+
+----- frappe -----
+PATH=/home/frappe/frappe/frappe-bench/apps/frappe
+BRANCH=version-16
+COMMIT=97a5dd93ca5883bcc9c4ef9834120c5cba397b67
+
+----- frappe_ai -----
+PATH=/home/frappe/frappe/frappe-bench/apps/frappe_ai
+BRANCH=main
+COMMIT=864901587194dde88301bafd078ca5620d0332a8
+?? yarn.lock
+
+----- frappe_vision -----
+PATH=/home/frappe/frappe/frappe-bench/apps/frappe_vision
+BRANCH=main
+COMMIT=1167526458922ded3388c807cdd35af2e859d941
+ D frappe_vision/public/dist/js/frappe.vision.bundle.3P336PO5.js
+ D frappe_vision/public/dist/js/frappe.vision.bundle.3P336PO5.js.map
+?? frappe_vision/public/dist/js/frappe.vision.bundle.2UVAW4NF.js
+?? frappe_vision/public/dist/js/frappe.vision.bundle.2UVAW4NF.js.map
+
+----- gas_station -----
+PATH=/home/frappe/frappe/frappe-bench/apps/gas_station
+BRANCH=master
+COMMIT=b13193464db70a5dd712a137c11f00ab9ba8d18d
+ M gas_station/gas_station/dashboard.py
+ M gas_station/gas_station/page/gas_station_dashboard/gas_station_dashboard.js
+ M gas_station/gas_station/report/fuel_dispensing/fuel_dispensing.py
+ M gas_station/gas_station/report/nozzle_performance/nozzle_performance.py
+ M gas_station/gas_station/report/pump_performance/pump_performance.py
+ M gas_station/gas_station/report/station_operational_summary/station_operational_summary.py
+ M gas_station/modules.txt
+?? gas_station/__pycache__/
+?? gas_station/demo/__pycache__/
+?? gas_station/gas_station/__pycache__/
+?? gas_station/gas_station/alerts/__pycache__/
+?? gas_station/gas_station/doctype/__pycache__/
+?? gas_station/gas_station/doctype/alert_rule/__pycache__/
+?? gas_station/gas_station/doctype/controller_connection_state/__pycache__/
+?? gas_station/gas_station/doctype/gas_station/__pycache__/
+?? gas_station/gas_station/doctype/gas_station_nozzle/__pycache__/
+?? gas_station/gas_station/doctype/gas_station_probe/__pycache__/
+?? gas_station/gas_station/doctype/gas_station_pump/__pycache__/
+?? gas_station/gas_station/doctype/gas_station_settings/__pycache__/
+?? gas_station/gas_station/doctype/gas_station_tank/__pycache__/
+?? gas_station/gas_station/doctype/integration_event/__pycache__/
+?? gas_station/gas_station/doctype/mock_pts_controller/__pycache__/
+?? gas_station/gas_station/doctype/pts_controller/__pycache__/
+?? gas_station/gas_station/doctype/pts_pump_transaction/__pycache__/
+?? gas_station/gas_station/doctype/pump_state/__pycache__/
+?? gas_station/gas_station/doctype/reconciliation_result/__pycache__/
+?? gas_station/gas_station/doctype/reconciliation_run/__pycache__/
+?? gas_station/gas_station/doctype/station_alert/__pycache__/
+?? gas_station/gas_station/doctype/tank_delivery/__pycache__/
+?? gas_station/gas_station/doctype/tank_measurement/__pycache__/
+?? gas_station/gas_station/doctype/tank_state/__pycache__/
+?? gas_station/gas_station/erpnext_integration/__pycache__/
+?? gas_station/gas_station/integration/__pycache__/
+?? gas_station/gas_station/integration/handlers/__pycache__/
+?? gas_station/gas_station/integration/providers/__pycache__/
+?? gas_station/gas_station/reconciliation/__pycache__/
+?? gas_station/gas_station/report/__pycache__/
+?? gas_station/gas_station/report/controller_connectivity_report/__pycache__/
+?? gas_station/gas_station/report/fuel_dispensing/__pycache__/
+?? gas_station/gas_station/report/integration_events_report/__pycache__/
+?? gas_station/gas_station/report/nozzle_performance/__pycache__/
+?? gas_station/gas_station/report/pts_transaction_report/__pycache__/
+?? gas_station/gas_station/report/pump_performance/__pycache__/
+?? gas_station/gas_station/report/station_alerts_report/__pycache__/
+?? gas_station/gas_station/report/tank_delivery_report/__pycache__/
+?? gas_station/gas_station/report/tank_level_history/__pycache__/
+?? gas_station/gas_station/report/tank_variance/__pycache__/
+?? gas_station/gas_station/simulator/__pycache__/
+?? gas_station/setup/__pycache__/
+
+----- healthcare -----
+PATH=/home/frappe/frappe/frappe-bench/apps/healthcare
+BRANCH=version-16
+COMMIT=dda107b26e3a0fe1dbd65c7257371235de054a04
+?? healthcare/public/frontend/
+?? healthcare/public/node_modules
+?? yarn.lock
+
+----- hrms -----
+PATH=/home/frappe/frappe/frappe-bench/apps/hrms
+BRANCH=version-16
+COMMIT=f281e8b172ac8836ad89c59df65a922101103097
+ M hrms/setup.py
+
+----- ksa_compliance -----
+PATH=/home/frappe/frappe/frappe-bench/apps/ksa_compliance
+BRANCH=master
+COMMIT=24968b4e7e6846b968421f385311a999ca3cfd0f
+
+----- nds_restaurant -----
+PATH=/home/frappe/frappe/frappe-bench/apps/nds_restaurant
+BRANCH=cursor/p2-t9-room-order-menu
+COMMIT=1256782e3022bd3cdf522643337b752f2f158264
+
+----- ndserp -----
+PATH=/home/frappe/frappe/frappe-bench/apps/ndserp
+BRANCH=main
+COMMIT=50bb3a1f3b3d4b0ace9c0e8502a769ea0e7bad1a
+ M README.md
+ M ndserp/fixtures/print_format.json
+ M ndserp/fixtures/property_setter.json
+ M ndserp/fixtures/workspace.json
+ M ndserp/hooks.py
+ M ndserp/install.py
+ M ndserp/setup/sidebar_builder.py
+ M ndserp/setup/workspace_policy.py
+ M ndserp/setup/workspace_scope.py
+ M ndserp/tests/test_fixtures.py
+ M ndserp/translations/en.csv
+?? .claude/
+?? docs/
+?? ndserp/api/
+?? ndserp/fixtures/custom_docperm.json
+?? ndserp/fixtures/role.json
+?? ndserp/fixtures/role_profile.json
+?? ndserp/jinja.py
+?? ndserp/overrides/
+?? "ndserp/public/icons/desktop_icons/solid/\331\206\331\202\330\247\330\267_\330\247\331\204\330\250\331\212\330\271_nds_erp.svg"
+?? "ndserp/public/icons/desktop_icons/subtle/\331\206\331\202\330\247\330\267_\330\247\331\204\330\250\331\212\330\271_nds_erp.svg"
+?? ndserp/public/js/user.js
+?? ndserp/setup/_tmp_vqr.py
+?? ndserp/setup/audit_nds_profiles.py
+?? ndserp/setup/complete_harthi_wizard.py
+?? ndserp/setup/debug_zatca_qr.py
+?? ndserp/setup/install_zatca_tax_invoice_pf.py
+?? ndserp/setup/setup_ksa_vat.py
+?? ndserp/setup/setup_zatca_phase1.py
+?? ndserp/setup/user_provisioning.py
+?? ndserp/setup/verify_discount_print.py
+?? ndserp/setup/verify_qr_fix.py
+?? ndserp/setup/verify_words.py
+?? ndserp/setup/verify_zatca_tax_invoice_pf.py
+?? ndserp/tests/test_user_provisioning.py
+
+----- optical -----
+PATH=/home/frappe/frappe/frappe-bench/apps/optical
+BRANCH=master
+COMMIT=4657b4cc23f4b9eb044b65b05f397afc36c0844f
+ M optical/optical/workspace/optical/optical.json
+?? optical/setup/seed.py
+
+----- optima_hr -----
+PATH=/home/frappe/frappe/frappe-bench/apps/optima_hr
+BRANCH=version-16
+COMMIT=e039c74dc6b3af4b7b6ad6211ce04ce7dd5bfbfb
+
+----- pos_next -----
+PATH=/home/frappe/frappe/frappe-bench/apps/pos_next
+BRANCH=version-16
+COMMIT=a4b952bf8eebbf87bcc89305bcb4d199085c267c
+ M POS/src/components/sale/ExpenseDialog.vue
+ M POS/src/utils/printInvoice.js
+ M pos_next/api/expenses.py
+ M pos_next/fixtures/custom_field.json
+ M pos_next/hooks.py
+ M pos_next/pos_next/doctype/pos_closing_shift/pos_closing_shift.json
+ M pos_next/pos_next/doctype/pos_closing_shift/pos_closing_shift.py
+ M pos_next/uninstall.py
+ M pos_next/utils.py

@@ -1,0 +1,52 @@
+{
+ "name": "Sub POS Invoices",
+ "istable": 1,
+ "editable_grid": 1,
+ "field_order": [
+  "pos_invoice",
+  "posting_date",
+  "grand_total",
+  "customer"
+ ],
+ "fields": [
+  {
+   "fieldname": "pos_invoice",
+   "fieldtype": "Link",
+   "label": "POS Invoice",
+   "options": "POS Invoice",
+   "in_list_view": 1,
+   "reqd": 1
+  },
+  {
+   "fieldname": "posting_date",
+   "fieldtype": "Date",
+   "label": "Posting Date",
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "grand_total",
+   "fieldtype": "Currency",
+   "label": "Grand Total",
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "customer",
+   "fieldtype": "Link",
+   "label": "Customer",
+   "options": "Customer"
+  }
+ ],
+ "doctype": "DocType",
+ "module": "NDS Restaurant",
+ "engine": "InnoDB",
+ "actions": [],
+ "links": [],
+ "states": [],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "owner": "Administrator",
+ "modified_by": "Administrator",
+ "creation": "2026-09-24 00:00:00.000000",
+ "modified": "2026-09-24 00:00:00.000000",
+ "permissions": []
+}

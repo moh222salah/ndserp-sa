@@ -1,0 +1,23 @@
+{
+ "align_labels_right": 0,
+ "creation": "2026-09-27 10:00:00.000000",
+ "css": "@page { size: 80mm auto; margin: 0; }\n.print-format { width: 72mm; padding: 2mm; font-size: 12px; font-family: monospace; }\n.print-format table { width: 100%; border-collapse: collapse; }\n.print-format .header { text-align: center; font-weight: bold; font-size: 14px; margin-bottom: 4mm; }\n.print-format .section { margin-top: 2mm; margin-bottom: 2mm; }\n.print-format .label { font-weight: bold; }\n.print-format .item-row td { padding-top: 1mm; padding-bottom: 1mm; border-top: 1px dashed #ccc; }\n.print-format .totals { margin-top: 2mm; padding-top: 2mm; border-top: 2px solid #000; }\n.print-format .footer { text-align: center; margin-top: 4mm; padding-top: 2mm; border-top: 1px dashed #ccc; }",
+ "custom_format": 1,
+ "disabled": 0,
+ "doc_type": "POS Invoice",
+ "docstatus": 0,
+ "doctype": "Print Format",
+ "html": "<div class=\"print-format\">\n\t<div class=\"header\">\n\t\t{{ doc.company }}\n\t</div>\n\t\n\t<div class=\"section\">\n\t\t<strong>{{ doc.name }}</strong><br>\n\t\tDate: {{ frappe.utils.format_datetime((doc.posting_date|string) + ' ' + ((doc.posting_time or '00:00:00')|string), 'dd/MM/yyyy HH:mm') }}<br>\n\t\tCashier: {{ frappe.db.get_value(\"User\", doc.owner, \"full_name\") or doc.owner }}\n\t\t{% if doc.custom_nds_table %}\n\t\t<br>Table: {{ doc.custom_nds_table }}\n\t\t{% endif %}\n\t\t{% if doc.custom_nds_order_type and doc.custom_nds_order_type != 'Dine In' %}\n\t\t<br>Type: {{ doc.custom_nds_order_type }}\n\t\t{% endif %}\n\t</div>\n\t\n\t<div class=\"section\">\n\t\t<table>\n\t\t\t<thead>\n\t\t\t\t<tr>\n\t\t\t\t\t<th style=\"text-align: left;\">Item</th>\n\t\t\t\t\t<th style=\"text-align: center;\">Qty</th>\n\t\t\t\t\t<th style=\"text-align: right;\">Amount</th>\n\t\t\t\t</tr>\n\t\t\t</thead>\n\t\t\t<tbody>\n\t\t\t\t{% for item in doc.items %}\n\t\t\t\t<tr class=\"item-row\">\n\t\t\t\t\t<td>{{ item.item_name }}</td>\n\t\t\t\t\t<td style=\"text-align: center;\">{{ item.qty }}</td>\n\t\t\t\t\t<td style=\"text-align: right;\">{{ frappe.utils.fmt_money(item.amount, currency=doc.currency) }}</td>\n\t\t\t\t</tr>\n\t\t\t\t{% endfor %}\n\t\t\t</tbody>\n\t\t</table>\n\t</div>\n\t\n\t<div class=\"totals\">\n\t\t<table>\n\t\t\t<tr>\n\t\t\t\t<td><strong>Net Total</strong></td>\n\t\t\t\t<td style=\"text-align: right;\"><strong>{{ frappe.utils.fmt_money(doc.net_total, currency=doc.currency) }}</strong></td>\n\t\t\t</tr>\n\t\t\t{% if doc.taxes %}\n\t\t\t{% for tax in doc.taxes %}\n\t\t\t<tr>\n\t\t\t\t<td>{{ tax.description }}</td>\n\t\t\t\t<td style=\"text-align: right;\">{{ frappe.utils.fmt_money(tax.tax_amount, currency=doc.currency) }}</td>\n\t\t\t</tr>\n\t\t\t{% endfor %}\n\t\t\t{% endif %}\n\t\t\t{% if doc.discount_amount and doc.discount_amount > 0 %}\n\t\t\t<tr>\n\t\t\t\t<td>Discount</td>\n\t\t\t\t<td style=\"text-align: right;\">-{{ frappe.utils.fmt_money(doc.discount_amount, currency=doc.currency) }}</td>\n\t\t\t</tr>\n\t\t\t{% endif %}\n\t\t\t<tr style=\"font-size: 14px; font-weight: bold;\">\n\t\t\t\t<td>GRAND TOTAL</td>\n\t\t\t\t<td style=\"text-align: right;\">{{ frappe.utils.fmt_money(doc.grand_total, currency=doc.currency) }}</td>\n\t\t\t</tr>\n\t\t</table>\n\t</div>\n\t\n\t<div class=\"section\" style=\"margin-top: 3mm;\">\n\t\t<strong>Payment</strong>\n\t\t<table>\n\t\t\t{% for payment in doc.payments %}\n\t\t\t<tr>\n\t\t\t\t<td>{{ payment.mode_of_payment }}</td>\n\t\t\t\t<td style=\"text-align: right;\">{{ frappe.utils.fmt_money(payment.amount, currency=doc.currency) }}</td>\n\t\t\t</tr>\n\t\t\t{% endfor %}\n\t\t\t{% if doc.change_amount and doc.change_amount > 0 %}\n\t\t\t<tr>\n\t\t\t\t<td><strong>Change</strong></td>\n\t\t\t\t<td style=\"text-align: right;\"><strong>{{ frappe.utils.fmt_money(doc.change_amount, currency=doc.currency) }}</strong></td>\n\t\t\t</tr>\n\t\t\t{% endif %}\n\t\t</table>\n\t</div>\n\t\n\t<div class=\"footer\">\n\t\tThank you for your visit!<br>\n\t\tPlease come again\n\t</div>\n</div>\n",
+ "line_breaks": 0,
+ "modified": "2026-09-27 15:30:00.000000",
+ "module": "NDS Restaurant",
+ "name": "NDS Receipt",
+ "owner": "Administrator",
+ "print_format_builder": 0,
+ "print_format_builder_beta": 0,
+ "print_format_type": "Jinja",
+ "raw_commands": 0,
+ "raw_printing": 0,
+ "show_section_headings": 0,
+ "standard": "Yes"
+}

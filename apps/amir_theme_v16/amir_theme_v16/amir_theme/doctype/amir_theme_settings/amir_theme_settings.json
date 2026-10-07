@@ -1,0 +1,148 @@
+{
+ "actions": [],
+ "creation": "2026-08-15 00:00:00",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "section_features",
+  "features_intro",
+  "enable_hijri_dates",
+  "enable_smart_actions",
+  "column_break_features",
+  "enable_translation_mode",
+  "enable_color_schemes",
+  "section_navigation",
+  "language_switcher_position",
+  "section_branding",
+  "branding_intro",
+  "app_name",
+  "favicon",
+  "app_logo",
+  "column_break_branding",
+  "splash_image",
+  "login_logo"
+ ],
+ "fields": [
+  {
+   "fieldname": "section_features",
+   "fieldtype": "Section Break",
+   "label": "Theme Features"
+  },
+  {
+   "fieldname": "features_intro",
+   "fieldtype": "HTML",
+   "options": "<p class=\"text-muted small\">Turn individual theme features on or off. Changes take effect after the page is reloaded.</p>"
+  },
+  {
+   "default": "1",
+   "description": "Show the Hijri date alongside the Gregorian date in date fields and date pickers.",
+   "fieldname": "enable_hijri_dates",
+   "fieldtype": "Check",
+   "label": "Hijri Dates"
+  },
+  {
+   "default": "1",
+   "description": "Add the Save & Final Submit / Revert to Draft / Cancel & Delete actions on submittable documents that have no active Workflow.",
+   "fieldname": "enable_smart_actions",
+   "fieldtype": "Check",
+   "label": "Smart Submit Actions"
+  },
+  {
+   "fieldname": "column_break_features",
+   "fieldtype": "Column Break"
+  },
+  {
+   "default": "1",
+   "description": "Show the in-context Translation Mode button. Requires the incontext_translation app; the button is hidden automatically when it is not installed.",
+   "fieldname": "enable_translation_mode",
+   "fieldtype": "Check",
+   "label": "Translation Mode Button"
+  },
+  {
+   "default": "1",
+   "description": "Show the colour-scheme picker that lets each user restyle the theme palette.",
+   "fieldname": "enable_color_schemes",
+   "fieldtype": "Check",
+   "label": "Colour Scheme Picker"
+  },
+  {
+   "fieldname": "section_navigation",
+   "fieldtype": "Section Break",
+   "label": "Navigation"
+  },
+  {
+   "default": "Navbar",
+   "description": "Where the Arabic / English language switcher appears. Choose Hidden to remove it entirely.",
+   "fieldname": "language_switcher_position",
+   "fieldtype": "Select",
+   "label": "Language Switcher Position",
+   "options": "Navbar\nSidebar Rail\nHidden"
+  },
+  {
+   "fieldname": "section_branding",
+   "fieldtype": "Section Break",
+   "label": "Branding"
+  },
+  {
+   "fieldname": "branding_intro",
+   "fieldtype": "HTML",
+   "options": "<p class=\"text-muted small\">Upload your brand here once. On save these are written through to Website Settings, Navbar Settings and Login Page Settings, so the browser tab, the desk, the splash screen and the login page all match. Leave a field empty to keep whatever is configured there today.</p>"
+  },
+  {
+   "description": "Text shown in the browser tab and as the application name.",
+   "fieldname": "app_name",
+   "fieldtype": "Data",
+   "label": "Application Name"
+  },
+  {
+   "description": "Browser tab icon. A square .ico, .png or .svg; 32×32 or larger. Browsers cache favicons aggressively — a hard reload (Ctrl+Shift+R) may be needed to see the change.",
+   "fieldname": "favicon",
+   "fieldtype": "Attach",
+   "label": "Favicon"
+  },
+  {
+   "description": "Logo shown in the desk navigation and, unless a Login Logo is set below, on the login page.",
+   "fieldname": "app_logo",
+   "fieldtype": "Attach Image",
+   "label": "App Logo"
+  },
+  {
+   "fieldname": "column_break_branding",
+   "fieldtype": "Column Break"
+  },
+  {
+   "description": "Image shown on the loading screen while the desk boots.",
+   "fieldname": "splash_image",
+   "fieldtype": "Attach Image",
+   "label": "Splash Image"
+  },
+  {
+   "description": "Optional. Overrides the App Logo on the login page only.",
+   "fieldname": "login_logo",
+   "fieldtype": "Attach Image",
+   "label": "Login Logo"
+  }
+ ],
+ "issingle": 1,
+ "links": [],
+ "modified": "2026-08-16 10:00:00",
+ "modified_by": "Administrator",
+ "module": "Amir Theme",
+ "name": "Amir Theme Settings",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "print": 1,
+   "read": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "sort_field": "creation",
+ "sort_order": "DESC",
+ "states": []
+}

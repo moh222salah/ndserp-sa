@@ -1,0 +1,49 @@
+// ---------------------------------------------------------------------------
+// Rail translation-mode button (incontext_translation integration)
+// ---------------------------------------------------------------------------
+// Mirrors .amt-rail-scheme's own geometry/hover/label rules exactly (see
+// themes/_color-schemes.scss) so it reads as a sibling of the palette and
+// language icons, not a bolt-on. Injected by core/translation_toggle.js —
+// only ever appears when the incontext_translation app is installed.
+// ---------------------------------------------------------------------------
+
+.amt-rail-translate {
+	width: 44px;
+	height: 36px;
+	margin: 0 auto 4px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	border-radius: 8px;
+	cursor: pointer;
+	transition: background 0.15s ease, opacity 0.15s ease;
+}
+body.amt-rail-expanded .amt-rail-translate { width: 100%; }
+
+.amt-rail-translate:hover,
+.amt-rail-translate.active { background: rgba(255, 255, 255, 0.08); }
+
+.amt-rail-translate svg {
+	width: 17px;
+	height: 17px;
+	flex-shrink: 0;
+	color: rgba(255, 255, 255, 0.62);
+	transition: color 0.15s ease;
+}
+// Active state reuses the same gold accent as the palette button's active/hover
+// state — one consistent "engaged" colour across the rail's toggle controls.
+.amt-rail-translate:hover svg,
+.amt-rail-translate.active svg {
+	color: var(--accent-gold-on-dark, #E8C64A);
+}
+
+.amt-rail-translate-label {
+	display: none;
+	margin-inline-start: 8px;
+	font-size: 12px;
+	font-weight: 600;
+	letter-spacing: 0.03em;
+	color: var(--accent-gold-on-dark, #E8C64A);
+	white-space: nowrap;
+}
+body.amt-rail-expanded .amt-rail-translate-label { display: inline; }

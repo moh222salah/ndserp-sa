@@ -1,0 +1,132 @@
+// ===========================================================================
+// Tree view  —  Chart of Accounts, Cost Centers, and every other .treeview page
+// ===========================================================================
+// Everything is scoped under `.treeview`, the class Frappe puts on the page
+// container for tree pages (verified live). That keeps these rules off any
+// `.tree` markup that might appear inside a dialog or another view, and means
+// one implementation covers all tree doctypes with no per-doctype work.
+//
+// WHY THIS FILE EXISTS
+// Frappe authored a connector-line "skeleton" for the tree and then commented
+// the whole thing out — apps/frappe/frappe/public/scss/desk/tree.scss lines
+// 125-158 are dead code, and `.tree.with-skeleton` survives only as
+// `position: relative`. So the class name promises structure the stylesheet
+// never draws, and a deep account tree reads as a flat indented list with no
+// visual link between a parent and its children. This file finishes the job
+// Frappe started, reusing the `position: relative` it already sets on every
+// `.tree-node` as the positioning context.
+//
+// RTL DISCIPLINE (this theme has been bitten twice — see _report.scss §3 and
+// the login_brand block): every offset here is a LOGICAL property
+// (`inset-inline-start`, `padding-inline`, `margin-inline`). rtlcss rewrites
+// physical left/right during the css-rtl build, which would mirror these lines
+// to the wrong side; logical properties are direction-relative by definition
+// and pass through untouched. No physical offset appears anywhere below.
+//
+// GRID-TRAP SAFETY: no transform, filter or backdrop-filter on any container —
+// only `background-color` and absolutely-positioned 1px pseudo-elements.
+
+// Geometry, in one place, derived rather than guessed — the first attempt used
+// 15px and measured 3.0px off in the live tree.
+//
+//   parent row's folder-icon centre = 8px (the padding-inline set below)
+//                                   + 10px (half of the 20px icon box)
+//                                   = 18px in from the row's inline start
+//   children are indented 30px by Frappe
+//     (`.tree-children { padding-left: var(--padding-xl) }`)
+//   → from a child's own box the guide sits 30 - 18 = 12px back
+//
+// If the row padding below changes, this must change with it.
+$amt-tree-guide: 12px;
+$amt-tree-row-mid: 17px; // half of the 33px row, where the tick meets the row
+
+.treeview {
+	// --- connector skeleton -------------------------------------------------
+	.tree-children > .tree-node {
+		// Vertical guide: one segment per child, so they stack into a continuous
+		// line without needing to know the list's height.
+		&::before {
+			content: "";
+			position: absolute;
+			inset-inline-start: -$amt-tree-guide;
+			top: 0;
+			width: 1px;
+			height: 100%;
+			background: var(--border-color);
+		}
+
+		// The last child stops the line at its own row, so it never dangles past
+		// the final item — the detail that makes a tree read as finished.
+		&:last-child::before {
+			height: $amt-tree-row-mid;
+		}
+
+		// Horizontal tick from the guide to the row.
+		&::after {
+			content: "";
+			position: absolute;
+			inset-inline-start: -$amt-tree-guide;
+			top: $amt-tree-row-mid;
+			width: 12px;
+			height: 1px;
+			background: var(--border-color);
+		}
+	}
+
+	// --- rows ---------------------------------------------------------------
+	.tree-link {
+		// Frappe uses `align-items: flex-end`, which sits the label on the icon's
+		// baseline; with Arabic's taller glyph box that reads as a half-line drop.
+		align-items: center;
+		border-radius: 6px;
+		padding-inline: 8px;
+		transition: background-color 0.12s ease;
+
+		&:hover {
+			background-color: var(--fg-hover-color);
+		}
+	}
+
+	// Frappe marks the open node `.selected` and the focused one `.active`;
+	// treat both as "you are here".
+	.tree-link.selected,
+	.tree-link.active {
+		background-color: color-mix(in srgb, var(--primary) 10%, transparent);
+
+		> .tree-label {
+			color: var(--primary);
+			font-weight: 600;
+		}
+	}
+
+	// --- folder glyphs ------------------------------------------------------
+	// Groups get the accent so the eye can separate a branch from a ledger row
+	// at a glance; leaves stay muted.
+	.tree-link .node-parent {
+		color: var(--primary);
+		opacity: 0.75;
+	}
+
+	.tree-link.selected .node-parent,
+	.tree-link.active .node-parent {
+		opacity: 1;
+	}
+
+	.tree-link .node-leaf {
+		color: var(--text-muted);
+	}
+
+	// --- balances -----------------------------------------------------------
+	// Chart of Accounts hangs an amount off each row. Tabular figures make the
+	// column scan vertically instead of jittering per row.
+	.balance-area {
+		font-variant-numeric: tabular-nums;
+		font-feature-settings: "tnum" 1;
+		color: var(--text-muted) !important;
+	}
+
+	.tree-link.selected ~ .balance-area,
+	.tree-link.active ~ .balance-area {
+		color: var(--text-color) !important;
+	}
+}

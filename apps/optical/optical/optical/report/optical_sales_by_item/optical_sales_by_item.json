@@ -1,0 +1,30 @@
+{
+ "add_total_row": 0,
+ "creation": "2026-09-28 00:00:00",
+ "disabled": 0,
+ "docstatus": 0,
+ "doctype": "Report",
+ "idx": 0,
+ "is_standard": "Yes",
+ "modified": "2026-09-28 00:00:00",
+ "modified_by": "Administrator",
+ "module": "Optical",
+ "name": "Optical Sales by Item",
+ "owner": "Administrator",
+ "prepared_report": 0,
+ "query": "SELECT\n oi.item_role AS \"Role::110\",\n oi.item_code AS \"Item:Link/Item:150\",\n oi.item_name AS \"Item Name::200\",\n SUM(oi.qty) AS \"Quantity:Float:90\",\n SUM(oi.amount) AS \"Amount:Currency:120\"\nFROM `tabOptical Order Item` oi\nINNER JOIN `tabOptical Order` o ON o.name = oi.parent AND oi.parenttype = 'Optical Order'\nWHERE o.status NOT IN ('Draft', 'Cancelled')\nGROUP BY oi.item_role, oi.item_code, oi.item_name\nORDER BY SUM(oi.amount) DESC",
+ "ref_doctype": "Optical Order",
+ "report_name": "Optical Sales by Item",
+ "report_type": "Query Report",
+ "roles": [
+  {
+   "role": "System Manager"
+  },
+  {
+   "role": "Optical Manager"
+  },
+  {
+   "role": "Optical Branch Manager"
+  }
+ ]
+}

@@ -1,0 +1,106 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2026-09-08 00:00:00.000000",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "company",
+  "deduction_type",
+  "basis",
+  "dr_cb",
+  "percentage",
+  "fixed_value",
+  "effective_from",
+  "effective_to",
+  "active"
+ ],
+ "fields": [
+  {
+   "fieldname": "company",
+   "fieldtype": "Link",
+   "label": "Company",
+   "options": "Company",
+   "reqd": 1
+  },
+  {
+   "fieldname": "deduction_type",
+   "fieldtype": "Link",
+   "label": "Deduction Type",
+   "options": "Deduction Type",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "basis",
+   "fieldtype": "Select",
+   "label": "Basis",
+   "options": "Gross Value\nNet Value\nQuantity\nOther",
+   "reqd": 1
+  },
+  {
+   "fieldname": "dr_cb",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "percentage",
+   "fieldtype": "Percent",
+   "label": "Percentage",
+   "default": "0"
+  },
+  {
+   "fieldname": "fixed_value",
+   "fieldtype": "Currency",
+   "label": "Fixed Value",
+   "default": "0"
+  },
+  {
+   "fieldname": "effective_from",
+   "fieldtype": "Date",
+   "label": "Effective From",
+   "reqd": 1
+  },
+  {
+   "fieldname": "effective_to",
+   "fieldtype": "Date",
+   "label": "Effective To"
+  },
+  {
+   "fieldname": "active",
+   "fieldtype": "Check",
+   "label": "Active",
+   "default": "1"
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "is_submittable": 0,
+ "issingle": 0,
+ "istable": 0,
+ "links": [],
+ "modified": "2026-09-08 00:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Contracting Setup",
+ "name": "Deduction Rule",
+ "owner": "Administrator",
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "track_changes": 1,
+ "autoname": "CT-DRULE-.#####",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1,
+   "submit": 0,
+   "cancel": 0
+  }
+ ]
+}

@@ -1,0 +1,170 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2026-09-08 00:00:00.000000",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "naming_series",
+  "project",
+  "company",
+  "source_tender",
+  "pbud_cb",
+  "budget_date",
+  "revision_no",
+  "currency",
+  "status",
+  "description",
+  "pbud_tot",
+  "total_cost_amount",
+  "total_selling_amount",
+  "pbud_tot_cb",
+  "planned_profit",
+  "planned_margin",
+  "pbud_note",
+  "boq_html"
+ ],
+ "fields": [
+  {
+   "fieldname": "naming_series",
+   "fieldtype": "Select",
+   "label": "Series",
+   "options": "CT-PBUD-.#####",
+   "default": "CT-PBUD-.#####",
+   "hidden": 1
+  },
+  {
+   "fieldname": "project",
+   "fieldtype": "Link",
+   "label": "Project",
+   "options": "Project",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "company",
+   "fieldtype": "Link",
+   "label": "Company",
+   "options": "Company"
+  },
+  {
+   "fieldname": "source_tender",
+   "fieldtype": "Link",
+   "label": "Source Tender",
+   "options": "Tender"
+  },
+  {
+   "fieldname": "pbud_cb",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "budget_date",
+   "fieldtype": "Date",
+   "label": "Budget Date",
+   "default": "Today"
+  },
+  {
+   "fieldname": "revision_no",
+   "fieldtype": "Int",
+   "label": "Revision No",
+   "default": "0"
+  },
+  {
+   "fieldname": "currency",
+   "fieldtype": "Link",
+   "label": "Currency",
+   "options": "Currency"
+  },
+  {
+   "fieldname": "status",
+   "fieldtype": "Select",
+   "label": "Status",
+   "options": "Draft\nSubmitted\nApproved\nClosed",
+   "default": "Draft",
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "description",
+   "fieldtype": "Small Text",
+   "label": "Description"
+  },
+  {
+   "fieldname": "pbud_tot",
+   "fieldtype": "Section Break",
+   "label": "Totals"
+  },
+  {
+   "fieldname": "total_cost_amount",
+   "fieldtype": "Currency",
+   "label": "Total Cost Budget",
+   "read_only": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "total_selling_amount",
+   "fieldtype": "Currency",
+   "label": "Total Contract / Revenue",
+   "read_only": 1
+  },
+  {
+   "fieldname": "pbud_tot_cb",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "planned_profit",
+   "fieldtype": "Currency",
+   "label": "Planned Profit",
+   "read_only": 1
+  },
+  {
+   "fieldname": "planned_margin",
+   "fieldtype": "Percent",
+   "label": "Planned Margin %",
+   "read_only": 1
+  },
+  {
+   "fieldname": "pbud_note",
+   "fieldtype": "Section Break",
+   "label": "BOQ Items"
+  },
+  {
+   "fieldname": "boq_html",
+   "fieldtype": "HTML",
+   "label": "",
+   "options": "<p>Budget BOQ Items are standalone records linked to this budget (so execution, cost and IPC can reference each line). Use the Budget BOQ Item list filtered by this budget.</p>"
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "is_submittable": 0,
+ "issingle": 0,
+ "istable": 0,
+ "links": [],
+ "modified": "2026-09-08 00:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Contracting Budget",
+ "name": "Project Budget",
+ "owner": "Administrator",
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "track_changes": 1,
+ "autoname": "naming_series:",
+ "title_field": "project",
+ "search_fields": "project,status",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1,
+   "submit": 0,
+   "cancel": 0
+  }
+ ]
+}

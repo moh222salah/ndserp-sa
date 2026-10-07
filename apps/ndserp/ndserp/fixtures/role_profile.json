@@ -1,0 +1,408 @@
+[
+ {
+  "docstatus": 0,
+  "doctype": "Role Profile",
+  "modified": "2026-08-19 15:53:21.393760",
+  "name": "Inventory",
+  "role_profile": "Inventory",
+  "roles": [
+   {
+    "role": "Stock User"
+   },
+   {
+    "role": "Stock Manager"
+   },
+   {
+    "role": "Item Manager"
+   }
+  ]
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Role Profile",
+  "modified": "2026-08-19 15:53:21.399290",
+  "name": "Manufacturing",
+  "role_profile": "Manufacturing",
+  "roles": [
+   {
+    "role": "Stock User"
+   },
+   {
+    "role": "Manufacturing User"
+   },
+   {
+    "role": "Manufacturing Manager"
+   }
+  ]
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Role Profile",
+  "modified": "2026-08-19 15:53:21.403809",
+  "name": "Accounts",
+  "role_profile": "Accounts",
+  "roles": [
+   {
+    "role": "Accounts User"
+   },
+   {
+    "role": "Accounts Manager"
+   }
+  ]
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Role Profile",
+  "modified": "2026-08-19 15:53:21.406581",
+  "name": "Sales",
+  "role_profile": "Sales",
+  "roles": [
+   {
+    "role": "Sales User"
+   },
+   {
+    "role": "Stock User"
+   },
+   {
+    "role": "Sales Manager"
+   }
+  ]
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Role Profile",
+  "modified": "2026-08-19 15:53:21.409543",
+  "name": "Purchase",
+  "role_profile": "Purchase",
+  "roles": [
+   {
+    "role": "Item Manager"
+   },
+   {
+    "role": "Stock User"
+   },
+   {
+    "role": "Purchase User"
+   },
+   {
+    "role": "Purchase Manager"
+   }
+  ]
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Role Profile",
+  "modified": "2026-08-23 10:13:46.657318",
+  "name": "Small Next",
+  "role_profile": "Small Next",
+  "roles": [
+   {
+    "role": "Accounts Manager"
+   },
+   {
+    "role": "حسابات NDS ERP"
+   },
+   {
+    "role": "الاصول NDS ERP"
+   },
+   {
+    "role": "Accounts User"
+   },
+   {
+    "role": "الملفات الرئيسية NDS ERP"
+   },
+   {
+    "role": "مخازن NDS ERP"
+   },
+   {
+    "role": "Stock User"
+   },
+   {
+    "role": "Stock Manager"
+   },
+   {
+    "role": "Sales User"
+   },
+   {
+    "role": "المبيعات NDS ERP"
+   },
+   {
+    "role": "Sales Manager"
+   },
+   {
+    "role": "المشتريات NDS ERP"
+   },
+   {
+    "role": "Purchase User"
+   },
+   {
+    "role": "Purchase Manager"
+   },
+   {
+    "role": "HR NDS"
+   },
+   {
+    "role": "HR Manager"
+   },
+   {
+    "role": "HR User"
+   }
+  ]
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Role Profile",
+  "modified": "2026-08-23 10:11:59.384909",
+  "name": "MID Next",
+  "role_profile": "MID Next",
+  "roles": [
+   {
+    "role": "Accounts Manager"
+   },
+   {
+    "role": "حسابات NDS ERP"
+   },
+   {
+    "role": "Accounts User"
+   },
+   {
+    "role": "HR Manager"
+   },
+   {
+    "role": "HR User"
+   },
+   {
+    "role": "المشتريات NDS ERP"
+   },
+   {
+    "role": "Purchase User"
+   },
+   {
+    "role": "Purchase Manager"
+   },
+   {
+    "role": "الملفات الرئيسية NDS ERP"
+   },
+   {
+    "role": "Sales Manager"
+   },
+   {
+    "role": "المبيعات NDS ERP"
+   },
+   {
+    "role": "Sales User"
+   },
+   {
+    "role": "Stock Manager"
+   },
+   {
+    "role": "مخازن NDS ERP"
+   },
+   {
+    "role": "Stock User"
+   }
+  ]
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Role Profile",
+  "modified": "2026-09-17 01:00:00.000000",
+  "name": "Sales Manager NDS",
+  "role_profile": "Sales Manager NDS",
+  "roles": [
+   {"role": "المبيعات NDS ERP"},
+   {"role": "Sales Manager"},
+   {"role": "Sales User"},
+   {"role": "Sales Master Manager"},
+   {"role": "Stock User"},
+   {"role": "Item Manager"},
+   {"role": "Accounts Manager"},
+   {"role": "Accounts User"},
+   {"role": "NDS Module Manager"}
+  ]
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Role Profile",
+  "modified": "2026-09-17 01:00:00.000000",
+  "name": "Sales User NDS",
+  "role_profile": "Sales User NDS",
+  "roles": [
+   {"role": "المبيعات NDS ERP"},
+   {"role": "Sales User"},
+   {"role": "Sales Master Manager"},
+   {"role": "Stock User"},
+   {"role": "Accounts User"}
+  ]
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Role Profile",
+  "modified": "2026-09-17 01:00:00.000000",
+  "name": "Accounts Manager NDS",
+  "role_profile": "Accounts Manager NDS",
+  "roles": [
+   {"role": "حسابات NDS ERP"},
+   {"role": "Accounts Manager"},
+   {"role": "Accounts User"},
+   {"role": "NDS Module Manager"}
+  ]
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Role Profile",
+  "modified": "2026-09-17 01:00:00.000000",
+  "name": "Accounts User NDS",
+  "role_profile": "Accounts User NDS",
+  "roles": [
+   {"role": "حسابات NDS ERP"},
+   {"role": "Accounts User"}
+  ]
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Role Profile",
+  "modified": "2026-09-17 01:00:00.000000",
+  "name": "Stock Manager NDS",
+  "role_profile": "Stock Manager NDS",
+  "roles": [
+   {"role": "مخازن NDS ERP"},
+   {"role": "Stock Manager"},
+   {"role": "Stock User"},
+   {"role": "Item Manager"},
+   {"role": "NDS Module Manager"}
+  ]
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Role Profile",
+  "modified": "2026-09-17 01:00:00.000000",
+  "name": "Stock User NDS",
+  "role_profile": "Stock User NDS",
+  "roles": [
+   {"role": "مخازن NDS ERP"},
+   {"role": "Stock User"},
+   {"role": "Item Manager"}
+  ]
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Role Profile",
+  "modified": "2026-09-17 01:00:00.000000",
+  "name": "Purchase Manager NDS",
+  "role_profile": "Purchase Manager NDS",
+  "roles": [
+   {"role": "المشتريات NDS ERP"},
+   {"role": "Purchase Manager"},
+   {"role": "Purchase User"},
+   {"role": "Purchase Master Manager"},
+   {"role": "Stock User"},
+   {"role": "Item Manager"},
+   {"role": "Accounts User"},
+   {"role": "NDS Module Manager"}
+  ]
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Role Profile",
+  "modified": "2026-09-17 01:00:00.000000",
+  "name": "Purchase User NDS",
+  "role_profile": "Purchase User NDS",
+  "roles": [
+   {"role": "المشتريات NDS ERP"},
+   {"role": "Purchase User"},
+   {"role": "Stock User"},
+   {"role": "Accounts User"}
+  ]
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Role Profile",
+  "modified": "2026-09-17 01:00:00.000000",
+  "name": "Assets Manager NDS",
+  "role_profile": "Assets Manager NDS",
+  "roles": [
+   {"role": "الاصول NDS ERP"},
+   {"role": "Accounts Manager"},
+   {"role": "Accounts User"},
+   {"role": "Item Manager"},
+   {"role": "Quality Manager"},
+   {"role": "Manufacturing User"},
+   {"role": "Manufacturing Manager"},
+   {"role": "NDS Module Manager"}
+  ]
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Role Profile",
+  "modified": "2026-09-17 01:00:00.000000",
+  "name": "Assets User NDS",
+  "role_profile": "Assets User NDS",
+  "roles": [
+   {"role": "الاصول NDS ERP"},
+   {"role": "Accounts User"},
+   {"role": "Accounts Manager"},
+   {"role": "Stock Manager"},
+   {"role": "Quality Manager"},
+   {"role": "Manufacturing User"}
+  ]
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Role Profile",
+  "modified": "2026-09-17 01:00:00.000000",
+  "name": "HR Manager NDS",
+  "role_profile": "HR Manager NDS",
+  "roles": [
+   {"role": "HR NDS"},
+   {"role": "HR Manager"},
+   {"role": "HR User"},
+   {"role": "Expense Approver"},
+   {"role": "NDS Module Manager"}
+  ]
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Role Profile",
+  "modified": "2026-09-17 01:00:00.000000",
+  "name": "HR User NDS",
+  "role_profile": "HR User NDS",
+  "roles": [
+   {"role": "HR NDS"},
+   {"role": "HR Manager"},
+   {"role": "HR User"},
+   {"role": "Expense Approver"}
+  ]
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Role Profile",
+  "modified": "2026-09-17 01:00:00.000000",
+  "name": "POS Manager NDS",
+  "role_profile": "POS Manager NDS",
+  "roles": [
+   {"role": "نقاط البيع NDS ERP"},
+   {"role": "Sales Manager"},
+   {"role": "Sales User"},
+   {"role": "Stock User"},
+   {"role": "Item Manager"},
+   {"role": "Accounts Manager"},
+   {"role": "Accounts User"},
+   {"role": "NDS Module Manager"}
+  ]
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Role Profile",
+  "modified": "2026-09-17 01:00:00.000000",
+  "name": "POS User NDS",
+  "role_profile": "POS User NDS",
+  "roles": [
+   {"role": "نقاط البيع NDS ERP"},
+   {"role": "Sales Manager"},
+   {"role": "Sales User"},
+   {"role": "Stock User"},
+   {"role": "Accounts User"}
+  ]
+ }
+]

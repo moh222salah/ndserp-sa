@@ -1,0 +1,90 @@
+{
+ "name": "NDS Menu Item",
+ "istable": 1,
+ "editable_grid": 1,
+ "allow_rename": 1,
+ "field_order": [
+  "item",
+  "item_name",
+  "rate",
+  "course",
+  "special_dish",
+  "disabled",
+  "variants",
+  "addons"
+ ],
+ "fields": [
+  {
+   "fieldname": "item",
+   "fieldtype": "Link",
+   "label": "Item",
+   "options": "Item",
+   "in_list_view": 1,
+   "reqd": 1
+  },
+  {
+   "fieldname": "item_name",
+   "fieldtype": "Data",
+   "label": "Item Name",
+   "fetch_from": "item.item_name",
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "rate",
+   "fieldtype": "Currency",
+   "label": "Rate",
+   "in_list_view": 1,
+   "reqd": 1
+  },
+  {
+   "fieldname": "course",
+   "fieldtype": "Link",
+   "label": "Course",
+   "options": "NDS Menu Course",
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "special_dish",
+   "fieldtype": "Check",
+   "label": "Special Dish",
+   "default": "0",
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "disabled",
+   "fieldtype": "Check",
+   "label": "Disabled",
+   "default": "0",
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "variants",
+   "fieldtype": "Small Text",
+   "label": "Variants (deprecated - use Item child tables)",
+   "read_only": 1,
+   "hidden": 1,
+   "description": "Deprecated: Use custom_pos_item_variants on the Item instead"
+  },
+  {
+   "fieldname": "addons",
+   "fieldtype": "Small Text",
+   "label": "Add-ons (deprecated - use Item child tables)",
+   "read_only": 1,
+   "hidden": 1,
+   "description": "Deprecated: Use custom_pos_add_on_items on the Item instead"
+  }
+ ],
+ "doctype": "DocType",
+ "module": "NDS Restaurant",
+ "engine": "InnoDB",
+ "actions": [],
+ "links": [],
+ "states": [],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "owner": "Administrator",
+ "modified_by": "Administrator",
+ "creation": "2026-09-24 00:00:00.000000",
+ "modified": "2026-09-24 00:00:00.000000",
+ "permissions": []
+}

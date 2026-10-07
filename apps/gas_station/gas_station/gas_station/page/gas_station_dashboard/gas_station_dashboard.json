@@ -1,0 +1,22 @@
+{
+ "content": null,
+ "creation": "2026-01-15 00:00:00.000000",
+ "docstatus": 0,
+ "doctype": "Page",
+ "idx": 0,
+ "modified": "2026-01-15 00:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Gas Station",
+ "name": "gas_station_dashboard",
+ "owner": "Administrator",
+ "page_name": "gas_station_dashboard",
+ "roles": [
+  {"role": "Gas Station Administrator"},
+  {"role": "Station Manager"},
+  {"role": "Station Operator"},
+  {"role": "Gas Station Viewer"},
+  {"role": "System Manager"}
+ ],
+ "standard": "Yes",
+ "title": "Gas Station Dashboard"
+}

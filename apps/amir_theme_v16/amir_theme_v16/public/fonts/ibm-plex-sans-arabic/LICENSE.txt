@@ -1,0 +1,17 @@
+IBM Plex Sans Arabic
+Copyright © 2017 IBM Corp. https://github.com/IBM/plex
+
+Licensed under the SIL Open Font License, Version 1.1.
+Full text: https://scripts.sil.org/OFL
+
+The OFL permits bundling and redistribution with software, including
+commercial software, provided the fonts are not sold on their own and
+this notice is retained.
+
+Files here are the ARABIC SUBSET only (unicode-range U+0600-06FF and the
+Arabic presentation-form blocks), extracted from the Google Fonts build.
+Latin glyphs are deliberately excluded — Inter, already shipped by Frappe,
+renders Latin, so shipping Latin twice would waste bytes.
+
+Weights bundled: 400, 500, 600, 700.
+Weight 300 is not bundled: unused by this theme.

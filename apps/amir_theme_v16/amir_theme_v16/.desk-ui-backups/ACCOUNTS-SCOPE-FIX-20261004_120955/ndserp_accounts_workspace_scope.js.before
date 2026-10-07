@@ -1,0 +1,128 @@
+(() => {
+    "use strict";
+
+    const TARGET_ROUTE = "/desk/Workspaces/حسابات NDS ERP";
+    const TARGET_CLASS = "ndserp-accounts-workspace";
+
+    const getPath = () => {
+        let path = window.location.pathname || "";
+
+        try {
+            path = decodeURIComponent(path);
+        } catch {
+            // Keep raw path on decode failure.
+        }
+
+        return path.replace(/\/+$/, "");
+    };
+
+    const isTarget = () => getPath() === TARGET_ROUTE;
+
+    const applyScope = () => {
+        const active = isTarget();
+
+        document.body?.classList.toggle(TARGET_CLASS, active);
+
+        document
+            .querySelectorAll(
+                '[data-page-route="Workspaces"],' +
+                '.workspace-container,' +
+                '.workspace-page'
+            )
+            .forEach((node) => {
+                node.classList.toggle(TARGET_CLASS, active);
+            });
+    };
+
+    const refresh = () => {
+        window.requestAnimationFrame(applyScope);
+    };
+
+    const wrapHistory = (method) => {
+        const original = history[method];
+
+        if (typeof original !== "function") {
+            return;
+        }
+
+        history[method] = function (...args) {
+            const result = original.apply(this, args);
+            refresh();
+            return result;
+        };
+    };
+
+    wrapHistory("pushState");
+    wrapHistory("replaceState");
+
+    window.addEventListener("popstate", refresh);
+    window.addEventListener("hashchange", refresh);
+
+    if (window.frappe?.router?.on) {
+        try {
+            window.frappe.router.on("change", refresh);
+        } catch {
+            // Frappe router API may vary.
+        }
+    }
+
+    if (document.documentElement) {
+        const observer = new MutationObserver(() => {
+            if (isTarget()) {
+                refresh();
+            }
+        });
+
+        observer.observe(document.documentElement, {
+            childList: true,
+            subtree: true
+        });
+    }
+
+    refresh();
+})();
+
+
+/* NDSERP_ACCOUNTS_RUNTIME_SCOPE_FIX_20261004
+ * Runtime scope hardening for Accounts Workspace.
+ * UI/runtime scope only; no database or business-logic changes.
+ */
+(function () {
+    const ACCOUNT_WORKSPACE = "حسابات NDS ERP";
+    const ACCOUNT_CLASS = "ndserp-accounts-workspace";
+    let raf = 0;
+
+    const isAccountsWorkspace = () => {
+        const route = window.frappe?.get_route?.() || [];
+        return route[0] === "Workspaces" && route[1] === ACCOUNT_WORKSPACE;
+    };
+
+    const syncAccountsScope = () => {
+        const page = document.querySelector("#page-Workspaces");
+        if (!page) return;
+
+        page.classList.toggle(ACCOUNT_CLASS, isAccountsWorkspace());
+    };
+
+    const queueSync = () => {
+        cancelAnimationFrame(raf);
+        raf = requestAnimationFrame(syncAccountsScope);
+    };
+
+    queueSync();
+    [100, 300, 800, 1500].forEach((delay) => {
+        window.setTimeout(queueSync, delay);
+    });
+
+    if (window.frappe?.router?.on) {
+        frappe.router.on("change", queueSync);
+    }
+
+    window.addEventListener("hashchange", queueSync);
+
+    const observer = new MutationObserver(queueSync);
+    observer.observe(document.body, {
+        childList: true,
+        subtree: true
+    });
+})();

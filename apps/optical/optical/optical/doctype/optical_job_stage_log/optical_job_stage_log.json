@@ -1,0 +1,47 @@
+{
+ "actions": [],
+ "creation": "2026-09-28 00:00:00",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "stage",
+  "changed_on",
+  "changed_by"
+ ],
+ "fields": [
+  {
+   "fieldname": "stage",
+   "fieldtype": "Data",
+   "label": "Stage",
+   "read_only": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "changed_on",
+   "fieldtype": "Datetime",
+   "label": "Changed On",
+   "read_only": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "changed_by",
+   "fieldtype": "Link",
+   "label": "Changed By",
+   "options": "User",
+   "read_only": 1,
+   "in_list_view": 1
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2026-09-28 00:00:00",
+ "modified_by": "Administrator",
+ "module": "Optical",
+ "name": "Optical Job Stage Log",
+ "owner": "Administrator",
+ "permissions": [],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "istable": 1
+}

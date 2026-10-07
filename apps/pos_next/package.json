@@ -1,0 +1,19 @@
+{
+  "name": "pos_next",
+  "version": "1.0.0",
+  "description": "POS built on ERPNext that brings together real-time billing, stock management, multi-user access, offline mode, and direct ERP integration. Run your store or restaurant with confidence and control, while staying 100% open source.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "postinstall": "cd POS && yarn install",
+    "dev": "cd POS && yarn dev",
+    "build": "cd POS && yarn build"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "dompurify": "^3.3.0",
+    "playwright": "^1.57.0"
+  }
+}

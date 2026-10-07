@@ -1,0 +1,167 @@
+{
+ "actions": [],
+ "creation": "2026-09-28 00:00:00",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "general_section",
+  "default_laboratory",
+  "default_delivery_days",
+  "default_prescription_validity_days",
+  "default_warranty_days",
+  "general_col",
+  "allow_delivery_with_balance",
+  "insurance_service_item",
+  "lab_service_item",
+  "stages_section",
+  "enable_rx_verification",
+  "enable_measurements_confirmation",
+  "enable_preparation",
+  "enable_laboratory",
+  "stages_col",
+  "enable_assembly",
+  "enable_quality_control",
+  "enable_customer_notification"
+ ],
+ "fields": [
+  {
+   "fieldname": "general_section",
+   "fieldtype": "Section Break",
+   "label": "General"
+  },
+  {
+   "fieldname": "default_laboratory",
+   "fieldtype": "Link",
+   "label": "Default Laboratory",
+   "options": "Optical Laboratory"
+  },
+  {
+   "fieldname": "default_delivery_days",
+   "fieldtype": "Int",
+   "label": "Default Delivery Days",
+   "default": "3"
+  },
+  {
+   "fieldname": "default_prescription_validity_days",
+   "fieldtype": "Int",
+   "label": "Prescription Validity (Days)",
+   "default": "365"
+  },
+  {
+   "fieldname": "default_warranty_days",
+   "fieldtype": "Int",
+   "label": "Default Warranty (Days)",
+   "default": "365"
+  },
+  {
+   "fieldname": "general_col",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "allow_delivery_with_balance",
+   "fieldtype": "Check",
+   "label": "Allow Delivery With Outstanding Balance"
+  },
+  {
+   "fieldname": "insurance_service_item",
+   "fieldtype": "Link",
+   "label": "Insurance Service Item",
+   "options": "Item",
+   "description": "Non-stock item used on the insurer invoice."
+  },
+  {
+   "fieldname": "lab_service_item",
+   "fieldtype": "Link",
+   "label": "Laboratory Service Item",
+   "options": "Item",
+   "description": "Non-stock item used on external laboratory purchase orders."
+  },
+  {
+   "fieldname": "stages_section",
+   "fieldtype": "Section Break",
+   "label": "Optical Job Stages"
+  },
+  {
+   "fieldname": "enable_rx_verification",
+   "fieldtype": "Check",
+   "label": "Prescription Verification",
+   "default": "1"
+  },
+  {
+   "fieldname": "enable_measurements_confirmation",
+   "fieldtype": "Check",
+   "label": "Measurements Confirmed",
+   "default": "1"
+  },
+  {
+   "fieldname": "enable_preparation",
+   "fieldtype": "Check",
+   "label": "Preparation",
+   "default": "1"
+  },
+  {
+   "fieldname": "enable_laboratory",
+   "fieldtype": "Check",
+   "label": "Laboratory",
+   "default": "1"
+  },
+  {
+   "fieldname": "stages_col",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "enable_assembly",
+   "fieldtype": "Check",
+   "label": "Assembly",
+   "default": "1"
+  },
+  {
+   "fieldname": "enable_quality_control",
+   "fieldtype": "Check",
+   "label": "Quality Control",
+   "default": "1"
+  },
+  {
+   "fieldname": "enable_customer_notification",
+   "fieldtype": "Check",
+   "label": "Customer Notification",
+   "default": "1"
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2026-09-28 00:00:00",
+ "modified_by": "Administrator",
+ "module": "Optical",
+ "name": "Optical Settings",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "role": "System Manager",
+   "read": 1,
+   "report": 1,
+   "export": 1,
+   "print": 1,
+   "email": 1,
+   "share": 1,
+   "write": 1,
+   "create": 1
+  },
+  {
+   "role": "Optical Manager",
+   "read": 1,
+   "report": 1,
+   "export": 1,
+   "print": 1,
+   "email": 1,
+   "share": 1,
+   "write": 1,
+   "create": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "track_changes": 1,
+ "issingle": 1
+}

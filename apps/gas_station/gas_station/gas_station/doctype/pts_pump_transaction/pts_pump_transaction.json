@@ -1,0 +1,389 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2026-01-15 00:00:00.000000",
+ "description": "Physical fuel transaction received from PTS. NOT a Sales Invoice.",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "sb_src",
+  "station",
+  "pts_controller",
+  "pts_transaction_id",
+  "pts_packet_id",
+  "cb_src",
+  "pump",
+  "nozzle",
+  "tank",
+  "fuel_grade",
+  "erpnext_item",
+  "sb_txn",
+  "start_datetime",
+  "end_datetime",
+  "volume",
+  "temperature_compensated_volume",
+  "cb_txn",
+  "price",
+  "amount",
+  "flow_rate",
+  "sb_tot",
+  "total_volume",
+  "total_amount",
+  "tag",
+  "is_remote_tag",
+  "cb_tot",
+  "user_id",
+  "shift_number",
+  "is_offline",
+  "is_paid",
+  "is_test",
+  "sb_proc",
+  "received_at",
+  "processed_at",
+  "processing_status",
+  "retry_count",
+  "cb_proc",
+  "erpnext_doctype",
+  "erpnext_reference",
+  "reconciliation_status",
+  "error_message",
+  "sb_raw",
+  "custom_data",
+  "raw_payload"
+ ],
+ "fields": [
+  {
+   "fieldname": "sb_src",
+   "fieldtype": "Section Break",
+   "label": "Source"
+  },
+  {
+   "fieldname": "station",
+   "fieldtype": "Link",
+   "label": "Station",
+   "options": "Gas Station",
+   "reqd": 1,
+   "search_index": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "pts_controller",
+   "fieldtype": "Link",
+   "label": "PTS Controller",
+   "options": "PTS Controller",
+   "search_index": 1
+  },
+  {
+   "fieldname": "pts_transaction_id",
+   "fieldtype": "Data",
+   "label": "PTS Transaction ID",
+   "reqd": 1,
+   "search_index": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "pts_packet_id",
+   "fieldtype": "Data",
+   "label": "PTS Packet ID",
+   "search_index": 1
+  },
+  {
+   "fieldname": "cb_src",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "pump",
+   "fieldtype": "Data",
+   "label": "Pump",
+   "search_index": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "nozzle",
+   "fieldtype": "Data",
+   "label": "Nozzle"
+  },
+  {
+   "fieldname": "tank",
+   "fieldtype": "Data",
+   "label": "Tank"
+  },
+  {
+   "fieldname": "fuel_grade",
+   "fieldtype": "Data",
+   "label": "Fuel Grade"
+  },
+  {
+   "fieldname": "erpnext_item",
+   "fieldtype": "Link",
+   "label": "Fuel Item",
+   "options": "Item"
+  },
+  {
+   "fieldname": "sb_txn",
+   "fieldtype": "Section Break",
+   "label": "Transaction"
+  },
+  {
+   "fieldname": "start_datetime",
+   "fieldtype": "Datetime",
+   "label": "Start",
+   "search_index": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "end_datetime",
+   "fieldtype": "Datetime",
+   "label": "End"
+  },
+  {
+   "fieldname": "volume",
+   "fieldtype": "Float",
+   "label": "Volume (L)",
+   "precision": "3",
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "temperature_compensated_volume",
+   "fieldtype": "Float",
+   "label": "TC Volume (L)",
+   "precision": "3"
+  },
+  {
+   "fieldname": "cb_txn",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "price",
+   "fieldtype": "Float",
+   "label": "Price /L",
+   "precision": "3"
+  },
+  {
+   "fieldname": "amount",
+   "fieldtype": "Float",
+   "label": "Amount",
+   "precision": "2",
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "flow_rate",
+   "fieldtype": "Float",
+   "label": "Flow Rate",
+   "precision": "2"
+  },
+  {
+   "fieldname": "sb_tot",
+   "fieldtype": "Section Break",
+   "label": "Totalizers & Tags"
+  },
+  {
+   "fieldname": "total_volume",
+   "fieldtype": "Float",
+   "label": "Totalizer Volume",
+   "precision": "3"
+  },
+  {
+   "fieldname": "total_amount",
+   "fieldtype": "Float",
+   "label": "Totalizer Amount",
+   "precision": "2"
+  },
+  {
+   "fieldname": "tag",
+   "fieldtype": "Data",
+   "label": "Tag"
+  },
+  {
+   "fieldname": "is_remote_tag",
+   "fieldtype": "Check",
+   "label": "Remote Tag"
+  },
+  {
+   "fieldname": "cb_tot",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "user_id",
+   "fieldtype": "Data",
+   "label": "User ID"
+  },
+  {
+   "fieldname": "shift_number",
+   "fieldtype": "Data",
+   "label": "Shift"
+  },
+  {
+   "fieldname": "is_offline",
+   "fieldtype": "Check",
+   "label": "Offline"
+  },
+  {
+   "fieldname": "is_paid",
+   "fieldtype": "Check",
+   "label": "Paid"
+  },
+  {
+   "fieldname": "is_test",
+   "fieldtype": "Check",
+   "label": "Test"
+  },
+  {
+   "fieldname": "sb_proc",
+   "fieldtype": "Section Break",
+   "label": "Processing"
+  },
+  {
+   "fieldname": "received_at",
+   "fieldtype": "Datetime",
+   "label": "Received At"
+  },
+  {
+   "fieldname": "processed_at",
+   "fieldtype": "Datetime",
+   "label": "Processed At"
+  },
+  {
+   "fieldname": "processing_status",
+   "fieldtype": "Select",
+   "label": "Processing Status",
+   "options": "Received\nProcessing\nProcessed\nFailed\nDuplicate\nIgnored",
+   "default": "Received",
+   "search_index": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "retry_count",
+   "fieldtype": "Int",
+   "label": "Retry Count"
+  },
+  {
+   "fieldname": "cb_proc",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "erpnext_doctype",
+   "fieldtype": "Data",
+   "label": "ERPNext DocType",
+   "read_only": 1
+  },
+  {
+   "fieldname": "erpnext_reference",
+   "fieldtype": "Dynamic Link",
+   "label": "ERPNext Reference",
+   "options": "erpnext_doctype",
+   "read_only": 1
+  },
+  {
+   "fieldname": "reconciliation_status",
+   "fieldtype": "Select",
+   "label": "Reconciliation",
+   "options": "Pending\nMatched\nMissing in ERPNext\nMissing in PTS\nAmount Mismatch\nVolume Mismatch\nDuplicate",
+   "default": "Pending",
+   "search_index": 1
+  },
+  {
+   "fieldname": "error_message",
+   "fieldtype": "Small Text",
+   "label": "Error"
+  },
+  {
+   "fieldname": "sb_raw",
+   "fieldtype": "Section Break",
+   "label": "Raw"
+  },
+  {
+   "fieldname": "custom_data",
+   "fieldtype": "Code",
+   "label": "Custom Data",
+   "options": "JSON"
+  },
+  {
+   "fieldname": "raw_payload",
+   "fieldtype": "Code",
+   "label": "Raw Payload",
+   "options": "JSON"
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2026-01-15 00:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Gas Station",
+ "name": "PTS Pump Transaction",
+ "owner": "Administrator",
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "track_changes": 1,
+ "autoname": "PTS-TXN-.YYYY.-.#####",
+ "naming_rule": "Expression (old style)",
+ "search_fields": "pts_transaction_id,pump,station",
+ "permissions": [
+  {
+   "role": "System Manager",
+   "read": 1,
+   "permlevel": 0,
+   "create": 1,
+   "write": 1,
+   "delete": 1,
+   "report": 1,
+   "export": 1,
+   "email": 1,
+   "print": 1,
+   "share": 1
+  },
+  {
+   "role": "Gas Station Administrator",
+   "read": 1,
+   "permlevel": 0,
+   "create": 1,
+   "write": 1,
+   "delete": 1,
+   "report": 1,
+   "export": 1,
+   "email": 1,
+   "print": 1,
+   "share": 1
+  },
+  {
+   "role": "Gas Station Integration Manager",
+   "read": 1,
+   "permlevel": 0,
+   "create": 1,
+   "write": 1,
+   "delete": 1,
+   "report": 1,
+   "export": 1,
+   "email": 1,
+   "print": 1,
+   "share": 1
+  },
+  {
+   "role": "Station Manager",
+   "read": 1,
+   "permlevel": 0,
+   "write": 1,
+   "create": 1,
+   "report": 1,
+   "print": 1,
+   "email": 1
+  },
+  {
+   "role": "Station Operator",
+   "read": 1,
+   "permlevel": 0,
+   "report": 1,
+   "print": 1,
+   "export": 1
+  },
+  {
+   "role": "Gas Station Viewer",
+   "read": 1,
+   "permlevel": 0,
+   "report": 1,
+   "print": 1,
+   "export": 1
+  }
+ ]
+}

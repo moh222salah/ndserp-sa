@@ -1,0 +1,121 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2026-09-08 00:00:00.000000",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "code",
+  "csi_name",
+  "csi_cb",
+  "is_group",
+  "parent_csi_code",
+  "disabled",
+  "lft",
+  "rgt",
+  "old_parent"
+ ],
+ "fields": [
+  {
+   "fieldname": "code",
+   "fieldtype": "Data",
+   "label": "Code",
+   "reqd": 1,
+   "unique": 1,
+   "description": "CSI classification code, e.g. 03.30.10"
+  },
+  {
+   "fieldname": "csi_name",
+   "fieldtype": "Data",
+   "label": "Description",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "csi_cb",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "is_group",
+   "fieldtype": "Check",
+   "label": "Is Group",
+   "default": "0"
+  },
+  {
+   "fieldname": "parent_csi_code",
+   "fieldtype": "Link",
+   "label": "Parent CSI Code",
+   "options": "CSI Code"
+  },
+  {
+   "fieldname": "disabled",
+   "fieldtype": "Check",
+   "label": "Disabled",
+   "default": "0"
+  },
+  {
+   "fieldname": "lft",
+   "fieldtype": "Int",
+   "label": "lft",
+   "hidden": 1,
+   "read_only": 1,
+   "no_copy": 1,
+   "print_hide": 1,
+   "search_index": 1
+  },
+  {
+   "fieldname": "rgt",
+   "fieldtype": "Int",
+   "label": "rgt",
+   "hidden": 1,
+   "read_only": 1,
+   "no_copy": 1,
+   "print_hide": 1,
+   "search_index": 1
+  },
+  {
+   "fieldname": "old_parent",
+   "fieldtype": "Link",
+   "label": "old_parent",
+   "options": "CSI Code",
+   "hidden": 1,
+   "read_only": 1,
+   "no_copy": 1,
+   "print_hide": 1
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "is_submittable": 0,
+ "issingle": 0,
+ "istable": 0,
+ "links": [],
+ "modified": "2026-09-08 00:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Contracting Setup",
+ "name": "CSI Code",
+ "owner": "Administrator",
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "track_changes": 1,
+ "is_tree": 1,
+ "autoname": "field:code",
+ "title_field": "csi_name",
+ "search_fields": "csi_name",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1,
+   "submit": 0,
+   "cancel": 0
+  }
+ ]
+}

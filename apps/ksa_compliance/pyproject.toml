@@ -1,0 +1,40 @@
+[project]
+name = "ksa_compliance"
+authors = [
+    { name = "LavaLoon", email = "info@lavaloon.com" }
+]
+description = "KSA Compliance app for E-invoice"
+requires-python = ">=3.10"
+readme = "README.md"
+dynamic = ["version"]
+dependencies = [
+    # "frappe~=15.0.0" # Installed and managed by bench.
+    "result",
+    "pyqrcode~=1.2.1",
+    "pathvalidate~=3.2.1",
+    # frappe already requires a specific version of this, so we don't specify a version to avoid conflicts
+    "semantic-version"
+]
+
+[build-system]
+requires = ["flit_core >=3.4,<4"]
+build-backend = "flit_core.buildapi"
+
+[tool.bench.frappe-dependencies]
+frappe = ">=15.0.0,<17.0.0"
+
+# These dependencies are only installed when developer mode is enabled
+[tool.bench.dev-dependencies]
+# package_name = "~=1.1.0"
+ruff = "~=0.15.0"
+pre-commit = "~=4.0.1"
+mypy = "~=1.13.0"
+
+[tool.ruff]
+line-length = 120
+
+[tool.ruff.lint]
+typing-modules = ['frappe.types.DF']
+
+[tool.ruff.format]
+quote-style = 'single'

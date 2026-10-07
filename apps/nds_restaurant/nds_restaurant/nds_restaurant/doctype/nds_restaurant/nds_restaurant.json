@@ -1,0 +1,174 @@
+{
+ "name": "NDS Restaurant",
+ "autoname": "prompt",
+ "naming_rule": "Set by user",
+ "document_type": "Setup",
+ "editable_grid": 1,
+ "image_field": "image",
+ "field_order": [
+  "image",
+  "company",
+  "invoice_series_prefix",
+  "aggregator_series_prefix",
+  "column_break_1",
+  "address",
+  "branch",
+  "default_tax_template",
+  "menu_info_section",
+  "active_menu",
+  "default_room",
+  "room_wise_menu",
+  "menu_for_room",
+  "order_type_wise_menu",
+  "order_type_menu"
+ ],
+ "fields": [
+  {
+   "fieldname": "image",
+   "fieldtype": "Attach Image",
+   "label": "Image",
+   "hidden": 1
+  },
+  {
+   "fieldname": "company",
+   "fieldtype": "Link",
+   "label": "Company",
+   "options": "Company",
+   "reqd": 1
+  },
+  {
+   "fieldname": "invoice_series_prefix",
+   "fieldtype": "Data",
+   "label": "Invoice Series Prefix",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "aggregator_series_prefix",
+   "fieldtype": "Data",
+   "label": "Aggregator Series Prefix"
+  },
+  {
+   "fieldname": "column_break_1",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "address",
+   "fieldtype": "Link",
+   "label": "Address",
+   "options": "Address"
+  },
+  {
+   "fieldname": "branch",
+   "fieldtype": "Link",
+   "label": "Branch",
+   "options": "Branch",
+   "reqd": 1
+  },
+  {
+   "fieldname": "default_tax_template",
+   "fieldtype": "Link",
+   "label": "Default Tax Template",
+   "options": "Sales Taxes and Charges Template"
+  },
+  {
+   "fieldname": "menu_info_section",
+   "fieldtype": "Section Break",
+   "label": "Menu Info"
+  },
+  {
+   "fieldname": "active_menu",
+   "fieldtype": "Link",
+   "label": "Default Menu",
+   "options": "NDS Menu"
+  },
+  {
+   "fieldname": "default_room",
+   "fieldtype": "Link",
+   "label": "Default Room",
+   "options": "NDS Room",
+   "reqd": 0
+  },
+  {
+   "fieldname": "room_wise_menu",
+   "fieldtype": "Check",
+   "label": "Room Wise Menu",
+   "default": "0"
+  },
+  {
+   "fieldname": "menu_for_room",
+   "fieldtype": "Table",
+   "label": "Menu For Room",
+   "options": "NDS Menu For Room",
+   "depends_on": "eval:doc.room_wise_menu"
+  },
+  {
+   "fieldname": "order_type_wise_menu",
+   "fieldtype": "Check",
+   "label": "Order Type Wise Menu",
+   "default": "0"
+  },
+  {
+   "fieldname": "order_type_menu",
+   "fieldtype": "Table",
+   "label": "Order Type Menu",
+   "options": "NDS Order Type Menu",
+   "depends_on": "eval:doc.order_type_wise_menu"
+  }
+ ],
+ "doctype": "DocType",
+ "module": "NDS Restaurant",
+ "engine": "InnoDB",
+ "actions": [],
+ "links": [],
+ "states": [],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "owner": "Administrator",
+ "modified_by": "Administrator",
+ "creation": "2026-09-24 00:00:00.000000",
+ "modified": "2026-09-24 00:00:00.000000",
+ "permissions": [
+  {
+   "role": "System Manager",
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "select": 1,
+   "share": 1,
+   "write": 1
+  },
+  {
+   "role": "NDS Manager",
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "select": 1,
+   "share": 1,
+   "write": 1
+  },
+  {
+   "role": "NDS Captain",
+   "email": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "select": 1
+  },
+  {
+   "role": "NDS Cashier",
+   "print": 1,
+   "read": 1,
+   "select": 1,
+   "write": 1
+  }
+ ]
+}

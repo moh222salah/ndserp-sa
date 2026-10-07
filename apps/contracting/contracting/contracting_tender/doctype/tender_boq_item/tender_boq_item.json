@@ -1,0 +1,263 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2026-09-08 00:00:00.000000",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "naming_series",
+  "tender",
+  "boq_no",
+  "description",
+  "parent_tender_boq_item",
+  "is_group",
+  "tboq_cb1",
+  "quantity",
+  "unit",
+  "csi_code",
+  "pricing_mode",
+  "tboq_cost",
+  "cost_rate",
+  "cost_amount",
+  "direct_cost",
+  "tboq_sell",
+  "calculated_selling_rate",
+  "selling_rate",
+  "tboq_sell_cb",
+  "selling_amount",
+  "planned_profit",
+  "planned_margin",
+  "tboq_mat",
+  "materials",
+  "tboq_lab",
+  "labour",
+  "tboq_eq",
+  "equipment",
+  "tboq_exp",
+  "expenses",
+  "tboq_sub",
+  "subcontracts"
+ ],
+ "fields": [
+  {
+   "fieldname": "naming_series",
+   "fieldtype": "Select",
+   "label": "Series",
+   "options": "CT-TBOQ-.#####",
+   "default": "CT-TBOQ-.#####",
+   "hidden": 1
+  },
+  {
+   "fieldname": "tender",
+   "fieldtype": "Link",
+   "label": "Tender",
+   "options": "Tender",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "boq_no",
+   "fieldtype": "Data",
+   "label": "BOQ No",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "description",
+   "fieldtype": "Small Text",
+   "label": "Description",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "parent_tender_boq_item",
+   "fieldtype": "Link",
+   "label": "Parent BOQ Item",
+   "options": "Tender BOQ Item"
+  },
+  {
+   "fieldname": "is_group",
+   "fieldtype": "Check",
+   "label": "Is Group",
+   "default": "0"
+  },
+  {
+   "fieldname": "tboq_cb1",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "quantity",
+   "fieldtype": "Float",
+   "label": "Quantity",
+   "reqd": 1
+  },
+  {
+   "fieldname": "unit",
+   "fieldtype": "Data",
+   "label": "Unit",
+   "description": "Free text, e.g. m\u00b3, m\u00b2, ton, LS."
+  },
+  {
+   "fieldname": "csi_code",
+   "fieldtype": "Link",
+   "label": "CSI Code",
+   "options": "CSI Code"
+  },
+  {
+   "fieldname": "pricing_mode",
+   "fieldtype": "Select",
+   "label": "Pricing Mode",
+   "options": "Detailed Breakdown\nDirect Cost\nDirect Selling Rate",
+   "default": "Direct Cost"
+  },
+  {
+   "fieldname": "tboq_cost",
+   "fieldtype": "Section Break",
+   "label": "Cost (no markup)"
+  },
+  {
+   "fieldname": "cost_rate",
+   "fieldtype": "Currency",
+   "label": "Cost Rate"
+  },
+  {
+   "fieldname": "cost_amount",
+   "fieldtype": "Currency",
+   "label": "Cost Amount",
+   "read_only": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "direct_cost",
+   "fieldtype": "Currency",
+   "label": "Direct Cost (from breakdown)",
+   "read_only": 1
+  },
+  {
+   "fieldname": "tboq_sell",
+   "fieldtype": "Section Break",
+   "label": "Selling"
+  },
+  {
+   "fieldname": "calculated_selling_rate",
+   "fieldtype": "Currency",
+   "label": "Calculated Selling Rate",
+   "read_only": 1
+  },
+  {
+   "fieldname": "selling_rate",
+   "fieldtype": "Currency",
+   "label": "Final Selling Rate"
+  },
+  {
+   "fieldname": "tboq_sell_cb",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "selling_amount",
+   "fieldtype": "Currency",
+   "label": "Selling Amount",
+   "read_only": 1
+  },
+  {
+   "fieldname": "planned_profit",
+   "fieldtype": "Currency",
+   "label": "Planned Profit",
+   "read_only": 1
+  },
+  {
+   "fieldname": "planned_margin",
+   "fieldtype": "Percent",
+   "label": "Planned Margin %",
+   "read_only": 1
+  },
+  {
+   "fieldname": "tboq_mat",
+   "fieldtype": "Section Break",
+   "label": "Material"
+  },
+  {
+   "fieldname": "materials",
+   "fieldtype": "Table",
+   "label": "Materials",
+   "options": "Tender BOQ Material"
+  },
+  {
+   "fieldname": "tboq_lab",
+   "fieldtype": "Section Break",
+   "label": "Labour"
+  },
+  {
+   "fieldname": "labour",
+   "fieldtype": "Table",
+   "label": "Labour",
+   "options": "Tender BOQ Labour"
+  },
+  {
+   "fieldname": "tboq_eq",
+   "fieldtype": "Section Break",
+   "label": "Equipment"
+  },
+  {
+   "fieldname": "equipment",
+   "fieldtype": "Table",
+   "label": "Equipment",
+   "options": "Tender BOQ Equipment"
+  },
+  {
+   "fieldname": "tboq_exp",
+   "fieldtype": "Section Break",
+   "label": "Expense"
+  },
+  {
+   "fieldname": "expenses",
+   "fieldtype": "Table",
+   "label": "Expenses",
+   "options": "Tender BOQ Expense"
+  },
+  {
+   "fieldname": "tboq_sub",
+   "fieldtype": "Section Break",
+   "label": "Subcontract"
+  },
+  {
+   "fieldname": "subcontracts",
+   "fieldtype": "Table",
+   "label": "Subcontracts",
+   "options": "Tender BOQ Subcontract"
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "is_submittable": 0,
+ "issingle": 0,
+ "istable": 0,
+ "links": [],
+ "modified": "2026-09-08 00:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Contracting Tender",
+ "name": "Tender BOQ Item",
+ "owner": "Administrator",
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "track_changes": 1,
+ "autoname": "naming_series:",
+ "title_field": "description",
+ "search_fields": "boq_no,tender,csi_code",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1,
+   "submit": 0,
+   "cancel": 0
+  }
+ ]
+}

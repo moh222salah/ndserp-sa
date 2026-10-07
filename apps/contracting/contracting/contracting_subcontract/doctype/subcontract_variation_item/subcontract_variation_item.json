@@ -1,0 +1,68 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2026-09-08 00:00:00.000000",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "subcontract_boq_item",
+  "change_type",
+  "variation_qty",
+  "variation_rate",
+  "variation_amount",
+  "reason"
+ ],
+ "fields": [
+  {
+   "fieldname": "subcontract_boq_item",
+   "fieldtype": "Link",
+   "label": "Subcontract BOQ Item",
+   "options": "Subcontract BOQ Item",
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "change_type",
+   "fieldtype": "Select",
+   "label": "Change Type",
+   "options": "Quantity Change\nRate Change\nAddition\nDeduction\nNew Item\nOther",
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "variation_qty",
+   "fieldtype": "Float",
+   "label": "Variation Qty",
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "variation_rate",
+   "fieldtype": "Currency",
+   "label": "Variation / New Rate"
+  },
+  {
+   "fieldname": "variation_amount",
+   "fieldtype": "Currency",
+   "label": "Variation Amount",
+   "read_only": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "reason",
+   "fieldtype": "Data",
+   "label": "Reason"
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "is_submittable": 0,
+ "issingle": 0,
+ "istable": 1,
+ "links": [],
+ "modified": "2026-09-08 00:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Contracting Subcontract",
+ "name": "Subcontract Variation Item",
+ "owner": "Administrator",
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "track_changes": 1
+}

@@ -1,0 +1,162 @@
+{
+ "charts": [],
+ "content": "[{\"id\": \"hdr\", \"type\": \"header\", \"data\": {\"text\": \"<span class=\\\"h4\\\"><b>Optical Front Desk</b></span>\", \"col\": 12}}, {\"id\": \"nc0\", \"type\": \"number_card\", \"data\": {\"number_card_name\": \"Todays Optical Orders\", \"col\": 3}}, {\"id\": \"nc1\", \"type\": \"number_card\", \"data\": {\"number_card_name\": \"Ready for Delivery\", \"col\": 3}}, {\"id\": \"nc2\", \"type\": \"number_card\", \"data\": {\"number_card_name\": \"Todays Sales\", \"col\": 3}}, {\"id\": \"sp1\", \"type\": \"spacer\", \"data\": {\"col\": 12}}, {\"id\": \"hdr2\", \"type\": \"header\", \"data\": {\"text\": \"<span class=\\\"h5\\\"><b>Shortcuts</b></span>\", \"col\": 12}}, {\"id\": \"sc0\", \"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"Optical Order\", \"col\": 3}}, {\"id\": \"sc1\", \"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"Customer\", \"col\": 3}}, {\"id\": \"sc2\", \"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"Eye Examination\", \"col\": 3}}, {\"id\": \"sc3\", \"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"Optical Prescription\", \"col\": 3}}, {\"id\": \"sc4\", \"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"Sales Invoice\", \"col\": 3}}, {\"id\": \"sp2\", \"type\": \"spacer\", \"data\": {\"col\": 12}}, {\"id\": \"cd0\", \"type\": \"card\", \"data\": {\"card_name\": \"Customers\", \"col\": 4}}, {\"id\": \"cd1\", \"type\": \"card\", \"data\": {\"card_name\": \"Orders\", \"col\": 4}}]",
+ "creation": "2026-09-28 00:00:00",
+ "custom_blocks": [],
+ "docstatus": 0,
+ "doctype": "Workspace",
+ "for_user": "",
+ "hide_custom": 0,
+ "icon": "shopping-cart",
+ "idx": 0,
+ "indicator_color": "",
+ "is_hidden": 0,
+ "label": "Optical Front Desk",
+ "links": [
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Customers",
+   "link_count": 3,
+   "onboard": 0,
+   "type": "Card Break"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Customer",
+   "link_to": "Customer",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Eye Examination",
+   "link_to": "Eye Examination",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Optical Prescription",
+   "link_to": "Optical Prescription",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Orders",
+   "link_count": 3,
+   "onboard": 0,
+   "type": "Card Break"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Optical Order",
+   "link_to": "Optical Order",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Sales Invoice",
+   "link_to": "Sales Invoice",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 1,
+   "label": "Open Optical Orders",
+   "link_to": "Open Optical Orders",
+   "link_type": "Report",
+   "onboard": 0,
+   "type": "Link"
+  }
+ ],
+ "modified": "2026-09-28 00:00:00",
+ "modified_by": "Administrator",
+ "module": "Optical",
+ "name": "Optical Front Desk",
+ "number_cards": [
+  {
+   "label": "Todays Optical Orders",
+   "number_card_name": "Todays Optical Orders"
+  },
+  {
+   "label": "Ready for Delivery",
+   "number_card_name": "Ready for Delivery"
+  },
+  {
+   "label": "Todays Sales",
+   "number_card_name": "Todays Sales"
+  }
+ ],
+ "owner": "Administrator",
+ "parent_page": "",
+ "public": 1,
+ "restrict_to_domain": "",
+ "roles": [
+  {
+   "role": "System Manager"
+  },
+  {
+   "role": "Optical Cashier"
+  },
+  {
+   "role": "Optician"
+  },
+  {
+   "role": "Optical Manager"
+  }
+ ],
+ "sequence_id": 2,
+ "title": "Optical Front Desk",
+ "shortcuts": [
+  {
+   "color": "Grey",
+   "doc_view": "List",
+   "label": "Optical Order",
+   "link_to": "Optical Order",
+   "type": "DocType"
+  },
+  {
+   "color": "Grey",
+   "doc_view": "List",
+   "label": "Customer",
+   "link_to": "Customer",
+   "type": "DocType"
+  },
+  {
+   "color": "Grey",
+   "doc_view": "List",
+   "label": "Eye Examination",
+   "link_to": "Eye Examination",
+   "type": "DocType"
+  },
+  {
+   "color": "Grey",
+   "doc_view": "List",
+   "label": "Optical Prescription",
+   "link_to": "Optical Prescription",
+   "type": "DocType"
+  },
+  {
+   "color": "Grey",
+   "doc_view": "List",
+   "label": "Sales Invoice",
+   "link_to": "Sales Invoice",
+   "type": "DocType"
+  }
+ ]
+}

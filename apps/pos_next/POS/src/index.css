@@ -1,0 +1,271 @@
+@import "./assets/Inter/inter.css";
+@import "frappe-ui/src/style.css";
+@import "@abdulrysr/saudi-riyal-new-symbol-font/style.css";
+
+/*
+ * Appearance theme defaults (overridden at runtime by src/utils/theme.js).
+ * Values are space-separated RGB channels for Tailwind opacity modifiers.
+ */
+:root {
+	--c-blue-50: 239 246 255;
+	--c-blue-100: 219 234 254;
+	--c-blue-200: 191 219 254;
+	--c-blue-300: 147 197 253;
+	--c-blue-400: 96 165 250;
+	--c-blue-500: 59 130 246;
+	--c-blue-600: 37 99 235;
+	--c-blue-700: 29 78 216;
+	--c-blue-800: 30 64 175;
+	--c-blue-900: 30 58 138;
+
+	--c-gray-50: 248 248 248;
+	--c-gray-100: 243 243 243;
+	--c-gray-200: 237 237 237;
+	--c-gray-300: 226 226 226;
+	--c-gray-400: 199 199 199;
+	--c-gray-500: 153 153 153;
+	--c-gray-600: 124 124 124;
+	--c-gray-700: 82 82 82;
+	--c-gray-800: 56 56 56;
+	--c-gray-900: 23 23 23;
+
+	--c-white: 255 255 255;
+
+	--c-red-50: 254 242 242;
+	--c-red-100: 254 226 226;
+	--c-red-200: 254 202 202;
+	--c-red-300: 252 165 165;
+	--c-red-400: 248 113 113;
+	--c-red-500: 239 68 68;
+	--c-red-600: 220 38 38;
+	--c-red-700: 185 28 28;
+	--c-red-800: 153 27 27;
+	--c-red-900: 127 29 29;
+
+	--c-green-50: 240 253 244;
+	--c-green-100: 220 252 231;
+	--c-green-200: 187 247 208;
+	--c-green-300: 134 239 172;
+	--c-green-400: 74 222 128;
+	--c-green-500: 34 197 94;
+	--c-green-600: 22 163 74;
+	--c-green-700: 21 128 61;
+	--c-green-800: 22 101 52;
+	--c-green-900: 20 83 45;
+
+	--c-orange-50: 255 247 237;
+	--c-orange-100: 255 237 213;
+	--c-orange-200: 254 215 170;
+	--c-orange-300: 253 186 116;
+	--c-orange-400: 251 146 60;
+	--c-orange-500: 249 115 22;
+	--c-orange-600: 234 88 12;
+	--c-orange-700: 194 65 12;
+	--c-orange-800: 154 52 18;
+	--c-orange-900: 124 45 18;
+
+	--c-amber-50: 255 251 235;
+	--c-amber-100: 254 243 199;
+	--c-amber-200: 253 230 138;
+	--c-amber-300: 252 211 77;
+	--c-amber-400: 251 191 36;
+	--c-amber-500: 245 158 11;
+	--c-amber-600: 217 119 6;
+	--c-amber-700: 180 83 9;
+	--c-amber-800: 146 64 14;
+	--c-amber-900: 120 53 15;
+
+	--c-purple-50: 250 245 255;
+	--c-purple-100: 243 232 255;
+	--c-purple-200: 233 213 255;
+	--c-purple-300: 216 180 254;
+	--c-purple-400: 192 132 252;
+	--c-purple-500: 168 85 247;
+	--c-purple-600: 147 51 234;
+	--c-purple-700: 126 34 206;
+	--c-purple-800: 107 33 168;
+	--c-purple-900: 88 28 135;
+
+	--c-emerald-50: 236 253 245;
+	--c-emerald-100: 209 250 229;
+	--c-emerald-200: 167 243 208;
+	--c-emerald-300: 110 231 183;
+	--c-emerald-400: 52 211 153;
+	--c-emerald-500: 16 185 129;
+	--c-emerald-600: 5 150 105;
+	--c-emerald-700: 4 120 87;
+	--c-emerald-800: 6 95 70;
+	--c-emerald-900: 6 78 59;
+
+	--c-yellow-50: 254 252 232;
+	--c-yellow-100: 254 249 195;
+	--c-yellow-200: 254 240 138;
+	--c-yellow-300: 253 224 71;
+	--c-yellow-400: 250 204 21;
+	--c-yellow-500: 234 179 8;
+	--c-yellow-600: 202 138 4;
+	--c-yellow-700: 161 98 7;
+	--c-yellow-800: 133 77 14;
+	--c-yellow-900: 113 63 18;
+
+	--c-indigo-50: 238 242 255;
+	--c-indigo-100: 224 231 255;
+	--c-indigo-200: 199 210 254;
+	--c-indigo-300: 165 180 252;
+	--c-indigo-400: 129 140 248;
+	--c-indigo-500: 99 102 241;
+	--c-indigo-600: 79 70 229;
+	--c-indigo-700: 67 56 202;
+	--c-indigo-800: 55 48 163;
+	--c-indigo-900: 49 46 129;
+
+	--c-teal-50: 240 253 250;
+	--c-teal-100: 204 251 241;
+	--c-teal-200: 153 246 228;
+	--c-teal-300: 94 234 212;
+	--c-teal-400: 45 212 191;
+	--c-teal-500: 20 184 166;
+	--c-teal-600: 13 148 136;
+	--c-teal-700: 15 118 110;
+	--c-teal-800: 17 94 89;
+	--c-teal-900: 19 78 74;
+
+	--c-violet-50: 245 243 255;
+	--c-violet-100: 237 233 254;
+	--c-violet-200: 221 214 254;
+	--c-violet-300: 196 181 253;
+	--c-violet-400: 167 139 250;
+	--c-violet-500: 139 92 246;
+	--c-violet-600: 124 58 237;
+	--c-violet-700: 109 40 217;
+	--c-violet-800: 91 33 182;
+	--c-violet-900: 76 29 149;
+
+	--c-pink-50: 253 242 248;
+	--c-pink-100: 252 231 243;
+	--c-pink-200: 251 207 232;
+	--c-pink-300: 249 168 212;
+	--c-pink-400: 244 114 182;
+	--c-pink-500: 236 72 153;
+	--c-pink-600: 219 39 119;
+	--c-pink-700: 190 24 93;
+	--c-pink-800: 157 23 77;
+	--c-pink-900: 131 24 67;
+
+	--c-cyan-50: 236 254 255;
+	--c-cyan-100: 207 250 254;
+	--c-cyan-200: 165 243 252;
+	--c-cyan-300: 103 232 249;
+	--c-cyan-400: 34 211 238;
+	--c-cyan-500: 6 182 212;
+	--c-cyan-600: 8 145 178;
+	--c-cyan-700: 14 116 144;
+	--c-cyan-800: 21 94 117;
+	--c-cyan-900: 22 78 99;
+}
+
+/* Soft dark surfaces when Appearance → Dark is selected */
+html[data-theme="dark"] body {
+	background-color: rgb(var(--c-gray-50));
+	color: rgb(var(--c-gray-900));
+}
+
+/* Apply Saudi Riyal symbol font to body for currency support */
+body {
+	font-family: "SaudiRiyalSymbol", "Inter", sans-serif;
+}
+
+/* Ensure all text elements inherit the font stack with Saudi Riyal support */
+* {
+	font-family: inherit;
+}
+
+/* Ensure frappe-ui dialogs render above sticky mobile navigation */
+.dialog-overlay {
+	z-index: 400 !important;
+}
+
+.dialog-overlay .dialog-content,
+.dialog-content {
+	z-index: 500 !important;
+}
+
+/* Mobile touch optimizations - removes 300ms tap delay and improves scrolling */
+.touch-manipulation {
+	touch-action: manipulation;
+	-webkit-tap-highlight-color: transparent;
+}
+
+/* Apply touch-action to all interactive elements */
+button,
+a,
+[role="button"],
+input[type="button"],
+input[type="submit"],
+.cursor-pointer {
+	touch-action: manipulation;
+	-webkit-tap-highlight-color: transparent;
+}
+
+/* Optimized button touch animations - prevents layout thrashing */
+.btn-touch {
+	transition: transform 0.1s ease;
+	will-change: transform;
+}
+
+.btn-touch:active {
+	transform: scale(0.95);
+}
+
+/* Override Tailwind's active:scale-95 with optimized version */
+button.active\:scale-95:active,
+.active\:scale-95:active {
+	transform: scale(0.95);
+	will-change: transform;
+}
+
+/* RTL Support: Fix frappe-ui TextInput prefix/suffix positioning */
+[dir="rtl"] .relative > div.absolute.left-0 {
+	left: auto !important;
+	right: 0 !important;
+	padding-left: 0 !important;
+	padding-right: 0.5rem !important;
+}
+
+[dir="rtl"] .relative > div.absolute.right-0 {
+	right: auto !important;
+	left: 0 !important;
+	padding-right: 0 !important;
+	padding-left: 0.5rem !important;
+}
+
+/* RTL Support: Swap input padding for prefix/suffix in TextInput */
+[dir="rtl"] .relative > input.pl-8 {
+	padding-left: 0.5rem !important;
+	padding-right: 2rem !important;
+}
+
+[dir="rtl"] .relative > input.pr-8 {
+	padding-right: 0.5rem !important;
+	padding-left: 2rem !important;
+}
+
+[dir="rtl"] .relative > input.pl-9 {
+	padding-left: 0.625rem !important;
+	padding-right: 2.25rem !important;
+}
+
+[dir="rtl"] .relative > input.pr-9 {
+	padding-right: 0.625rem !important;
+	padding-left: 2.25rem !important;
+}
+
+[dir="rtl"] .relative > input.pl-10 {
+	padding-left: 0.75rem !important;
+	padding-right: 2.5rem !important;
+}
+
+[dir="rtl"] .relative > input.pr-10 {
+	padding-right: 0.75rem !important;
+	padding-left: 2.5rem !important;
+}

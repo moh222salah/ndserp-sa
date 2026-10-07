@@ -1,0 +1,269 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2026-01-15 00:00:00.000000",
+ "description": "PTS-2 forecourt controller. Secrets are stored as encrypted Password fields.",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "sb_identity",
+  "controller_code",
+  "controller_name",
+  "station",
+  "cb_identity",
+  "enabled",
+  "is_demo",
+  "provider",
+  "sb_connection",
+  "hostname",
+  "port",
+  "protocol",
+  "cb_connection",
+  "protocol_version",
+  "connection_mode",
+  "configuration_id",
+  "sb_credentials",
+  "auth_username",
+  "auth_password",
+  "cb_credentials",
+  "hmac_secret",
+  "sb_status",
+  "connection_status",
+  "last_communication_at",
+  "cb_status",
+  "firmware_version",
+  "stale_after_seconds"
+ ],
+ "fields": [
+  {
+   "fieldname": "sb_identity",
+   "fieldtype": "Section Break",
+   "label": "Identity"
+  },
+  {
+   "fieldname": "controller_code",
+   "fieldtype": "Data",
+   "label": "Controller Code",
+   "reqd": 1,
+   "unique": 1,
+   "bold": 1
+  },
+  {
+   "fieldname": "controller_name",
+   "fieldtype": "Data",
+   "label": "Controller Name",
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "station",
+   "fieldtype": "Link",
+   "label": "Station",
+   "options": "Gas Station",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "cb_identity",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "enabled",
+   "fieldtype": "Check",
+   "label": "Enabled",
+   "default": "1"
+  },
+  {
+   "fieldname": "is_demo",
+   "fieldtype": "Check",
+   "label": "Demo Data"
+  },
+  {
+   "fieldname": "provider",
+   "fieldtype": "Select",
+   "label": "Integration Provider",
+   "options": "Mock\nReal",
+   "default": "Mock",
+   "reqd": 1,
+   "description": "Mock = simulator; Real = physical PTS-2. Same handlers either way."
+  },
+  {
+   "fieldname": "sb_connection",
+   "fieldtype": "Section Break",
+   "label": "Connection"
+  },
+  {
+   "fieldname": "hostname",
+   "fieldtype": "Data",
+   "label": "Hostname / IP"
+  },
+  {
+   "fieldname": "port",
+   "fieldtype": "Int",
+   "label": "Port",
+   "default": "80"
+  },
+  {
+   "fieldname": "protocol",
+   "fieldtype": "Select",
+   "label": "Protocol",
+   "options": "HTTP\nHTTPS\nTCP",
+   "default": "HTTPS"
+  },
+  {
+   "fieldname": "cb_connection",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "protocol_version",
+   "fieldtype": "Data",
+   "label": "Protocol Version",
+   "default": "jsonPTS/2"
+  },
+  {
+   "fieldname": "connection_mode",
+   "fieldtype": "Select",
+   "label": "Connection Mode",
+   "options": "Push\nPull\nBoth",
+   "default": "Push"
+  },
+  {
+   "fieldname": "configuration_id",
+   "fieldtype": "Data",
+   "label": "PTS Configuration ID"
+  },
+  {
+   "fieldname": "sb_credentials",
+   "fieldtype": "Section Break",
+   "label": "Credentials"
+  },
+  {
+   "fieldname": "auth_username",
+   "fieldtype": "Data",
+   "label": "Auth Username"
+  },
+  {
+   "fieldname": "auth_password",
+   "fieldtype": "Password",
+   "label": "Auth Password"
+  },
+  {
+   "fieldname": "cb_credentials",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "hmac_secret",
+   "fieldtype": "Password",
+   "label": "HMAC / Signature Secret",
+   "description": "Optional. If set, incoming packets must carry a valid signature."
+  },
+  {
+   "fieldname": "sb_status",
+   "fieldtype": "Section Break",
+   "label": "Live Status (read-only)"
+  },
+  {
+   "fieldname": "connection_status",
+   "fieldtype": "Select",
+   "label": "Connection Status",
+   "options": "Unknown\nConnected\nDisconnected\nStale",
+   "default": "Unknown",
+   "read_only": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "last_communication_at",
+   "fieldtype": "Datetime",
+   "label": "Last Communication",
+   "read_only": 1
+  },
+  {
+   "fieldname": "cb_status",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "firmware_version",
+   "fieldtype": "Data",
+   "label": "Firmware Version",
+   "read_only": 1
+  },
+  {
+   "fieldname": "stale_after_seconds",
+   "fieldtype": "Int",
+   "label": "Mark Stale After (seconds)",
+   "default": "120",
+   "description": "If no packet arrives within this window, status becomes Stale."
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2026-01-15 00:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Gas Station",
+ "name": "PTS Controller",
+ "owner": "Administrator",
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "track_changes": 1,
+ "permissions": [
+  {
+   "role": "System Manager",
+   "read": 1,
+   "permlevel": 0,
+   "create": 1,
+   "write": 1,
+   "delete": 1,
+   "report": 1,
+   "export": 1,
+   "email": 1,
+   "print": 1,
+   "share": 1
+  },
+  {
+   "role": "Gas Station Administrator",
+   "read": 1,
+   "permlevel": 0,
+   "create": 1,
+   "write": 1,
+   "delete": 1,
+   "report": 1,
+   "export": 1,
+   "email": 1,
+   "print": 1,
+   "share": 1
+  },
+  {
+   "role": "Gas Station Integration Manager",
+   "read": 1,
+   "permlevel": 0,
+   "create": 1,
+   "write": 1,
+   "delete": 1,
+   "report": 1,
+   "export": 1,
+   "email": 1,
+   "print": 1,
+   "share": 1
+  },
+  {
+   "role": "Station Manager",
+   "read": 1,
+   "permlevel": 0,
+   "write": 1,
+   "report": 1,
+   "print": 1,
+   "email": 1
+  },
+  {
+   "role": "Gas Station Viewer",
+   "read": 1,
+   "permlevel": 0,
+   "report": 1,
+   "print": 1
+  }
+ ],
+ "autoname": "field:controller_code",
+ "naming_rule": "By fieldname",
+ "title_field": "controller_name",
+ "search_fields": "controller_name,station,hostname"
+}

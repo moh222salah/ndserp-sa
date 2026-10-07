@@ -1,0 +1,359 @@
+{
+ "app": "nds_restaurant",
+ "charts": [],
+ "content": "[{\"id\": \"zoUHXatDc8\", \"type\": \"header\", \"data\": {\"text\": \"<span class=\\\"h4\\\"><b>NDS Restaurant</b></span>\", \"col\": 12}}, {\"id\": \"iOKa1xHTS6\", \"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"POS\", \"col\": 3}}, {\"id\": \"H7oAqnHhDa\", \"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"Kitchen Display\", \"col\": 3}}, {\"id\": \"U319XDUt7o\", \"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"NDS Restaurant\", \"col\": 3}}, {\"id\": \"vr5jDriavF\", \"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"NDS Menu\", \"col\": 3}}, {\"id\": \"JRhYSKuW79\", \"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"NDS Room\", \"col\": 3}}, {\"id\": \"fIObK1V76J\", \"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"NDS Table\", \"col\": 3}}, {\"id\": \"FDvvv8SnyK\", \"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"NDS Production Unit\", \"col\": 3}}, {\"id\": \"jKzK2Oy4za\", \"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"NDS KOT\", \"col\": 3}}, {\"id\": \"t7h6RCcsWf\", \"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"POS Invoice\", \"col\": 3}}, {\"id\": \"ANuu8DvmdH\", \"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"POS Opening Entry\", \"col\": 3}}, {\"id\": \"f6VJ0gGBgb\", \"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"POS Closing Entry\", \"col\": 3}}, {\"id\": \"inWnvru5QQ\", \"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"POS Profile\", \"col\": 3}}, {\"id\": \"WKzxNsuvrP\", \"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"Item\", \"col\": 3}}, {\"id\": \"3SWP8ZdHJU\", \"type\": \"spacer\", \"data\": {\"col\": 12}}, {\"id\": \"f70Mtm4U5V\", \"type\": \"header\", \"data\": {\"text\": \"<span class=\\\"h4\\\"><b>Masters, Operations &amp; Reports</b></span>\", \"col\": 12}}, {\"id\": \"nJwWKpWK7c\", \"type\": \"card\", \"data\": {\"card_name\": \"Setup\", \"col\": 4}}, {\"id\": \"aczfQFOL7C\", \"type\": \"card\", \"data\": {\"card_name\": \"Menu\", \"col\": 4}}, {\"id\": \"gaeIyNdii3\", \"type\": \"card\", \"data\": {\"card_name\": \"Operations\", \"col\": 4}}, {\"id\": \"E9zpNHqRe0\", \"type\": \"card\", \"data\": {\"card_name\": \"Reports\", \"col\": 4}}]",
+ "creation": "2026-09-27 12:22:13.605637",
+ "custom_blocks": [],
+ "docstatus": 0,
+ "doctype": "Workspace",
+ "hide_custom": 0,
+ "icon": "utensils-crossed",
+ "idx": 0,
+ "indicator_color": "orange",
+ "is_hidden": 0,
+ "label": "Restaurant",
+ "link_type": "DocType",
+ "links": [
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Setup",
+   "link_count": 7,
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Card Break"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Restaurant",
+   "link_count": 0,
+   "link_to": "NDS Restaurant",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Rooms",
+   "link_count": 0,
+   "link_to": "NDS Room",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Tables",
+   "link_count": 0,
+   "link_to": "NDS Table",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Production Units",
+   "link_count": 0,
+   "link_to": "NDS Production Unit",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "POS Profile",
+   "link_count": 0,
+   "link_to": "POS Profile",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "POS Settings",
+   "link_count": 0,
+   "link_to": "POS Settings",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Report Settings",
+   "link_count": 0,
+   "link_to": "NDS Report Settings",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Menu",
+   "link_count": 6,
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Card Break"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "NDS Menu",
+   "link_count": 0,
+   "link_to": "NDS Menu",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Menu Courses",
+   "link_count": 0,
+   "link_to": "NDS Menu Course",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Recipes",
+   "link_count": 0,
+   "link_to": "NDS Recipe",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Item",
+   "link_count": 0,
+   "link_to": "Item",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Item Group",
+   "link_count": 0,
+   "link_to": "Item Group",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Item Price",
+   "link_count": 0,
+   "link_to": "Item Price",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Operations",
+   "link_count": 5,
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Card Break"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "POS Invoice",
+   "link_count": 0,
+   "link_to": "POS Invoice",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "KOT",
+   "link_count": 0,
+   "link_to": "NDS KOT",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "POS Opening Entry",
+   "link_count": 0,
+   "link_to": "POS Opening Entry",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "POS Closing Entry",
+   "link_count": 0,
+   "link_to": "POS Closing Entry",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Sub POS Closing",
+   "link_count": 0,
+   "link_to": "Sub POS Closing",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Reports",
+   "link_count": 3,
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Card Break"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 1,
+   "label": "NDS Daily P and L",
+   "link_count": 0,
+   "link_to": "NDS Daily P and L",
+   "link_type": "Report",
+   "onboard": 0,
+   "report_ref_doctype": "NDS Report Settings",
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 1,
+   "label": "POS Register",
+   "link_count": 0,
+   "link_to": "POS Register",
+   "link_type": "Report",
+   "onboard": 0,
+   "report_ref_doctype": "POS Invoice",
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 1,
+   "label": "Sales Register",
+   "link_count": 0,
+   "link_to": "Sales Register",
+   "link_type": "Report",
+   "onboard": 0,
+   "report_ref_doctype": "Sales Invoice",
+   "type": "Link"
+  }
+ ],
+ "modified": "2026-09-27 13:15:00.000000",
+ "modified_by": "Administrator",
+ "module": "NDS Restaurant",
+ "name": "Restaurant",
+ "number_cards": [],
+ "owner": "Administrator",
+ "public": 1,
+ "quick_lists": [],
+ "roles": [],
+ "sequence_id": 1.5,
+ "shortcuts": [
+  {
+   "doc_view": "",
+   "label": "POS",
+   "type": "URL",
+   "url": "/restaurant-pos"
+  },
+  {
+   "doc_view": "",
+   "label": "Kitchen Display",
+   "type": "URL",
+   "url": "/kotdisplay"
+  },
+  {
+   "doc_view": "List",
+   "label": "NDS Restaurant",
+   "link_to": "NDS Restaurant",
+   "type": "DocType"
+  },
+  {
+   "doc_view": "List",
+   "label": "NDS Menu",
+   "link_to": "NDS Menu",
+   "type": "DocType"
+  },
+  {
+   "doc_view": "List",
+   "label": "NDS Room",
+   "link_to": "NDS Room",
+   "type": "DocType"
+  },
+  {
+   "doc_view": "List",
+   "label": "NDS Table",
+   "link_to": "NDS Table",
+   "type": "DocType"
+  },
+  {
+   "doc_view": "List",
+   "label": "NDS Production Unit",
+   "link_to": "NDS Production Unit",
+   "type": "DocType"
+  },
+  {
+   "doc_view": "List",
+   "label": "NDS KOT",
+   "link_to": "NDS KOT",
+   "type": "DocType"
+  },
+  {
+   "doc_view": "List",
+   "label": "POS Invoice",
+   "link_to": "POS Invoice",
+   "type": "DocType"
+  },
+  {
+   "doc_view": "List",
+   "label": "POS Opening Entry",
+   "link_to": "POS Opening Entry",
+   "type": "DocType"
+  },
+  {
+   "doc_view": "List",
+   "label": "POS Closing Entry",
+   "link_to": "POS Closing Entry",
+   "type": "DocType"
+  },
+  {
+   "doc_view": "List",
+   "label": "POS Profile",
+   "link_to": "POS Profile",
+   "type": "DocType"
+  },
+  {
+   "doc_view": "List",
+   "label": "Item",
+   "link_to": "Item",
+   "type": "DocType"
+  }
+ ],
+ "title": "Restaurant",
+ "type": "Workspace"
+}

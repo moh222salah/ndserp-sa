@@ -1,0 +1,167 @@
+<script setup lang="ts">
+import { computed, ref, onErrorCaptured } from "vue";
+import { getBlockComponent } from "./blocks";
+import { renderMarkdown } from "../utils/markdown";
+import type { Message } from "../types/messages";
+
+const props = defineProps<{ message: Message }>();
+
+const renderError = ref(false);
+
+onErrorCaptured((err) => {
+	console.error("[Frappe AI] Block render error:", err);
+	renderError.value = true;
+	return false;
+});
+
+const timeStr = computed(() =>
+	props.message.timestamp
+		? props.message.timestamp.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })
+		: "",
+);
+
+const isPendingEmpty = computed(
+	() =>
+		props.message.role === "assistant" &&
+		!!props.message.pending &&
+		!props.message.content &&
+		(!props.message.blocks || props.message.blocks.length === 0),
+);
+</script>
+
+<template>
+	<div :class="`frappe-ai-bubble frappe-ai-bubble--${message.role}`">
+		<!-- User message -->
+		<div v-if="message.role === 'user'" class="frappe-ai-bubble-content">
+			{{ message.content }}
+		</div>
+
+		<!-- Assistant message. When pending and still empty, show the in-bubble
+         "Thinking…" pulse; once content or blocks arrive, fall through to the
+         normal render path. -->
+		<div v-else-if="message.role === 'assistant'" class="frappe-ai-bubble-content">
+			<div v-if="renderError" class="frappe-ai-error frappe-ai-error--info">
+				<div class="frappe-ai-error-message">Could not render response</div>
+			</div>
+			<template v-else-if="isPendingEmpty">
+				<div class="frappe-ai-bubble-status">
+					<span class="frappe-ai-bubble-status-dot"></span>
+					<span class="frappe-ai-bubble-status-dot"></span>
+					<span class="frappe-ai-bubble-status-dot"></span>
+				</div>
+			</template>
+			<template v-else>
+				<!-- Streaming path: walk `parts` in arrival order so text and
+             blocks render where the agent actually emitted them. The
+             agent's SSE protocol delivers `content` (prose) and
+             `content_block` (structured payload) as separate events, so
+             text fragments never see raw block HTML; tables, lists,
+             code, and prose all flow through renderMarkdown.
+             Hydrated rows (from get_recent_messages) don't have `parts`
+             — they fall through to the legacy content + blocks render
+             below, which puts everything in a single text block. -->
+				<template v-if="message.parts && message.parts.length > 0">
+					<template v-for="(part, i) in message.parts" :key="i">
+						<!-- eslint-disable-next-line vue/no-v-html -->
+						<div
+							v-if="part.kind === 'text'"
+							class="frappe-ai-markdown"
+							v-html="renderMarkdown(part.text)"
+						/>
+						<component
+							v-else-if="part.kind === 'block'"
+							:is="getBlockComponent(part.block.type)"
+							:block="part.block"
+						/>
+					</template>
+				</template>
+				<template v-else>
+					<!-- eslint-disable-next-line vue/no-v-html -->
+					<div
+						v-if="message.content"
+						class="frappe-ai-markdown"
+						v-html="renderMarkdown(message.content)"
+					/>
+					<template v-if="message.blocks && message.blocks.length > 0">
+						<component
+							v-for="(block, i) in message.blocks"
+							:key="i"
+							:is="getBlockComponent(block.type)"
+							:block="block"
+						/>
+					</template>
+				</template>
+			</template>
+		</div>
+
+		<!-- Error message -->
+		<div v-else-if="message.role === 'error'" class="frappe-ai-error frappe-ai-error--info">
+			<div class="frappe-ai-error-message">{{ message.error?.message }}</div>
+			<div v-if="message.error?.suggestion" class="frappe-ai-error-suggestion">
+				{{ message.error.suggestion }}
+			</div>
+		</div>
+
+		<div v-if="!isPendingEmpty && message.timestamp" class="frappe-ai-bubble-time">
+			{{ timeStr }}
+		</div>
+	</div>
+</template>
+
+<style scoped>
+/* Constrain everything inside the assistant bubble to the sidebar width.
+   Markdown-rendered tables (and other v-html content) can have intrinsic
+   widths that push their container past the sidebar edge. Make the
+   .frappe-ai-markdown wrapper itself the horizontal-scroll container so
+   even wide tables, pre/code blocks, and images stay inside the bubble.
+   :deep() is required because v-html content is not covered by Vue's
+   scoped style transformer. */
+.frappe-ai-markdown {
+	max-width: 100%;
+	overflow-x: auto;
+	-webkit-overflow-scrolling: touch;
+}
+.frappe-ai-markdown :deep(table) {
+	display: table;
+	width: max-content;
+	max-width: 100%;
+	border-collapse: collapse;
+	margin: 8px 0;
+	font-size: 12px;
+	border: 1px solid var(--border-color);
+	border-radius: 6px;
+	overflow: hidden;
+}
+.frappe-ai-markdown :deep(table thead th) {
+	background: var(--bg-light-gray);
+	color: var(--text-muted);
+	font-weight: 600;
+	text-align: left;
+	padding: 6px 10px;
+	border-bottom: 1px solid var(--border-color);
+	white-space: nowrap;
+}
+.frappe-ai-markdown :deep(table tbody td) {
+	padding: 6px 10px;
+	border-bottom: 1px solid var(--border-color);
+	vertical-align: middle;
+	white-space: nowrap;
+}
+.frappe-ai-markdown :deep(table tbody tr:last-child td) {
+	border-bottom: none;
+}
+.frappe-ai-markdown :deep(table tbody tr:nth-child(even)) {
+	background: var(--bg-light-gray);
+}
+.frappe-ai-markdown :deep(pre),
+.frappe-ai-markdown :deep(img),
+.frappe-ai-markdown :deep(svg) {
+	max-width: 100%;
+}
+/* Make sure the bubble itself can't be widened by its children. */
+.frappe-ai-bubble-content {
+	min-width: 0;
+	max-width: 100%;
+	overflow: hidden;
+}
+</style>

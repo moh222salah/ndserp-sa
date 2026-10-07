@@ -1,0 +1,42 @@
+// ===========================================================================
+// Text selection
+// ===========================================================================
+// Neither Frappe nor this theme styled ::selection, so selected text fell back
+// to Chrome's default opaque blue (#3297FD) — which fights the navy brand and,
+// on the dark rail, paints an opaque light block over light text.
+//
+// The rule below deliberately sets ONLY a background, never a `color`. That is
+// the whole safety argument: text keeps whatever colour it already had, so this
+// works on the light desk, inside inputs, on the dark rail, and in dark theme
+// without a single per-surface override. A translucent wash (22%) over any of
+// those surfaces shifts measured contrast by a fraction of a ratio point, so a
+// pairing that passed AA before still passes after.
+//
+// Uses --primary, so it follows every colour scheme (and the custom one) with
+// no per-scheme rules — same mechanism as the focus rings in _color-schemes.
+
+::selection {
+	background: color-mix(in srgb, var(--primary) 22%, transparent);
+	// No `color` — intentional. See the note above.
+	text-shadow: none;
+}
+
+// Firefox needs the -moz- pseudo spelled out separately; a combined selector
+// list would be dropped wholesale by every engine that doesn't know one half.
+::-moz-selection {
+	background: color-mix(in srgb, var(--primary) 22%, transparent);
+	text-shadow: none;
+}
+
+// The dark rail carries light text on a near-black tint, where a 22% brand wash
+// is too dim to read as a selection at all. The gold accent is the rail's own
+// highlight colour and is the one value guaranteed to be visible against every
+// scheme's rail (each scheme ships a deliberately bright --accent-gold-on-dark
+// for exactly this reason).
+.amt-workspace-rail ::selection {
+	background: color-mix(in srgb, var(--accent-gold-on-dark, #D9B85E) 30%, transparent);
+}
+
+.amt-workspace-rail ::-moz-selection {
+	background: color-mix(in srgb, var(--accent-gold-on-dark, #D9B85E) 30%, transparent);
+}

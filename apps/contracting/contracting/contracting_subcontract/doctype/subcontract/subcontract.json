@@ -1,0 +1,169 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2026-09-08 00:00:00.000000",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "naming_series",
+  "company",
+  "project",
+  "supplier",
+  "sub_cb",
+  "contract_date",
+  "start_date",
+  "end_date",
+  "sub_fin",
+  "currency",
+  "exchange_rate",
+  "sub_fin_cb",
+  "original_value",
+  "current_value",
+  "sub_status",
+  "status",
+  "description"
+ ],
+ "fields": [
+  {
+   "fieldname": "naming_series",
+   "fieldtype": "Select",
+   "label": "Series",
+   "options": "CT-SUB-.#####",
+   "default": "CT-SUB-.#####",
+   "hidden": 1
+  },
+  {
+   "fieldname": "company",
+   "fieldtype": "Link",
+   "label": "Company",
+   "options": "Company",
+   "reqd": 1
+  },
+  {
+   "fieldname": "project",
+   "fieldtype": "Link",
+   "label": "Project",
+   "options": "Project",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "supplier",
+   "fieldtype": "Link",
+   "label": "Supplier (Subcontractor)",
+   "options": "Supplier",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "sub_cb",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "contract_date",
+   "fieldtype": "Date",
+   "label": "Contract Date",
+   "reqd": 1,
+   "default": "Today"
+  },
+  {
+   "fieldname": "start_date",
+   "fieldtype": "Date",
+   "label": "Start Date"
+  },
+  {
+   "fieldname": "end_date",
+   "fieldtype": "Date",
+   "label": "End Date"
+  },
+  {
+   "fieldname": "sub_fin",
+   "fieldtype": "Section Break",
+   "label": "Financial"
+  },
+  {
+   "fieldname": "currency",
+   "fieldtype": "Link",
+   "label": "Currency",
+   "options": "Currency",
+   "reqd": 1
+  },
+  {
+   "fieldname": "exchange_rate",
+   "fieldtype": "Float",
+   "label": "Exchange Rate",
+   "default": "1",
+   "precision": "9"
+  },
+  {
+   "fieldname": "sub_fin_cb",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "original_value",
+   "fieldtype": "Currency",
+   "label": "Original Value",
+   "options": "currency",
+   "description": "Immutable baseline after approval."
+  },
+  {
+   "fieldname": "current_value",
+   "fieldtype": "Currency",
+   "label": "Current Value",
+   "options": "currency",
+   "read_only": 1,
+   "description": "Original + approved subcontract variations. Derived."
+  },
+  {
+   "fieldname": "sub_status",
+   "fieldtype": "Section Break",
+   "label": "Status"
+  },
+  {
+   "fieldname": "status",
+   "fieldtype": "Select",
+   "label": "Status",
+   "options": "Draft\nReview\nApproved\nActive\nSuspended\nCompleted\nClosed",
+   "default": "Draft",
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "description",
+   "fieldtype": "Small Text",
+   "label": "Description"
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "is_submittable": 0,
+ "issingle": 0,
+ "istable": 0,
+ "links": [],
+ "modified": "2026-09-08 00:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Contracting Subcontract",
+ "name": "Subcontract",
+ "owner": "Administrator",
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "track_changes": 1,
+ "autoname": "naming_series:",
+ "title_field": "supplier",
+ "search_fields": "supplier,project,status",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1,
+   "submit": 0,
+   "cancel": 0
+  }
+ ]
+}

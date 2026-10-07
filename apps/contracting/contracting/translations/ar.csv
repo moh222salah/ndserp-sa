@@ -1,0 +1,432 @@
+Account,الحساب
+Active,نشط
+Actual Cost,التكلفة الفعلية
+Addition,إضافة
+Advance,دفعة مقدمة
+Advance Outstanding,الدفعة المقدمة القائمة
+Advance Percent,نسبة الدفعة المقدمة %
+Advance Recovery,استرداد الدفعة المقدمة
+Advance Recovery %,نسبة استرداد الدفعة
+Advance Recovery (current),استرداد الدفعة المقدمة (الحالي)
+Affected Term / Field,البند/الحقل المتأثر
+Affected Terms,البنود المتأثرة
+After,بعد
+Allocated Budget,الموازنة المخصصة
+Allocation %,نسبة التخصيص
+Allocation Qty,كمية التخصيص
+Allow Pass,السماح بالتمرير
+Amendment Item,بند التعديل
+Amount,القيمة
+Applicable Deductions,الخصومات المطبقة
+Applied,مُطبّق
+Approve,اعتماد
+Approved,معتمد
+Approved Amount,المبلغ المعتمد
+Approved Claims,المطالبات المعتمدة
+Approved Days,الأيام المعتمدة
+Approved Impact,الأثر المعتمد
+Approved New End Date,تاريخ الانتهاء الجديد المعتمد
+Approved Variations,أوامر التغيير المعتمدة
+Assessed,المُقيَّم
+Assessed Amount,المبلغ المقيَّم
+Asset,الأصل
+Awarded,تمت الترسية
+BOQ Budget vs Actual,موازنة جدول الكميات مقابل التكلفة الفعلية
+BOQ Code,كود البند
+BOQ Item,بند جدول الكميات
+BOQ Item Enabled,تفعيل بند BOQ
+BOQ Items,بنود جدول كميات الموازنة
+BOQ No,رقم البند
+Basis,الأساس
+Before,قبل
+Budget,الموازنة
+Budget Amount,قيمة الموازنة
+Budget BOQ Equipment,معدات بند الموازنة
+Budget BOQ Expense,مصروفات بند الموازنة
+Budget BOQ Item,بند جدول كميات الموازنة
+Budget BOQ Labour,عمالة بند الموازنة
+Budget BOQ Material,مواد بند الموازنة
+Budget BOQ Subcontract,مقاولات باطن بند الموازنة
+Budget Cost,تكلفة الموازنة
+Budget Date,تاريخ الموازنة
+Budget Per Cost Code,الموازنة حسب كود التكلفة
+Budget Per Cost Code Item,بند الموازنة حسب كود التكلفة
+Budget Quantity,كمية الموازنة
+CSI Code,كود CSI
+Calculated Selling Rate,سعر البيع المحسوب
+Can Close,قابل للإقفال
+Cancel,إلغاء
+Cancelled,ملغى
+Certification & Outstanding,الاعتماد والمستحقات
+Certified Items,البنود المعتمدة
+Certified Qty,الكمية المعتمدة
+Certified Value,القيمة المعتمدة
+Certified to Date,المعتمد حتى تاريخه
+Change Type,نوع التغيير
+Checklist,قائمة التحقق
+Checklist Item,بند القائمة
+Claim Item,بند المطالبة
+Claim Items,بنود المطالبة
+Claim Type,نوع المطالبة
+Claimed,المطالَب به
+Claimed Amount,المبلغ المطالَب به
+Client BOQ Item,بند جدول كميات العميل
+Client IPC,مستخلص العميل
+Client IPC Item,بند مستخلص العميل
+Client Measurement,مقايسة العميل
+Client Reference,مرجع العميل
+Close,إغلاق
+Closed,مغلق
+Closeout Checklist,قائمة الإقفال
+Closeout Checklist Item,بند قائمة الإقفال
+Code,الكود
+Code Name,اسم الكود
+Comments,ملاحظات
+Commercial / Revenue baseline,الأساس التجاري / الإيراد
+Commercial Summary,الملخص التجاري
+Commitment,الالتزام
+Company,الشركة
+Company Default,افتراضي الشركة
+Completed,مكتمل
+Construction Cost Dimensions,أبعاد تكلفة الإنشاءات
+Construction Material Requirement,طلب مواد
+Construction Settings,إعدادات المقاولات
+Contract Amendment,تعديل العقد
+Contract Claim,مطالبة
+Contract Closeout,إقفال العقد
+Contract Date,تاريخ العقد
+Contract No,رقم العقد
+Contract Quantity,الكمية التعاقدية
+Contract Type,نوع العقد
+Contract Variation,أمر تغيير
+Contract Variation Item,بند أمر التغيير
+Contracting Settings,إعدادات المقاولات
+Cost (control baseline — no markup),التكلفة (أساس الرقابة — بدون ربح)
+Cost (no markup),التكلفة (بدون ربح)
+Cost Account,حساب التكلفة
+Cost Amount,قيمة التكلفة
+Cost Code,كود التكلفة
+Cost Code Budget,موازنة كود التكلفة
+Cost Code Budget vs Actual,موازنة كود التكلفة مقابل التكلفة الفعلية
+Cost Code Description,وصف كود التكلفة
+Cost Code Enabled,تفعيل كود التكلفة
+Cost Dimensions,أبعاد التكلفة
+Cost Rate,سعر التكلفة
+Cumulative Quantity,الكمية التراكمية
+Currency,العملة
+Current Amount,القيمة الحالية
+Current Contract Value,القيمة الحالية للعقد
+Current Qty,الكمية الحالية
+Current Quantity,الكمية الحالية
+Current Rate,السعر الحالي
+Current Value,القيمة الحالية
+Customer,العميل
+Date,التاريخ
+Deduction,خصم
+Deduction & Tax Rates,نسب الخصم والضريبة
+Deduction Class,تصنيف الخصم
+Deduction Rule,قاعدة الخصم
+Deduction Type,نوع الخصم
+Deductions,الخصومات
+Default Accounts (override Project),حسابات افتراضية (تتجاوز المشروع)
+Default Cost Account,حساب التكلفة الافتراضي
+Default Revenue Account,حساب الإيراد الافتراضي
+Defaults,الإعدادات الافتراضية
+Description,الوصف
+Detailed Breakdown,تفصيل كامل
+Direct Cost,التكلفة المباشرة
+Direct Cost (from breakdown),التكلفة المباشرة (من التفصيل)
+Direct Selling Rate,سعر بيع مباشر
+Disabled,معطل
+Done,منجز
+Download Template,تحميل النموذج
+Draft,مسودة
+Due Release Date,تاريخ الإفراج المستحق
+Effective Date,تاريخ السريان
+Effective From,ساري من
+Effective To,ساري إلى
+Employee,الموظف
+Enable Auto Cost Allocation,تفعيل التخصيص التلقائي للتكلفة
+Enable BOQ Item,تفعيل بند الكميات
+Enable Cost Code,تفعيل كود التكلفة
+Enable WBS,تفعيل هيكل العمل
+End Date,تاريخ الانتهاء
+Equipment,معدات
+Equipment Breakdown,تفصيل المعدات
+Evidence,الإثبات
+Exchange Rate,سعر الصرف
+Executed Quantity,حصر الكميات المنفذة
+Execution %,نسبة التنفيذ %
+Execution Date,تاريخ التنفيذ
+Expense,مصروف
+Expense Breakdown,تفصيل المصروفات
+Expenses,المصروفات
+Export,تصدير
+Extension of Time,تمديد المدة
+Final Account,الحساب الختامي
+Final Account Line,بند الحساب الختامي
+Final Account Lines,بنود الحساب الختامي
+Final Contract Value,قيمة العقد النهائية
+Final IPC,المستخلص الختامي
+Final Selling Rate,سعر البيع النهائي
+Financial,مالي
+Fixed Value,القيمة الثابتة
+From Date,من تاريخ
+Generated,مُولّد
+Gross Valuation,إجمالي التقييم
+Gross Value,الإجمالي
+Gross Work Done,إجمالي العمل المنفذ
+Header Deductions,خصومات الرأس
+High,مرتفع
+IPC Header Deduction,خصم رأس المستخلص
+IPC No,رقم المستخلص
+Import,استيراد
+In Progress,قيد التنفيذ
+Indirect Costs,التكاليف غير المباشرة
+Installation %,نسبة التركيب
+Installation % (progress),نسبة التركيب (تقدم)
+Insurance,تأمين
+Insurance %,نسبة التأمين
+Insurance (current),التأمين (الحالي)
+Is Group,مجموعة
+Issued,المصروف
+Item,الصنف
+Item Deduction,خصم البند
+Item Deductions,خصومات البنود
+Item No,رقم البند
+Items,البنود
+Labour,عمالة
+Labour Breakdown,تفصيل العمالة
+Level,المستوى
+Line No,رقم السطر
+Lines,البنود
+Lost,خاسر
+Low,منخفض
+Mandatory,إلزامي
+Manual,يدوي
+Markup %,نسبة الربح %
+Material,مواد
+Material Breakdown,تفصيل المواد
+Material Requirement Item,بند طلب المواد
+Materials,المواد
+Materials on Site,التشوينات
+Measured Items,البنود المقاسة
+Measurement Part,جزء القياس
+Measurement Parts (informational until Part Type / Period Per Days confirmed),أجزاء القياس (للعلم فقط حتى تأكيد النوع والمدة)
+Medium,متوسط
+Name,الاسم
+Net (current),الصافي (الحالي)
+Net Current,صافي هذا المستخلص
+Net Payable,صافي المستحق
+Net Position,صافي المركز
+Net Receivable,صافي المستحق
+Net Value,صافي القيمة
+New Item,بند جديد
+New Item Description,وصف البند الجديد
+New Item UOM,وحدة البند الجديد
+Node Code,كود العقدة
+Node Name,اسم العقدة
+Node Type,نوع العقدة
+Notes,ملاحظات
+On Hold,معلّق
+Open,مفتوح
+Operation Measurement,المقايسة
+Operation Measurement Deduction,خصم المقايسة
+Operation Measurement Item,بند المقايسة
+Order Date,تاريخ الأمر
+Order Value,قيمة الأمر
+Ordered,تم طلبه
+Original Contract,العقد الأصلي
+Original Contract Value,القيمة الأصلية للعقد
+Original End Date,تاريخ الانتهاء الأصلي
+Original Qty,الكمية الأصلية
+Original Rate,السعر الأصلي
+Original Start Date,تاريخ البدء الأصلي
+Original Value,القيمة الأصلية
+Other,أخرى
+Other Deductions,خصومات أخرى
+Output Tax,ضريبة المخرجات
+Output Tax %,نسبة ضريبة المخرجات
+Outstanding Receivable,المستحق القائم
+Parent,المستوى الأب
+Parent BOQ Item,البند الأب
+Parent CSI Code,كود CSI الأب
+Parent Cost Code,كود التكلفة الأب
+Parent WBS,هيكل العمل الأب
+Parent WBS Node,العقدة الأب
+Partially Received,مستلم جزئيًا
+Parts,الأجزاء
+Pass %,نسبة التمرير
+Penalty,غرامات التأخير
+Pending,قيد الانتظار
+Percent Complete,نسبة الإنجاز
+Percentage,النسبة
+Period Per Days,المدة بالأيام
+Plan Date,تاريخ الخطة
+Planned,مخطط
+Planned Amount,القيمة المخططة
+Planned Date,التاريخ المخطط
+Planned Margin %,هامش الربح المخطط %
+Planned Procurement,المشتريات المخططة
+Planned Profit,الربح المخطط
+Planned Qty,الكمية المخططة
+Policy,السياسة
+Posted,مرحل
+Preparing,قيد الإعداد
+Previous / Current / Total,السابق / الحالي / الإجمالي
+Previous Net,الصافي السابق
+Previous Qty,الكمية السابقة
+Previous Quantity,الكمية السابقة
+Previous Value,القيمة السابقة
+Previously Paid,المدفوع سابقاً
+Pricing Mode,طريقة التسعير
+Print,طباعة
+Priority,الأولوية
+Procurement Plan,خطة المشتريات
+Procurement Plan Item,بند خطة المشتريات
+Project,المشروع
+Project Budget,الموازنة
+Project Code,كود المشروع
+Project Name,اسم المشروع
+Project Warehouse Policy,سياسة مخزن المشروع
+Purchase Invoice,فاتورة الشراء
+Qty,الكمية
+Quantity,الكمية
+Quantity Change,تغيير كمية
+Rate,السعر
+Rate Change,تغيير سعر
+Ready,جاهز
+Reason,السبب
+Received,المستلم
+Reconciliation,تسوية
+Reference,المرجع
+Reference Event,الحدث المرجعي
+Reference No,رقم المرجع
+References (Variation / Claim / EOT),مراجع (تغيير/مطالبة/تمديد)
+Reject,رفض
+Rejected,مرفوض
+Release Date,تاريخ الإفراج الفعلي
+Released Amount,المبلغ المفرج عنه
+Remaining,المتبقي
+Remaining Quantity,الكمية المتبقية
+Remarks,ملاحظات
+Request Date,تاريخ الطلب
+Requested Days,الأيام المطلوبة
+Required,مطلوب
+Required Date,التاريخ المطلوب
+Required Qty,الكمية المطلوبة
+Requirement Items,بنود الطلب
+Retained Amount,المبلغ المحتجز
+Retention,محتجز
+Retention %,نسبة المحتجز
+Retention (current),المحتجز (الحالي)
+Retention Amount,قيمة المحتجزات
+Retention Held,المحتجز
+Retention Percent,نسبة المحتجزات %
+Revenue Account,حساب الإيراد
+Revenue Amount,قيمة الإيراد
+Review,مراجعة
+Revision No,رقم المراجعة
+Sales Invoice,فاتورة البيع
+Save,حفظ
+Scope Change,تغيير نطاق
+Selling,البيع
+Selling Amount,قيمة البيع
+Selling Rate,سعر البيع
+Series,المسلسل
+Source / Reference,المصدر / المرجع
+Source IPC,المستخلص المصدر
+Source Measurement,المقايسة المصدر
+Source Tender,العطاء المصدر
+Start Date,تاريخ البدء
+Status,الحالة
+Status & Posting,الحالة والترحيل
+Statutory / Recovery,القانونية / الاسترداد
+Storage,التخزين
+Storage & Line Deductions,التخزين وخصومات البند
+Storage / Materials on Site (adds),التخزين / مواد بالموقع (يُضاف)
+Storage Total,إجمالي التخزين
+Sub BOQ Item,بند مقايسة مقاول الباطن
+Sub BOQ Item No,رقم بند مقايسة الباطن
+Sub IPC Item,بند مستخلص مقاول الباطن
+Subcontract,عقد الباطن
+Subcontract BOQ,مقايسة مقاول الباطن
+Subcontract BOQ Item,بند جدول كميات الباطن
+Subcontract BOQ Mapping,ربط بنود مقاول الباطن
+Subcontract Breakdown,تفصيل الباطن
+Subcontract IPC,مستخلص مقاول الباطن
+Subcontract IPC Item,بند مستخلص مقاول الباطن
+Subcontract Order,أمر إسناد مقاول الباطن
+Subcontract Variation,أمر تغيير مقاول الباطن
+Subcontract Variation Item,بند أمر تغيير مقاول الباطن
+Subcontractor,مقاول الباطن
+Subcontractor IPC,مستخلص مقاول الباطن
+Subcontractor Retention,محتجزات مقاول الباطن
+Subcontracts,مقاولات الباطن
+Submission Date,تاريخ التقديم
+Submit,ترحيل
+Submitted,مرحل
+Supplier,المورد
+Supplier (Subcontractor),المورد (مقاول الباطن)
+Supply %,نسبة التوريد
+Supply % (progress),نسبة التوريد (تقدم)
+Suspended,موقوف
+Target Warehouse,المخزن المستهدف
+Tax,ضريبة
+Tax / WHT,الضريبة / ضريبة الخصم من المنبع
+Tax Amount,قيمة الضريبة
+Temporary,مؤقت
+Temporary Deduction (holds back),خصم مؤقت (محتجز)
+Temporary Deductions,الخصومات المؤقتة
+Tender,العطاء
+Tender BOQ Equipment,معدات بند العطاء
+Tender BOQ Expense,مصروفات بند العطاء
+Tender BOQ Item,بند جدول كميات العطاء
+Tender BOQ Labour,عمالة بند العطاء
+Tender BOQ Material,مواد بند العطاء
+Tender BOQ Subcontract,مقاولات باطن بند العطاء
+Tender Date,تاريخ العطاء
+Tender Indirect Cost,التكلفة غير المباشرة للعطاء
+Tender No,رقم العطاء
+Tender Price,سعر العطاء
+Title,عنوان العطاء
+To Date,إلى تاريخ
+Total BOQ Value,إجمالي قيمة جدول الكميات
+Total Budget,إجمالي الموازنة
+Total Contract / Revenue,إجمالي العقد / الإيراد
+Total Cost Budget,إجمالي موازنة التكلفة
+Total Deductions,إجمالي الخصومات
+Total Direct Cost,إجمالي التكلفة المباشرة
+Total Estimated Cost,إجمالي التكلفة التقديرية
+Total Indirect Cost,إجمالي التكلفة غير المباشرة
+Total Net (cumulative),الصافي التراكمي
+Total Qty,الكمية الإجمالية
+Total Value,القيمة الإجمالية
+Totals,الإجماليات
+Type,النوع
+Under Assessment,قيد التقييم
+Under Review,قيد المراجعة
+Unit,الوحدة
+Unit Price,سعر الوحدة
+Upload Excel,رفع ملف Excel
+Urgent,عاجل
+Valuation,التقييم
+Valuation Totals (derived — see ASSUMPTIONS.md),إجماليات التقييم (محسوبة)
+Variance,الانحراف
+Variance %,نسبة الانحراف %
+Variation / New Rate,سعر التغيير / الجديد
+Variation Amount,قيمة التغيير
+Variation Items,بنود أمر التغيير
+Variation Qty,كمية التغيير
+Variation Value,قيمة أمر التغيير
+Version,الإصدار
+WBS,هيكل تجزئة العمل
+WBS Allocation,توزيع هيكل تجزئة العمل
+WBS Code,كود هيكل العمل
+WBS Enabled,تفعيل WBS
+WBS Node,عقدة هيكل تجزئة العمل
+Warehouse,المخزن
+Withholding Tax,ضريبة الخصم والإضافة
+Withholding Tax %,نسبة ضريبة الخصم
+Work Done,قيمة الأعمال المنفذة
+Work Done Value,قيمة الأعمال المنفذة

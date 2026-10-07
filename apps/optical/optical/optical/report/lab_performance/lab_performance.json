@@ -1,0 +1,33 @@
+{
+ "add_total_row": 0,
+ "creation": "2026-09-28 00:00:00",
+ "disabled": 0,
+ "docstatus": 0,
+ "doctype": "Report",
+ "idx": 0,
+ "is_standard": "Yes",
+ "modified": "2026-09-28 00:00:00",
+ "modified_by": "Administrator",
+ "module": "Optical",
+ "name": "Lab Performance",
+ "owner": "Administrator",
+ "prepared_report": 0,
+ "query": "SELECT\n laboratory AS \"Laboratory:Link/Optical Laboratory:170\",\n COUNT(*) AS \"Jobs:Int:80\",\n ROUND(AVG(DATEDIFF(actual_return, date_sent)), 1) AS \"Avg Turnaround (Days):Float:160\",\n SUM(CASE WHEN actual_return IS NOT NULL AND actual_return <= expected_return THEN 1 ELSE 0 END) AS \"On Time:Int:90\",\n SUM(CASE WHEN actual_return IS NULL THEN 1 ELSE 0 END) AS \"Still Open:Int:90\",\n SUM(IFNULL(lab_cost, 0)) AS \"Total Cost:Currency:110\"\nFROM `tabOptical Job`\nWHERE laboratory IS NOT NULL AND date_sent IS NOT NULL AND status != 'Cancelled'\nGROUP BY laboratory",
+ "ref_doctype": "Optical Job",
+ "report_name": "Lab Performance",
+ "report_type": "Query Report",
+ "roles": [
+  {
+   "role": "System Manager"
+  },
+  {
+   "role": "Optical Manager"
+  },
+  {
+   "role": "Optical Branch Manager"
+  },
+  {
+   "role": "Optical Lab Technician"
+  }
+ ]
+}

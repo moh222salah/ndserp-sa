@@ -1,0 +1,60 @@
+[project]
+name = "changai"
+authors = [
+    { name = "ERPGulf", email = "support@erpgulf.com"}
+]
+description = "ChangAI"
+readme = "README.md"
+dynamic = ["version"]
+dependencies = [
+    "cffi",
+    "openai",
+    "anthropic",
+    "google-genai",
+    "google-auth",
+    "google-cloud-aiplatform",
+    "langchain-core",
+    "langchain-community",
+    "langchain-huggingface",
+    "langgraph",
+    "symspellpy",
+    "transformers",
+    "sentence-transformers",
+    "faiss-cpu",
+    "numpy",
+    "sqlglot",
+    "boto3",
+    "PyQRCode",
+    "pypng",
+    "opencv-python-headless",
+    "rapidfuzz",
+    "Pillow",
+    "pandas",
+    "scikit-learn",
+    "tabulate",
+    "regex",
+    "aiohttp",
+    "paramiko",
+    "tomli-w",
+    "jellyfish" 
+]
+
+[build-system]
+requires = ["flit_core >=3.4,<4"]
+build-backend = "flit_core.buildapi"
+
+[tool.bench.dev-dependencies]
+
+[tool.bench.frappe-dependencies]
+    frappe = ">=15.0.0,<=17.0.0-dev"
+
+[deploy.dependencies.apt]
+packages = [
+  "libffi-dev",
+  "pkg-config",
+  "build-essential",
+  "python3-dev",
+  "libopenblas-dev",
+  "libgl1",
+  "libglib2.0-0"
+]

@@ -1,0 +1,229 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2026-01-15 00:00:00.000000",
+ "description": "Raw record of every PTS integration request \u2014 essential for troubleshooting.",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "station",
+  "pts_controller",
+  "event_type",
+  "direction",
+  "cb1",
+  "status",
+  "request_id",
+  "packet_id",
+  "transaction_id",
+  "sb_t",
+  "received_at",
+  "processed_at",
+  "processing_duration",
+  "cb2",
+  "retry_count",
+  "error_code",
+  "error_message",
+  "sb_raw",
+  "payload",
+  "response"
+ ],
+ "fields": [
+  {
+   "fieldname": "station",
+   "fieldtype": "Link",
+   "label": "Station",
+   "options": "Gas Station",
+   "search_index": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "pts_controller",
+   "fieldtype": "Link",
+   "label": "PTS Controller",
+   "options": "PTS Controller",
+   "search_index": 1
+  },
+  {
+   "fieldname": "event_type",
+   "fieldtype": "Select",
+   "label": "Event Type",
+   "options": "UploadPumpTransaction\nUploadTankMeasurement\nUploadInTankDelivery\nUploadAlertRecord\nUploadStatus\nUploadConfiguration\nUploadPayment\nUploadShift",
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "direction",
+   "fieldtype": "Select",
+   "label": "Direction",
+   "options": "Inbound\nOutbound",
+   "default": "Inbound"
+  },
+  {
+   "fieldname": "cb1",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "status",
+   "fieldtype": "Select",
+   "label": "Status",
+   "options": "Received\nProcessing\nProcessed\nFailed\nDuplicate\nIgnored",
+   "default": "Received",
+   "search_index": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "request_id",
+   "fieldtype": "Data",
+   "label": "Request ID"
+  },
+  {
+   "fieldname": "packet_id",
+   "fieldtype": "Data",
+   "label": "Packet ID",
+   "search_index": 1
+  },
+  {
+   "fieldname": "transaction_id",
+   "fieldtype": "Data",
+   "label": "Transaction ID"
+  },
+  {
+   "fieldname": "sb_t",
+   "fieldtype": "Section Break",
+   "label": "Timing"
+  },
+  {
+   "fieldname": "received_at",
+   "fieldtype": "Datetime",
+   "label": "Received At",
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "processed_at",
+   "fieldtype": "Datetime",
+   "label": "Processed At"
+  },
+  {
+   "fieldname": "processing_duration",
+   "fieldtype": "Float",
+   "label": "Duration (ms)",
+   "precision": "1"
+  },
+  {
+   "fieldname": "cb2",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "retry_count",
+   "fieldtype": "Int",
+   "label": "Retry Count"
+  },
+  {
+   "fieldname": "error_code",
+   "fieldtype": "Data",
+   "label": "Error Code"
+  },
+  {
+   "fieldname": "error_message",
+   "fieldtype": "Small Text",
+   "label": "Error Message"
+  },
+  {
+   "fieldname": "sb_raw",
+   "fieldtype": "Section Break",
+   "label": "Payload / Response"
+  },
+  {
+   "fieldname": "payload",
+   "fieldtype": "Code",
+   "label": "Payload",
+   "options": "JSON"
+  },
+  {
+   "fieldname": "response",
+   "fieldtype": "Code",
+   "label": "Response",
+   "options": "JSON"
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2026-01-15 00:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Gas Station",
+ "name": "Integration Event",
+ "owner": "Administrator",
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "track_changes": 1,
+ "autoname": "INT-EVT-.YYYY.-.######",
+ "naming_rule": "Expression (old style)",
+ "search_fields": "pts_controller,event_type,status",
+ "permissions": [
+  {
+   "role": "System Manager",
+   "read": 1,
+   "permlevel": 0,
+   "create": 1,
+   "write": 1,
+   "delete": 1,
+   "report": 1,
+   "export": 1,
+   "email": 1,
+   "print": 1,
+   "share": 1
+  },
+  {
+   "role": "Gas Station Administrator",
+   "read": 1,
+   "permlevel": 0,
+   "create": 1,
+   "write": 1,
+   "delete": 1,
+   "report": 1,
+   "export": 1,
+   "email": 1,
+   "print": 1,
+   "share": 1
+  },
+  {
+   "role": "Gas Station Integration Manager",
+   "read": 1,
+   "permlevel": 0,
+   "create": 1,
+   "write": 1,
+   "delete": 1,
+   "report": 1,
+   "export": 1,
+   "email": 1,
+   "print": 1,
+   "share": 1
+  },
+  {
+   "role": "Station Manager",
+   "read": 1,
+   "permlevel": 0,
+   "write": 1,
+   "create": 1,
+   "report": 1,
+   "print": 1,
+   "email": 1
+  },
+  {
+   "role": "Station Operator",
+   "read": 1,
+   "permlevel": 0,
+   "report": 1,
+   "print": 1,
+   "export": 1
+  },
+  {
+   "role": "Gas Station Viewer",
+   "read": 1,
+   "permlevel": 0,
+   "report": 1,
+   "print": 1,
+   "export": 1
+  }
+ ]
+}

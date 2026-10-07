@@ -1,0 +1,36 @@
+{
+ "add_total_row": 0,
+ "creation": "2026-09-28 00:00:00",
+ "disabled": 0,
+ "docstatus": 0,
+ "doctype": "Report",
+ "idx": 0,
+ "is_standard": "Yes",
+ "modified": "2026-09-28 00:00:00",
+ "modified_by": "Administrator",
+ "module": "Optical",
+ "name": "Open Optical Orders",
+ "owner": "Administrator",
+ "prepared_report": 0,
+ "query": "SELECT\n name AS \"Order:Link/Optical Order:140\",\n customer_name AS \"Customer::170\",\n cost_center AS \"Branch:Link/Cost Center:130\",\n expected_delivery AS \"Expected Delivery:Date:120\",\n status AS \"Status::110\",\n payment_status AS \"Payment Status::110\",\n net_total AS \"Net Total:Currency:110\",\n outstanding_amount AS \"Outstanding:Currency:110\",\n GREATEST(DATEDIFF(CURDATE(), expected_delivery), 0) AS \"Days Overdue:Int:100\"\nFROM `tabOptical Order`\nWHERE status IN ('Confirmed', 'In Production', 'Ready')\nORDER BY expected_delivery",
+ "ref_doctype": "Optical Order",
+ "report_name": "Open Optical Orders",
+ "report_type": "Query Report",
+ "roles": [
+  {
+   "role": "System Manager"
+  },
+  {
+   "role": "Optical Manager"
+  },
+  {
+   "role": "Optical Branch Manager"
+  },
+  {
+   "role": "Optical Cashier"
+  },
+  {
+   "role": "Optician"
+  }
+ ]
+}

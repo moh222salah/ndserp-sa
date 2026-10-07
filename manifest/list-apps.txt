@@ -1,0 +1,13 @@
+
+frappe         16.36.1 version-16
+erpnext        16.37.0 version-16
+hrms           16.16.0 version-16
+pos_next       1.12.0  version-16
+ndserp         1.0.0   main
+ksa_compliance 0.61.4  master
+amir_theme_v16 0.0.1   main
+optima_hr      15.0.1  version-16
+changai        0.0.1   main
+frappe_vision  0.0.1   main
+frappe_ai      0.0.1   main
+

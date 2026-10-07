@@ -1,0 +1,88 @@
+<div class="print-format">
+	<div class="header">
+		{{ doc.company }}
+	</div>
+	
+	<div class="section">
+		<strong>{{ doc.name }}</strong><br>
+		Date: {{ frappe.utils.format_datetime((doc.posting_date|string) + ' ' + ((doc.posting_time or '00:00:00')|string), 'dd/MM/yyyy HH:mm') }}<br>
+		Cashier: {{ frappe.db.get_value("User", doc.owner, "full_name") or doc.owner }}
+		{% if doc.custom_nds_table %}
+		<br>Table: {{ doc.custom_nds_table }}
+		{% endif %}
+		{% if doc.custom_nds_order_type and doc.custom_nds_order_type != 'Dine In' %}
+		<br>Type: {{ doc.custom_nds_order_type }}
+		{% endif %}
+	</div>
+	
+	<div class="section">
+		<table>
+			<thead>
+				<tr>
+					<th style="text-align: left;">Item</th>
+					<th style="text-align: center;">Qty</th>
+					<th style="text-align: right;">Amount</th>
+				</tr>
+			</thead>
+			<tbody>
+				{% for item in doc.items %}
+				<tr class="item-row">
+					<td>{{ item.item_name }}</td>
+					<td style="text-align: center;">{{ item.qty }}</td>
+					<td style="text-align: right;">{{ frappe.utils.fmt_money(item.amount, currency=doc.currency) }}</td>
+				</tr>
+				{% endfor %}
+			</tbody>
+		</table>
+	</div>
+	
+	<div class="totals">
+		<table>
+			<tr>
+				<td><strong>Net Total</strong></td>
+				<td style="text-align: right;"><strong>{{ frappe.utils.fmt_money(doc.net_total, currency=doc.currency) }}</strong></td>
+			</tr>
+			{% if doc.taxes %}
+			{% for tax in doc.taxes %}
+			<tr>
+				<td>{{ tax.description }}</td>
+				<td style="text-align: right;">{{ frappe.utils.fmt_money(tax.tax_amount, currency=doc.currency) }}</td>
+			</tr>
+			{% endfor %}
+			{% endif %}
+			{% if doc.discount_amount and doc.discount_amount > 0 %}
+			<tr>
+				<td>Discount</td>
+				<td style="text-align: right;">-{{ frappe.utils.fmt_money(doc.discount_amount, currency=doc.currency) }}</td>
+			</tr>
+			{% endif %}
+			<tr style="font-size: 14px; font-weight: bold;">
+				<td>GRAND TOTAL</td>
+				<td style="text-align: right;">{{ frappe.utils.fmt_money(doc.grand_total, currency=doc.currency) }}</td>
+			</tr>
+		</table>
+	</div>
+	
+	<div class="section" style="margin-top: 3mm;">
+		<strong>Payment</strong>
+		<table>
+			{% for payment in doc.payments %}
+			<tr>
+				<td>{{ payment.mode_of_payment }}</td>
+				<td style="text-align: right;">{{ frappe.utils.fmt_money(payment.amount, currency=doc.currency) }}</td>
+			</tr>
+			{% endfor %}
+			{% if doc.change_amount and doc.change_amount > 0 %}
+			<tr>
+				<td><strong>Change</strong></td>
+				<td style="text-align: right;"><strong>{{ frappe.utils.fmt_money(doc.change_amount, currency=doc.currency) }}</strong></td>
+			</tr>
+			{% endif %}
+		</table>
+	</div>
+	
+	<div class="footer">
+		Thank you for your visit!<br>
+		Please come again
+	</div>
+</div>

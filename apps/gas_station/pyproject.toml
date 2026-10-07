@@ -1,0 +1,19 @@
+[project]
+name = "gas_station"
+authors = [{ name = "Ahmed", email = "dev@example.com" }]
+description = "Gas Station Operations & Monitoring for ERPNext v16"
+requires-python = ">=3.10"
+readme = "README.md"
+dynamic = ["version"]
+dependencies = [
+    # ERPNext is the business/financial system of record and is a hard dependency.
+    # It is installed at the bench/site level, not via pip here.
+]
+
+[build-system]
+requires = ["flit_core >=3.4,<4"]
+build-backend = "flit_core.buildapi"
+
+[tool.bench.frappe-dependencies]
+frappe = ">=15.0.0,<17.0.0"
+erpnext = ">=15.0.0,<17.0.0"

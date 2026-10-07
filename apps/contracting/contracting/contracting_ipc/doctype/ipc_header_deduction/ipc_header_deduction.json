@@ -1,0 +1,75 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2026-09-08 00:00:00.000000",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "deduction_type",
+  "description",
+  "account",
+  "percentage",
+  "current_value",
+  "previous_value",
+  "total_value"
+ ],
+ "fields": [
+  {
+   "fieldname": "deduction_type",
+   "fieldtype": "Link",
+   "label": "Deduction Type",
+   "options": "Deduction Type",
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "description",
+   "fieldtype": "Data",
+   "label": "Description"
+  },
+  {
+   "fieldname": "account",
+   "fieldtype": "Link",
+   "label": "Account",
+   "options": "Account"
+  },
+  {
+   "fieldname": "percentage",
+   "fieldtype": "Percent",
+   "label": "Percentage",
+   "in_list_view": 1,
+   "description": "If set, computed on Gross Valuation; else enter Current Value."
+  },
+  {
+   "fieldname": "current_value",
+   "fieldtype": "Currency",
+   "label": "Current Value",
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "previous_value",
+   "fieldtype": "Currency",
+   "label": "Previous Value",
+   "read_only": 1
+  },
+  {
+   "fieldname": "total_value",
+   "fieldtype": "Currency",
+   "label": "Total Value",
+   "read_only": 1
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "is_submittable": 0,
+ "issingle": 0,
+ "istable": 1,
+ "links": [],
+ "modified": "2026-09-08 00:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Contracting IPC",
+ "name": "IPC Header Deduction",
+ "owner": "Administrator",
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "track_changes": 1
+}

@@ -1,0 +1,202 @@
+{
+ "actions": [],
+ "creation": "2026-05-21 00:00:00",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "enabled",
+  "section_brand",
+  "company_name",
+  "company_name_ar",
+  "tagline",
+  "tagline_ar",
+  "logo",
+  "column_break_brand",
+  "background_image",
+  "accent_color",
+  "panel_position",
+  "section_description",
+  "description",
+  "description_ar",
+  "section_contact",
+  "address",
+  "address_ar",
+  "phone",
+  "email",
+  "website",
+  "column_break_contact",
+  "show_social",
+  "facebook_url",
+  "twitter_url",
+  "linkedin_url",
+  "instagram_url"
+ ],
+ "fields": [
+  {
+   "default": "1",
+   "fieldname": "enabled",
+   "fieldtype": "Check",
+   "label": "Enable Custom Login Page"
+  },
+  {
+   "fieldname": "section_brand",
+   "fieldtype": "Section Break",
+   "label": "Brand"
+  },
+  {
+   "fieldname": "company_name",
+   "fieldtype": "Data",
+   "label": "Company Name (English)"
+  },
+  {
+   "fieldname": "company_name_ar",
+   "fieldtype": "Data",
+   "label": "Company Name (Arabic)"
+  },
+  {
+   "fieldname": "tagline",
+   "fieldtype": "Data",
+   "label": "Tagline (English)"
+  },
+  {
+   "fieldname": "tagline_ar",
+   "fieldtype": "Data",
+   "label": "Tagline (Arabic)"
+  },
+  {
+   "fieldname": "logo",
+   "fieldtype": "Attach Image",
+   "label": "Logo"
+  },
+  {
+   "fieldname": "column_break_brand",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "background_image",
+   "fieldtype": "Attach Image",
+   "label": "Brand Panel Background Image"
+  },
+  {
+   "default": "#14477E",
+   "fieldname": "accent_color",
+   "fieldtype": "Color",
+   "label": "Accent Color"
+  },
+  {
+   "default": "right",
+   "fieldname": "panel_position",
+   "fieldtype": "Select",
+   "label": "Brand Panel Position",
+   "options": "right\nleft"
+  },
+  {
+   "fieldname": "section_description",
+   "fieldtype": "Section Break",
+   "label": "Description"
+  },
+  {
+   "fieldname": "description",
+   "fieldtype": "Small Text",
+   "label": "About / Description (English)"
+  },
+  {
+   "fieldname": "description_ar",
+   "fieldtype": "Small Text",
+   "label": "About / Description (Arabic)"
+  },
+  {
+   "fieldname": "section_contact",
+   "fieldtype": "Section Break",
+   "label": "Contact Info"
+  },
+  {
+   "fieldname": "address",
+   "fieldtype": "Small Text",
+   "label": "Address (English)"
+  },
+  {
+   "fieldname": "address_ar",
+   "fieldtype": "Small Text",
+   "label": "Address (Arabic)"
+  },
+  {
+   "fieldname": "phone",
+   "fieldtype": "Data",
+   "label": "Phone",
+   "options": "Phone"
+  },
+  {
+   "fieldname": "email",
+   "fieldtype": "Data",
+   "label": "Email",
+   "options": "Email"
+  },
+  {
+   "fieldname": "website",
+   "fieldtype": "Data",
+   "label": "Website",
+   "options": "URL"
+  },
+  {
+   "fieldname": "column_break_contact",
+   "fieldtype": "Column Break"
+  },
+  {
+   "default": "0",
+   "fieldname": "show_social",
+   "fieldtype": "Check",
+   "label": "Show Social Links"
+  },
+  {
+   "depends_on": "show_social",
+   "fieldname": "facebook_url",
+   "fieldtype": "Data",
+   "label": "Facebook URL",
+   "options": "URL"
+  },
+  {
+   "depends_on": "show_social",
+   "fieldname": "twitter_url",
+   "fieldtype": "Data",
+   "label": "Twitter / X URL",
+   "options": "URL"
+  },
+  {
+   "depends_on": "show_social",
+   "fieldname": "linkedin_url",
+   "fieldtype": "Data",
+   "label": "LinkedIn URL",
+   "options": "URL"
+  },
+  {
+   "depends_on": "show_social",
+   "fieldname": "instagram_url",
+   "fieldtype": "Data",
+   "label": "Instagram URL",
+   "options": "URL"
+  }
+ ],
+ "issingle": 1,
+ "links": [],
+ "modified": "2026-05-22 00:00:00",
+ "modified_by": "Administrator",
+ "module": "Amir Theme",
+ "name": "Login Page Settings",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "print": 1,
+   "read": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "sort_field": "creation",
+ "sort_order": "DESC",
+ "states": []
+}

@@ -1,0 +1,59 @@
+// ===========================================================================
+// amir_theme_v16 — desk stylesheet entry point
+// ===========================================================================
+// Architecture
+//   abstracts/   design tokens and maps — emit no CSS on their own
+//   base/        @font-face and direction handling
+//   components/  reusable UI pieces
+//   layouts/     page-level composition (desk, form, list, report)
+//   themes/      light / dark value sets
+//   _legacy      pre-restructure rules, shrinking as modules are extracted
+//
+// ---------------------------------------------------------------------------
+// Why there are NO cascade layers here
+// ---------------------------------------------------------------------------
+// Layers were tried first and had to be removed. Measured on the live desk:
+// Frappe's own `.desktop-icon { border-radius: 20px }` (specificity 0,1,0)
+// beat this theme's `.desktop-container > .icons-container > .icons >
+// .desktop-icon` (0,4,0). That is not a bug — it is the layer rule:
+//
+//   normal declarations:  UNLAYERED  >  last layer  >  …  >  first layer
+//   !important:           first layer  >  …  >  last layer  >  UNLAYERED
+//
+// Frappe and ERPNext ship entirely unlayered, so every rule this theme put in
+// a layer was demoted below the framework it exists to override — layers made
+// the theme weaker, and would have forced !important back in to compensate.
+//
+// The organisational win we actually wanted (small, single-purpose files) comes
+// from SCSS partials, not from layers. So: modular files, flat cascade, and
+// override strength earned through specificity and source order.
+//
+// Load order is therefore meaningful — _legacy is imported FIRST so that any
+// extracted module, declared later at equal specificity, wins.
+// ===========================================================================
+
+// Font descriptors — not subject to the cascade.
+@import "base/fonts";
+
+// Legacy first: everything below is allowed to override it.
+@import "legacy";
+
+// Design tokens.
+@import "themes/launcher-tokens";
+@import "themes/background";
+@import "themes/color-schemes";
+@import "themes/readability";
+
+// Extracted modules.
+@import "components/page-header";
+@import "components/progress-bar";
+@import "components/status-bar";
+@import "components/hijri-date";
+@import "components/workspace-enhance";
+@import "components/smart-actions";
+@import "components/translation-toggle";
+@import "components/navbar-language";
+@import "components/selection";
+@import "layouts/desk-launcher";
+@import "layouts/tree";
+@import "layouts/report";

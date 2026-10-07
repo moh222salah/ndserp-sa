@@ -1,0 +1,109 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2026-09-08 00:00:00.000000",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "change_type",
+  "boq_item",
+  "new_item_description",
+  "new_item_uom",
+  "cvi_cb",
+  "original_qty",
+  "original_rate",
+  "variation_qty",
+  "variation_rate",
+  "variation_amount",
+  "cost_code",
+  "reason"
+ ],
+ "fields": [
+  {
+   "fieldname": "change_type",
+   "fieldtype": "Select",
+   "label": "Change Type",
+   "options": "Quantity Change\nRate Change\nAddition\nDeduction\nNew Item\nOther",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "boq_item",
+   "fieldtype": "Link",
+   "label": "BOQ Item",
+   "options": "Budget BOQ Item",
+   "in_list_view": 1,
+   "description": "Existing BOQ line. Leave blank for a New Item."
+  },
+  {
+   "fieldname": "new_item_description",
+   "fieldtype": "Small Text",
+   "label": "New Item Description"
+  },
+  {
+   "fieldname": "new_item_uom",
+   "fieldtype": "Link",
+   "label": "New Item UOM",
+   "options": "UOM"
+  },
+  {
+   "fieldname": "cvi_cb",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "original_qty",
+   "fieldtype": "Float",
+   "label": "Original Qty",
+   "read_only": 1
+  },
+  {
+   "fieldname": "original_rate",
+   "fieldtype": "Currency",
+   "label": "Original Rate",
+   "read_only": 1
+  },
+  {
+   "fieldname": "variation_qty",
+   "fieldtype": "Float",
+   "label": "Variation Qty",
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "variation_rate",
+   "fieldtype": "Currency",
+   "label": "Variation / New Rate"
+  },
+  {
+   "fieldname": "variation_amount",
+   "fieldtype": "Currency",
+   "label": "Variation Amount",
+   "read_only": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "cost_code",
+   "fieldtype": "Link",
+   "label": "Cost Code",
+   "options": "Cost Code"
+  },
+  {
+   "fieldname": "reason",
+   "fieldtype": "Data",
+   "label": "Reason"
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "is_submittable": 0,
+ "issingle": 0,
+ "istable": 1,
+ "links": [],
+ "modified": "2026-09-08 00:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Contracting Commercial",
+ "name": "Contract Variation Item",
+ "owner": "Administrator",
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "track_changes": 1
+}

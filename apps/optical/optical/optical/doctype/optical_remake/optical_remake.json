@@ -1,0 +1,241 @@
+{
+ "actions": [],
+ "creation": "2026-09-28 00:00:00",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "original_order",
+  "customer",
+  "customer_name",
+  "request_date",
+  "remake_col",
+  "status",
+  "reason",
+  "responsibility",
+  "warranty_covered",
+  "remake_cost_section",
+  "laboratory",
+  "cost",
+  "remake_col2",
+  "optical_qc",
+  "warranty_claim",
+  "new_job",
+  "replacement_section",
+  "replacement_items",
+  "remake_notes_section",
+  "notes"
+ ],
+ "fields": [
+  {
+   "fieldname": "original_order",
+   "fieldtype": "Link",
+   "label": "Original Order",
+   "options": "Optical Order",
+   "reqd": 1,
+   "in_list_view": 1,
+   "set_only_once": 1
+  },
+  {
+   "fieldname": "customer",
+   "fieldtype": "Link",
+   "label": "Customer",
+   "options": "Customer",
+   "fetch_from": "original_order.customer",
+   "read_only": 1
+  },
+  {
+   "fieldname": "customer_name",
+   "fieldtype": "Data",
+   "label": "Customer Name",
+   "fetch_from": "original_order.customer_name",
+   "read_only": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "request_date",
+   "fieldtype": "Date",
+   "label": "Request Date",
+   "default": "Today"
+  },
+  {
+   "fieldname": "remake_col",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "status",
+   "fieldtype": "Select",
+   "label": "Status",
+   "options": "Requested\nApproved\nIn Progress\nCompleted\nRejected",
+   "default": "Requested",
+   "in_list_view": 1,
+   "in_standard_filter": 1
+  },
+  {
+   "fieldname": "reason",
+   "fieldtype": "Select",
+   "label": "Reason",
+   "options": "Lab Error\nMeasurement Error\nPrescription Change\nDefective Material\nAdaptation Issue\nOther",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "responsibility",
+   "fieldtype": "Select",
+   "label": "Responsibility",
+   "options": "Laboratory\nStore\nSupplier\nManufacturer\nCustomer",
+   "reqd": 1
+  },
+  {
+   "fieldname": "warranty_covered",
+   "fieldtype": "Check",
+   "label": "Covered by Warranty"
+  },
+  {
+   "fieldname": "remake_cost_section",
+   "fieldtype": "Section Break",
+   "label": "Cost and Supplier"
+  },
+  {
+   "fieldname": "laboratory",
+   "fieldtype": "Link",
+   "label": "Laboratory",
+   "options": "Optical Laboratory"
+  },
+  {
+   "fieldname": "cost",
+   "fieldtype": "Currency",
+   "label": "Cost"
+  },
+  {
+   "fieldname": "remake_col2",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "optical_qc",
+   "fieldtype": "Link",
+   "label": "Optical QC",
+   "options": "Optical QC",
+   "read_only": 1
+  },
+  {
+   "fieldname": "warranty_claim",
+   "fieldtype": "Link",
+   "label": "Warranty Claim",
+   "options": "Optical Warranty Claim",
+   "read_only": 1
+  },
+  {
+   "fieldname": "new_job",
+   "fieldtype": "Link",
+   "label": "New Job",
+   "options": "Optical Job",
+   "read_only": 1,
+   "no_copy": 1
+  },
+  {
+   "fieldname": "replacement_section",
+   "fieldtype": "Section Break",
+   "label": "Replacement Items"
+  },
+  {
+   "fieldname": "replacement_items",
+   "fieldtype": "Table",
+   "label": "Replacement Items",
+   "options": "Optical Order Item"
+  },
+  {
+   "fieldname": "remake_notes_section",
+   "fieldtype": "Section Break",
+   "label": "Notes"
+  },
+  {
+   "fieldname": "notes",
+   "fieldtype": "Small Text",
+   "label": "Notes"
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2026-09-28 00:00:00",
+ "modified_by": "Administrator",
+ "module": "Optical",
+ "name": "Optical Remake",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "role": "System Manager",
+   "read": 1,
+   "report": 1,
+   "export": 1,
+   "print": 1,
+   "email": 1,
+   "share": 1,
+   "write": 1,
+   "create": 1,
+   "delete": 1
+  },
+  {
+   "role": "Optical Manager",
+   "read": 1,
+   "report": 1,
+   "export": 1,
+   "print": 1,
+   "email": 1,
+   "share": 1,
+   "write": 1,
+   "create": 1,
+   "delete": 1
+  },
+  {
+   "role": "Optical Branch Manager",
+   "read": 1,
+   "report": 1,
+   "export": 1,
+   "print": 1,
+   "email": 1,
+   "share": 1,
+   "write": 1,
+   "create": 1
+  },
+  {
+   "role": "Optical Cashier",
+   "read": 1,
+   "report": 1,
+   "export": 1,
+   "print": 1,
+   "email": 1,
+   "share": 1,
+   "write": 1,
+   "create": 1
+  },
+  {
+   "role": "Optician",
+   "read": 1,
+   "report": 1,
+   "export": 1,
+   "print": 1,
+   "email": 1,
+   "share": 1,
+   "write": 1,
+   "create": 1
+  },
+  {
+   "role": "Optical Lab Technician",
+   "read": 1,
+   "report": 1,
+   "export": 1,
+   "print": 1,
+   "email": 1,
+   "share": 1,
+   "write": 1,
+   "create": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "track_changes": 1,
+ "autoname": "format:OPT-RMK-{YYYY}-{#####}",
+ "naming_rule": "Expression",
+ "title_field": "customer_name"
+}

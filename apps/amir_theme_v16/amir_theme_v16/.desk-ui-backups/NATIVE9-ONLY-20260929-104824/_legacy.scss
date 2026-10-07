@@ -1,0 +1,4625 @@
+// ---------------------------------------------------------------------------
+// LEGACY — accumulated theme rules, pending extraction into modules.
+//
+// This file is the pre-restructure stylesheet moved verbatim (minus the Google
+// Fonts @import, now self-hosted in base/_fonts.scss). It is compiled into the
+// LOWEST-priority cascade layer, so anything extracted into a proper module
+// automatically overrides it WITHOUT needing !important.
+//
+// Migration rule: when a component is rewritten under components/ or layouts/,
+// delete its counterpart here. This file must only ever shrink.
+// ---------------------------------------------------------------------------
+
+/* IBM Plex Sans Arabic + Inter.
+   @import MUST be the first at-rule in the file — CSS ignores any @import
+   that appears after a normal rule, which is why this sits above everything
+   including the theme's own banner comment. Weight axis 300-700 is loaded so
+   Arabic gets REAL bold cuts instead of the browser's synthesised smear (the
+   local fallback face here exposes only two states: 400 and a fake 600+). */
+/*
+ * SaaS Theme — Fintech Theme (Blue)
+ *
+ * Brand blue:  #14477E
+ * Navy:        #0A2540
+ * Body:        #3C4257
+ * Muted:       #697386
+ * Surface:     #F6F9FC
+ * Borders:     #E3E8EE
+ */
+
+/* ============================================
+   1. GLOBAL FRAPPE VARIABLE OVERRIDES
+   ============================================ */
+
+:root,
+[data-theme="light"] {
+	--primary: #14477E;
+	--primary-color: #14477E;
+	--brand-color: #14477E;
+
+	--gray-50:  #F6F9FC;
+	--gray-100: #EFF3F8;
+	--gray-200: #E3E8EE;
+	--gray-300: #D3D9E0;
+	--gray-400: #A3ACB9;
+	--gray-500: #66707F;
+	--gray-600: #697386;
+	--gray-700: #425466;
+	--gray-800: #30313D;
+	--gray-900: #0A2540;
+
+	--heading-color: #0A2540;
+	--text-color: #3C4257;
+	--text-neutral: #3C4257;
+	--text-dark: #0A2540;
+	--text-muted: #697386;
+	--text-light: #66707F;
+
+	--bg-color: #F6F9FC;
+	--fg-color: #FFFFFF;
+	--card-bg: #FFFFFF;
+	--subtle-accent: #F6F9FC;
+	--subtle-fg: #EFF3F8;
+	--navbar-bg: #FFFFFF;
+	--fg-hover-color: #EFF3F8;
+	--modal-bg: #FFFFFF;
+	--toast-bg: #FFFFFF;
+	--popover-bg: #FFFFFF;
+	--control-bg: #F6F9FC;
+	--control-bg-on-gray: #EFF3F8;
+	--awesomebar-focus-bg: #FFFFFF;
+	--awesomplete-hover-bg: #EFF3F8;
+	--disabled-control-bg: #F6F9FC;
+	--disabled-text-color: #8792A2;
+
+	--border-color: #E3E8EE;
+	--dark-border-color: #D3D9E0;
+	--table-border-color: #E3E8EE;
+	--border-primary: #0A2540;
+	--btn-group-border-color: #D3D9E0;
+
+	--border-radius-tiny: 2px;
+	--border-radius-sm: 4px;
+	--border-radius: 4px;
+	--border-radius-md: 6px;
+	--border-radius-lg: 8px;
+	--border-radius-xl: 10px;
+	--border-radius-2xl: 12px;
+
+	--btn-primary: #14477E;
+	--btn-default-bg: #FFFFFF;
+	--btn-default-hover-bg: #EFF3F8;
+	--btn-ghost-hover-bg: #EFF3F8;
+
+	--shadow-xs: 0 1px 1px rgba(0, 0, 0, 0.04);
+	--shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.06), 0 1px 2px rgba(0, 0, 0, 0.04);
+	--shadow-base: 0 2px 8px rgba(0, 0, 0, 0.06), 0 0 2px rgba(0, 0, 0, 0.06);
+	--shadow-md: 0 4px 12px rgba(0, 0, 0, 0.08), 0 0 4px rgba(0, 0, 0, 0.06);
+	--shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.1), 0 2px 8px rgba(0, 0, 0, 0.06);
+
+	--focus-default: 0 0 0 2px rgba(20, 71, 126, 0.25);
+	--focus-blue: 0 0 0 2px rgba(20, 71, 126, 0.3);
+	--focus-green: 0 0 0 2px rgba(12, 191, 76, 0.3);
+	--focus-red: 0 0 0 2px rgba(223, 27, 65, 0.3);
+
+	--scrollbar-thumb-color: #C1C8D1;
+	--scrollbar-track-color: #EFF3F8;
+
+	--sidebar-select-color: #EFF3F8;
+	--sidebar-hover-color: #F0F2F5;
+	--sidebar-active-color: #E8F0FE;
+	--sidebar-border-color: #E3E8EE;
+	--divider-color: #E3E8EE;
+	--sidebar-width: 240px;
+	--surface-menu-bar: #FFFFFF;
+
+	--surface-gray-1: #F6F9FC;
+	--surface-gray-2: #EFF3F8;
+	--surface-gray-3: #E3E8EE;
+	--surface-gray-4: #D3D9E0;
+	--surface-gray-5: #425466;
+	--surface-gray-6: #30313D;
+	--surface-gray-7: #0A2540;
+	--surface-white: #FFFFFF;
+	--surface-modal: #FFFFFF;
+
+	--ink-gray-1: #E3E8EE;
+	--ink-gray-2: #D3D9E0;
+	--ink-gray-3: #A3ACB9;
+	--ink-gray-4: #66707F;
+	--ink-gray-5: #5A6577;
+	--ink-gray-6: #425466;
+	--ink-gray-7: #425466;
+	--ink-gray-8: #30313D;
+	--ink-gray-9: #0A2540;
+	--ink-blue-link: #14477E;
+
+	--outline-gray-1: #E3E8EE;
+	--outline-gray-2: #D3D9E0;
+	--outline-gray-3: #A3ACB9;
+	--outline-gray-4: #8792A2;
+	--outline-gray-5: #E3E8EE;
+	--outline-gray-modals: #E3E8EE;
+
+	--highlight-color: #F6F9FC;
+	--yellow-highlight-color: #FFFBEB;
+	--highlight-shadow: 1px 1px 10px rgba(20, 71, 126, 0.08), 0 0 4px rgba(20, 71, 126, 0.15);
+	--placeholder-color: #F6F9FC;
+
+	--checkbox-color: #14477E;
+	--checkbox-gradient: linear-gradient(180deg, #14477E -124.51%, #14477E 100%);
+	--checkbox-focus-shadow: 0 0 0 2px rgba(20, 71, 126, 0.25);
+	--switch-bg: #D3D9E0;
+
+	--date-active-bg: #14477E;
+	--date-active-text: #FFFFFF;
+	--progress-bar-bg: #14477E;
+	--skeleton-bg: #EFF3F8;
+
+	--code-block-bg: #0A2540;
+	--code-block-text: #A3ACB9;
+
+	--blue-500: #14477E;
+	--blue-600: #0E3560;
+	--blue-700: #0A2745;
+
+	--surface-blue-1: #F2F6FB;
+	--surface-blue-2: #DCE7F5;
+	--surface-blue-3: #14477E;
+	--ink-blue-2: #14477E;
+	--ink-blue-3: #0E3560;
+	--outline-blue-1: #A8C0DE;
+
+	--alert-bg-info: #F2F6FB;
+	--alert-text-info: #0A2745;
+	--alert-bg-success: #ECFDF5;
+	--alert-text-success: #0B8C3E;
+	--alert-bg-danger: #FFF1F3;
+	--alert-text-danger: #DF1B41;
+	--alert-bg-warning: #FFFBEB;
+	--alert-text-warning: #B76E00;
+
+	--bg-blue: #DCE7F5;
+	--text-on-blue: #0A2745;
+	--bg-light-blue: #F2F6FB;
+	--text-on-light-blue: #0E3560;
+
+	/* These two are a matched pair and must be read together.
+
+	   Frappe declares `.form-control { height: var(--input-height); padding:
+	   var(--input-padding) }` with `box-sizing: border-box`. Raising the padding
+	   to 14px makes an input 14 + 14 + 2px of border = 30px, which OVERFLOWS the
+	   28px height Frappe ships — so for text inputs the height token has been
+	   dead all along and 30px is the real, measured height.
+
+	   A <select> is the exception: Frappe zeroes `padding-block` on it
+	   (common/controls.scss), so it does NOT grow and lands on the declared 28px
+	   instead. That is the entire reason a Select filter sat 2px shorter than the
+	   Link and Data filters beside it. Declaring the height the padding already
+	   produces makes the token honest and puts selects back on the same baseline.
+
+	   Measured before/after on a Journal Entry form and its child-table grid:
+	   inputs 38px, selects 38px, grid row 44px, heading 32px, like-disabled-input
+	   39.09px — identical either way. The change moves nothing except the
+	   controls that were wrong. */
+	--input-padding: 14px 12px;
+	--input-height: 30px;
+
+	/* Gold accent — reserved for active-state indicators and highlights.
+	   Never used for body text: #C9A227 on white is ~3:1, below the 4.5:1
+	   contrast floor. Text keeps the navy scale. */
+	--accent-gold: #C9A227;
+	--accent-gold-strong: #A88516;
+	--accent-gold-soft: #F5EBC8;
+	--accent-gold-on-dark: #E8C64A;
+}
+
+/* ============================================
+   2. DARK MODE
+   ============================================ */
+
+[data-theme="dark"] {
+	--primary: #8AB4E8;
+	--primary-color: #8AB4E8;
+	--brand-color: #8AB4E8;
+
+	/* Gold reads brighter on dark surfaces — swap to the lighter tone. */
+	--accent-gold: #E8C64A;
+	--accent-gold-strong: #F0D876;
+	--accent-gold-soft: rgba(232, 198, 74, 0.16);
+
+	--gray-900: #0D1117;
+	--gray-800: #161B22;
+	--gray-700: #21262D;
+	--gray-600: #30363D;
+	--gray-500: #484F58;
+	--gray-400: #6E7681;
+	--gray-300: #8B949E;
+	--gray-200: #C9D1D9;
+	--gray-100: #E6EDF3;
+	--gray-50:  #F0F6FC;
+
+	--heading-color: #E6EDF3;
+	--text-color: #C9D1D9;
+	--text-neutral: #C9D1D9;
+	--text-muted: #8B949E;
+	--text-light: #6E7681;
+
+	--bg-color: #0D1117;
+	--fg-color: #161B22;
+	--card-bg: #161B22;
+	--subtle-accent: #161B22;
+	--subtle-fg: #21262D;
+	--navbar-bg: #161B22;
+	--fg-hover-color: #21262D;
+	--modal-bg: #161B22;
+	--toast-bg: #161B22;
+	--popover-bg: #161B22;
+	--control-bg: #21262D;
+	--control-bg-on-gray: #21262D;
+
+	--border-color: #21262D;
+	--dark-border-color: #30363D;
+	--table-border-color: #21262D;
+
+	--btn-primary: #8AB4E8;
+	--btn-default-bg: #21262D;
+	--btn-default-hover-bg: #30363D;
+	--btn-ghost-hover-bg: #21262D;
+
+	--focus-default: 0 0 0 2px rgba(138, 180, 232, 0.3);
+	--focus-blue: 0 0 0 2px rgba(138, 180, 232, 0.35);
+
+	--sidebar-hover-color: #21262D;
+	--sidebar-active-color: #1A2E4A;
+	--sidebar-border-color: #21262D;
+	--divider-color: #21262D;
+	--surface-menu-bar: #0D1117;
+
+	--surface-gray-1: #161B22;
+	--surface-gray-2: #21262D;
+	--surface-gray-3: #30363D;
+	--surface-gray-4: #484F58;
+	--surface-white: #0D1117;
+	--surface-modal: #161B22;
+	--surface-cards: #161B22;
+	--surface-selected: #30363D;
+
+	--ink-gray-1: #21262D;
+	--ink-gray-2: #30363D;
+	--ink-gray-3: #484F58;
+	--ink-gray-4: #8B949E;
+	--ink-gray-5: #A2ACB9;
+	--ink-gray-6: #C9D1D9;
+	--ink-gray-7: #C9D1D9;
+	--ink-gray-8: #E6EDF3;
+	--ink-gray-9: #F0F6FC;
+	--ink-blue-link: #8AB4E8;
+	--ink-white: #0D1117;
+
+	--outline-gray-1: #21262D;
+	--outline-gray-2: #30363D;
+	--outline-gray-3: #484F58;
+	--outline-gray-4: #6E7681;
+	--outline-gray-modals: #30363D;
+
+	--surface-blue-1: #0D1B33;
+	--surface-blue-2: #142A4D;
+	--surface-blue-3: #8AB4E8;
+
+	--checkbox-color: #8AB4E8;
+	--checkbox-gradient: linear-gradient(180deg, #8AB4E8 -124.51%, #8AB4E8 100%);
+	--date-active-bg: #8AB4E8;
+	--progress-bar-bg: #8AB4E8;
+
+	--scrollbar-thumb-color: #484F58;
+	--scrollbar-track-color: #21262D;
+	--skeleton-bg: #21262D;
+}
+
+/* ============================================
+   3. SIDEBAR VARIABLES (Light)
+   ============================================ */
+
+:root {
+	--amt-sidebar-bg: #FFFFFF;
+	--amt-sidebar-width: 240px;
+	--amt-sidebar-border: #E3E8EE;
+	--amt-item-hover: #F4F6F8;
+	--amt-item-active-bg: #14477E;
+	--amt-item-active-text: #FFFFFF;
+	--amt-text-primary: #0A2540;
+	--amt-text-secondary: #425466;
+	--amt-text-muted: #697386;
+	--amt-section-color: #8792A2;
+	--amt-kbd-bg: #EFF3F8;
+	--amt-kbd-color: #8792A2;
+	--amt-search-bg: #F6F9FC;
+	--amt-search-border: #E3E8EE;
+	--amt-divider: #EFF3F8;
+	--amt-update-bg: #ECFDF5;
+	--amt-update-color: #0B8C3E;
+	--amt-radius: 6px;
+	--amt-radius-sm: 4px;
+}
+
+[data-theme="dark"] {
+	--amt-sidebar-bg: #0D1117;
+	--amt-sidebar-border: #21262D;
+	--amt-item-hover: rgba(255, 255, 255, 0.05);
+	--amt-item-active-bg: #8AB4E8;
+	--amt-item-active-text: #FFFFFF;
+	--amt-text-primary: #E6EDF3;
+	--amt-text-secondary: #8B949E;
+	--amt-text-muted: #6E7681;
+	--amt-section-color: #6E7681;
+	--amt-kbd-bg: rgba(255, 255, 255, 0.06);
+	--amt-kbd-color: #6E7681;
+	--amt-search-bg: rgba(255, 255, 255, 0.03);
+	--amt-search-border: rgba(255, 255, 255, 0.08);
+	--amt-divider: rgba(255, 255, 255, 0.06);
+	--amt-update-bg: rgba(12, 191, 76, 0.1);
+	--amt-update-color: #34D399;
+}
+
+/* ============================================
+   4. BUTTONS
+   ============================================ */
+
+.btn {
+	border-radius: 4px !important;
+}
+
+.btn-primary,
+.btn-primary-dark {
+	background-color: var(--primary) !important;
+	border-color: var(--primary) !important;
+	color: #FFFFFF !important;
+	font-weight: 500;
+	box-shadow: 0 1px 2px rgba(20, 71, 126, 0.15);
+	transition: background 0.15s ease, box-shadow 0.15s ease;
+}
+
+.btn-primary:hover,
+.btn-primary-dark:hover {
+	background-color: #0E3560 !important;
+	border-color: #0E3560 !important;
+	box-shadow: 0 2px 6px rgba(20, 71, 126, 0.2);
+}
+
+.btn-primary:focus,
+.btn-primary:focus-visible,
+.btn-primary-dark:focus,
+.btn-primary-dark:focus-visible {
+	box-shadow: 0 0 0 2px rgba(20, 71, 126, 0.3) !important;
+}
+
+.btn-default {
+	border: 1px solid #E3E8EE;
+	font-weight: 500;
+}
+
+/* ============================================
+   5. INPUTS — Squarish + Blue Focus
+   ============================================ */
+
+/* --- All inputs: squarish corners + blue focus --- */
+.form-control {
+	border-radius: 4px !important;
+	transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+/* Inherited focus rule, corrected. Its box-shadow never rendered — Frappe's
+   desk bundle resets box-shadow universally with !important — and its
+   `outline: none` then removed the browser's own fallback, leaving focused
+   fields with no visible indicator at all. The working ring is defined with
+   `outline` in section 15; only the border cue is kept here. */
+.form-control:focus,
+.form-control:focus-visible {
+	border-color: var(--primary) !important;
+}
+
+.frappe-control .ql-editor:focus {
+	box-shadow: 0 0 0 2px rgba(20, 71, 126, 0.25) !important;
+}
+
+.frappe-control.has-error .form-control:focus {
+	box-shadow: 0 0 0 2px rgba(223, 27, 65, 0.25) !important;
+	border-color: #DF1B41 !important;
+}
+
+.frappe-control .link-btn {
+	border-radius: 0 4px 4px 0;
+}
+
+.input-group > .form-control {
+	border-radius: 4px 0 0 4px !important;
+}
+
+.input-group > .input-group-append .btn {
+	border-radius: 0 4px 4px 0 !important;
+}
+
+/* --- Slightly larger inputs only inside forms --- */
+.form-page .form-control,
+.form-layout .form-control,
+.modal-dialog .form-control {
+	height: 38px !important;
+	font-size: 13px !important;
+	padding: 8px 10px !important;
+	border: 1px solid var(--gray-300) !important;
+	background-color: var(--fg-color) !important;
+}
+
+.form-page textarea.form-control,
+.form-layout textarea.form-control,
+.modal-dialog textarea.form-control {
+	height: auto !important;
+	min-height: 76px !important;
+	padding: 8px 10px !important;
+}
+
+.form-page select.form-control,
+.form-layout select.form-control,
+.modal-dialog select.form-control {
+	height: 38px !important;
+	padding: 8px 10px !important;
+}
+
+.form-page .input-group > .input-group-append .btn,
+.form-layout .input-group > .input-group-append .btn,
+.modal-dialog .input-group > .input-group-append .btn {
+	height: 38px !important;
+}
+
+.form-page .like-disabled-input,
+.form-layout .like-disabled-input,
+.modal-dialog .like-disabled-input {
+	min-height: 38px !important;
+	padding: 8px 10px !important;
+	border-radius: 4px !important;
+}
+
+/* ============================================
+   5b. FORM TABS — Primary active state
+   ============================================ */
+
+.form-tabs .nav-tabs {
+	padding: 0 16px;
+	gap: 0;
+}
+
+.form-tabs .nav-item {
+	margin-right: 4px !important;
+	margin-left: 0 !important;
+}
+
+.form-tabs .nav-link {
+	border: none !important;
+	border-bottom: 2px solid transparent !important;
+	border-radius: 4px 4px 0 0 !important;
+	padding: 8px 10px !important;
+	margin: 0 !important;
+	transition: all 0.15s ease;
+}
+
+.form-tabs .nav-link.active {
+	color: var(--primary) !important;
+	border-bottom: 2px solid var(--primary) !important;
+	background-color: rgba(20, 71, 126, 0.06) !important;
+	font-weight: 600;
+}
+
+.form-tabs .nav-link:hover:not(.active) {
+	color: var(--primary) !important;
+	background-color: rgba(20, 71, 126, 0.03) !important;
+}
+
+/* ============================================
+   5c. FORM RIGHT SIDEBAR — Modern Redesign
+   ============================================ */
+
+/* --- Sidebar wrapper --- */
+.layout-side-section {
+	background: var(--fg-color);
+	border-left: 1px solid var(--border-color);
+}
+
+.layout-side-section .form-sidebar {
+	padding: 0 !important;
+}
+
+/* --- Image / avatar section --- */
+.form-sidebar .sidebar-image-section {
+	text-align: center;
+	padding: 16px 16px 4px !important;
+	background: var(--fg-color);
+	border-bottom: none;
+}
+
+.form-sidebar .sidebar-image-wrapper {
+	display: inline-block;
+}
+
+.form-sidebar .sidebar-image-section .sidebar-image,
+.form-sidebar .sidebar-image-section .sidebar-standard-image {
+	width: 72px !important;
+	height: 72px !important;
+	border-radius: 0 !important;
+}
+
+.form-sidebar .sidebar-standard-image .standard-image {
+	width: 72px !important;
+	height: 72px !important;
+	font-size: 24px !important;
+	border-radius: 0 !important;
+	box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
+	font-weight: 600;
+}
+
+.form-sidebar .sidebar-image {
+	border-radius: 0 !important;
+	box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
+}
+
+/* --- Meta details (name + ID below image) --- */
+.form-sidebar .sidebar-meta-details {
+	padding: 4px 16px 8px !important;
+	background: var(--fg-color);
+	border-bottom: none;
+	text-align: center;
+}
+
+.form-sidebar .form-title-text {
+	font-weight: 600 !important;
+	font-size: 13px !important;
+	color: var(--heading-color) !important;
+	line-height: 1.4;
+}
+
+.form-sidebar .form-name-copy {
+	font-size: 11px !important;
+	color: var(--gray-500) !important;
+}
+
+/* --- Action icons row (like, print, edit, fav) --- */
+.form-sidebar .form-stats-likes {
+	display: flex !important;
+	align-items: center !important;
+	gap: 4px;
+}
+
+.form-sidebar .form-stats-likes .btn,
+.form-sidebar .form-stats-likes .icon-btn,
+.form-sidebar .form-stats-likes .liked-by {
+	width: 30px !important;
+	height: 30px !important;
+	min-width: 30px !important;
+	min-height: 30px !important;
+	border-radius: 6px !important;
+	display: inline-flex !important;
+	align-items: center !important;
+	justify-content: center !important;
+	transition: all 0.15s ease;
+	background: var(--subtle-fg) !important;
+	border: 1px solid var(--border-color) !important;
+	padding: 0 !important;
+}
+
+.form-sidebar .form-stats-likes .btn:hover,
+.form-sidebar .form-stats-likes .icon-btn:hover,
+.form-sidebar .form-stats-likes .liked-by:hover {
+	background: var(--fg-color) !important;
+	border-color: var(--primary) !important;
+	color: var(--primary) !important;
+}
+
+.form-sidebar .like-action .like-icon {
+	transition: transform 0.15s ease;
+}
+
+.form-sidebar .like-action:hover .like-icon {
+	transform: scale(1.1);
+}
+
+/* --- Divider between header and sections --- */
+.form-sidebar .sidebar-meta-details + .sidebar-section {
+	border-top: 1px solid var(--border-color) !important;
+}
+
+/* --- Sidebar sections --- */
+.form-sidebar .sidebar-section {
+	padding: 12px 16px !important;
+	border-bottom: none !important;
+	margin: 0 !important;
+}
+
+/* --- Section labels with colored icons --- */
+.form-sidebar .form-sidebar-items .form-sidebar-label {
+	font-size: 12px !important;
+	font-weight: 600 !important;
+	letter-spacing: 0.01em !important;
+	color: var(--heading-color) !important;
+	gap: 8px !important;
+}
+
+/* Colored icon backgrounds for each section */
+.form-sidebar .form-sidebar-items .form-sidebar-label .icon {
+	width: 22px;
+	height: 22px;
+	border-radius: 5px;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	flex-shrink: 0;
+	padding: 4px;
+}
+
+.form-sidebar .form-sidebar-items .form-sidebar-label .icon svg {
+	width: 13px !important;
+	height: 13px !important;
+}
+
+/* Assign — blue icon */
+.form-sidebar .form-assignments .form-sidebar-label .icon {
+	background: #E8F0FE;
+	color: #1A73E8;
+}
+
+/* Attachments — amber icon */
+.form-sidebar .form-attachments .form-sidebar-label .icon {
+	background: #FEF3E0;
+	color: #E8A317;
+}
+
+/* Tags — green icon */
+.form-sidebar .form-tags .form-sidebar-label .icon {
+	background: #E6F4EA;
+	color: #1E8E3E;
+}
+
+/* Share — purple icon */
+.form-sidebar .form-shared .form-sidebar-label .icon {
+	background: #F3E8FD;
+	color: #8430CE;
+}
+
+/* Dark mode icon colors */
+[data-theme="dark"] .form-sidebar .form-assignments .form-sidebar-label .icon {
+	background: rgba(26, 115, 232, 0.15);
+	color: #6EAAFF;
+}
+[data-theme="dark"] .form-sidebar .form-attachments .form-sidebar-label .icon {
+	background: rgba(232, 163, 23, 0.15);
+	color: #FFC94D;
+}
+[data-theme="dark"] .form-sidebar .form-tags .form-sidebar-label .icon {
+	background: rgba(30, 142, 62, 0.15);
+	color: #5CD87D;
+}
+[data-theme="dark"] .form-sidebar .form-shared .form-sidebar-label .icon {
+	background: rgba(132, 48, 206, 0.15);
+	color: #BB86FC;
+}
+
+/* --- Add buttons (+) --- */
+.form-sidebar .add-assignment-btn,
+.form-sidebar .add-attachment-btn,
+.form-sidebar .share-doc-btn {
+	width: 24px !important;
+	height: 24px !important;
+	border-radius: 6px !important;
+	display: flex !important;
+	align-items: center !important;
+	justify-content: center !important;
+	transition: all 0.15s ease;
+	color: var(--gray-500) !important;
+	background: var(--subtle-fg) !important;
+}
+
+.form-sidebar .add-assignment-btn:hover,
+.form-sidebar .add-attachment-btn:hover,
+.form-sidebar .share-doc-btn:hover {
+	background-color: var(--primary) !important;
+	color: #fff !important;
+}
+
+/* --- Assignment rows --- */
+.form-sidebar .assignments .dialog-assignment-row {
+	padding: 5px 6px !important;
+	margin-left: 0 !important;
+}
+
+.form-sidebar .assignments .avatar {
+	border: 2px solid var(--fg-color) !important;
+	box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.06);
+}
+
+/* --- Attachment rows — card style --- */
+.form-sidebar .attachment-row {
+	margin: 4px 0 !important;
+	margin-left: 0 !important;
+}
+
+/* Enhanced card layout */
+.form-sidebar .amt-attach-card {
+	display: flex !important;
+	align-items: center !important;
+	gap: 8px !important;
+	background: var(--fg-color) !important;
+	border: 1px solid var(--border-color) !important;
+	border-radius: 8px !important;
+	padding: 8px 10px !important;
+	height: auto !important;
+	width: 100% !important;
+	transition: all 0.15s ease;
+}
+
+.form-sidebar .amt-attach-card:hover {
+	border-color: var(--primary) !important;
+	box-shadow: 0 1px 4px rgba(20, 71, 126, 0.1);
+}
+
+/* File type badge */
+.amt-file-icon {
+	width: 30px;
+	height: 30px;
+	border-radius: 6px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	font-size: 9px;
+	font-weight: 700;
+	text-transform: uppercase;
+	flex-shrink: 0;
+	letter-spacing: 0.02em;
+}
+
+.amt-file-icon.amt-pdf  { background: #FDECEA; color: #D93025; }
+.amt-file-icon.amt-doc  { background: #E8F0FE; color: #1A73E8; }
+.amt-file-icon.amt-xls  { background: #E6F4EA; color: #1E8E3E; }
+.amt-file-icon.amt-img  { background: #F3E8FD; color: #8430CE; }
+.amt-file-icon.amt-zip  { background: #FEF3E0; color: #E8A317; }
+.amt-file-icon.amt-code { background: #E8EAF6; color: #3F51B5; }
+.amt-file-icon.amt-file { background: var(--subtle-fg); color: var(--gray-500); }
+
+[data-theme="dark"] .amt-file-icon.amt-pdf  { background: rgba(217, 48, 37, 0.15); color: #F28B82; }
+[data-theme="dark"] .amt-file-icon.amt-doc  { background: rgba(26, 115, 232, 0.15); color: #6EAAFF; }
+[data-theme="dark"] .amt-file-icon.amt-xls  { background: rgba(30, 142, 62, 0.15); color: #5CD87D; }
+[data-theme="dark"] .amt-file-icon.amt-img  { background: rgba(132, 48, 206, 0.15); color: #BB86FC; }
+[data-theme="dark"] .amt-file-icon.amt-zip  { background: rgba(232, 163, 23, 0.15); color: #FFC94D; }
+[data-theme="dark"] .amt-file-icon.amt-code { background: rgba(63, 81, 181, 0.15); color: #9FA8DA; }
+[data-theme="dark"] .amt-file-icon.amt-file { background: rgba(255, 255, 255, 0.06); }
+
+/* File details */
+.amt-attach-details {
+	flex: 1;
+	min-width: 0;
+	text-align: left;
+}
+
+.amt-attach-name {
+	font-size: 12px;
+	font-weight: 500;
+	color: var(--heading-color);
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	display: block;
+	line-height: 1.3;
+	text-decoration: none;
+	text-align: left;
+}
+
+.amt-attach-name:hover {
+	color: var(--primary);
+	text-decoration: underline;
+}
+
+.amt-attach-lock {
+	font-size: 10px;
+	color: var(--gray-400);
+	line-height: 1;
+	display: block;
+	margin-top: 1px;
+}
+
+/* Remove btn */
+.form-sidebar .amt-attach-card .remove-btn {
+	opacity: 0;
+	transition: opacity 0.15s ease;
+	flex-shrink: 0;
+}
+
+.form-sidebar .amt-attach-card:hover .remove-btn {
+	opacity: 1;
+}
+
+/* --- Tag pills --- */
+.form-sidebar .form-tag-row .data-pill {
+	border-radius: 20px !important;
+	font-size: 11px !important;
+	font-weight: 500;
+	padding: 4px 12px !important;
+	background: #E6F4EA !important;
+	color: #1E8E3E !important;
+	border: none !important;
+}
+
+[data-theme="dark"] .form-sidebar .form-tag-row .data-pill {
+	background: rgba(30, 142, 62, 0.15) !important;
+	color: #5CD87D !important;
+}
+
+.form-sidebar .form-tag-row .data-pill .remove-btn {
+	color: #1E8E3E !important;
+}
+
+/* --- Shared users --- */
+.form-sidebar .shares .shared-user {
+	margin-right: 2px !important;
+}
+
+.form-sidebar .shares .avatar {
+	border: 2px solid var(--fg-color) !important;
+	box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.06);
+}
+
+/* --- Followed by section --- */
+.form-sidebar .followed-by-section {
+	padding: 12px 16px !important;
+}
+
+/* --- Meta info footer (Last Edited, Created) --- */
+.form-sidebar .sidebar-menu {
+	padding: 14px 16px !important;
+	margin: 0 !important;
+	list-style: none !important;
+	background-color: rgba(0, 0, 0, 0.015);
+	border-top: 1px solid var(--border-color);
+}
+
+[data-theme="dark"] .form-sidebar .sidebar-menu {
+	background-color: rgba(255, 255, 255, 0.02);
+}
+
+.form-sidebar .sidebar-menu li {
+	padding: 4px 0 !important;
+	font-size: 11px !important;
+	color: var(--gray-500) !important;
+	border: none !important;
+	line-height: 1.5;
+}
+
+.form-sidebar .sidebar-menu li:last-child {
+	padding-bottom: 0 !important;
+}
+
+.form-sidebar .sidebar-menu .modified-by,
+.form-sidebar .sidebar-menu .created-by {
+	font-weight: 500;
+}
+
+/* ============================================
+   6. LINKS
+   ============================================ */
+
+a {
+	color: var(--primary);
+}
+a:hover {
+	color: color-mix(in srgb, var(--primary) 72%, #000);
+}
+
+/* ============================================
+   7. PAGE & CARDS
+   ============================================ */
+
+.main-section {
+	background: var(--bg-color);
+}
+
+.frappe-card,
+.frappe-control .frappe-card {
+	border: 1px solid var(--border-color);
+	border-radius: 6px;
+	box-shadow: var(--shadow-sm);
+}
+
+/* ============================================
+   8. SIDEBAR — CONTAINER
+   ============================================ */
+
+.body-sidebar-container {
+	height: 100vh;
+}
+
+.body-sidebar-container .body-sidebar-placeholder {
+	width: 50px;
+}
+
+.body-sidebar-container.expanded .body-sidebar-placeholder {
+	width: var(--amt-sidebar-width);
+}
+
+.body-sidebar {
+	background: var(--amt-sidebar-bg) !important;
+	border-right: 1px solid var(--amt-sidebar-border) !important;
+	padding: 14px 12px 14px 12px;
+	gap: 4px;
+	width: 50px;
+	transition: width 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.body-sidebar-container.expanded .body-sidebar {
+	width: var(--amt-sidebar-width);
+}
+
+/* ============================================
+   9. SIDEBAR HEADER
+   ============================================ */
+
+.sidebar-header {
+	padding: 8px 10px;
+	height: 52px;
+	border-radius: var(--amt-radius);
+	transition: background 0.15s ease;
+	margin-bottom: 4px;
+}
+
+.sidebar-header:hover {
+	background: var(--amt-item-hover);
+}
+
+.header-logo {
+	width: 36px;
+	height: 36px;
+	border-radius: 8px;
+	overflow: hidden;
+}
+
+.header-logo .icon-container {
+	border-radius: 8px;
+}
+
+.header-logo-container {
+	border-radius: 8px;
+}
+
+.sidebar-item-icon[style*="background-color"] {
+	border-radius: 8px !important;
+}
+
+.header-title {
+	font-weight: 600 !important;
+	font-size: 14.5px !important;
+	color: var(--amt-text-primary) !important;
+	line-height: 1.25 !important;
+}
+
+.header-subtitle {
+	font-size: 12px !important;
+	color: var(--amt-text-muted) !important;
+	line-height: 1.25 !important;
+	margin-top: 2px !important;
+}
+
+.title-container {
+	margin-left: 10px;
+}
+
+/* Header chevron — visible */
+.body-sidebar .sidebar-header .drop-icon {
+	opacity: 0.5 !important;
+	transition: opacity 0.15s ease;
+}
+
+.body-sidebar .sidebar-header .drop-icon svg,
+.body-sidebar .sidebar-header .drop-icon .icon {
+	color: var(--amt-text-muted) !important;
+}
+
+.body-sidebar .sidebar-header:hover .drop-icon {
+	opacity: 0.8 !important;
+}
+
+/* ============================================
+   10. SEARCH
+   ============================================ */
+
+.standard-items-sections {
+	padding: 0 2px;
+	margin-bottom: 2px;
+}
+
+.body-sidebar .standard-items-sections .sidebar-item-container:first-child .standard-sidebar-item {
+	margin-bottom: 4px;
+}
+
+.body-sidebar-container.expanded .standard-items-sections .sidebar-item-container:first-child .item-anchor {
+	background: var(--amt-search-bg);
+	border: 1px solid var(--amt-search-border);
+	border-radius: var(--amt-radius);
+	padding: 0 12px;
+	height: 36px;
+	transition: border-color 0.15s ease, background 0.15s ease;
+}
+
+.body-sidebar-container.expanded .standard-items-sections .sidebar-item-container:first-child .item-anchor:hover {
+	border-color: #D3D9E0;
+	background: #FFFFFF;
+}
+
+.body-sidebar-container.expanded .standard-items-sections .sidebar-item-container:first-child .sidebar-item-icon {
+	padding: 4px;
+}
+
+.body-sidebar-container.expanded .standard-items-sections .sidebar-item-container:first-child .sidebar-item-label {
+	color: var(--amt-text-muted) !important;
+	font-weight: 400;
+}
+
+/* ============================================
+   11. SIDEBAR ITEMS
+   ============================================ */
+
+.body-sidebar .body-sidebar-top {
+	gap: 2px;
+	padding: 0 2px;
+}
+
+.body-sidebar .standard-sidebar-item {
+	margin-bottom: 0;
+}
+
+.body-sidebar .standard-sidebar-item .item-anchor {
+	/* min-height (not fixed) so a long workspace-link title that wraps to two
+	   lines grows the row rather than being clipped; icon + label stay centred. */
+	min-height: 36px;
+	height: auto;
+	padding: 6px 10px;
+	align-items: center;
+	border-radius: var(--amt-radius);
+	color: var(--amt-text-secondary) !important;
+	gap: 8px;
+	transition: all 0.15s ease;
+}
+
+.body-sidebar .standard-sidebar-item:not(.active-sidebar):has(a:not(.section-break)):hover {
+	background: var(--amt-item-hover) !important;
+	border-radius: var(--amt-radius) !important;
+}
+
+.body-sidebar .standard-sidebar-item .sidebar-item-icon {
+	padding: 4px;
+	width: 28px;
+	height: 28px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	flex-shrink: 0;
+	border-radius: 6px;
+	transition: background 0.15s ease;
+}
+
+.body-sidebar .standard-sidebar-item .sidebar-item-icon svg,
+.body-sidebar .standard-sidebar-item .sidebar-item-icon .icon {
+	color: var(--amt-text-muted) !important;
+}
+
+.body-sidebar .standard-sidebar-item .sidebar-item-label {
+	font-size: 13.5px;
+	font-weight: 480;
+	color: var(--amt-text-secondary) !important;
+	/* Frappe's desk.bundle pins these to `white-space:nowrap`, truncating long
+	   Arabic titles ("إعادة ترحيل دفتر أست…"). Wrap to at most two lines instead,
+	   so the full name shows in a narrow panel; short titles stay on one line. */
+	white-space: normal !important;
+	line-height: 1.3;
+	min-width: 0;
+	display: -webkit-box;
+	-webkit-line-clamp: 2;
+	-webkit-box-orient: vertical;
+	overflow: hidden;
+}
+
+/* Hover: darken text + icon */
+.body-sidebar .standard-sidebar-item:not(.active-sidebar):hover .sidebar-item-label {
+	color: var(--amt-text-primary) !important;
+}
+
+.body-sidebar .standard-sidebar-item:not(.active-sidebar):hover .sidebar-item-icon svg,
+.body-sidebar .standard-sidebar-item:not(.active-sidebar):hover .sidebar-item-icon .icon {
+	color: var(--amt-text-secondary) !important;
+}
+
+/* Keyboard shortcuts */
+.sidebar-item-suffix .keyboard-shortcut {
+	background: var(--amt-kbd-bg) !important;
+	color: var(--amt-kbd-color) !important;
+	font-size: 11px !important;
+	font-weight: 500 !important;
+	padding: 2px 6px;
+	border-radius: 3px;
+	line-height: 1.4;
+	font-family: inherit;
+}
+
+/* ============================================
+   12. ACTIVE ITEM — Blue bg, white text
+   Higher specificity to beat frappe defaults
+   ============================================ */
+
+.body-sidebar .standard-sidebar-item.active-sidebar {
+	background: var(--amt-item-active-bg) !important;
+	box-shadow: 0 1px 3px rgba(20, 71, 126, 0.2) !important;
+	border-radius: var(--amt-radius) !important;
+}
+
+.body-sidebar .standard-sidebar-item.active-sidebar .item-anchor {
+	color: var(--amt-item-active-text) !important;
+}
+
+.body-sidebar .standard-sidebar-item.active-sidebar .sidebar-item-label {
+	font-weight: 560 !important;
+	color: var(--amt-item-active-text) !important;
+}
+
+/*
+ * Icons — outlined, not filled.
+ * frappe icons use stroke="currentColor" for line icons (es-line).
+ * We set color + stroke, but NOT fill, so outlines stay outlined.
+ */
+.body-sidebar .standard-sidebar-item.active-sidebar .sidebar-item-icon svg,
+.body-sidebar .standard-sidebar-item.active-sidebar .sidebar-item-icon .icon,
+.body-sidebar .active-sidebar .sidebar-item-icon svg,
+.body-sidebar .active-sidebar .sidebar-item-icon .icon {
+	color: var(--amt-item-active-text) !important;
+	stroke: var(--amt-item-active-text) !important;
+}
+
+.body-sidebar .standard-sidebar-item.active-sidebar .sidebar-item-icon .text-ink-gray-7,
+.body-sidebar .standard-sidebar-item.active-sidebar .sidebar-item-icon .current-color,
+.body-sidebar .standard-sidebar-item.active-sidebar .sidebar-item-icon span,
+.body-sidebar .active-sidebar .sidebar-item-icon span {
+	color: var(--amt-item-active-text) !important;
+}
+
+/* SVG use elements */
+.body-sidebar .active-sidebar .sidebar-item-icon svg use {
+	stroke: var(--amt-item-active-text) !important;
+	color: var(--amt-item-active-text) !important;
+}
+
+/* Nested active items */
+.body-sidebar .sidebar-item-container .active-sidebar .sidebar-item-label {
+	color: var(--amt-item-active-text) !important;
+}
+
+.body-sidebar .sidebar-item-container .active-sidebar .sidebar-item-icon svg {
+	color: var(--amt-item-active-text) !important;
+	stroke: var(--amt-item-active-text) !important;
+}
+
+.body-sidebar .standard-sidebar-item.active-sidebar .sidebar-item-suffix .keyboard-shortcut {
+	background: rgba(255, 255, 255, 0.2) !important;
+	color: rgba(255, 255, 255, 0.85) !important;
+}
+
+/* ============================================
+   13. SECTION BREAKS
+   ============================================ */
+
+.section-break {
+	color: var(--amt-section-color) !important;
+	margin-left: 10px !important;
+	margin-top: 2px;
+	padding-top: 12px;
+}
+
+.body-sidebar .section-item .divider {
+	border-top: 1px solid var(--amt-divider) !important;
+	margin: 8px 10px !important;
+}
+
+.body-sidebar .section-item .divider.hidden {
+	display: none;
+}
+
+.section-break .sidebar-item-label {
+	font-size: 10.5px !important;
+	font-weight: 650 !important;
+	text-transform: uppercase;
+	letter-spacing: 0.08em;
+	color: var(--amt-section-color) !important;
+}
+
+.section-break .sidebar-item-control {
+	margin-left: auto;
+}
+
+.body-sidebar .section-break .sidebar-item-control .drop-icon,
+.body-sidebar .section-break .sidebar-item-control .btn-reset {
+	width: 22px;
+	height: 22px;
+	border-radius: 4px;
+	display: flex !important;
+	align-items: center;
+	justify-content: center;
+	transition: background 0.12s ease;
+	opacity: 0.5;
+}
+
+.body-sidebar .section-break .sidebar-item-control .drop-icon svg,
+.body-sidebar .section-break .sidebar-item-control .btn-reset svg {
+	color: var(--amt-section-color) !important;
+}
+
+.body-sidebar .section-item:hover .sidebar-item-control .drop-icon,
+.body-sidebar .section-item:hover .sidebar-item-control .btn-reset {
+	opacity: 0.8;
+}
+
+.section-break .sidebar-item-control .drop-icon:hover {
+	background: var(--amt-item-hover);
+}
+
+/* Nested items */
+.sidebar-child-item.nested-container {
+	padding-left: 0;
+}
+
+.indent + .nested-container {
+	margin-left: 12px;
+}
+
+/* Divider */
+.body-sidebar .divider {
+	border-top-color: var(--amt-divider) !important;
+	margin: 8px 10px !important;
+}
+
+/* ============================================
+   14. BOTTOM SECTION
+   ============================================ */
+
+.body-sidebar .body-sidebar-bottom {
+	padding: 8px 4px 4px;
+	border-top: 1px solid var(--amt-divider);
+	margin-top: 4px;
+}
+
+.body-sidebar .collapse-sidebar-link {
+	padding: 6px 10px;
+	border-radius: var(--amt-radius);
+	color: var(--amt-text-muted) !important;
+	font-size: 13px;
+	height: 36px;
+	display: flex;
+	align-items: center;
+	transition: background 0.15s ease;
+}
+
+.body-sidebar .collapse-sidebar-link svg {
+	flex-shrink: 0;
+	color: var(--amt-text-muted) !important;
+}
+
+.body-sidebar .collapse-sidebar-link span {
+	font-weight: 460;
+	color: var(--amt-text-muted) !important;
+}
+
+.body-sidebar .collapse-sidebar-link:hover {
+	background: var(--amt-item-hover);
+	text-decoration: none;
+}
+
+.body-sidebar .collapse-sidebar-link:hover span,
+.body-sidebar .collapse-sidebar-link:hover svg {
+	color: var(--amt-text-secondary) !important;
+}
+
+.body-sidebar .onboarding-sidebar {
+	padding: 6px 10px;
+	border-radius: var(--amt-radius);
+	color: var(--amt-text-muted) !important;
+	font-size: 13px;
+	height: 36px;
+	display: flex;
+	align-items: center;
+	transition: background 0.15s ease;
+}
+
+.body-sidebar .onboarding-sidebar:hover {
+	background: var(--amt-item-hover);
+}
+
+.body-sidebar .onboarding-sidebar svg,
+.body-sidebar .onboarding-sidebar span {
+	color: var(--amt-text-muted) !important;
+}
+
+/* ============================================
+   15. USER PROFILE
+   ============================================ */
+
+.body-sidebar .dropdown-navbar-user {
+	margin-left: 0 !important;
+	margin-top: 8px !important;
+	border-top: 1px solid var(--amt-divider);
+	padding-top: 12px;
+}
+
+.body-sidebar .dropdown-navbar-user .sidebar-user-button {
+	padding: 8px !important;
+	border-radius: var(--amt-radius) !important;
+	transition: background 0.15s ease;
+}
+
+.body-sidebar .dropdown-navbar-user:hover {
+	background: var(--amt-item-hover) !important;
+	border-radius: var(--amt-radius) !important;
+}
+
+.body-sidebar .dropdown-navbar-user .avatar-name-email {
+	margin-left: 10px !important;
+}
+
+.body-sidebar .dropdown-navbar-user .avatar-name-email span:first-child {
+	font-weight: 600;
+	font-size: 13px;
+	color: var(--amt-text-primary) !important;
+}
+
+.body-sidebar .dropdown-navbar-user .avatar-name-email .text-secondary {
+	font-size: 11.5px !important;
+	color: var(--amt-text-muted) !important;
+	margin-top: 1px;
+	/* The email ships with Bootstrap `.text-truncate`, which in the RTL panel
+	   clipped it from the LEFT → "…ashuorah@gmail.com". Show it in full: wrap
+	   instead of truncate, and break-all so a long address takes a second line
+	   rather than overflowing. (No `text-align:right` — rtlcss would flip it.) */
+	white-space: normal !important;
+	overflow: visible !important;
+	text-overflow: clip !important;
+	word-break: break-all;
+	line-height: 1.25;
+}
+
+// The name/email column caps at 75% width with hidden overflow; let it use the
+// full row and show the wrapped email without clipping.
+.body-sidebar .dropdown-navbar-user .avatar-name-email {
+	overflow: visible !important;
+}
+
+.body-sidebar .dropdown-navbar-user .avatar-medium {
+	width: 36px !important;
+	height: 36px !important;
+	border-radius: 8px !important;
+}
+
+.body-sidebar .dropdown-navbar-user .sidebar-user-button::after {
+	content: "";
+	display: inline-block;
+	width: 16px;
+	height: 16px;
+	margin-left: auto;
+	flex-shrink: 0;
+	background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23A3ACB9' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M7 15l5-5 5 5'/%3E%3Cpath d='M7 9l5 5 5-5'/%3E%3C/svg%3E");
+	background-size: contain;
+	background-repeat: no-repeat;
+	opacity: 0.5;
+	transition: opacity 0.15s ease;
+}
+
+.body-sidebar .dropdown-navbar-user:hover .sidebar-user-button::after {
+	opacity: 0.8;
+}
+
+/* ============================================
+   16. DROPDOWNS & MENUS
+   ============================================ */
+
+.body-sidebar .dropdown-notifications {
+	border-radius: var(--amt-radius);
+	overflow: visible;
+}
+
+/* Notification panel always positioned to the right of the sidebar */
+.body-sidebar .dropdown-notifications .notifications-list {
+	border-radius: 8px;
+	box-shadow: var(--shadow-lg);
+	border: 1px solid var(--amt-sidebar-border);
+	left: 100% !important;
+	position: fixed;
+	top: 0;
+	height: 100vh;
+}
+
+/* When sidebar is collapsed (not in dual mode), position after the rail */
+.body-sidebar-container:not(.expanded) .dropdown-notifications .notifications-list {
+	left: 56px !important;
+}
+
+/* In dual sidebar mode, position after the rail + sidebar */
+body.amt-dual-sidebar .dropdown-notifications .notifications-list {
+	left: calc(var(--amt-rail-width) + 240px) !important;
+}
+
+body.amt-dual-sidebar .body-sidebar-container:not(.expanded) .dropdown-notifications .notifications-list {
+	left: calc(var(--amt-rail-width) + 50px) !important;
+}
+
+.hover {
+	background-color: var(--amt-item-hover) !important;
+	border-radius: var(--amt-radius) !important;
+}
+
+.body-sidebar .promotional-banners {
+	margin: 4px 0 !important;
+}
+
+.body-sidebar .promotional-banner {
+	font-size: 13px;
+	padding: 6px 10px;
+	border-radius: var(--amt-radius);
+	color: var(--amt-text-muted);
+	transition: all 0.15s ease;
+}
+
+.body-sidebar .promotional-banner:hover {
+	background: var(--amt-item-hover);
+	color: var(--amt-text-secondary);
+}
+
+/* Scrollbar */
+.body-sidebar .body-sidebar-top::-webkit-scrollbar {
+	width: 3px;
+}
+
+.body-sidebar .body-sidebar-top::-webkit-scrollbar-track {
+	background: transparent;
+}
+
+.body-sidebar .body-sidebar-top::-webkit-scrollbar-thumb {
+	background: var(--amt-divider);
+	border-radius: 3px;
+}
+
+.body-sidebar .body-sidebar-top::-webkit-scrollbar-thumb:hover {
+	background: #A3ACB9;
+}
+
+/* App switcher dropdown */
+.sidebar-header-menu {
+	border-radius: 8px !important;
+	box-shadow: var(--shadow-lg) !important;
+	border: 1px solid var(--amt-sidebar-border) !important;
+	padding: 6px !important;
+	background: var(--amt-sidebar-bg) !important;
+}
+
+.sidebar-header-menu .dropdown-menu-item {
+	border-radius: var(--amt-radius);
+	padding: 0;
+}
+
+.sidebar-header-menu .dropdown-menu-item a {
+	padding: 8px 10px;
+	border-radius: var(--amt-radius);
+	display: flex;
+	align-items: center;
+	gap: 10px;
+	color: var(--amt-text-primary) !important;
+	font-size: 13.5px;
+	font-weight: 460;
+	text-decoration: none;
+	transition: background 0.12s ease;
+}
+
+.sidebar-header-menu .dropdown-menu-item a:hover {
+	background: var(--amt-item-hover);
+}
+
+.sidebar-header-menu .dropdown-menu-item .sidebar-item-icon {
+	width: 20px;
+	height: 20px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	flex-shrink: 0;
+}
+
+/* ============================================
+   17. COLLAPSED SIDEBAR
+   ============================================ */
+
+.body-sidebar-container:not(.expanded) .body-sidebar {
+	width: 56px !important;
+	padding: 14px 6px;
+	align-items: center;
+	overflow: hidden;
+}
+
+.body-sidebar-container:not(.expanded) .body-sidebar-placeholder {
+	width: 56px !important;
+}
+
+/* Hide all text and controls */
+.body-sidebar-container:not(.expanded) .body-sidebar .sidebar-item-label,
+.body-sidebar-container:not(.expanded) .body-sidebar .sidebar-item-suffix,
+.body-sidebar-container:not(.expanded) .body-sidebar .section-break,
+.body-sidebar-container:not(.expanded) .body-sidebar .sidebar-item-control,
+.body-sidebar-container:not(.expanded) .body-sidebar .title-container,
+.body-sidebar-container:not(.expanded) .body-sidebar .drop-icon,
+.body-sidebar-container:not(.expanded) .body-sidebar .divider,
+.body-sidebar-container:not(.expanded) .body-sidebar .avatar-name-email,
+.body-sidebar-container:not(.expanded) .body-sidebar .section-item .section-break,
+.body-sidebar-container:not(.expanded) .body-sidebar .sidebar-item-edit-controls {
+	display: none !important;
+}
+
+/* Hide section items entirely in collapsed mode */
+.body-sidebar-container:not(.expanded) .body-sidebar .section-item {
+	display: none !important;
+}
+
+/* Header — center the logo */
+.body-sidebar-container:not(.expanded) .sidebar-header {
+	justify-content: center;
+	padding: 4px;
+	margin-bottom: 4px;
+	width: 44px;
+	height: 44px;
+}
+
+/* Items — centered icon squares */
+.body-sidebar-container:not(.expanded) .body-sidebar .standard-sidebar-item {
+	width: 44px;
+	margin: 0 auto;
+}
+
+.body-sidebar-container:not(.expanded) .body-sidebar .standard-sidebar-item .item-anchor {
+	justify-content: center;
+	padding: 0;
+	height: 40px;
+	width: 44px;
+	margin: 0 auto;
+	border-radius: var(--amt-radius);
+	gap: 0;
+}
+
+.body-sidebar-container:not(.expanded) .body-sidebar .standard-sidebar-item .sidebar-item-icon {
+	padding: 0;
+	width: 20px;
+	height: 20px;
+}
+
+/* Active item in collapsed */
+.body-sidebar-container:not(.expanded) .body-sidebar .standard-sidebar-item.active-sidebar {
+	width: 44px;
+	margin: 0 auto;
+}
+
+/* Bottom section */
+.body-sidebar-container:not(.expanded) .body-sidebar .body-sidebar-bottom {
+	border-top: 1px solid var(--amt-divider);
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	width: 100%;
+	padding: 6px 0 0;
+}
+
+/* Collapse link */
+.body-sidebar-container:not(.expanded) .body-sidebar .collapse-sidebar-link {
+	justify-content: center;
+	width: 44px;
+	height: 40px;
+	padding: 0;
+	margin: 0 auto;
+}
+
+.body-sidebar-container:not(.expanded) .body-sidebar .collapse-sidebar-link span {
+	display: none !important;
+}
+
+/* Onboarding */
+.body-sidebar-container:not(.expanded) .body-sidebar .onboarding-sidebar span {
+	display: none !important;
+}
+
+.body-sidebar-container:not(.expanded) .body-sidebar .onboarding-sidebar {
+	justify-content: center;
+	width: 44px;
+	height: 40px;
+	padding: 0;
+	margin: 0 auto;
+}
+
+/* User profile */
+.body-sidebar-container:not(.expanded) .body-sidebar .dropdown-navbar-user {
+	border-top: none;
+	padding-top: 6px !important;
+	margin-top: 4px !important;
+}
+
+.body-sidebar-container:not(.expanded) .body-sidebar .dropdown-navbar-user .sidebar-user-button {
+	justify-content: center;
+	width: 44px;
+	padding: 4px !important;
+}
+
+/* Hide the user chevron */
+.body-sidebar-container:not(.expanded) .body-sidebar .dropdown-navbar-user .sidebar-user-button::after {
+	display: none !important;
+}
+
+/* Promotional banners */
+.body-sidebar-container:not(.expanded) .body-sidebar .promotional-banners {
+	display: none !important;
+}
+
+/* Cards */
+.body-sidebar-container:not(.expanded) .body-sidebar .body-sidebar-cards {
+	display: none !important;
+}
+
+.body-sidebar-container:not(.expanded) .body-sidebar .dropdown-navbar-user .sidebar-user-button::after {
+	display: none;
+}
+
+/* ============================================
+   18. TOOLTIP
+   ============================================ */
+
+.tooltip .tooltip-inner {
+	background: #0A2540;
+	border-radius: 4px;
+	font-size: 12px;
+	font-weight: 500;
+	padding: 5px 10px;
+}
+
+/* ============================================
+   19. RESPONSIVE
+   ============================================ */
+
+@media (max-width: 576px) {
+	.body-sidebar-container.expanded .body-sidebar {
+		width: var(--amt-sidebar-width);
+		padding: 14px 12px 14px;
+	}
+}
+
+/* ============================================
+   20. EDIT MODE
+   ============================================ */
+
+.body-sidebar-container[data-mode="edit"] .body-sidebar {
+	background: var(--amt-sidebar-bg) !important;
+}
+
+.body-sidebar .bottom-edit-controls {
+	gap: 8px;
+	padding: 8px 0;
+}
+
+.body-sidebar .bottom-edit-controls .btn {
+	border-radius: 4px;
+	font-size: 13px;
+}
+
+/* ============================================
+   21. SIDEBAR CARDS
+   ============================================ */
+
+.body-sidebar .body-sidebar-cards .sidebar-card {
+	border-radius: var(--amt-radius) !important;
+	border: 1px solid var(--amt-divider);
+	margin: 4px 4px;
+}
+
+/* ============================================
+   22. USER MENU POPOVER
+   ============================================ */
+
+.amt-user-menu {
+	position: absolute;
+	bottom: 64px;
+	left: 10px;
+	right: 10px;
+	background: var(--amt-sidebar-bg);
+	border: 1px solid var(--amt-sidebar-border);
+	border-radius: 8px;
+	box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12), 0 2px 8px rgba(0, 0, 0, 0.06);
+	z-index: 1050;
+	padding: 8px;
+	animation: amt-menu-in 0.15s ease-out;
+}
+
+@keyframes amt-menu-in {
+	from { opacity: 0; transform: translateY(6px); }
+	to { opacity: 1; transform: translateY(0); }
+}
+
+.amt-user-menu-header {
+	display: flex;
+	align-items: center;
+	gap: 10px;
+	padding: 8px 6px;
+}
+
+.amt-user-menu-avatar {
+	flex-shrink: 0;
+}
+
+.amt-user-menu-avatar .avatar-large {
+	width: 38px !important;
+	height: 38px !important;
+	border-radius: 8px;
+}
+
+.amt-user-menu-info {
+	overflow: hidden;
+}
+
+.amt-user-menu-name {
+	font-weight: 600;
+	font-size: 13.5px;
+	color: var(--amt-text-primary);
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+
+.amt-user-menu-email {
+	font-size: 12px;
+	color: var(--amt-text-muted);
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	margin-top: 2px;
+}
+
+.amt-user-menu-divider {
+	height: 1px;
+	background: var(--amt-divider);
+	margin: 6px 0;
+}
+
+.amt-user-menu-items {
+	display: flex;
+	flex-direction: column;
+	gap: 1px;
+}
+
+.amt-user-menu-item {
+	display: flex;
+	align-items: center;
+	gap: 10px;
+	padding: 8px 8px;
+	border-radius: var(--amt-radius);
+	color: var(--amt-text-secondary);
+	font-size: 13.5px;
+	font-weight: 460;
+	cursor: pointer;
+	text-decoration: none !important;
+	transition: all 0.12s ease;
+}
+
+.amt-user-menu-item:hover {
+	background: var(--amt-item-hover);
+	color: var(--amt-text-primary);
+	text-decoration: none;
+}
+
+.amt-menu-icon {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 18px;
+	height: 18px;
+	flex-shrink: 0;
+	color: var(--amt-text-muted);
+}
+
+.amt-menu-star {
+	font-size: 16px;
+	color: #F59E0B;
+	width: 18px;
+	text-align: center;
+	flex-shrink: 0;
+}
+
+.amt-user-menu-item.highlight {
+	background: var(--amt-update-bg);
+	color: var(--amt-update-color);
+	font-weight: 500;
+}
+
+.amt-user-menu-item.highlight:hover {
+	background: var(--amt-update-bg);
+	opacity: 0.9;
+}
+
+.amt-menu-dot {
+	width: 8px;
+	height: 8px;
+	background: var(--amt-update-color);
+	border-radius: 50%;
+	flex-shrink: 0;
+}
+
+.amt-user-menu-footer {
+	padding: 8px 8px 4px;
+	font-size: 11px;
+	color: var(--amt-text-muted);
+	text-align: left;
+}
+
+/* ============================================
+   23. NOTIFICATION DOT
+   ============================================ */
+
+.amt-notification-dot {
+	width: 7px;
+	height: 7px;
+	background: #DF1B41;
+	border-radius: 50%;
+	position: absolute;
+	top: 0;
+	right: 0;
+}
+
+/* ============================================
+   24. DUAL SIDEBAR — WORKSPACE RAIL
+   ============================================ */
+
+/* Layout */
+body.amt-dual-sidebar {
+	display: flex;
+	flex-direction: row;
+}
+
+body.amt-dual-sidebar .main-section {
+	flex: 1;
+	min-width: 0;
+}
+
+/* ===== Rail width — collapsed (icons) vs expanded (icons + labels) ===== */
+:root {
+	--amt-rail-width: 60px;
+	--amt-rail-width-expanded: 184px;
+}
+
+body.amt-rail-expanded {
+	--amt-rail-width: var(--amt-rail-width-expanded);
+}
+
+/* ===== The Rail — dark by default ===== */
+.amt-workspace-rail {
+	width: var(--amt-rail-width);
+	min-width: var(--amt-rail-width);
+	height: 100vh;
+	background: var(--amt-rail-bg, #0B1120);
+	border-right: 1px solid var(--amt-rail-border, #1A2332);
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	padding: 14px 0;
+	position: sticky;
+	top: 0;
+	z-index: 1021;
+	overflow: hidden;
+	transition: width 0.2s cubic-bezier(0.4, 0, 0.2, 1), min-width 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+[data-theme="dark"] .amt-workspace-rail {
+	background: var(--amt-rail-bg, #070B14);
+	border-right-color: var(--amt-rail-border, #141C28);
+}
+
+.amt-rail-top {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 4px;
+	width: 100%;
+	padding: 0 8px;
+	flex: 1;
+	/* min-height:0 lets this flex item shrink below its content so overflow-y
+	   actually scrolls the workspace list — without it the list expands to full
+	   content height and pushes the bottom bar (language + palette + collapse)
+	   off a short viewport. */
+	min-height: 0;
+	overflow-y: auto;
+	overflow-x: hidden;
+}
+
+/* ===== Rail Item ===== */
+.amt-rail-item {
+	width: 44px;
+	height: 44px;
+	flex-shrink: 0;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	border-radius: 10px;
+	cursor: pointer;
+	transition: background 0.15s ease;
+	position: relative;
+}
+
+.amt-rail-item:hover {
+	background: rgba(255, 255, 255, 0.08);
+}
+
+/* ===== Active Rail Item ===== */
+.amt-rail-item.active {
+	background: rgba(255, 255, 255, 0.12);
+}
+
+.amt-rail-item.active:hover {
+	background: rgba(255, 255, 255, 0.15);
+}
+
+/* Active indicator — left bar */
+.amt-rail-item.active::before {
+	content: "";
+	position: absolute;
+	left: -8px;
+	top: 8px;
+	bottom: 8px;
+	width: 3px;
+	/* Gold, not navy — the rail is a dark surface, navy-on-navy disappears. */
+	background: var(--accent-gold-on-dark, #E8C64A);
+	border-radius: 0 3px 3px 0;
+	box-shadow: 0 0 8px rgba(232, 198, 74, 0.45);
+}
+
+/* Active workspace icon + label pick up the gold tint too */
+.amt-rail-item.active .amt-rail-icon svg,
+.amt-rail-item.active .amt-rail-icon .icon,
+.amt-rail-item.active .amt-rail-label {
+	color: var(--accent-gold-on-dark, #E8C64A) !important;
+	fill: var(--accent-gold-on-dark, #E8C64A) !important;
+}
+
+/* ===== Rail Icon ===== */
+.amt-rail-icon {
+	width: 24px;
+	height: 24px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	overflow: visible;
+}
+
+/* All SVGs/icons in rail — default muted white */
+.amt-rail-icon svg,
+.amt-rail-icon .icon {
+	width: 20px !important;
+	height: 20px !important;
+	color: rgba(255, 255, 255, 0.45) !important;
+	stroke: rgba(255, 255, 255, 0.45) !important;
+	transition: color 0.15s ease, stroke 0.15s ease;
+}
+
+/* Hover — brighter */
+.amt-rail-item:hover .amt-rail-icon svg,
+.amt-rail-item:hover .amt-rail-icon .icon {
+	color: rgba(255, 255, 255, 0.8) !important;
+	stroke: rgba(255, 255, 255, 0.8) !important;
+}
+
+/* Active — full white */
+.amt-rail-item.active .amt-rail-icon svg,
+.amt-rail-item.active .amt-rail-icon .icon {
+	color: #FFFFFF !important;
+	stroke: #FFFFFF !important;
+}
+
+/* Initials fallback */
+.amt-rail-initials {
+	font-size: 12px;
+	font-weight: 700;
+	/* 0.4 alpha over the rail measured 3.8:1 — below the floor for 12px bold
+	   text. 0.62 lands at 7.4:1 and still reads as secondary to the solid
+	   white of an active item. */
+	color: rgba(255, 255, 255, 0.62);
+	letter-spacing: 0.02em;
+	line-height: 1;
+	transition: color 0.15s ease;
+}
+
+.amt-rail-item:hover .amt-rail-initials {
+	color: rgba(255, 255, 255, 0.8);
+}
+
+.amt-rail-item.active .amt-rail-initials {
+	color: #FFFFFF;
+}
+
+/* ===== Expanded mode — items become full-width rows with labels ===== */
+/* Metrics mirror the sidebar panel: 36px rows, 8px gap, 13.5px/480 labels, 16px icons */
+body.amt-rail-expanded .amt-rail-item,
+body.amt-rail-resizing .amt-rail-item {
+	width: 100%;
+	/* min-height (not fixed height) so a long workspace name that wraps to two
+	   lines grows the row instead of being clipped; icon + label stay centred. */
+	min-height: 36px;
+	height: auto;
+	justify-content: flex-start;
+	gap: 8px;
+	padding: 5px 10px;
+}
+
+body.amt-rail-expanded .amt-rail-icon svg,
+body.amt-rail-expanded .amt-rail-icon .icon,
+body.amt-rail-resizing .amt-rail-icon svg,
+body.amt-rail-resizing .amt-rail-icon .icon {
+	width: 16px !important;
+	height: 16px !important;
+}
+
+.amt-rail-label {
+	display: none;
+	flex: 1;
+	min-width: 0;
+	font-size: 13.5px;
+	font-weight: 480;
+	/* 1.22 (was 1) gives a wrapped second line room to breathe. */
+	line-height: 1.22;
+	color: rgba(255, 255, 255, 0.65);
+	/* `normal` (was nowrap) lets a multi-word workspace name wrap instead of
+	   truncating to "Financial Re…". Single unbreakable words still fit the
+	   expanded rail width, so only genuinely long names take a second line. */
+	white-space: normal;
+	overflow: hidden;
+	transition: color 0.15s ease;
+}
+
+/* Expanded: clamp the label to at most two lines (ellipsis only past that), so
+   even the longest name is legible without ever pushing the row out of rhythm. */
+body.amt-rail-expanded .amt-rail-label,
+body.amt-rail-resizing .amt-rail-label {
+	display: -webkit-box;
+	-webkit-line-clamp: 2;
+	-webkit-box-orient: vertical;
+}
+
+.amt-rail-item:hover .amt-rail-label {
+	color: rgba(255, 255, 255, 0.9);
+}
+
+.amt-rail-item.active .amt-rail-label {
+	color: #FFFFFF;
+}
+
+/* ===== Rail search ===== */
+.amt-rail-search {
+	width: 100%;
+	padding: 0 8px;
+	margin-bottom: 6px;
+	flex-shrink: 0;
+}
+
+.amt-rail-search-btn {
+	width: 44px;
+	height: 40px;
+	margin: 0 auto;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	border-radius: 10px;
+	cursor: pointer;
+	transition: background 0.15s ease;
+}
+
+.amt-rail-search-btn:hover {
+	background: rgba(255, 255, 255, 0.08);
+}
+
+.amt-rail-search-btn svg {
+	width: 18px;
+	height: 18px;
+	color: rgba(255, 255, 255, 0.45);
+	transition: color 0.15s ease;
+}
+
+.amt-rail-search-btn:hover svg {
+	color: rgba(255, 255, 255, 0.8);
+}
+
+.amt-rail-search-box {
+	display: none;
+	align-items: center;
+	gap: 8px;
+	height: 36px;
+	padding: 0 10px;
+	border-radius: 8px;
+	background: rgba(255, 255, 255, 0.06);
+	border: 1px solid rgba(255, 255, 255, 0.1);
+	transition: border-color 0.15s ease, background 0.15s ease;
+}
+
+.amt-rail-search-box:focus-within {
+	border-color: rgba(255, 255, 255, 0.25);
+	background: rgba(255, 255, 255, 0.09);
+}
+
+.amt-rail-search-box svg {
+	width: 15px;
+	height: 15px;
+	/* Same correction as the initials: 3.75:1 -> 7.4:1. */
+	color: rgba(255, 255, 255, 0.62);
+	flex-shrink: 0;
+}
+
+.amt-rail-search-box input {
+	flex: 1;
+	min-width: 0;
+	background: transparent;
+	border: none;
+	outline: none;
+	box-shadow: none;
+	color: rgba(255, 255, 255, 0.9);
+	font-size: 13.5px;
+	font-weight: 400;
+	padding: 0;
+}
+
+.amt-rail-search-box input::placeholder {
+	color: rgba(255, 255, 255, 0.35);
+}
+
+.amt-rail-search-clear {
+	display: none;
+	color: rgba(255, 255, 255, 0.4);
+	cursor: pointer;
+	font-size: 15px;
+	line-height: 1;
+	flex-shrink: 0;
+}
+
+.amt-rail-search-clear:hover {
+	color: rgba(255, 255, 255, 0.8);
+}
+
+.amt-workspace-rail.amt-filtering .amt-rail-search-clear {
+	display: block;
+}
+
+body.amt-rail-expanded .amt-rail-search-box,
+body.amt-rail-resizing .amt-rail-search-box {
+	display: flex;
+}
+
+body.amt-rail-expanded .amt-rail-search-btn,
+body.amt-rail-resizing .amt-rail-search-btn {
+	display: none;
+}
+
+.amt-rail-item.amt-rail-hidden {
+	display: none !important;
+}
+
+.amt-rail-empty {
+	display: none;
+	font-size: 12px;
+	color: rgba(255, 255, 255, 0.35);
+	text-align: center;
+	padding: 10px 8px;
+	flex-shrink: 0;
+}
+
+.amt-rail-empty.visible {
+	display: block;
+}
+
+/* ===== Rail bottom — expand/collapse toggle ===== */
+.amt-rail-bottom {
+	flex-shrink: 0;
+	width: 100%;
+	padding: 6px 8px 0;
+	border-top: 1px solid rgba(255, 255, 255, 0.08);
+	margin-top: 6px;
+}
+
+.amt-rail-toggle {
+	width: 44px;
+	height: 36px;
+	margin: 0 auto;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	border-radius: 8px;
+	cursor: pointer;
+	transition: background 0.15s ease;
+}
+
+/* ===== Language Toggle (AR / EN) ===== */
+.amt-rail-lang {
+	width: 44px;
+	height: 36px;
+	margin: 0 auto 4px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	gap: 5px;
+	border-radius: 8px;
+	cursor: pointer;
+	transition: background 0.15s ease, opacity 0.15s ease;
+}
+
+body.amt-rail-expanded .amt-rail-lang {
+	width: 100%;
+}
+
+.amt-rail-lang:hover {
+	background: rgba(255, 255, 255, 0.08);
+}
+
+.amt-rail-lang svg {
+	width: 16px;
+	height: 16px;
+	flex-shrink: 0;
+	/* This icon set no colour of its own, so it inherited --text-muted
+	   (#5A6577) — a token scaled for white surfaces — and rendered dark-on-dark
+	   at 3.19:1. The rail has its own light scale; use it. */
+	color: rgba(255, 255, 255, 0.62);
+}
+
+.amt-rail-lang-code {
+	font-size: 11px;
+	font-weight: 600;
+	letter-spacing: 0.02em;
+	color: var(--accent-gold-on-dark, #E8C64A);
+}
+
+/* Guard against a second click queuing another reload */
+.amt-rail-lang.amt-busy {
+	opacity: 0.5;
+	pointer-events: none;
+}
+
+body.amt-rail-expanded .amt-rail-toggle {
+	width: 100%;
+}
+
+.amt-rail-toggle:hover {
+	background: rgba(255, 255, 255, 0.08);
+}
+
+.amt-rail-toggle svg {
+	width: 16px;
+	height: 16px;
+	color: rgba(255, 255, 255, 0.45);
+	transition: transform 0.2s ease, color 0.15s ease;
+}
+
+body.amt-rail-expanded .amt-rail-toggle svg {
+	transform: rotate(180deg);
+}
+
+.amt-rail-toggle:hover svg {
+	color: rgba(255, 255, 255, 0.8);
+}
+
+/* ===== Rail resizer — drag edge, snaps to nearest state ===== */
+.amt-rail-resizer {
+	position: absolute;
+	top: 0;
+	right: 0;
+	width: 5px;
+	height: 100%;
+	cursor: col-resize;
+	z-index: 5;
+}
+
+.amt-rail-resizer:hover,
+body.amt-rail-resizing .amt-rail-resizer {
+	background: rgba(20, 71, 126, 0.4);
+}
+
+body.amt-rail-resizing {
+	cursor: col-resize;
+	user-select: none;
+	-webkit-user-select: none;
+}
+
+body.amt-rail-resizing .amt-workspace-rail {
+	transition: none;
+}
+
+/* ===== Rail Tooltip (fixed position, set by JS) ===== */
+.amt-rail-tooltip {
+	position: fixed;
+	background: #0A2540;
+	color: #FFFFFF;
+	font-size: 12px;
+	font-weight: 500;
+	padding: 5px 10px;
+	border-radius: 4px;
+	white-space: nowrap;
+	pointer-events: none;
+	opacity: 0;
+	visibility: hidden;
+	transition: opacity 0.12s ease, visibility 0.12s ease;
+	z-index: 9999;
+	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
+}
+
+/* Arrow */
+.amt-rail-tooltip::before {
+	content: "";
+	position: absolute;
+	right: 100%;
+	top: 50%;
+	transform: translateY(-50%);
+	border: 5px solid transparent;
+	border-right-color: #0A2540;
+}
+
+.amt-rail-tooltip.visible {
+	opacity: 1;
+	visibility: visible;
+}
+
+/* ===== Dual sidebar — sidebar panel stays collapsible ===== */
+body.amt-dual-sidebar .body-sidebar-container {
+	height: 100vh;
+}
+
+/* The sidebar panel uses frappe's normal expand/collapse behavior */
+/* We just remove the placeholder since the rail handles spacing */
+body.amt-dual-sidebar .body-sidebar-placeholder {
+	display: none !important;
+}
+
+body.amt-dual-sidebar .body-sidebar-container {
+	width: auto;
+}
+
+/* When expanded, standard width */
+body.amt-dual-sidebar .body-sidebar-container.expanded .body-sidebar {
+	width: 240px !important;
+	position: relative !important;
+}
+
+/* The header dropdown chevron is hidden — switching is via rail */
+body.amt-dual-sidebar .sidebar-header .drop-icon {
+	display: none !important;
+}
+
+/* Rail scrollbar (items list scrolls; search and toggle stay fixed) */
+.amt-rail-top::-webkit-scrollbar {
+	width: 2px;
+}
+
+.amt-rail-top::-webkit-scrollbar-track {
+	background: transparent;
+}
+
+.amt-rail-top::-webkit-scrollbar-thumb {
+	background: rgba(255, 255, 255, 0.1);
+	border-radius: 2px;
+}
+
+/* ===== Responsive ===== */
+@media (max-width: 576px) {
+	.amt-workspace-rail {
+		display: none;
+	}
+}
+
+/* ===== Overlay ===== */
+body.amt-dual-sidebar .overlay {
+	display: none !important;
+}
+
+/* ===== Onboarding panel — shift right for workspace rail ===== */
+body.amt-dual-sidebar .onb-panel {
+	left: calc(var(--amt-rail-width) + 236px) !important;
+}
+
+/* ============================================
+   25. DESK PAGE (/desk) — Module Picker
+   ============================================ */
+
+/* Navbar */
+.desktop-wrapper .navbar-container {
+	height: 56px;
+	padding: 10px 24px;
+	background: #FFFFFF;
+	border-bottom: 1px solid #E3E8EE;
+	box-shadow: none;
+}
+
+[data-theme="dark"] .desktop-wrapper .navbar-container {
+	background: #161B22;
+	border-bottom-color: #21262D;
+}
+
+/* Brand logo */
+.desktop-wrapper #brand-logo {
+	height: 28px;
+	width: auto;
+}
+
+/* Search bar */
+.desktop-wrapper .desktop-navbar-modal-search {
+	background: var(--control-bg);
+	border: 1px solid var(--border-color);
+	border-radius: 6px;
+	height: 36px;
+	padding: 0 14px;
+	max-width: 480px;
+	transition: border-color 0.15s ease, background 0.15s ease;
+}
+
+.desktop-wrapper .desktop-navbar-modal-search:hover {
+	border-color: #D3D9E0;
+	background: #FFFFFF;
+	outline: none;
+}
+
+.desktop-wrapper .desktop-search-icon {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	color: var(--text-muted);
+	font-size: 13px;
+}
+
+.desktop-wrapper .desktop-keyboard-shortcut {
+	color: var(--text-light);
+	font-size: 12px;
+	background: var(--subtle-fg);
+	padding: 2px 6px;
+	border-radius: 4px;
+	font-weight: 500;
+}
+
+/* Notification bell */
+.desktop-wrapper .desktop-notifications .btn-reset {
+	width: 36px;
+	height: 36px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	border-radius: 8px;
+	transition: background 0.15s ease;
+}
+
+.desktop-wrapper .desktop-notifications .btn-reset:hover {
+	background: var(--subtle-fg);
+}
+
+/* Avatar */
+.desktop-wrapper .desktop-avatar .avatar {
+	width: 32px !important;
+	height: 32px !important;
+	border-radius: 8px !important;
+}
+
+/* Icons container */
+.desktop-wrapper .icons-container {
+	margin-top: 0;
+	padding: 0;
+	width: 100%;
+	max-width: 1000px;
+}
+
+/* Grid — 6 columns on desktop */
+.desktop-wrapper .icons {
+	gap: 12px 8px;
+	grid-template-columns: repeat(6, 1fr) !important;
+	grid-template-rows: auto !important;
+	justify-items: center;
+}
+
+/* Individual icon */
+.desktop-wrapper .desktop-icon {
+	width: 100%;
+	max-width: 140px;
+	height: auto;
+	padding: 18px 10px 14px;
+	border-radius: 10px;
+	border: 1px solid transparent;
+	gap: 10px;
+	transition: all 0.2s ease;
+	text-decoration: none;
+}
+
+.desktop-wrapper .desktop-icon:hover {
+	background: var(--fg-color);
+	border-color: var(--gray-200);
+	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+	transform: translateY(-2px);
+}
+
+[data-theme="dark"] .desktop-wrapper .desktop-icon:hover {
+	background: #21262D;
+	border-color: #30363D;
+}
+
+/* Icon container (the rounded square with icon) */
+.desktop-wrapper .icon-container {
+	width: 52px;
+	height: 52px;
+	border-radius: 14px;
+	padding: 0;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	transition: transform 0.2s ease;
+}
+
+.desktop-wrapper .icon-container:has(.icon) {
+	background: var(--gray-100);
+}
+
+[data-theme="dark"] .desktop-wrapper .icon-container:has(.icon) {
+	background: #21262D;
+}
+
+.desktop-wrapper .icon-container:hover {
+	transform: scale(1.08);
+}
+
+.desktop-wrapper .icon-container img {
+	width: 48px;
+	height: 48px;
+}
+
+.desktop-wrapper .icon-container .icon {
+	width: 26px;
+	height: 26px;
+	color: var(--text-color);
+}
+
+/* Icon caption */
+.desktop-wrapper .icon-caption {
+	height: auto;
+	gap: 2px;
+}
+
+.desktop-wrapper .icon-title {
+	font-size: 12.5px;
+	font-weight: 550;
+	color: var(--text-color);
+	line-height: 1.3;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+
+.desktop-wrapper .icon-subtitle {
+	font-size: 11px;
+	color: var(--text-muted);
+	line-height: 1.3;
+}
+
+/* ===== Folder icons ===== */
+.desktop-wrapper .folder-icon {
+	border-radius: 14px;
+	padding: 6px;
+	background: var(--gray-100) !important;
+	box-shadow: 0 0 1px rgba(0, 0, 0, 0.1);
+}
+
+[data-theme="dark"] .desktop-wrapper .folder-icon {
+	background: #21262D !important;
+}
+
+/* ===== Modal (folder open view) ===== */
+.desktop-modal .modal-content {
+	border-radius: 16px !important;
+	box-shadow: 0 16px 48px rgba(0, 0, 0, 0.15);
+}
+
+.desktop-modal-body {
+	border-radius: 16px;
+}
+
+/* ===== Edit mode ===== */
+.desktop-wrapper .desktop-edit-mode {
+	border-color: var(--gray-300);
+}
+
+.desktop-wrapper .edit-mode-buttons .btn {
+	border-radius: 6px;
+}
+
+/* ===== Page indicator ===== */
+.desktop-wrapper .page-indicator {
+	background: var(--gray-300);
+	width: 6px;
+	height: 6px;
+}
+
+.desktop-wrapper .active-page {
+	background: var(--primary) !important;
+}
+
+/* ===== Welcome text ===== */
+.desktop-wrapper .no-apps-message {
+	color: var(--text-muted);
+	font-size: var(--text-lg);
+}
+
+/* ===== Responsive ===== */
+@media (max-width: 768px) {
+	.desktop-wrapper .icons {
+		grid-template-columns: repeat(4, 1fr) !important;
+		gap: 10px 6px;
+	}
+
+	.desktop-wrapper .desktop-icon {
+		max-width: none;
+	}
+}
+
+@media (max-width: 480px) {
+	.desktop-wrapper .icons {
+		grid-template-columns: repeat(3, 1fr) !important;
+		gap: 8px 4px;
+	}
+
+	.desktop-wrapper .desktop-icon {
+		padding: 14px 6px 10px;
+	}
+
+	.desktop-wrapper .icons-container {
+		margin-top: 0;
+	}
+}
+
+/* ============================================
+   DASHBOARD WIDGETS — Polished Cards
+   ============================================ */
+
+/* --- All widgets: base card style --- */
+.widget {
+	border-radius: 4px !important;
+	border: 1px solid var(--border-color) !important;
+	background: var(--fg-color) !important;
+	box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03) !important;
+	transition: box-shadow 0.2s ease, border-color 0.2s ease;
+	overflow: hidden;
+}
+
+.widget:hover {
+	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06) !important;
+	border-color: rgba(20, 71, 126, 0.15) !important;
+}
+
+/* --- Widget head — subtle bg + bottom border --- */
+.widget .widget-head {
+	padding: 10px 14px !important;
+	background: rgba(0, 0, 0, 0.015) !important;
+	border-bottom: 1px solid var(--border-color) !important;
+}
+
+[data-theme="dark"] .widget .widget-head {
+	background: rgba(255, 255, 255, 0.02) !important;
+}
+
+.widget .widget-head .widget-title {
+	font-weight: 600 !important;
+	font-size: 12px !important;
+	color: var(--gray-600) !important;
+	letter-spacing: 0.01em;
+}
+
+.widget .widget-head .widget-subtitle {
+	font-size: 11px !important;
+	color: var(--gray-400) !important;
+}
+
+/* --- Widget control (menu) --- */
+.widget .widget-control .card-actions a,
+.widget .widget-control .chart-actions .chart-menu {
+	border-radius: 4px !important;
+	transition: background 0.15s ease;
+}
+
+.widget .widget-control .card-actions a:hover,
+.widget .widget-control .chart-actions .chart-menu:hover {
+	background: rgba(0, 0, 0, 0.04) !important;
+}
+
+/* --- Number card --- */
+.widget.number-widget-box {
+	padding: 0 !important;
+	min-height: 90px !important;
+}
+
+.widget.number-widget-box .widget-head {
+	padding: 10px 14px !important;
+}
+
+.widget.number-widget-box .widget-body {
+	padding: 12px 14px !important;
+}
+
+.widget.number-widget-box .number {
+	font-size: 26px !important;
+	font-weight: 700 !important;
+	line-height: 1.2;
+}
+
+.widget.number-widget-box .card-stats {
+	margin-top: 4px;
+}
+
+.widget.number-widget-box .stat-period {
+	font-size: 11px !important;
+	color: var(--gray-400) !important;
+}
+
+.widget.number-widget-box .percentage-stat-area .indicator-pill-round {
+	font-size: 11px !important;
+	padding: 2px 6px !important;
+	border-radius: 4px !important;
+}
+
+/* --- Chart widget --- */
+.widget.dashboard-widget-box {
+	padding: 0 !important;
+}
+
+.widget.dashboard-widget-box .widget-head {
+	padding: 10px 14px !important;
+}
+
+.widget.dashboard-widget-box .widget-title {
+	font-size: 12px !important;
+	font-weight: 600 !important;
+	color: var(--gray-600) !important;
+}
+
+.widget.dashboard-widget-box .widget-body {
+	padding: 0 8px 8px !important;
+}
+
+/* Chart colors — use primary */
+.widget.dashboard-widget-box .line-graph-path {
+	stroke: var(--primary) !important;
+}
+
+.widget.dashboard-widget-box .region-fill {
+	fill: var(--primary) !important;
+	opacity: 0.05;
+}
+
+.widget.dashboard-widget-box .bar {
+	fill: var(--primary) !important;
+}
+
+.widget.dashboard-widget-box .data-point-list .circle {
+	fill: var(--primary) !important;
+	stroke: var(--primary) !important;
+}
+
+/* Chart filter buttons */
+.widget.dashboard-widget-box .filter-chart,
+.widget.dashboard-widget-box .time-interval-filter,
+.widget.dashboard-widget-box .timespan-filter {
+	border-radius: 4px !important;
+	font-size: 11px !important;
+}
+
+/* --- Shortcut widget --- */
+.widget.shortcut-widget-box {
+	padding: 0 !important;
+	border-radius: 4px !important;
+}
+
+.widget.shortcut-widget-box .widget-head {
+	padding: 10px 14px !important;
+}
+
+.widget.shortcut-widget-box:hover {
+	border-color: var(--primary) !important;
+}
+
+.widget.shortcut-widget-box .widget-title {
+	font-size: 13px !important;
+	font-weight: 600 !important;
+	color: var(--heading-color) !important;
+}
+
+.widget.shortcut-widget-box .indicator-pill {
+	font-size: 11px !important;
+	border-radius: 4px !important;
+	padding: 2px 8px !important;
+}
+
+/* --- Quick list widget --- */
+.widget.quick-list-widget-box .quick-list-item {
+	border-radius: 4px !important;
+	padding: 8px 12px !important;
+	transition: background 0.15s ease;
+}
+
+.widget.quick-list-widget-box .quick-list-item:hover {
+	background: var(--subtle-fg) !important;
+}
+
+/* --- Links widget --- */
+.widget.links-widget-box .link-item {
+	border-radius: 4px !important;
+	transition: background 0.15s ease;
+}
+
+.widget.links-widget-box .link-item:hover {
+	background: var(--subtle-fg) !important;
+}
+
+/* --- Widget group titles --- */
+.widget-group-head .widget-group-title {
+	font-size: 15px !important;
+	font-weight: 700 !important;
+	color: var(--heading-color) !important;
+}
+
+/* --- Dark mode --- */
+[data-theme="dark"] .widget {
+	box-shadow: 0 1px 3px rgba(0, 0, 0, 0.15) !important;
+}
+
+[data-theme="dark"] .widget:hover {
+	box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25) !important;
+	border-color: rgba(138, 180, 232, 0.2) !important;
+}
+
+/* ============================================
+   8. CONNECTIONS TAB (Form Dashboard Links)
+   ============================================ */
+
+/* --- Masonry-style columns layout --- */
+.form-links .form-documents {
+	column-count: 3 !important;
+	column-gap: 16px !important;
+	margin-top: 12px !important;
+}
+
+.form-links .form-documents .row {
+	display: contents !important;
+	margin: 0 !important;
+}
+
+.form-links .form-documents .col-md-4 {
+	width: 100% !important;
+	max-width: 100% !important;
+	flex: none !important;
+	padding: 0 !important;
+	margin-bottom: 16px !important;
+	break-inside: avoid !important;
+	display: inline-block !important;
+	background: none !important;
+	border: none !important;
+}
+
+/* --- Card border via individual elements --- */
+.form-links .form-documents .col-md-4 > .form-link-title:first-child {
+	border: 1px solid var(--gray-200) !important;
+	border-bottom: none !important;
+	border-radius: 6px 6px 0 0 !important;
+}
+
+.form-links .form-documents .col-md-4 > .document-link:last-of-type {
+	border-bottom: 1px solid var(--gray-200) !important;
+	border-left: 1px solid var(--gray-200) !important;
+	border-right: 1px solid var(--gray-200) !important;
+	border-radius: 0 0 6px 6px !important;
+}
+
+.form-links .form-documents .col-md-4 > .document-link:not(:last-of-type) {
+	border-left: 1px solid var(--gray-200) !important;
+	border-right: 1px solid var(--gray-200) !important;
+}
+
+/* --- Section title as card header --- */
+.form-links .form-link-title {
+	font-size: 11px !important;
+	font-weight: 700 !important;
+	text-transform: uppercase !important;
+	letter-spacing: 0.06em !important;
+	color: var(--gray-600) !important;
+	margin: 0 !important;
+	padding: 10px 14px !important;
+	background: rgba(0, 0, 0, 0.015) !important;
+	border-bottom: 1px solid var(--gray-200) !important;
+}
+
+/* --- Document link rows inside card --- */
+.form-links .document-link {
+	border: none !important;
+	border-radius: 0 !important;
+	background: transparent !important;
+	padding: 6px 14px !important;
+	margin: 0 !important;
+	max-width: none !important;
+	border-bottom: 1px solid var(--gray-100) !important;
+	transition: background 0.12s ease !important;
+}
+
+.form-links .document-link:last-child {
+	border-bottom: none !important;
+}
+
+.form-links .document-link:hover {
+	background: var(--gray-50) !important;
+	box-shadow: none !important;
+}
+
+/* --- Badge link text --- */
+.form-links .document-link .badge-link {
+	color: var(--text-color) !important;
+	font-weight: 500 !important;
+	font-size: 13px !important;
+	text-decoration: none !important;
+}
+
+.form-links .document-link:hover .badge-link {
+	color: var(--primary) !important;
+}
+
+.form-links .document-link .badge-link:hover {
+	text-decoration: underline !important;
+}
+
+/* --- Count badge --- */
+.form-links .document-link .count {
+	background: rgba(20, 71, 126, 0.08) !important;
+	color: var(--primary) !important;
+	font-size: 11px !important;
+	font-weight: 600 !important;
+	padding: 1px 7px !important;
+	border-radius: 4px !important;
+	min-width: 20px !important;
+	text-align: center !important;
+}
+
+/* --- Open notification badge --- */
+.form-links .document-link .open-notification {
+	background: #fff3e0 !important;
+	color: #e65100 !important;
+	font-weight: 600 !important;
+	border-radius: 4px !important;
+	font-size: 11px !important;
+	padding: 1px 7px !important;
+}
+
+/* --- New button --- */
+.form-links .document-link .btn-new {
+	border: none !important;
+	border-radius: 4px !important;
+	background: transparent !important;
+	color: var(--gray-400) !important;
+	box-shadow: none !important;
+	transition: all 0.15s ease !important;
+}
+
+.form-links .document-link .btn-new:hover {
+	background: rgba(20, 71, 126, 0.08) !important;
+	color: var(--primary) !important;
+}
+
+.form-links .document-link .btn-new:hover .icon {
+	stroke: var(--primary) !important;
+}
+
+/* --- Dark mode --- */
+[data-theme="dark"] .form-links .form-documents .col-md-4 {
+	background: var(--fg-color) !important;
+	border-color: var(--gray-700) !important;
+}
+
+[data-theme="dark"] .form-links .form-link-title {
+	background: rgba(255, 255, 255, 0.03) !important;
+	border-bottom-color: var(--gray-700) !important;
+	color: var(--gray-400) !important;
+}
+
+[data-theme="dark"] .form-links .document-link {
+	border-bottom-color: var(--gray-800) !important;
+}
+
+[data-theme="dark"] .form-links .document-link:hover {
+	background: rgba(255, 255, 255, 0.04) !important;
+}
+
+[data-theme="dark"] .form-links .document-link .count {
+	background: rgba(20, 71, 126, 0.15) !important;
+	color: var(--primary) !important;
+}
+
+[data-theme="dark"] .form-links .document-link .open-notification {
+	background: rgba(230, 81, 0, 0.15) !important;
+	color: #ff9800 !important;
+}
+
+/* ============================================
+   9. CHILD TABLE ROW — Right Sheet (Slide-in)
+   ============================================ */
+
+/* --- Override the centered modal to a right-side sheet --- */
+.grid-row-open .form-in-grid {
+	top: 0 !important;
+	right: 0 !important;
+	left: auto !important;
+	bottom: 0 !important;
+	transform: translateX(0) !important;
+	width: 50% !important;
+	max-width: 720px !important;
+	height: 100vh !important;
+	border-radius: 0 !important;
+	border-left: 1px solid var(--gray-200) !important;
+	box-shadow: -4px 0 24px rgba(0, 0, 0, 0.08) !important;
+	padding: 0 !important;
+	display: flex !important;
+	flex-direction: column !important;
+	animation: amt-slide-in-right 0.25s ease-out !important;
+}
+
+@keyframes amt-slide-in-right {
+	from {
+		transform: translateX(100%);
+		opacity: 0;
+	}
+	to {
+		transform: translateX(0);
+		opacity: 1;
+	}
+}
+
+/* rtlcss mirrors declarations but NOT @keyframes, so the sheet would still fly
+   in from the right in Arabic while docking on the left. Flip it explicitly. */
+[dir="rtl"] .grid-row-open .form-in-grid {
+	animation-name: amt-slide-in-left !important;
+}
+
+@keyframes amt-slide-in-left {
+	from {
+		transform: translateX(-100%);
+		opacity: 0;
+	}
+	to {
+		transform: translateX(0);
+		opacity: 1;
+	}
+}
+
+/* --- Scrollable body --- */
+.grid-row-open .form-in-grid .grid-form-body {
+	max-height: none !important;
+	overflow-y: auto !important;
+	flex: 1 !important;
+	padding: var(--padding-md) !important;
+}
+
+/* --- Header toolbar --- */
+.grid-row-open .form-in-grid .grid-form-heading {
+	padding: 12px 16px !important;
+	border-bottom: 1px solid var(--gray-200) !important;
+	background: rgba(0, 0, 0, 0.015) !important;
+	flex-shrink: 0 !important;
+}
+
+/* --- Footer toolbar --- */
+.grid-row-open .form-in-grid .grid-footer-toolbar {
+	padding: 10px 16px !important;
+	border-top: 1px solid var(--gray-200) !important;
+	background: rgba(0, 0, 0, 0.015) !important;
+	flex-shrink: 0 !important;
+}
+
+/* --- Overlay dimmer --- */
+#freeze.grid-form {
+	z-index: 1020 !important;
+	background-color: rgba(0, 0, 0, 0.3) !important;
+}
+
+/* --- Responsive: full width on smaller screens --- */
+@media (max-width: 992px) {
+	.grid-row-open .form-in-grid {
+		width: 85% !important;
+		max-width: none !important;
+	}
+}
+
+@media (max-width: 576px) {
+	.grid-row-open .form-in-grid {
+		width: 100% !important;
+	}
+}
+
+/* --- Close button (repurpose collapse-row) --- */
+.grid-row-open .form-in-grid .grid-collapse-row {
+	width: 32px !important;
+	height: 32px !important;
+	padding: 0 !important;
+	display: inline-flex !important;
+	align-items: center !important;
+	justify-content: center !important;
+	border-radius: 6px !important;
+	border: none !important;
+	background: transparent !important;
+	color: var(--gray-500) !important;
+	transition: background 0.15s ease !important;
+	order: 99 !important;
+}
+
+.grid-row-open .form-in-grid .grid-collapse-row:hover {
+	background: var(--gray-100) !important;
+	color: var(--gray-700) !important;
+}
+
+/* Replace the down-arrow icon with an X via CSS */
+.grid-row-open .form-in-grid .grid-collapse-row .icon {
+	display: none !important;
+}
+
+.grid-row-open .form-in-grid .grid-collapse-row::after {
+	content: "\00D7" !important;
+	font-size: 22px !important;
+	line-height: 1 !important;
+	font-weight: 300 !important;
+}
+
+/* --- Header layout fix for close button alignment --- */
+.grid-row-open .form-in-grid .grid-header-toolbar {
+	display: flex !important;
+	align-items: center !important;
+	justify-content: space-between !important;
+}
+
+.grid-row-open .form-in-grid .grid-header-toolbar .row-actions {
+	display: flex !important;
+	align-items: center !important;
+	gap: 6px !important;
+	flex-wrap: wrap !important;
+}
+
+/* Ensure all action buttons are visible and remove pull-right float */
+.grid-row-open .form-in-grid .grid-header-toolbar .row-actions .btn {
+	float: none !important;
+}
+
+/* Show hidden-xs buttons inside sheet */
+.grid-row-open .form-in-grid .grid-header-toolbar .row-actions .hidden-xs {
+	display: inline-flex !important;
+}
+
+/* --- Dark mode --- */
+[data-theme="dark"] .grid-row-open .form-in-grid .grid-collapse-row:hover {
+	background: var(--gray-800) !important;
+	color: var(--gray-300) !important;
+}
+
+/* --- Dark mode --- */
+[data-theme="dark"] .grid-row-open .form-in-grid {
+	border-left-color: var(--gray-700) !important;
+	box-shadow: -4px 0 24px rgba(0, 0, 0, 0.3) !important;
+}
+
+[data-theme="dark"] .grid-row-open .form-in-grid .grid-form-heading,
+[data-theme="dark"] .grid-row-open .form-in-grid .grid-footer-toolbar {
+	background: rgba(255, 255, 255, 0.03) !important;
+	border-color: var(--gray-700) !important;
+}
+
+/* ============================================
+   12. BILINGUAL TYPOGRAPHY (AR / EN)
+   ============================================
+
+   Frappe's default --font-stack is Inter-first. Inter carries no Arabic
+   glyphs at all, so every Arabic character silently falls through the whole
+   stack to whatever the operating system picks last. That is why Arabic and
+   Latin never looked like one typeface: different machines resolved it to
+   different fonts, at different optical sizes, on different baselines.
+
+   Fix: bind the Arabic Unicode blocks to a named face sourced from the best
+   Arabic UI font present on the OS, and metric-match it to Inter. Latin is
+   untouched — Inter still renders it, so numbers and codes stay identical. */
+
+@font-face {
+	font-family: "AmtArabic";
+	/* Quality Arabic UI faces only, in order of preference.
+	   Tahoma and Geeza Pro are deliberately NOT listed: Tahoma is installed on
+	   most machines, so including it meant it always won — rendering Arabic in
+	   a wide, dated face ~15% broader than the system default. When none of
+	   these are installed this @font-face simply does not match, and Arabic
+	   falls through to the OS UI font (SF Arabic on macOS), which is the
+	   better outcome. */
+	src: local("IBM Plex Sans Arabic"), local("Noto Sans Arabic"),
+		local("Dubai"), local("SF Arabic");
+	/* Arabic, Supplement, Extended-A/B, Presentation Forms A/B, and the
+	   bidi marks. Latin, digits and punctuation are deliberately excluded. */
+	unicode-range: U+0600-06FF, U+0750-077F, U+0870-089F, U+08A0-08FF,
+		U+FB50-FDFF, U+FE70-FEFF, U+061C, U+200F;
+	/* Left neutral on purpose. Each candidate above has different metrics, so
+	   one correction value cannot be right for all of them — a fixed 105% was
+	   measured overshooting Latin by 6% once Tahoma matched. Tune this only
+	   when a single font is self-hosted and its metrics are known. */
+	size-adjust: 100%;
+	font-display: swap;
+}
+
+:root {
+	--font-stack: "InterVariable", "Inter", "AmtArabic", -apple-system,
+		BlinkMacSystemFont, "Segoe UI", "Roboto", "Helvetica Neue", sans-serif;
+}
+
+/* --- Arabic-specific corrections --------------------------------------- */
+
+/* Arabic is a cursive script: positive letter-spacing prises joined letters
+   apart and reads as broken text. Several headings in this theme set 0.06em
+   and 0.08em for Latin small-caps styling — neutralise those in RTL only, so
+   the English layout keeps its intended tracking. */
+[dir="rtl"] .section-break .sidebar-item-label,
+[dir="rtl"] .form-links .form-link-title,
+[dir="rtl"] .form-sidebar .form-sidebar-items .form-sidebar-label,
+[dir="rtl"] .widget .widget-head .widget-title,
+[dir="rtl"] .list-row-head .list-subject,
+[dir="rtl"] .comparison-header,
+[dir="rtl"] h1, [dir="rtl"] h2, [dir="rtl"] h3,
+[dir="rtl"] h4, [dir="rtl"] h5, [dir="rtl"] h6 {
+	letter-spacing: normal !important;
+}
+
+/* Arabic glyphs carry taller ascenders and dots below the baseline, so the
+   Latin-tuned line-height crowds them. A small bump only in RTL. */
+[dir="rtl"] body,
+[dir="rtl"] .list-row,
+[dir="rtl"] .form-control,
+[dir="rtl"] .control-label,
+[dir="rtl"] .sidebar-item-label,
+[dir="rtl"] .amt-rail-label {
+	line-height: 1.65;
+}
+
+/* Ensure Arabic shaping features stay on (contextual alternates + ligatures
+   are what join the letters correctly). */
+[dir="rtl"] {
+	font-feature-settings: "liga" 1, "calt" 1;
+	font-variant-ligatures: contextual;
+}
+
+/* --- Numeric alignment (both languages) -------------------------------- */
+
+/* ERP columns are read by scanning down. Proportional digits make the ones
+   and sevens jitter between rows; tabular figures lock them to one width so
+   amounts line up on the decimal. Applied to numeric cells only, never to
+   body copy. */
+.list-row .list-row-col[data-fieldtype="Currency"],
+.list-row .list-row-col[data-fieldtype="Float"],
+.list-row .list-row-col[data-fieldtype="Int"],
+.dt-cell__content--col-number,
+.datatable .dt-cell--align-right,
+.report-wrapper .dt-cell__content,
+.widget .number-card-value,
+.form-control[data-fieldtype="Currency"],
+.form-control[data-fieldtype="Float"],
+.form-control[data-fieldtype="Int"] {
+	font-variant-numeric: tabular-nums;
+	font-feature-settings: "tnum" 1;
+}
+
+/* Latin digits inside Arabic text must not be mirrored or reordered — force
+   an isolated LTR run for numeric/currency cells while the page stays RTL. */
+[dir="rtl"] .list-row .list-row-col[data-fieldtype="Currency"],
+[dir="rtl"] .list-row .list-row-col[data-fieldtype="Float"],
+[dir="rtl"] .list-row .list-row-col[data-fieldtype="Int"],
+[dir="rtl"] .indicator-pill,
+[dir="rtl"] .amt-rail-lang-code {
+	unicode-bidi: isolate;
+}
+
+/* ============================================
+   13. REFINEMENT PASS — button definition,
+       rail banding, and rhythm
+   ============================================ */
+
+/* --- Buttons: give every variant a real edge ------------------------------
+   Baseline audit before this block:
+     .btn-primary  border: none          (flat navy, no edge)
+     .btn-default  1px #E3E8EE on #F6F9FC   (border ~= background, invisible)
+     .btn-sm       1px #D3D9E0 on #FFF, weight 420
+   Three different treatments for what reads as one control family. Unify on
+   one token so a row of mixed buttons looks deliberate. */
+
+:root {
+	--amt-btn-border: #D7DEE7;
+	--amt-btn-border-hover: #B9C4D2;
+	/* A primary button sits on white; a hairline one step darker than its own
+	   fill defines the shape without reading as a second colour. */
+	--amt-btn-primary-border: #0E3560;
+	--amt-btn-shadow: 0 1px 1px rgba(10, 37, 64, 0.04);
+}
+
+[data-theme="dark"] {
+	--amt-btn-border: rgba(255, 255, 255, 0.14);
+	--amt-btn-border-hover: rgba(255, 255, 255, 0.24);
+	--amt-btn-primary-border: rgba(255, 255, 255, 0.18);
+	--amt-btn-shadow: 0 1px 1px rgba(0, 0, 0, 0.25);
+}
+
+.btn-default,
+.btn-secondary,
+.page-actions .btn,
+.standard-actions .btn,
+.btn-sm {
+	border: 1px solid var(--amt-btn-border) !important;
+	box-shadow: var(--amt-btn-shadow) !important;
+	font-weight: 500 !important;
+	transition: border-color 0.13s ease, background 0.13s ease,
+		box-shadow 0.13s ease !important;
+}
+
+.btn-default:hover,
+.btn-secondary:hover,
+.page-actions .btn:hover,
+.standard-actions .btn:hover,
+.btn-sm:hover {
+	border-color: var(--amt-btn-border-hover) !important;
+}
+
+.btn-primary {
+	border: 1px solid var(--amt-btn-primary-border) !important;
+	box-shadow: var(--amt-btn-shadow) !important;
+}
+
+/* Keyboard focus must stay obvious now that borders carry more meaning. */
+.btn:focus-visible {
+	outline: 2px solid var(--primary) !important;
+	outline-offset: 1px !important;
+}
+
+/* Icon-only and link buttons are not part of the bordered family — an edge
+   around a bare glyph reads as clutter. */
+.btn-link,
+.btn.icon-btn,
+.btn-reset,
+.comment-box .btn,
+.sidebar-menu .btn-link {
+	border-color: transparent !important;
+	box-shadow: none !important;
+}
+
+/* --- Workspace rail: band separators --------------------------------------
+   `.amt-rail-group-start` marks the first row of each app band (business ->
+   local apps -> framework). Drawn as a border on the row itself, so nothing
+   is added to the flex flow and the divider inherits the row's own margin.
+   Uses a logical property so RTL needs no override. */
+
+/* Alpha chosen by measurement, not taste: the rail sits on #0B1120, so
+   rgba(255,255,255,.09) resolves to only 1.24:1 against it — technically
+   present, practically invisible. .14 lands near 1.5:1: still a hairline,
+   but one the eye actually registers. */
+.amt-rail-item.amt-rail-group-start {
+	position: relative;
+	margin-block-start: 9px;
+	padding-block-start: 9px;
+	border-block-start: 1px solid rgba(255, 255, 255, 0.14);
+}
+
+/* Collapsed rail is only 60px wide — a full-bleed rule looks heavy against
+   the icons, so inset the line to align with the icon column. */
+body:not(.amt-rail-expanded) .amt-rail-item.amt-rail-group-start {
+	border-block-start-color: rgba(255, 255, 255, 0.12);
+	margin-inline: 8px;
+}
+
+/* An active row already has its own gold marker and background; letting the
+   divider run through it double-marks the same row. */
+.amt-rail-item.amt-rail-group-start.active {
+	border-block-start-color: transparent;
+}
+
+/* --- Sidebar panel: section rhythm ---------------------------------------
+   The panel lists every item at one weight with no breathing room, so the
+   eye has no anchor. Give section headers a hairline and real separation. */
+
+/* Frappe marks a group header as .sidebar-item-container.section-item (the
+   outer container) — NOT .section-break, which is only the inner anchor.
+   Bordering the container keeps the rule flush with the panel's own padding.
+   Frappe already renders a .divider node here but ships it .hidden; we leave
+   that alone rather than fight its inline state. */
+.body-sidebar .sidebar-item-container.section-item:not(:first-child) {
+	margin-block-start: 10px;
+	padding-block-start: 10px;
+	border-block-start: 1px solid var(--border-color);
+}
+
+/* Section-label typography is already set at rule ".section-break
+   .sidebar-item-label" above (with !important), so it is deliberately not
+   restated here — a second rule would simply lose the cascade and mislead. */
+
+.body-sidebar .standard-sidebar-item {
+	border-radius: 6px;
+}
+
+/* Active item: a solid inline marker rather than fill alone, so the current
+   position survives at a glance. Logical inset = correct edge in both dirs. */
+.body-sidebar .standard-sidebar-item.selected,
+.body-sidebar .standard-sidebar-item.active-sidebar-item {
+	position: relative;
+}
+
+.body-sidebar .standard-sidebar-item.selected::before,
+.body-sidebar .standard-sidebar-item.active-sidebar-item::before {
+	content: "";
+	position: absolute;
+	inset-inline-start: 0;
+	inset-block: 6px;
+	width: 2.5px;
+	border-radius: 0 2px 2px 0;
+	background: var(--primary);
+}
+
+/* ============================================
+   14. FIELD AFFORDANCE — type icons, borders,
+       icon normalisation, sidebar headings
+   ============================================ */
+
+/* --- Field type icons -----------------------------------------------------
+   Frappe renders no .field-icon in desk forms, so the icon is drawn on
+   .control-input::before rather than by adding DOM (no JS, nothing for
+   Frappe's control lifecycle to trip over).
+
+   Technique: mask-image + background-color: currentColor. A data-URI <img>
+   would bake a fixed colour and break in dark mode; a mask inherits the
+   field's own colour, so light/dark and disabled states follow for free.
+
+   Restraint is deliberate: only the types where a glyph genuinely speeds
+   recognition. Select already ships .select-icon, and Currency already
+   prints its symbol in the value — adding more there is noise, not polish. */
+
+:root {
+	--amt-field-icon-size: 15px;
+	--amt-field-icon-inset: 11px;
+	--amt-field-icon-pad: 34px;
+	--amt-field-icon-color: var(--gray-500);
+}
+
+[data-theme="dark"] {
+	--amt-field-icon-color: var(--gray-400);
+}
+
+.form-page .frappe-control .control-input,
+.form-layout .frappe-control .control-input,
+.modal-dialog .frappe-control .control-input {
+	position: relative;
+}
+
+.form-page .frappe-control[data-fieldtype] .control-input::before,
+.form-layout .frappe-control[data-fieldtype] .control-input::before,
+.modal-dialog .frappe-control[data-fieldtype] .control-input::before {
+	position: absolute;
+	inset-inline-start: var(--amt-field-icon-inset);
+	top: 50%;
+	transform: translateY(-50%);
+	width: var(--amt-field-icon-size);
+	height: var(--amt-field-icon-size);
+	background-color: var(--amt-field-icon-color);
+	-webkit-mask-position: center;
+	mask-position: center;
+	-webkit-mask-repeat: no-repeat;
+	mask-repeat: no-repeat;
+	-webkit-mask-size: contain;
+	mask-size: contain;
+	pointer-events: none;
+	z-index: 2;
+	opacity: 0.75;
+	transition: background-color 0.13s ease, opacity 0.13s ease;
+}
+
+/* Calendar — Date / Datetime */
+.form-page .frappe-control[data-fieldtype="Date"] .control-input::before,
+.form-layout .frappe-control[data-fieldtype="Date"] .control-input::before,
+.modal-dialog .frappe-control[data-fieldtype="Date"] .control-input::before,
+.form-page .frappe-control[data-fieldtype="Datetime"] .control-input::before,
+.form-layout .frappe-control[data-fieldtype="Datetime"] .control-input::before,
+.modal-dialog .frappe-control[data-fieldtype="Datetime"] .control-input::before {
+	content: "";
+	-webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='3' y='4' width='18' height='18' rx='2'/%3E%3Cpath d='M16 2v4M8 2v4M3 10h18'/%3E%3C/svg%3E");
+	mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='3' y='4' width='18' height='18' rx='2'/%3E%3Cpath d='M16 2v4M8 2v4M3 10h18'/%3E%3C/svg%3E");
+}
+
+/* Clock — Time / Duration */
+.form-page .frappe-control[data-fieldtype="Time"] .control-input::before,
+.form-layout .frappe-control[data-fieldtype="Time"] .control-input::before,
+.modal-dialog .frappe-control[data-fieldtype="Time"] .control-input::before,
+.form-page .frappe-control[data-fieldtype="Duration"] .control-input::before,
+.form-layout .frappe-control[data-fieldtype="Duration"] .control-input::before,
+.modal-dialog .frappe-control[data-fieldtype="Duration"] .control-input::before {
+	content: "";
+	-webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='12' cy='12' r='10'/%3E%3Cpath d='M12 6v6l4 2'/%3E%3C/svg%3E");
+	mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='12' cy='12' r='10'/%3E%3Cpath d='M12 6v6l4 2'/%3E%3C/svg%3E");
+}
+
+/* Link — chain */
+.form-page .frappe-control[data-fieldtype="Link"] .control-input::before,
+.form-layout .frappe-control[data-fieldtype="Link"] .control-input::before,
+.modal-dialog .frappe-control[data-fieldtype="Link"] .control-input::before {
+	content: "";
+	-webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71'/%3E%3Cpath d='M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71'/%3E%3C/svg%3E");
+	mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71'/%3E%3Cpath d='M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71'/%3E%3C/svg%3E");
+}
+
+/* Lock — Password */
+.form-page .frappe-control[data-fieldtype="Password"] .control-input::before,
+.form-layout .frappe-control[data-fieldtype="Password"] .control-input::before,
+.modal-dialog .frappe-control[data-fieldtype="Password"] .control-input::before {
+	content: "";
+	-webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='3' y='11' width='18' height='11' rx='2'/%3E%3Cpath d='M7 11V7a5 5 0 0 1 10 0v4'/%3E%3C/svg%3E");
+	mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='3' y='11' width='18' height='11' rx='2'/%3E%3Cpath d='M7 11V7a5 5 0 0 1 10 0v4'/%3E%3C/svg%3E");
+}
+
+/* Percent */
+.form-page .frappe-control[data-fieldtype="Percent"] .control-input::before,
+.form-layout .frappe-control[data-fieldtype="Percent"] .control-input::before,
+.modal-dialog .frappe-control[data-fieldtype="Percent"] .control-input::before {
+	content: "";
+	-webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cline x1='19' y1='5' x2='5' y2='19'/%3E%3Ccircle cx='6.5' cy='6.5' r='2.5'/%3E%3Ccircle cx='17.5' cy='17.5' r='2.5'/%3E%3C/svg%3E");
+	mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cline x1='19' y1='5' x2='5' y2='19'/%3E%3Ccircle cx='6.5' cy='6.5' r='2.5'/%3E%3Ccircle cx='17.5' cy='17.5' r='2.5'/%3E%3C/svg%3E");
+}
+
+/* Reserve room so the value never sits under the glyph. Logical padding, so
+   RTL needs no mirror rule. */
+.form-page .frappe-control[data-fieldtype="Date"] .control-input .form-control,
+.form-layout .frappe-control[data-fieldtype="Date"] .control-input .form-control,
+.modal-dialog .frappe-control[data-fieldtype="Date"] .control-input .form-control,
+.form-page .frappe-control[data-fieldtype="Datetime"] .control-input .form-control,
+.form-layout .frappe-control[data-fieldtype="Datetime"] .control-input .form-control,
+.modal-dialog .frappe-control[data-fieldtype="Datetime"] .control-input .form-control,
+.form-page .frappe-control[data-fieldtype="Time"] .control-input .form-control,
+.form-layout .frappe-control[data-fieldtype="Time"] .control-input .form-control,
+.modal-dialog .frappe-control[data-fieldtype="Time"] .control-input .form-control,
+.form-page .frappe-control[data-fieldtype="Duration"] .control-input .form-control,
+.form-layout .frappe-control[data-fieldtype="Duration"] .control-input .form-control,
+.modal-dialog .frappe-control[data-fieldtype="Duration"] .control-input .form-control,
+.form-page .frappe-control[data-fieldtype="Link"] .control-input .form-control,
+.form-layout .frappe-control[data-fieldtype="Link"] .control-input .form-control,
+.modal-dialog .frappe-control[data-fieldtype="Link"] .control-input .form-control,
+.form-page .frappe-control[data-fieldtype="Password"] .control-input .form-control,
+.form-layout .frappe-control[data-fieldtype="Password"] .control-input .form-control,
+.modal-dialog .frappe-control[data-fieldtype="Password"] .control-input .form-control,
+.form-page .frappe-control[data-fieldtype="Percent"] .control-input .form-control,
+.form-layout .frappe-control[data-fieldtype="Percent"] .control-input .form-control,
+.modal-dialog .frappe-control[data-fieldtype="Percent"] .control-input .form-control {
+	padding-inline-start: var(--amt-field-icon-pad) !important;
+}
+
+/* Focus: the glyph adopts the brand colour, so the active field is legible
+   from the icon alone and not only from the ring. */
+.frappe-control .control-input:focus-within::before {
+	background-color: var(--primary);
+	opacity: 1;
+}
+
+/* ---- Why compact grid cells need no exclusion list -----------------------
+   Verified in the DOM: a child-table cell in edit mode renders as
+     .grid-static-col > .field-area > .form-group.frappe-control > input
+   with NO .control-input wrapper, while a real form field renders
+     .frappe-control > .form-group > .control-input-wrapper > .control-input.
+   Both the glyph and its padding are therefore scoped through .control-input,
+   which compact cells structurally cannot match. The narrow columns are
+   protected by the markup itself rather than by a blocklist that could drift
+   as Frappe changes class names.
+
+   An earlier version keyed the padding off .frappe-control alone; that leaked
+   34px into 232px-wide Link cells because the icon rule outranked the reset.
+   Keep padding and glyph bound to the same selector so they cannot desync.
+
+   The expanded row editor (.form-in-grid) DOES have .control-input and is a
+   full-width form, so it intentionally receives the same treatment. */
+
+/* Filters and list chrome are dense, repeated controls — a glyph in each is
+   clutter, not affordance. These do use .control-input, so exclude them. */
+.filter-box .frappe-control .control-input::before,
+.filter-area .frappe-control .control-input::before,
+.list-sidebar .frappe-control .control-input::before,
+.page-form .frappe-control .control-input::before {
+	content: none !important;
+}
+
+.filter-box .frappe-control .control-input .form-control,
+.filter-area .frappe-control .control-input .form-control,
+.list-sidebar .frappe-control .control-input .form-control,
+.page-form .frappe-control .control-input .form-control {
+	padding-inline-start: 10px !important;
+}
+
+/* --- Field borders: clearer resting state --------------------------------
+   Inputs sat at gray-300 on white — present, but flat against the card. One
+   step of contrast plus a hover cue makes each field read as a real target
+   without shouting. */
+.form-page .form-control:hover:not(:focus):not([disabled]),
+.form-layout .form-control:hover:not(:focus):not([disabled]),
+.modal-dialog .form-control:hover:not(:focus):not([disabled]) {
+	border-color: var(--gray-400) !important;
+}
+
+/* Mandatory fields deserve a real signal, not just a red label asterisk. */
+.frappe-control.has-error .form-control,
+.form-control.invalid {
+	border-color: #DF1B41 !important;
+}
+
+/* --- Icon normalisation ---------------------------------------------------
+   Frappe icons render at assorted stroke widths and inherit colour
+   inconsistently across sidebar, navbar and toolbars. Pin them to one
+   optical weight and let them follow text colour. */
+.icon use,
+.icon path,
+.icon circle,
+.icon rect,
+.icon line,
+.icon polyline {
+	vector-effect: non-scaling-stroke;
+}
+
+.sidebar-item-icon .icon,
+.amt-rail-icon .icon,
+.page-actions .icon,
+.navbar .icon,
+.menu-btn-group .icon {
+	stroke-width: 1.6px;
+	flex-shrink: 0;
+}
+
+/* Icons next to text should optically centre with it, not sit on the
+   baseline — a one-pixel lift reads as alignment. */
+.btn .icon,
+.sidebar-item-label + .icon,
+.dropdown-item .icon {
+	vertical-align: -0.14em;
+}
+
+/* --- Main sidebar headings: heavier, clearer -----------------------------
+   Section headers were 10.5px / 650 at 62% colour — legible in English caps,
+   but Arabic has no capitals to carry that weight, so they read as faint
+   body text. Bigger, bolder, and full contrast; the uppercase transform is
+   kept for Latin and is a harmless no-op on Arabic. */
+/* Two different markups produce a "section heading" and both must be caught:
+     Frappe core  -> .item-anchor.section-break > .sidebar-item-label
+     ERPNext      -> .sidebar-item-container.section-item > .standard-sidebar-item
+                     (plain .item-anchor, NO .section-break class)
+   Verified in the DOM: ERPNext headings such as "الذمم المدينة" rendered at
+   13.5px/500 — byte-identical to their child rows, which is precisely why
+   they read as flat. Targeting only .section-break silently missed them. */
+.body-sidebar .section-break .sidebar-item-label,
+.section-break .sidebar-item-label,
+.body-sidebar .sidebar-item-container.section-item > .standard-sidebar-item .sidebar-item-label {
+	font-size: 12.5px !important;
+	font-weight: 700 !important;
+	color: var(--heading-color) !important;
+	opacity: 1;
+	letter-spacing: 0;
+}
+
+/* The heading's own icon should carry the same weight as its text. */
+.body-sidebar .sidebar-item-container.section-item > .standard-sidebar-item .sidebar-item-icon {
+	color: var(--heading-color);
+	opacity: 0.85;
+}
+
+/* Arabic has no capitals to carry small-caps emphasis, so weight and size do
+   the work instead of an uppercase transform. */
+[dir="rtl"] .body-sidebar .section-break .sidebar-item-label,
+[dir="rtl"] .section-break .sidebar-item-label,
+[dir="rtl"] .body-sidebar .sidebar-item-container.section-item > .standard-sidebar-item .sidebar-item-label {
+	font-size: 13px !important;
+	text-transform: none;
+}
+
+/* Leaf items lift slightly too, so the header/item hierarchy stays visible
+   now that headers are heavier. */
+.body-sidebar .standard-sidebar-item .sidebar-item-label {
+	font-weight: 500;
+}
+
+.body-sidebar .standard-sidebar-item.selected .sidebar-item-label,
+.body-sidebar .standard-sidebar-item.active-sidebar-item .sidebar-item-label {
+	font-weight: 650;
+}
+
+/* ============================================
+   15. DARK-MODE CORRECTNESS + FINAL POLISH
+   ============================================ */
+
+/* --- Input borders must not ride the gray scale --------------------------
+   The gray scale is INVERTED between themes:
+     light  --gray-300 = #D3D9E0 (pale)
+     dark   --gray-300 = #8B949E (mid-light)
+   The inherited rule painted input borders with var(--gray-300), so in dark
+   mode every field got a near-silver outline on a #161B22 fill — the fields
+   shouted louder than the content. Semantic tokens instead, so each theme
+   resolves to an edge that belongs to it. */
+
+:root {
+	--amt-input-border: #D3D9E0;
+	--amt-input-border-hover: #A3ACB9;
+}
+
+[data-theme="dark"] {
+	--amt-input-border: #30363D;
+	--amt-input-border-hover: #4A525C;
+}
+
+.form-page .form-control,
+.form-layout .form-control,
+.modal-dialog .form-control,
+.form-page select.form-control,
+.form-layout select.form-control,
+.modal-dialog select.form-control,
+.form-page textarea.form-control,
+.form-layout textarea.form-control,
+.modal-dialog textarea.form-control {
+	border-color: var(--amt-input-border) !important;
+}
+
+.form-page .form-control:hover:not(:focus):not([disabled]),
+.form-layout .form-control:hover:not(:focus):not([disabled]),
+.modal-dialog .form-control:hover:not(:focus):not([disabled]) {
+	border-color: var(--amt-input-border-hover) !important;
+}
+
+/* Focus ring — drawn with `outline`, not `box-shadow`.
+   Verified in the browser: Frappe's desk bundle ships a universal reset
+   `*, ::before, ::after { box-shadow: none !important }`, which swallowed the
+   inherited theme's focus ring entirely — a focused field computed to
+   box-shadow:none despite two !important rules aiming at it. So that ring had
+   never actually rendered. `outline` is untouched by that reset, is the
+   semantically correct property for focus, and is never clipped by a parent's
+   overflow the way a shadow can be. */
+.form-page .form-control:focus,
+.form-layout .form-control:focus,
+.modal-dialog .form-control:focus,
+.form-control:focus-visible,
+.frappe-control .ql-editor:focus {
+	outline: 2px solid color-mix(in srgb, var(--primary) 55%, transparent) !important;
+	outline-offset: 0px !important;
+	border-color: var(--primary) !important;
+}
+
+/* Older engines without color-mix still get a solid, visible ring. */
+@supports not (color: color-mix(in srgb, red 50%, transparent)) {
+	.form-page .form-control:focus,
+	.form-layout .form-control:focus,
+	.modal-dialog .form-control:focus {
+		outline: 2px solid var(--primary) !important;
+	}
+}
+
+/* Disabled / read-only fields should recede, not compete. */
+.form-page .form-control[disabled],
+.form-layout .form-control[disabled],
+.form-page .form-control[readonly],
+.form-layout .form-control[readonly],
+.like-disabled-input {
+	background-color: var(--control-bg) !important;
+	border-color: var(--border-color) !important;
+	color: var(--text-muted) !important;
+}
+
+/* A disabled field's glyph must fade with it, otherwise the icon implies the
+   control is still live. */
+.frappe-control .control-input:has(.form-control[disabled])::before,
+.frappe-control .control-input:has(.form-control[readonly])::before {
+	opacity: 0.35;
+}
+
+/* --- Checkbox: match the new border language ----------------------------- */
+.form-page input[type="checkbox"],
+.form-layout input[type="checkbox"],
+.modal-dialog input[type="checkbox"] {
+	border-color: var(--amt-input-border-hover) !important;
+}
+
+.form-page input[type="checkbox"]:checked,
+.form-layout input[type="checkbox"]:checked,
+.modal-dialog input[type="checkbox"]:checked {
+	border-color: var(--primary) !important;
+}
+
+/* --- Sidebar headings: final weight -------------------------------------
+   Requested heavier still. 700 -> 800 with a slightly tighter size keeps the
+   header dominant without turning the panel into a wall of bold. Leaf rows
+   stay 500, so the hierarchy is now two full weight steps apart. */
+.body-sidebar .section-break .sidebar-item-label,
+.section-break .sidebar-item-label,
+.body-sidebar .sidebar-item-container.section-item > .standard-sidebar-item .sidebar-item-label {
+	font-weight: 800 !important;
+}
+
+[dir="rtl"] .body-sidebar .section-break .sidebar-item-label,
+[dir="rtl"] .section-break .sidebar-item-label,
+[dir="rtl"] .body-sidebar .sidebar-item-container.section-item > .standard-sidebar-item .sidebar-item-label {
+	/* Arabic renders through the system UI face, whose 800 is a real weight
+	   rather than a synthesised one — safe to use, and it reads cleanly at
+	   13px where a synthetic bold would smear. */
+	font-weight: 800 !important;
+}
+
+/* Give the heading row a touch more air above its children. */
+.body-sidebar .sidebar-item-container.section-item > .standard-sidebar-item {
+	margin-block-end: 2px;
+}
+
+/* --- Scrollbars: quiet, theme-aware ------------------------------------- */
+.body-sidebar .body-sidebar-top,
+.layout-main-section,
+.modal-body {
+	scrollbar-width: thin;
+	scrollbar-color: var(--border-color) transparent;
+}
+
+/* --- Respect reduced-motion --------------------------------------------
+   The child-table sheet slides and rail items animate; users who ask the OS
+   for less motion should get none of it. */
+@media (prefers-reduced-motion: reduce) {
+	.grid-row-open .form-in-grid,
+	.amt-rail-item,
+	.amt-rail-lang,
+	.btn,
+	.form-control {
+		animation: none !important;
+		transition: none !important;
+	}
+}
+
+/* ============================================
+   16. LEGIBILITY, FILTERS, DESK GRID
+   ============================================ */
+
+/* --- 16.1 Secondary text was below the AA floor -------------------------
+   Measured on the live list view: --text-muted resolved to #697386, giving
+   4.29:1 on the list background — under the 4.5:1 minimum for body text.
+   It carries list cell values, column headers and page titles, which is
+   exactly the "washed out" text reported. Darkened to ~5.8:1: comfortably
+   legible while still clearly secondary to --text-color (#3C4257, ~10:1),
+   so the hierarchy survives. */
+
+:root {
+	--text-muted: #5A6577;
+	--text-light: #66707F;
+	--gray-600: #5A6577;
+
+	/* Read-only and disabled controls still carry real business values, so
+	   #8792A2 at 2.98:1 was too faint to read. WCAG exempts disabled controls
+	   from the 4.5 floor, which is why this is not raised all the way: at
+	   3.57:1 the text is legible while staying visibly lighter than an active
+	   field, so "disabled" remains readable as a state. */
+	--disabled-text-color: #7A8496;
+}
+
+[data-theme="dark"] {
+	/* On #0D1117 the inherited muted tone sat near 4.2:1; this lands ~6.4:1. */
+	--text-muted: #A2ACB9;
+	--text-light: #8B95A3;
+	--gray-600: #A2ACB9;
+	--disabled-text-color: #6E7681;
+}
+
+/* .text-extra-muted is the tertiary text role — "no rows", "no data", help
+   captions. Frappe maps it to --gray-500, a position on a neutral RAMP whose
+   job is to be evenly spaced, not to be readable. In light mode that meant
+   2.98:1; in dark the ramp runs the other way and the same position is 2.28:1.
+   Both fail, and neither can be fixed by moving the ramp: dragging --gray-500
+   light enough to read in dark would push it past --gray-400 and --gray-300 and
+   stop it being a ramp at all.
+
+   So the role is pinned to its own measured value per theme, and the ramps are
+   left alone. 4.74:1 on the #F6F9FC desk background, 6.88:1 on #0D1117. */
+.text-extra-muted {
+	color: #66707F !important;
+}
+
+[data-theme="dark"] .text-extra-muted {
+	color: #939DA9 !important;
+}
+
+/* Workspace headings led their content from behind.
+
+   Measured on the Assets workspace: the section heading "التقارير والبيانات
+   الرئيسية" (16px/700) sat on --text-muted at 4.69:1 while the 13px links it
+   introduces sit on --text-color at 9.96:1, and the card titles (12px/600) sat
+   at 5.58:1 against the same 9.96:1 links. Every heading was roughly HALF the
+   contrast of the content beneath it.
+
+   That passes AA and still reads as washed out, because the eye ranks by
+   relative weight, not by absolute ratio: a title that is fainter than its own
+   list stops looking like a title. Restoring the order — heading darkest, then
+   content — is what makes the group read as a group.
+
+   Scoped to the workspace canvas (.codex-editor) and to widget headers, so
+   form section headings and modal titles keep their own treatment. */
+.codex-editor .ce-header,
+.codex-editor .ce-header .h4,
+.codex-editor .ce-header b {
+	color: var(--heading-color) !important;
+}
+
+// `:not(.amt-card-icon)` carve-out: this rule exists to force real title TEXT
+// to `--text-color` (a legibility fix for upstream hardcoded colors), but its
+// broad `.widget-title span` half also matched the topic-icon chip appended
+// after the title (workspace_enhance.js) — its `!important` beat the chip's
+// own higher-specificity-but-plain hue colour, flattening every card icon to
+// one grey regardless of `data-hue`. Excluding the chip here restores its
+// per-topic colour while leaving this rule's original job untouched.
+.widget-head .widget-title,
+.widget-head .widget-title span:not(.amt-card-icon) {
+	color: var(--text-color) !important;
+}
+
+/* List cells inherit their colour from a hard-coded rule upstream, so the
+   token change alone does not reach them. */
+.list-row-col .level-item,
+.list-row-col span,
+.list-row .list-subject,
+.list-row-head .list-row-col span,
+.result .list-row-col {
+	color: var(--text-muted);
+}
+
+/* ...but a status pill is not metadata: it paints its own label on its own
+   solid fill. The blanket `span` above reached inside it and repainted that
+   label with --text-muted, which in dark mode is #A2ACB9 — the exact colour of
+   the grey pill's background. "مرتجع" was rendering at a 1.00:1 ratio, i.e.
+   completely invisible, and the yellow and red pills were washed to ~2:1. Light
+   mode hid it because there the two tones merely differ. The pill knows its own
+   contrast pairing; inherit it. */
+.list-row-col .indicator-pill span,
+.list-row-col .indicator-pill-round span {
+	color: inherit;
+}
+
+/* Same root cause, one level up. The grey pill takes its FILL from --gray-600,
+   which the block above lightens to #A2ACB9 in dark mode for text legibility.
+   A light-grey fill on a dark page then carried near-white text at 2.11:1.
+
+   The lesson both of these teach: a ramp token bent to serve a text role will
+   surface somewhere it was serving a surface role. Rather than bend it back and
+   break the text again, the grey pill is given the same treatment its coloured
+   siblings already get in dark mode — a dark fill with a light label, matching
+   the green pill's pairing exactly (10.91:1 there, 7.91:1 here). */
+[data-theme="dark"] .indicator-pill.gray,
+[data-theme="dark"] .indicator-pill.grey {
+	background-color: #30363D;
+	color: #C9D1D9;
+}
+
+/* The row's primary column should out-rank its metadata. */
+.list-row .list-subject .level-item.bold,
+.list-row .list-subject a,
+.list-row-col.list-subject .ellipsis {
+	color: var(--text-color) !important;
+	font-weight: 550;
+}
+
+/* Column headers read as structure, not as data. */
+.list-row-head .list-row-col span,
+.list-row-head .level-item {
+	color: var(--text-color) !important;
+	font-weight: 600 !important;
+}
+
+/* --- 16.2 Filter fields ---------------------------------------------------
+   Measured: standard filters render with border-width 0 on a #F6F9FC fill —
+   visually a label, not an input, which is why the filter row reads as flat
+   text. They also have NO .control-input wrapper (same markup shape as grid
+   cells), so section 14's field rules cannot reach them by design. Styled
+   here explicitly, scoped to .page-form so form fields are unaffected. */
+
+.page-form .standard-filter-section .frappe-control,
+.page-form .filter-section .frappe-control {
+	position: relative;
+}
+
+.page-form .standard-filter-section .form-control,
+.page-form .filter-section .form-control,
+.page-form .standard-filter-section .input-group .form-control {
+	border: 1px solid var(--amt-input-border) !important;
+	background-color: var(--fg-color) !important;
+	border-radius: 6px !important;
+	transition: border-color 0.13s ease, background 0.13s ease;
+}
+
+.page-form .standard-filter-section .form-control:hover:not(:focus),
+.page-form .filter-section .form-control:hover:not(:focus) {
+	border-color: var(--amt-input-border-hover) !important;
+}
+
+.page-form .standard-filter-section .form-control:focus,
+.page-form .filter-section .form-control:focus {
+	outline: 2px solid color-mix(in srgb, var(--primary) 45%, transparent) !important;
+	outline-offset: 0 !important;
+	border-color: var(--primary) !important;
+}
+
+/* A filter that holds a value should be visibly "on" — this is the single
+   most useful signal in a list view and Frappe gives it no styling at all.
+
+   `:placeholder-shown` only ever applies to elements that can carry a
+   placeholder attribute. A <select> cannot, so it NEVER matches it and
+   therefore always matched `:not(:placeholder-shown)` — every Select filter
+   rendered permanently "active", brand border and all, while holding nothing.
+   The state cue was inverted into noise on exactly the control it was meant to
+   describe. Selects are excluded here and given a truthful test below. */
+.page-form .standard-filter-section .form-control:not(select):not(:placeholder-shown),
+/* For a select, "has a value" means the checked option carries a non-empty
+   value. Frappe's blank first option is `<option></option>` with no value
+   attribute at all, so requiring [value] excludes it without a magic string. */
+.page-form .standard-filter-section select.form-control:has(option:checked[value]:not([value=""])) {
+	border-color: var(--primary) !important;
+	background-color: color-mix(in srgb, var(--primary) 5%, var(--fg-color)) !important;
+	font-weight: 550;
+}
+
+/* Type glyph. Filters carry no .control-input, so the icon is drawn on the
+   .frappe-control wrapper instead. 13px at a 26px inset keeps a 28px-tall
+   control from feeling crowded. */
+.page-form .standard-filter-section .frappe-control::before,
+.page-form .filter-section .frappe-control::before {
+	position: absolute;
+	inset-inline-start: 8px;
+	top: 50%;
+	transform: translateY(-50%);
+	width: 13px;
+	height: 13px;
+	background-color: var(--text-muted);
+	-webkit-mask-repeat: no-repeat; mask-repeat: no-repeat;
+	-webkit-mask-size: contain; mask-size: contain;
+	-webkit-mask-position: center; mask-position: center;
+	pointer-events: none;
+	z-index: 3;
+	opacity: 0.7;
+}
+
+/* Search glyph for free-text filters */
+.page-form .standard-filter-section .frappe-control:has(input[data-fieldtype="Data"])::before,
+.page-form .standard-filter-section .frappe-control:has(input[data-fieldtype="Int"])::before {
+	content: "";
+	-webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2.2' stroke-linecap='round'%3E%3Ccircle cx='11' cy='11' r='7'/%3E%3Cpath d='m20 20-3.5-3.5'/%3E%3C/svg%3E");
+	mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2.2' stroke-linecap='round'%3E%3Ccircle cx='11' cy='11' r='7'/%3E%3Cpath d='m20 20-3.5-3.5'/%3E%3C/svg%3E");
+}
+
+/* Chevron for Link filters — they open a list, not a text search.
+
+   Select is deliberately NOT in this list. Frappe's Select control already
+   ships its own chevron as a real element (.select-icon, 22px, at the inline
+   END) so adding ours would put two arrows on one control. Worse, a <select>
+   cannot carry a native placeholder, so Frappe draws one as an absolutely
+   positioned .placeholder div at inset-inline-start: 12px — which ignores the
+   input's padding entirely. Our glyph occupies 8px→21px from that same edge,
+   so the two overlapped between 12px and 21px and the caption rendered on top
+   of the icon. Padding could never have fixed that; the glyph simply does not
+   belong on a control that already has one. */
+.page-form .standard-filter-section .frappe-control:has(input[data-fieldtype="Link"])::before {
+	content: "";
+	-webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+	mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+}
+
+/* Room for the glyph above. Selects are excluded for the same reason they get
+   no glyph: 26px would push the selected value away from the 12px baseline that
+   Frappe's own .placeholder overlay sits on, so the caption and the value would
+   start at two different offsets in the same control. Left alone, the select
+   falls back to the 12px inline padding from --input-padding and the two line
+   up exactly. */
+.page-form .standard-filter-section .form-control:not(select),
+.page-form .filter-section .form-control:not(select) {
+	padding-inline-start: 26px !important;
+}
+
+/* An active filter's glyph adopts the brand colour with its border. */
+.page-form .standard-filter-section .frappe-control:has(.form-control:not(:placeholder-shown))::before {
+	background-color: var(--primary);
+	opacity: 1;
+}
+
+/* --- 16.3 Desk app grid ---------------------------------------------------
+   The grid is flex-centred in an 844px column while the content is only
+   ~361px tall, so ~210px of dead space sits above it. Geometric centring
+   reads as "sunk" because the eye expects the optical centre, which is
+   above the middle. Extra bottom padding lifts the block without switching
+   to top-alignment (which would strand it on tall displays). */
+
+
+/* Even rhythm: the inherited 12px/8px gap was tighter horizontally than
+   vertically, which made columns look crowded and rows loose.
+
+   CRITICAL: a folder tile renders a miniature 2x2 preview using a NESTED
+   .icons grid inside its own 52px swatch. A descendant selector here hit
+   that nested grid too and blew it from 40x40 to 40x54, overflowing the
+   swatch and visibly breaking the tile. The direct-child chain from
+   .desktop-container reaches only the top-level grid. */
+
+
+/* Belt and braces: whatever the outer rule does, the folder preview keeps
+   its own tight rhythm. */
+.desktop-icon .folder-icon .icons {
+	gap: 2px !important;
+}
+
+/* Tiles read as real targets, with a hover that confirms they are clickable.
+   Scoped to top-level tiles: a folder tile nests further .desktop-icon
+   anchors at 18px inside its preview swatch, and giving those a border plus
+   a hover surface both distorted the mini-grid and produced hover feedback
+   on something that is not independently clickable. */
+
+
+[data-theme="dark"] 
+
+/* Preview icons inside a folder tile carry no chrome of their own. */
+.desktop-icon .folder-icon .desktop-icon {
+	border: 0 !important;
+	border-radius: 4px !important;
+	padding: 0 !important;
+	background: none !important;
+	box-shadow: none !important;
+}
+
+.desktop-icon .icon-container {
+	border-radius: 13px;
+}
+
+/* App label. The real class is .icon-caption — an earlier guess at
+   .app-title / .desktop-icon-title matched nothing, so the caption kept
+   inheriting the anchor's link colour (--primary). Navy on white passes, but
+   the same navy on the dark theme's #0D1117 measured 2.01:1 — effectively
+   invisible. Bound to --text-color so both themes resolve correctly. */
+.desktop-icon .icon-caption,
+.desktop-icon .app-title,
+.desktop-icon .desktop-icon-title {
+	font-weight: 600 !important;
+	color: var(--text-color) !important;
+}
+
+
+/* --- 16.4 Report (datatable) hierarchy ----------------------------------
+   MOVED to layouts/_report.scss (loaded last). That partial now owns the whole
+   datatable surface — header hierarchy, RTL logical alignment, the body-width
+   fix, zebra/hover, focus and total row — as one measured, self-consistent set.
+   Kept here only as a signpost so the section numbering stays intact. */
+
+/* Sections 17 and 19-21 (desk launcher) were removed during the Phase-3
+   extraction: layouts/_desk-launcher.scss now owns that surface. They had
+   to GO rather than merely be outranked, because !important reverses layer
+   precedence — an !important in amt.legacy beats a normal declaration in
+   amt.layouts, which is exactly what stopped the new cards from painting.
+   Section 18 (workspace rail) is retained: not yet extracted. */
+
+/* ============================================
+   18. WORKSPACE RAIL ICONS — scale & form
+   ============================================
+
+   Three separate defects were measured here, all of them upstream:
+
+   1) SIZE INVERSION. The inherited theme carries
+        body.amt-rail-expanded .amt-rail-icon svg { width: 16px !important }
+      so opening the rail — the moment the user is actively navigating —
+      SHRINKS every workspace glyph from 20px to 16px. Expanding a panel
+      should reveal more, not less. That rule is neutralised below.
+
+   2) NO FORM. The glyph sat in a bare 24px box with no background and no
+      radius, so a workspace read as a loose stroke rather than an object.
+      A rounded container gives each workspace a consistent silhouette and
+      a real surface for hover/active feedback.
+
+   3) DEAD ACCENT. Two !important rules both target the active glyph — one
+      setting gold, a later one setting flat white. Equal specificity means
+      source order decides, so the gold accent never rendered. Resolved here
+      in favour of gold, matching the active indicator bar. */
+
+/* 1 — Undo the shrink-on-expand and raise the base size. */
+.amt-rail-icon svg,
+.amt-rail-icon .icon,
+body.amt-rail-expanded .amt-rail-icon svg,
+body.amt-rail-expanded .amt-rail-icon .icon,
+body.amt-rail-resizing .amt-rail-icon svg,
+body.amt-rail-resizing .amt-rail-icon .icon {
+	width: 21px !important;
+	height: 21px !important;
+	stroke-width: 1.7px;
+}
+
+/* 2 — Give the glyph a container with real form. */
+.amt-rail-icon {
+	width: 34px !important;
+	height: 34px !important;
+	border-radius: 10px;
+	flex-shrink: 0;
+	background: rgba(255, 255, 255, 0.05);
+	border: 1px solid rgba(255, 255, 255, 0.07);
+	transition: background 0.15s ease, border-color 0.15s ease,
+		transform 0.15s ease;
+}
+
+/* The rows must grow with the container or the glyphs collide vertically. */
+.amt-rail-item {
+	height: 46px !important;
+	border-radius: 12px;
+}
+
+body.amt-rail-expanded .amt-rail-item {
+	height: 44px !important;
+	gap: 10px;
+}
+
+.amt-rail-item:hover .amt-rail-icon {
+	background: rgba(255, 255, 255, 0.11);
+	border-color: rgba(255, 255, 255, 0.16);
+}
+
+/* 3 — Active workspace: gold glyph on a gold-tinted plate, so the rail's
+   accent language is consistent with the indicator bar and the language
+   toggle. Declared last and with !important to settle the conflict above. */
+.amt-rail-item.active .amt-rail-icon {
+	background: rgba(232, 198, 74, 0.16) !important;
+	border-color: rgba(232, 198, 74, 0.34) !important;
+}
+
+.amt-rail-item.active .amt-rail-icon svg,
+.amt-rail-item.active .amt-rail-icon .icon {
+	color: var(--accent-gold-on-dark, #E8C64A) !important;
+	stroke: var(--accent-gold-on-dark, #E8C64A) !important;
+	fill: none !important;
+}
+
+/* Initials fallback (workspaces with no icon) must match the new scale. */
+.amt-rail-initials {
+	font-size: 14px !important;
+	font-weight: 700 !important;
+}
+
+.amt-rail-item.active .amt-rail-initials {
+	color: var(--accent-gold-on-dark, #E8C64A) !important;
+}
+
+/* Collapsed rail: the container IS the target, so centre it in the 44px
+   column and drop the row's own plate to avoid a double-box look. */
+body:not(.amt-rail-expanded) .amt-rail-item {
+	width: 44px;
+	margin-inline: auto;
+}
+
+body:not(.amt-rail-expanded) .amt-rail-item:hover,
+body:not(.amt-rail-expanded) .amt-rail-item.active {
+	background: transparent;
+}
+
+/* ============================================
+   22. TYPOGRAPHY — IBM Plex Sans Arabic
+   ============================================
+
+   Adopted from the reference stylesheet supplied by the user. Two separate
+   families, switched by document direction rather than merged into one list:
+   Latin keeps Inter, Arabic gets IBM Plex Sans Arabic. Merging them into a
+   single stack also works via per-glyph fallback, but splitting by [dir]
+   makes the intent explicit and lets each script carry its own metrics.
+
+   Why this matters beyond looks: measured earlier, the locally available
+   Arabic face exposed only TWO weight states (400=500, 600=700=800), so any
+   "bold" was the browser smearing the regular cut. IBM Plex Sans Arabic ships
+   real 300/400/500/600/700 cuts, so weight finally means something. */
+
+:root {
+	--amt-font-en: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI",
+		"Helvetica Neue", Arial, sans-serif;
+	--amt-font-ar: "IBM Plex Sans Arabic", "Cairo", "Tajawal",
+		"Noto Sans Arabic", "Helvetica Neue", Arial, sans-serif;
+	--amt-font: var(--amt-font-en);
+}
+
+html[lang="en"],
+html[dir="ltr"] {
+	--amt-font: var(--amt-font-en);
+}
+
+html[lang="ar"],
+html[dir="rtl"] {
+	--amt-font: var(--amt-font-ar);
+	line-height: 1.65;
+}
+
+/* Frappe's own --font-stack is repointed too, so anything the framework
+   styles picks up the same family without needing its own override. */
+:root {
+	--font-stack: var(--amt-font);
+}
+
+body,
+.form-control,
+.btn,
+.page-title,
+.section-head,
+.widget-title,
+.widget-subtitle,
+.standard-sidebar-item,
+.sidebar-item-label,
+input,
+textarea,
+select,
+.navbar-breadcrumbs,
+.module-name,
+.ellipsis,
+.list-row-col,
+.dt-cell__content,
+.icon-caption,
+.amt-rail-label,
+h1, h2, h3, h4, h5, h6 {
+	font-family: var(--amt-font) !important;
+	font-feature-settings: "kern", "liga", "calt";
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+}
+
+/* Arabic is cursive: letter-spacing breaks the join, while a little
+   word-spacing separates words that would otherwise crowd. */
+html[lang="ar"] body,
+html[dir="rtl"] body {
+	letter-spacing: 0;
+	word-spacing: 0.04em;
+}
+
+html[dir="ltr"] body {
+	letter-spacing: -0.005em;
+}
+
+/* --- Arabic size scale (from the reference) ----------------------------- */
+
+html[dir="rtl"] .standard-sidebar-item,
+html[dir="rtl"] .sidebar-item-label {
+	font-size: 14px;
+	font-weight: 500;
+	letter-spacing: 0;
+}
+
+html[dir="rtl"] .page-title,
+html[dir="rtl"] h1,
+html[dir="rtl"] h2,
+html[dir="rtl"] h3 {
+	font-weight: 600;
+	letter-spacing: 0;
+}
+
+html[dir="rtl"] .form-control {
+	font-size: 14px;
+	font-weight: 400;
+}
+
+html[dir="rtl"] .btn {
+	font-size: 13.5px;
+	font-weight: 500;
+	letter-spacing: 0;
+}
+
+html[dir="rtl"] .widget-title,
+html[dir="rtl"] .h4 {
+	font-size: 15px;
+	font-weight: 600;
+}
+
+html[dir="rtl"] .indicator-pill {
+	font-size: 11px;
+	letter-spacing: 0;
+}
+
+html[dir="rtl"] .navbar-breadcrumbs li {
+	font-size: 14px;
+	font-weight: 500;
+}
+
+html[dir="rtl"] .section-head,
+html[dir="rtl"] .form-section .section-head {
+	font-size: 15px;
+	font-weight: 600;
+	letter-spacing: 0;
+}
+
+html[dir="rtl"] .modal-title {
+	font-size: 17px;
+	font-weight: 600;
+}
+
+/* Desk tile captions — the element being compared against the reference. */
+
+
+/* Section 12's local-only @font-face is now redundant: AmtArabic exists to
+   coax a decent system Arabic out of the machine, but a real webfont is
+   loaded above and ranks ahead of it. Dropping it from the stack avoids two
+   competing Arabic faces. */
+:root {
+	--font-stack: var(--amt-font);
+}
+
+/* ============================================
+   23. DESK TOP BAR + SEARCH TRIGGER
+   ============================================
+
+   Verified scope: `.desktop-navbar` and `.desktop-search-wrapper` exist ONLY
+   on /desk — a list view renders `.page-head` instead — so everything here is
+   confined to the launcher and cannot reach form or list chrome.
+
+   Measured defects before this section:
+     • search button   border: 1px solid TRANSPARENT — reserved the space for
+                       an edge and then drew nothing, so the control read as a
+                       flat grey patch rather than a field.
+     • ⌘K badge        width:12px; height:4px and EMPTY — collapsed to a sliver
+                       with its glyphs spilling out on overflow:visible.
+     • navbar          plain white, no shadow, sitting on the tinted desk
+                       background with only a hairline to separate them.
+     • "بحث" label     13px/400 at 5.58:1 — legible but reads as body text, not
+                       as the affordance of a control. */
+
+.desktop-navbar {
+	background: var(--fg-color) !important;
+	border-bottom: 1px solid var(--border-color) !important;
+	/* A whisper of depth so the bar sits above the tinted launcher field
+	   instead of blending into it. */
+	box-shadow: 0 1px 2px rgba(15, 30, 55, 0.04),
+		0 1px 0 rgba(15, 30, 55, 0.02) !important;
+}
+
+/* --- Search trigger ------------------------------------------------------
+   It is a <button> that opens the command modal, not an input — so it should
+   look like a field but behave like a target: real edge, hover lift, and a
+   proper keyboard focus ring. */
+
+.desktop-navbar .desktop-search-wrapper {
+	/* Upstream sets `flex: 1 1 0%` on this wrapper. flex-basis:0% overrides a
+	   plain `width`, and flex-grow then stretches it to fill the bar — an
+	   earlier `width: 380px` here was inert, and the size actually came from
+	   max-width by accident. Control the flex properties directly instead. */
+	flex: 0 1 440px !important;
+	width: 440px !important;
+	max-width: min(440px, 40vw) !important;
+}
+
+.desktop-navbar .desktop-search-wrapper > button {
+	width: 100% !important;
+	background: var(--control-bg) !important;
+	border: 1px solid var(--amt-input-border) !important;
+	border-radius: 9px !important;
+	padding: 0 12px !important;
+	transition: background 0.14s ease, border-color 0.14s ease,
+		box-shadow 0.14s ease !important;
+}
+
+.desktop-navbar .desktop-search-wrapper > button:hover {
+	background: var(--fg-color) !important;
+	border-color: var(--amt-input-border-hover) !important;
+	box-shadow: 0 1px 3px rgba(15, 30, 55, 0.07) !important;
+}
+
+.desktop-navbar .desktop-search-wrapper > button:focus-visible {
+	outline: 2px solid color-mix(in srgb, var(--primary) 55%, transparent) !important;
+	outline-offset: 1px !important;
+	border-color: var(--primary) !important;
+}
+
+/* Label reads as a control prompt: one weight step up, and the magnifier
+   takes the brand colour so the eye lands on the search first. */
+.desktop-navbar .desktop-search-icon {
+	color: var(--text-muted) !important;
+	font-size: 13.5px !important;
+	font-weight: 500 !important;
+}
+
+.desktop-navbar .desktop-search-icon svg,
+.desktop-navbar .desktop-search-icon .icon {
+	color: var(--primary) !important;
+	stroke: var(--primary) !important;
+	opacity: 0.85;
+	width: 16px !important;
+	height: 16px !important;
+}
+
+.desktop-navbar .desktop-search-wrapper > button:hover .desktop-search-icon {
+	color: var(--text-color) !important;
+}
+
+/* --- ⌘K badge -----------------------------------------------------------
+   Upstream pins it to 12x4px while leaving it empty, so the shortcut glyphs
+   escape their own box. Let it size to its content and give it the raised
+   keycap look the rest of the product implies. */
+.desktop-navbar .desktop-keyboard-shortcut {
+	width: auto !important;
+	height: auto !important;
+	min-width: 34px;
+	display: inline-flex !important;
+	align-items: center;
+	justify-content: center;
+	gap: 1px;
+	padding: 3px 7px !important;
+	background: var(--fg-color) !important;
+	color: var(--text-muted) !important;
+	border: 1px solid var(--border-color);
+	border-bottom-width: 2px;
+	border-radius: 5px !important;
+	font-size: 11px !important;
+	font-weight: 600;
+	line-height: 1.2;
+	letter-spacing: 0.02em;
+	white-space: nowrap;
+	overflow: visible;
+	box-shadow: 0 1px 0 rgba(15, 30, 55, 0.04);
+}
+
+[data-theme="dark"] .desktop-navbar .desktop-keyboard-shortcut {
+	background: rgba(255, 255, 255, 0.06) !important;
+	border-color: rgba(255, 255, 255, 0.14);
+}
+
+/* --- Avatar & notification bell ----------------------------------------- */
+
+.desktop-navbar .desktop-notifications .btn-reset,
+.desktop-navbar .desktop-avatar {
+	border-radius: 9px;
+	transition: background 0.14s ease;
+}
+
+.desktop-navbar .desktop-notifications .btn-reset {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+}
+
+.desktop-navbar .desktop-notifications .btn-reset:hover {
+	background: var(--control-bg);
+}
+
+.desktop-navbar .desktop-notifications .btn-reset svg,
+.desktop-navbar .desktop-notifications .btn-reset .icon {
+	color: var(--text-color) !important;
+	stroke: var(--text-color) !important;
+	opacity: 0.75;
+	transition: opacity 0.14s ease;
+}
+
+.desktop-navbar .desktop-notifications .btn-reset:hover svg,
+.desktop-navbar .desktop-notifications .btn-reset:hover .icon {
+	opacity: 1;
+}
+
+.desktop-navbar .desktop-notifications .btn-reset:focus-visible,
+.desktop-navbar .navbar-home:focus-visible {
+	outline: 2px solid var(--primary);
+	outline-offset: 2px;
+	border-radius: 9px;
+}
+
+/* The avatar is the only saturated element up here; a ring gives it a
+   deliberate edge rather than letting it float. */
+.desktop-navbar .desktop-avatar .avatar-frame {
+	box-shadow: 0 0 0 1px var(--border-color), 0 1px 2px rgba(15, 30, 55, 0.06);
+	font-weight: 600;
+}
+
+.desktop-navbar .navbar-home {
+	border-radius: 8px;
+	transition: transform 0.14s ease, opacity 0.14s ease;
+}
+
+.desktop-navbar .navbar-home:hover {
+	transform: translateY(-1px);
+	opacity: 0.9;
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.desktop-navbar .navbar-home:hover,
+	.desktop-navbar .desktop-search-wrapper > button {
+		transform: none !important;
+		transition: none !important;
+	}
+}

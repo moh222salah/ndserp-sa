@@ -1,0 +1,197 @@
+// ---------------------------------------------------------------------------
+// Desk status bar
+// ---------------------------------------------------------------------------
+// A single card holding three read-only facts, sitting below the launcher grid.
+// Uses the same surface tokens as the app cards so it reads as one system.
+// ---------------------------------------------------------------------------
+
+// The launcher must reserve vertical space for this bar, and the only file that
+// can know how tall it is, is this one. Declaring the reserve here — right next
+// to the padding and margin that determine it — stops the two from drifting
+// apart, which is exactly what happened when the number lived in the launcher:
+// padding changed from 18px to 16px, height went 78 -> 86, and the stale 106px
+// reserve was 4px short.
+//
+// No --amt-statusbar-space any more: the launcher docks this bar with flexbox
+// instead of subtracting a guessed height, so there is no constant to drift.
+
+.amt-status {
+	// Width is matched to the TOP BAR, not to the tile grid.
+	//
+	// The navbar spans the full desk column with `padding: 10px 24px`, so its
+	// controls start 24px in — measured, the avatar sits at x=35 when the
+	// wrapper starts at x=11. Insetting this card by the same 24px makes its
+	// left edge land under the avatar and its right edge under the settings
+	// button, which is what "same width as the top bar" means optically. An
+	// edge-to-edge card would instead collide with the navbar's own padding and
+	// read as misaligned by exactly that 24px.
+	//
+	// No max-width: the previous 1120px cap was inherited from the tile grid and
+	// is what made this 309px narrower than the bar above it.
+	--amt-status-inset: 24px;
+
+	width: calc(100% - (var(--amt-status-inset) * 2));
+	max-width: none;
+	// Docked: flush with the viewport floor, no gap beneath it.
+	margin: 0 var(--amt-status-inset);
+	padding: 16px 4px;
+	display: grid;
+	grid-template-columns: repeat(3, 1fr);
+	gap: 8px;
+
+	background: var(--amt-card-bg);
+	border: 1px solid var(--amt-card-border);
+	// Bottom corners are squared because the card now meets the viewport floor.
+	// Rounding them there would show a sliver of page through each corner and
+	// read as a clipped card rather than a docked one.
+	border-radius: 18px 18px 0 0;
+	border-bottom: 0;
+	box-shadow: var(--amt-card-shadow);
+	padding: 18px 12px;
+
+	&__cell {
+		display: flex;
+		align-items: center;
+		gap: 13px;
+		padding: 4px 22px;
+		min-width: 0; // lets long text ellipsis instead of blowing the column
+
+		// Hairline separators between cells, not around them. Logical border so
+		// RTL needs no override.
+		& + & {
+			border-inline-start: 1px solid var(--amt-card-border);
+		}
+	}
+
+	// Soft tinted square behind the glyph — the "badge" from the reference.
+	&__badge {
+		flex: 0 0 auto;
+		width: 34px;
+		height: 34px;
+		border-radius: 9px;
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		background: var(--amt-status-tint);
+		color: var(--amt-status-ink);
+	}
+
+	&__glyph {
+		width: 17px;
+		height: 17px;
+		stroke: currentColor;
+		fill: none;
+		stroke-width: 1.9;
+		stroke-linecap: round;
+		stroke-linejoin: round;
+	}
+
+	&__body {
+		display: flex;
+		flex-direction: column;
+		gap: 2px;
+		min-width: 0;
+	}
+
+	&__title {
+		font-size: 13.5px;
+		font-weight: 600;
+		color: var(--amt-card-ink);
+		line-height: 1.4;
+		letter-spacing: -0.005em;
+	}
+
+	&__detail {
+		font-size: 12px;
+		font-weight: 450;
+		color: var(--amt-card-muted);
+		line-height: 1.45;
+		display: inline-flex;
+		align-items: center;
+		gap: 6px;
+		white-space: nowrap;
+		overflow: hidden;
+		text-overflow: ellipsis;
+		// Figures in "v16.17.5" and "1 د" line up instead of jittering.
+		font-variant-numeric: tabular-nums;
+	}
+
+	// Health LED. No animation: this strip must not pull the eye.
+	&__dot {
+		flex: 0 0 auto;
+		width: 6px;
+		height: 6px;
+		border-radius: 50%;
+		background: #16A34A;
+		box-shadow: 0 0 0 2px rgba(22, 163, 74, 0.16);
+	}
+
+	// Tones — one variable pair per cell, so the markup carries no colour.
+	// Badges are MONOCHROME by default. Colour is reserved for meaning: only a
+	// healthy system earns green. A decorative tint on every cell would make the
+	// one cell that carries a signal indistinguishable from the two that do not.
+	&__cell {
+		--amt-status-tint: #{rgba(#64748B, 0.09)};
+		--amt-status-ink: #5B6675;
+
+		&[data-tone="ok"] {
+			--amt-status-tint: #{rgba(#16A34A, 0.11)};
+			--amt-status-ink: #15803D;
+		}
+	}
+
+	// Arabic carries no capitals, so the same pixel size reads smaller beside
+// Latin. A half-step up plus zero tracking restores the optical match.
+[dir="rtl"] & {
+	&__title {
+		font-size: 14px;
+		letter-spacing: 0;
+	}
+
+	&__detail {
+		font-size: 12.5px;
+		letter-spacing: 0;
+	}
+}
+
+// A host name and a version are Latin runs inside an Arabic line. Without
+// isolation the bidi algorithm can reorder the dot-separated parts.
+&__detail {
+	unicode-bidi: isolate;
+}
+
+// Stack on narrow screens rather than crushing three columns.
+	@media (max-width: 860px) {
+		grid-template-columns: 1fr;
+		gap: 0;
+
+		&__cell + &__cell {
+			border-inline-start: 0;
+			border-block-start: 1px solid var(--amt-card-border);
+			padding-block: 12px 2px;
+			margin-block-start: 10px;
+		}
+	}
+}
+
+[data-theme="dark"] // The launcher must reserve vertical space for this bar, and the only file that
+// can know how tall it is, is this one. Declaring the reserve here — right next
+// to the padding and margin that determine it — stops the two from drifting
+// apart, which is exactly what happened when the number lived in the launcher:
+// padding changed from 18px to 16px, height went 78 -> 86, and the stale 106px
+// reserve was 4px short.
+//
+// No --amt-statusbar-space any more: the launcher docks this bar with flexbox
+// instead of subtracting a guessed height, so there is no constant to drift.
+
+.amt-status {
+	&__cell {
+		--amt-status-tint: #{rgba(#94A3B8, 0.13)};
+		--amt-status-ink: #B6C0CE;
+
+		&[data-tone="ok"] {
+			--amt-status-tint: #{rgba(#22C55E, 0.15)};
+			--amt-status-ink: #4ADE80;
+		}
+	}
+}

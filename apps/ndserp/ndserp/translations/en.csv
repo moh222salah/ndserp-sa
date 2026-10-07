@@ -1,0 +1,117 @@
+حسابات NDS ERP,Accounts NDS ERP
+التقارير المالية,Financial Reports
+ميزان المراجعة,Trial Balance
+دفتر الاستاذ العام,General Ledger
+قائمة الربح و الخسارة,Profit and Loss Statement
+الميزانية العمومية,Balance Sheet
+التدفقات النقدية,Cash Flow
+الحسابات الرئيسية,Main Accounts
+الشركة,Company
+فرع,Branch
+شجرة الحسابات,Chart of Accounts
+السنة المالية,Fiscal Year
+شروط الدفع,Payment Term
+سندات القبض و الصرف,Payment Entry
+القيود اليومية,Journal Entry
+طرق الدفع,Mode of Payment
+مراكز التكلفه,Cost Center
+المشتريات NDS ERP,Purchasing NDS ERP
+الرئيسية,Main
+طلب الشراء,Material Request
+امر الشراء,Purchase Order
+فاتورة الشراء,Purchase Invoice
+التقارير الرئيسية,Key Reports
+تحليل المشتريات,Purchase Analytics
+تحليل اوامر الشراء,Purchase Order Analysis
+اكثر الاصناف المطلوبة,Purchase Order Trends
+الاصناف الجاهزة للأستلام,Requested Items to Order and Receive
+الاصناف و التسعير ,Items & Pricing
+الاصناف و التسعير,Items & Pricing
+الصنف,Item
+مجموعات الاصناف,Item Groups
+قائمة التسعير,Price List
+المورد,Supplier
+مجموعات الموردين,Supplier Groups
+عناوين الاتصال,Contacts
+العنوان,Address
+لوحه المؤشرات,Dashboard
+المبيعات NDS ERP,Sales NDS ERP
+الاصناف و التسعير,Items & Pricing
+مجموعة الاصناف,Item Group
+قاعدة التسعير,Item Price
+العميل,Customer
+مندوب المبيعات,Sales Person
+عرض سعر,Quotation
+امر البيع,Sales Order
+فاتورة البيع,Sales Invoice
+العملاء,Customers
+مجموعات العملاء,Customer Groups
+العناوين,Addresses
+المنطقه التابع لها,Territory
+التقارير ,Reports
+التقارير,Reports
+تحليل المبيعات,Sales Analytics
+تحليل اوامر البيع,Sales Order Analysis
+تحليل فواتير البيع,Sales Invoice Trends
+اوامر البيع المعلقة,Pending SO Items For Purchase Request
+سجل المبيعات,Sales Register
+سجل حركة المبيعات وفقا لصنف,Item-wise Sales Register
+عموله مناديب البيع,Sales Person Commission Summary
+تفاصيل عموله مندوب البيع,Sales Person-wise Transaction Summary
+تقرير ربحيه البيع,Gross Profit
+لوحة المؤشرات,Dashboard
+فواتير البيع,Sales Invoices
+اوامر البيع,Sales Orders
+مخازن NDS ERP,Stock NDS ERP
+المستودعات,Warehouses
+وحدة القياس,UOM
+براند,Brand
+التقارير المخزنية,Stock Reports
+سجل المخزون,Stock Ledger
+رصيد المخزون,Stock Balance
+السعر المخزني للصنف,Item Price Stock
+تحليل المخازن,Stock Analytics
+الرصيد المخزني لمخزن,Warehouse Wise Stock Balance
+الحركات المخزنية,Stock Transactions
+طلب المواد,Material Request
+حركات المخزون,Stock Entry
+اذن التسليم,Delivery Note
+استلام المشتريات,Purchase Receipt
+قائمة الاسعار,Pick List
+الجرد,Stock Reconciliation
+القيود المخزنية,Stock Entries
+الاصول NDS ERP,Assets NDS ERP
+الاصول,Assets
+الموقع,Location
+فئة الاصول,Asset Category
+حركات الاصول,Asset Movement
+الصيانة,Maintenance
+فريق الصيانة,Asset Maintenance Team
+صيانة الاصول,Asset Maintenance
+دخول الصيانة,Asset Maintenance Log
+تعديل قيمة الأصول,Asset Value Adjustment
+إصلاح الأصول,Asset Repair
+رأسمال الأصول,Asset Capitalization
+التقارير,Reports
+دفتر استهلاك الأصول,Asset Depreciation Ledger
+اهلاك الأصول والأرصدة,Asset Depreciations and Balances
+صيانة الأصول,Asset Maintenance
+نشاط الأصول,Asset Activity
+لوحة التحكم,Dashboard
+سجل الاصول الثابتة,Fixed Asset Register
+الملفات الرئيسية NDS ERP,Master Files NDS ERP
+الفروع,Branches
+المستخدمين,Users
+الصلاحيات,User Permissions
+الاعدادات,Settings
+نقاط البيع NDS ERP,POS NDS ERP
+تشغيل نقاط البيع,Start POS
+ملف نقاط البيع,POS Profile
+إعدادات نقاط البيع,POS Settings
+فتح الوردية,POS Opening Shift
+إغلاق الوردية,POS Closing Shift
+عروض نقاط البيع,POS Offer
+كوبونات نقاط البيع,POS Coupon
+الإعدادات,Settings
+الورديات,Shifts
+العروض والكوبونات,Offers & Coupons

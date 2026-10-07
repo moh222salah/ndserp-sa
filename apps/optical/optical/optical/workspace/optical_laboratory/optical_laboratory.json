@@ -1,0 +1,132 @@
+{
+ "charts": [],
+ "content": "[{\"id\": \"hdr\", \"type\": \"header\", \"data\": {\"text\": \"<span class=\\\"h4\\\"><b>Optical Laboratory</b></span>\", \"col\": 12}}, {\"id\": \"nc0\", \"type\": \"number_card\", \"data\": {\"number_card_name\": \"Pending Lab Jobs\", \"col\": 3}}, {\"id\": \"nc1\", \"type\": \"number_card\", \"data\": {\"number_card_name\": \"Open Optical Orders\", \"col\": 3}}, {\"id\": \"sp1\", \"type\": \"spacer\", \"data\": {\"col\": 12}}, {\"id\": \"hdr2\", \"type\": \"header\", \"data\": {\"text\": \"<span class=\\\"h5\\\"><b>Shortcuts</b></span>\", \"col\": 12}}, {\"id\": \"sc0\", \"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"Optical Job\", \"col\": 3}}, {\"id\": \"sc1\", \"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"Optical QC\", \"col\": 3}}, {\"id\": \"sc2\", \"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"Optical Remake\", \"col\": 3}}, {\"id\": \"sp2\", \"type\": \"spacer\", \"data\": {\"col\": 12}}, {\"id\": \"cd0\", \"type\": \"card\", \"data\": {\"card_name\": \"Laboratory\", \"col\": 4}}, {\"id\": \"cd1\", \"type\": \"card\", \"data\": {\"card_name\": \"Reports\", \"col\": 4}}]",
+ "creation": "2026-09-28 00:00:00",
+ "custom_blocks": [],
+ "docstatus": 0,
+ "doctype": "Workspace",
+ "for_user": "",
+ "hide_custom": 0,
+ "icon": "tool",
+ "idx": 0,
+ "indicator_color": "",
+ "is_hidden": 0,
+ "label": "Optical Laboratory",
+ "links": [
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Laboratory",
+   "link_count": 3,
+   "onboard": 0,
+   "type": "Card Break"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Optical Job",
+   "link_to": "Optical Job",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Optical QC",
+   "link_to": "Optical QC",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Optical Remake",
+   "link_to": "Optical Remake",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Reports",
+   "link_count": 2,
+   "onboard": 0,
+   "type": "Card Break"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 1,
+   "label": "Lab Performance",
+   "link_to": "Lab Performance",
+   "link_type": "Report",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 1,
+   "label": "QC Failures",
+   "link_to": "QC Failures",
+   "link_type": "Report",
+   "onboard": 0,
+   "type": "Link"
+  }
+ ],
+ "modified": "2026-09-28 00:00:00",
+ "modified_by": "Administrator",
+ "module": "Optical",
+ "name": "Optical Laboratory",
+ "number_cards": [
+  {
+   "label": "Pending Lab Jobs",
+   "number_card_name": "Pending Lab Jobs"
+  },
+  {
+   "label": "Open Optical Orders",
+   "number_card_name": "Open Optical Orders"
+  }
+ ],
+ "owner": "Administrator",
+ "parent_page": "",
+ "public": 1,
+ "restrict_to_domain": "",
+ "roles": [
+  {
+   "role": "System Manager"
+  },
+  {
+   "role": "Optical Lab Technician"
+  },
+  {
+   "role": "Optical Manager"
+  }
+ ],
+ "sequence_id": 3,
+ "title": "Optical Laboratory",
+ "shortcuts": [
+  {
+   "color": "Grey",
+   "doc_view": "List",
+   "label": "Optical Job",
+   "link_to": "Optical Job",
+   "type": "DocType"
+  },
+  {
+   "color": "Grey",
+   "doc_view": "List",
+   "label": "Optical QC",
+   "link_to": "Optical QC",
+   "type": "DocType"
+  },
+  {
+   "color": "Grey",
+   "doc_view": "List",
+   "label": "Optical Remake",
+   "link_to": "Optical Remake",
+   "type": "DocType"
+  }
+ ]
+}

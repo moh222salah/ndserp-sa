@@ -1,0 +1,20 @@
+{#
+	Base template used for the login routes only (see amir_theme_v16/website.py,
+	which swaps `base_template_path` to this file for those paths and nothing
+	else).
+
+	Why a whole base template for one snippet: `templates/base.html` exposes
+	`{{ head_include }}` as the supported way to add markup to <head>, but
+	`frappe/www/login.html` OVERRIDES `{% block head_include %}` outright to
+	inject its own stylesheet, so anything a hook puts in that context variable
+	is silently dropped on exactly the page we need it on. `block head` is not
+	overridden by login.html or by templates/web.html, so extending it here is
+	the one place the snippet reliably lands - and it lands in <head>, before
+	the login card is parsed, which is the entire point.
+#}
+{% extends "templates/base.html" %}
+
+{%- block head -%}
+	{{ super() }}
+	{{ amt_login_head or "" }}
+{%- endblock -%}

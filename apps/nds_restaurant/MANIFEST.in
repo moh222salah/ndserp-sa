@@ -1,0 +1,5 @@
+include nds_restaurant/public/**
+include nds_restaurant/templates/**
+include nds_restaurant/www/**
+include nds_restaurant/fixtures/**
+recursive-include nds_restaurant *.html *.css *.js *.json *.svg *.png *.jpg *.md

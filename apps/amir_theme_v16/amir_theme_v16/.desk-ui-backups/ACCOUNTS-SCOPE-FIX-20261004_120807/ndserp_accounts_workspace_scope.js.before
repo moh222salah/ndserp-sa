@@ -1,0 +1,83 @@
+(() => {
+    "use strict";
+
+    const TARGET_ROUTE = "/desk/Workspaces/حسابات NDS ERP";
+    const TARGET_CLASS = "ndserp-accounts-workspace";
+
+    const getPath = () => {
+        let path = window.location.pathname || "";
+
+        try {
+            path = decodeURIComponent(path);
+        } catch {
+            // Keep raw path on decode failure.
+        }
+
+        return path.replace(/\/+$/, "");
+    };
+
+    const isTarget = () => getPath() === TARGET_ROUTE;
+
+    const applyScope = () => {
+        const active = isTarget();
+
+        document.body?.classList.toggle(TARGET_CLASS, active);
+
+        document
+            .querySelectorAll(
+                '[data-page-route="Workspaces"],' +
+                '.workspace-container,' +
+                '.workspace-page'
+            )
+            .forEach((node) => {
+                node.classList.toggle(TARGET_CLASS, active);
+            });
+    };
+
+    const refresh = () => {
+        window.requestAnimationFrame(applyScope);
+    };
+
+    const wrapHistory = (method) => {
+        const original = history[method];
+
+        if (typeof original !== "function") {
+            return;
+        }
+
+        history[method] = function (...args) {
+            const result = original.apply(this, args);
+            refresh();
+            return result;
+        };
+    };
+
+    wrapHistory("pushState");
+    wrapHistory("replaceState");
+
+    window.addEventListener("popstate", refresh);
+    window.addEventListener("hashchange", refresh);
+
+    if (window.frappe?.router?.on) {
+        try {
+            window.frappe.router.on("change", refresh);
+        } catch {
+            // Frappe router API may vary.
+        }
+    }
+
+    if (document.documentElement) {
+        const observer = new MutationObserver(() => {
+            if (isTarget()) {
+                refresh();
+            }
+        });
+
+        observer.observe(document.documentElement, {
+            childList: true,
+            subtree: true
+        });
+    }
+
+    refresh();
+})();

@@ -1,0 +1,83 @@
+{
+ "actions": [],
+ "autoname": "prompt",
+ "creation": "2026-04-14 00:00:00.000000",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "user",
+  "title",
+  "started_at",
+  "last_activity",
+  "context_json",
+  "tenant_id"
+ ],
+ "fields": [
+  {
+   "fieldname": "user",
+   "fieldtype": "Link",
+   "label": "User",
+   "options": "User",
+   "reqd": 1
+  },
+  {
+   "fieldname": "title",
+   "fieldtype": "Data",
+   "label": "Title"
+  },
+  {
+   "fieldname": "started_at",
+   "fieldtype": "Datetime",
+   "label": "Started At"
+  },
+  {
+   "fieldname": "last_activity",
+   "fieldtype": "Datetime",
+   "label": "Last Activity"
+  },
+  {
+   "fieldname": "context_json",
+   "fieldtype": "Long Text",
+   "label": "Context JSON"
+  },
+  {
+   "fieldname": "tenant_id",
+   "fieldtype": "Data",
+   "label": "Tenant ID",
+   "read_only": 1,
+   "hidden": 1,
+   "no_copy": 1,
+   "print_hide": 1,
+   "description": "Tenant scope for multi-tenant isolation. Populated by saas_platform.utils.tenant.set_tenant_id on insert."
+  }
+ ],
+ "links": [],
+ "modified": "2026-04-14 00:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "AI Assistant",
+ "name": "AI Chat Session",
+ "naming_rule": "Set by user",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "if_owner": 1,
+   "read": 1,
+   "role": "All",
+   "write": 1
+  },
+  {
+   "create": 1,
+   "delete": 1,
+   "read": 1,
+   "role": "System Manager",
+   "write": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "track_changes": 1
+}

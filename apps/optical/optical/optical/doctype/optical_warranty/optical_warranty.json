@@ -1,0 +1,151 @@
+{
+ "actions": [],
+ "creation": "2026-09-28 00:00:00",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "optical_order",
+  "customer",
+  "item_code",
+  "item_role",
+  "warranty_col",
+  "warranty_type",
+  "start_date",
+  "end_date",
+  "status"
+ ],
+ "fields": [
+  {
+   "fieldname": "optical_order",
+   "fieldtype": "Link",
+   "label": "Optical Order",
+   "options": "Optical Order",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "customer",
+   "fieldtype": "Link",
+   "label": "Customer",
+   "options": "Customer",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "item_code",
+   "fieldtype": "Link",
+   "label": "Covered Item",
+   "options": "Item",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "item_role",
+   "fieldtype": "Select",
+   "label": "Role",
+   "options": "\nFrame\nRight Lens\nLeft Lens\nContact Lens\nCoating\nAccessory\nService"
+  },
+  {
+   "fieldname": "warranty_col",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "warranty_type",
+   "fieldtype": "Select",
+   "label": "Warranty Type",
+   "options": "Manufacturing Defect\nCoating\nExtended\nStore Guarantee",
+   "default": "Manufacturing Defect"
+  },
+  {
+   "fieldname": "start_date",
+   "fieldtype": "Date",
+   "label": "Start Date",
+   "reqd": 1
+  },
+  {
+   "fieldname": "end_date",
+   "fieldtype": "Date",
+   "label": "End Date",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "status",
+   "fieldtype": "Select",
+   "label": "Status",
+   "options": "Active\nClaimed\nExpired",
+   "default": "Active",
+   "in_list_view": 1,
+   "in_standard_filter": 1
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2026-09-28 00:00:00",
+ "modified_by": "Administrator",
+ "module": "Optical",
+ "name": "Optical Warranty",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "role": "System Manager",
+   "read": 1,
+   "report": 1,
+   "export": 1,
+   "print": 1,
+   "email": 1,
+   "share": 1,
+   "write": 1,
+   "create": 1,
+   "delete": 1
+  },
+  {
+   "role": "Optical Manager",
+   "read": 1,
+   "report": 1,
+   "export": 1,
+   "print": 1,
+   "email": 1,
+   "share": 1,
+   "write": 1,
+   "create": 1,
+   "delete": 1
+  },
+  {
+   "role": "Optical Branch Manager",
+   "read": 1,
+   "report": 1,
+   "export": 1,
+   "print": 1,
+   "email": 1,
+   "share": 1,
+   "write": 1,
+   "create": 1
+  },
+  {
+   "role": "Optical Cashier",
+   "read": 1,
+   "report": 1,
+   "export": 1,
+   "print": 1,
+   "email": 1,
+   "share": 1
+  },
+  {
+   "role": "Optician",
+   "read": 1,
+   "report": 1,
+   "export": 1,
+   "print": 1,
+   "email": 1,
+   "share": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "track_changes": 1,
+ "autoname": "format:OPT-WAR-{YYYY}-{#####}",
+ "naming_rule": "Expression",
+ "title_field": "customer"
+}

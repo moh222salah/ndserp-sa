@@ -1,0 +1,1 @@
+MIT License — demo/starter code for Gas Station Operations on ERPNext v16.

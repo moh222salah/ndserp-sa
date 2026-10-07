@@ -1,0 +1,40 @@
+{
+ "name": "NDS Menu For Room",
+ "istable": 1,
+ "editable_grid": 1,
+ "field_order": [
+  "room",
+  "menu"
+ ],
+ "fields": [
+  {
+   "fieldname": "room",
+   "fieldtype": "Link",
+   "label": "Room",
+   "options": "NDS Room",
+   "in_list_view": 1,
+   "reqd": 1
+  },
+  {
+   "fieldname": "menu",
+   "fieldtype": "Link",
+   "label": "Menu",
+   "options": "NDS Menu",
+   "in_list_view": 1,
+   "reqd": 1
+  }
+ ],
+ "doctype": "DocType",
+ "module": "NDS Restaurant",
+ "engine": "InnoDB",
+ "actions": [],
+ "links": [],
+ "states": [],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "owner": "Administrator",
+ "modified_by": "Administrator",
+ "creation": "2026-09-24 00:00:00.000000",
+ "modified": "2026-09-24 00:00:00.000000",
+ "permissions": []
+}

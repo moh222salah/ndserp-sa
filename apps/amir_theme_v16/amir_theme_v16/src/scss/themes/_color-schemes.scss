@@ -1,0 +1,309 @@
+// ===========================================================================
+// Color schemes  —  data-amt-scheme on <html>, driven by the rail palette button
+// ===========================================================================
+// The theme's whole brand identity is one accent (`--primary`, default navy
+// #14477E) plus a metallic (`--accent-gold`) and the dark rail. A scheme simply
+// REDEFINES those brand tokens; the working surfaces (page bg, cards, table
+// rows, text) stay neutral so data, reports and documents keep their contrast
+// and legibility no matter which scheme is on. Every accent chosen here clears
+// WCAG-AA against white for button text, and every rail stays a near-black tint
+// so its light labels remain readable.
+//
+// Specificity: `:root[data-amt-scheme="x"]` is (0,1,1) — it outranks the base
+// `:root` (0,0,1) and `[data-theme="dark"]` (0,1,0), so a chosen scheme's brand
+// wins in both light and dark mode. Default = no attribute (base tokens).
+//
+// Focus rings/highlights derive from `--primary` at runtime via color-mix, so
+// they follow the scheme (and the custom scheme) with no per-scheme rgba math.
+
+@mixin amt-scheme($primary, $gold, $gold-strong, $gold-soft, $gold-dark, $rail-bg, $rail-border) {
+	// --- brand accent (everything that was #14477E) ---
+	--primary: #{$primary};
+	--primary-color: #{$primary};
+	--brand-color: #{$primary};
+	--btn-primary: #{$primary};
+	--ink-blue-link: #{$primary};
+	--blue-500: #{$primary};
+	--surface-blue-3: #{$primary};
+	--ink-blue-2: #{$primary};
+	--checkbox-color: #{$primary};
+	--checkbox-gradient: linear-gradient(180deg, #{$primary} -124.51%, #{$primary} 100%);
+	--date-active-bg: #{$primary};
+	--progress-bar-bg: #{$primary};
+	--amt-item-active-bg: #{$primary};
+
+	// --- metallic accent ---
+	--accent-gold: #{$gold};
+	--accent-gold-strong: #{$gold-strong};
+	--accent-gold-soft: #{$gold-soft};
+	--accent-gold-on-dark: #{$gold-dark};
+
+	// --- dark rail tint ---
+	--amt-rail-bg: #{$rail-bg};
+	--amt-rail-border: #{$rail-border};
+
+	// --- primary-derived rings (follow the accent automatically) ---
+	--focus-default: 0 0 0 2px color-mix(in srgb, var(--primary) 28%, transparent);
+	--focus-blue: 0 0 0 2px color-mix(in srgb, var(--primary) 32%, transparent);
+	--checkbox-focus-shadow: 0 0 0 2px color-mix(in srgb, var(--primary) 26%, transparent);
+	--highlight-shadow:
+		1px 1px 10px color-mix(in srgb, var(--primary) 10%, transparent),
+		0 0 4px color-mix(in srgb, var(--primary) 18%, transparent);
+}
+
+// Cohesion tint — bleed a TRACE of the accent into the neutral SECONDARY
+// surfaces (zebra, hovers, borders, dividers, search field) so the scheme reads
+// as one system rather than a lone accent. Kept 3–7% so everything stays a
+// near-neutral off-white and data contrast is untouched; the true data surfaces
+// (`--bg-color`, `--fg-color`/card white) are deliberately NOT tinted. Applied
+// only in light mode — the dark theme keeps its own darker neutrals.
+@mixin amt-scheme-tint($primary) {
+	--subtle-accent: color-mix(in srgb, #{$primary} 4%, #F6F9FC);
+	--subtle-fg: color-mix(in srgb, #{$primary} 5%, #EFF3F8);
+	--fg-hover-color: color-mix(in srgb, #{$primary} 7%, #EFF3F8);
+	--control-bg: color-mix(in srgb, #{$primary} 3%, #F6F9FC);
+	--border-color: color-mix(in srgb, #{$primary} 6%, #E3E8EE);
+	--dark-border-color: color-mix(in srgb, #{$primary} 7%, #D3D9E0);
+	--divider-color: color-mix(in srgb, #{$primary} 6%, #E3E8EE);
+	--sidebar-hover-color: color-mix(in srgb, #{$primary} 7%, #F0F2F5);
+	--highlight-color: color-mix(in srgb, #{$primary} 4%, #F6F9FC);
+	--amt-item-hover: color-mix(in srgb, #{$primary} 7%, #F4F6F8);
+	--amt-divider: color-mix(in srgb, #{$primary} 6%, #EFF3F8);
+	--amt-search-bg: color-mix(in srgb, #{$primary} 3%, #F6F9FC);
+	--amt-sidebar-border: color-mix(in srgb, #{$primary} 7%, #E3E8EE);
+}
+
+// Palette rationale (new schemes only; default navy untouched). Each is a
+// harmonious triad — a deep primary (white-text contrast ≥ 5.3:1), a warm
+// metallic in ONE consistent brass→gold family so switching schemes feels
+// coherent, and a near-black rail whose hue clearly echoes the primary. The
+// on-dark gold is deliberately bright so the rail's active item / palette icon /
+// "C-Style" mark pop against the dark rail.
+//   amt-scheme($primary, $gold, $gold-strong, $gold-soft, $gold-on-dark, $rail, $rail-border)
+
+// 2) Olive — "الزيتوني الفاخر": olive-drab veneer + antique brass + olive-black rail.
+:root[data-amt-scheme="olive"] {
+	@include amt-scheme(#556B2E, #B08D3A, #8A6E28, #F0E8CC, #D9B85E, #151A0E, #29331D);
+}
+:root[data-amt-scheme="olive"]:not([data-theme="dark"]) { @include amt-scheme-tint(#556B2E); }
+
+// 3) Dark Oak — "البلوطي الداكن": warm espresso + bronze + dark-wood rail.
+:root[data-amt-scheme="oak"] {
+	@include amt-scheme(#6E4C30, #B5872F, #8C6620, #EFE5D0, #D8AC5A, #17110A, #2E251A);
+}
+:root[data-amt-scheme="oak"]:not([data-theme="dark"]) { @include amt-scheme-tint(#6E4C30); }
+
+// 4) Royal Red — "الأحمر الملكي": rich burgundy + royal gold + dark-wine rail.
+:root[data-amt-scheme="royal"] {
+	@include amt-scheme(#8C2334, #C9A22C, #A6851A, #F5ECC9, #EACA4E, #190A0E, #321724);
+}
+:root[data-amt-scheme="royal"]:not([data-theme="dark"]) { @include amt-scheme-tint(#8C2334); }
+
+// 5) Custom — user-picked, fed by --amt-custom-* set inline on <html> by JS.
+//    Falls back to the default brand if a channel is unset, so a partial pick
+//    never produces an undefined color.
+:root[data-amt-scheme="custom"] {
+	@include amt-scheme(
+		var(--amt-custom-primary, #14477E),
+		var(--amt-custom-gold, #C9A227),
+		var(--amt-custom-gold, #A88516),
+		var(--amt-custom-gold-soft, #F5EBC8),
+		var(--amt-custom-gold, #E8C64A),
+		var(--amt-custom-rail-bg, #0B1120),
+		var(--amt-custom-rail-border, #1A2332)
+	);
+}
+:root[data-amt-scheme="custom"]:not([data-theme="dark"]) {
+	@include amt-scheme-tint(var(--amt-custom-primary, #14477E));
+}
+
+// ===========================================================================
+// Rail palette button + scheme popover
+// ===========================================================================
+
+// Button — mirrors .amt-rail-lang so it reads as a sibling of the language icon.
+.amt-rail-scheme {
+	width: 44px;
+	height: 36px;
+	margin: 0 auto 4px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	border-radius: 8px;
+	cursor: pointer;
+	transition: background 0.15s ease, opacity 0.15s ease;
+}
+body.amt-rail-expanded .amt-rail-scheme { width: 100%; }
+.amt-rail-scheme:hover,
+.amt-rail-scheme.active { background: rgba(255, 255, 255, 0.08); }
+.amt-rail-scheme svg {
+	width: 17px;
+	height: 17px;
+	flex-shrink: 0;
+	color: rgba(255, 255, 255, 0.62);
+	transition: color 0.15s ease;
+}
+.amt-rail-scheme:hover svg,
+.amt-rail-scheme.active svg { color: var(--accent-gold-on-dark, #E8C64A); }
+
+// "C-Style" wordmark beside the palette icon — shown only when the rail is
+// expanded (no room in the 44px collapsed rail; the tooltip covers that state).
+// Metallic gold to echo the language code and read as the feature's name.
+.amt-rail-scheme-label {
+	display: none;
+	margin-inline-start: 8px;
+	font-size: 12px;
+	font-weight: 600;
+	letter-spacing: 0.03em;
+	color: var(--accent-gold-on-dark, #E8C64A);
+	white-space: nowrap;
+}
+body.amt-rail-expanded .amt-rail-scheme-label { display: inline; }
+
+// Popover — theme-aware surface; opens via .open (positioned by JS).
+.amt-cs-pop {
+	position: fixed;
+	z-index: 2000;
+	width: 300px;
+	max-width: calc(100vw - 16px);
+	padding: 14px;
+	background: var(--fg-color, #fff);
+	color: var(--text-color, #3C4257);
+	border: 1px solid var(--border-color, #E3E8EE);
+	border-radius: 12px;
+	box-shadow: 0 12px 32px -8px rgba(0, 0, 0, 0.22), 0 4px 12px rgba(0, 0, 0, 0.08);
+	opacity: 0;
+	visibility: hidden;
+	transform: translateY(4px);
+	transition: opacity 0.14s ease, transform 0.14s ease, visibility 0.14s;
+	text-align: start;
+}
+.amt-cs-pop.open { opacity: 1; visibility: visible; transform: translateY(0); }
+
+.amt-cs-head {
+	font-size: 13px;
+	font-weight: 650;
+	color: var(--heading-color, #0A2540);
+	margin-bottom: 10px;
+}
+
+.amt-cs-grid {
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+	gap: 8px;
+}
+
+.amt-cs-card {
+	display: flex;
+	flex-direction: column;
+	align-items: flex-start;
+	gap: 4px;
+	padding: 9px;
+	border: 1px solid var(--border-color, #E3E8EE);
+	border-radius: 9px;
+	background: var(--subtle-accent, #F6F9FC);
+	cursor: pointer;
+	text-align: start;
+	transition: border-color 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
+}
+.amt-cs-card:hover { border-color: var(--dark-border-color, #D3D9E0); }
+.amt-cs-card.active {
+	border-color: var(--primary);
+	box-shadow: 0 0 0 1px var(--primary);
+	background: color-mix(in srgb, var(--primary) 7%, var(--fg-color, #fff));
+}
+
+.amt-cs-swatches { display: flex; gap: 4px; }
+.amt-cs-swatches i {
+	width: 15px;
+	height: 15px;
+	border-radius: 50%;
+	border: 1px solid rgba(0, 0, 0, 0.12);
+	display: inline-block;
+}
+.amt-cs-name { font-size: 12px; font-weight: 600; color: var(--heading-color, #0A2540); }
+.amt-cs-desc {
+	font-size: 10px;
+	line-height: 1.3;
+	color: var(--text-muted, #697386);
+}
+
+.amt-cs-sep {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	margin: 12px 0 10px;
+	font-size: 10.5px;
+	font-weight: 600;
+	color: var(--text-muted, #697386);
+	text-transform: none;
+}
+.amt-cs-sep::before, .amt-cs-sep::after {
+	content: "";
+	flex: 1;
+	height: 1px;
+	background: var(--border-color, #E3E8EE);
+}
+
+.amt-cs-custom {
+	display: flex;
+	flex-direction: column;
+	gap: 8px;
+	padding: 10px;
+	border: 1px solid var(--border-color, #E3E8EE);
+	border-radius: 9px;
+	background: var(--subtle-accent, #F6F9FC);
+}
+.amt-cs-custom.active { border-color: var(--primary); box-shadow: 0 0 0 1px var(--primary); }
+
+.amt-cs-field {
+	display: flex;
+	align-items: center;
+	gap: 10px;
+	cursor: pointer;
+}
+.amt-cs-field input[type="color"] {
+	width: 30px;
+	height: 30px;
+	padding: 0;
+	border: 1px solid var(--dark-border-color, #D3D9E0);
+	border-radius: 7px;
+	background: none;
+	cursor: pointer;
+	flex-shrink: 0;
+}
+.amt-cs-field input[type="color"]::-webkit-color-swatch-wrapper { padding: 2px; }
+.amt-cs-field input[type="color"]::-webkit-color-swatch { border: none; border-radius: 5px; }
+.amt-cs-field-text { display: flex; flex-direction: column; line-height: 1.25; min-width: 0; }
+.amt-cs-field-name { font-size: 12px; font-weight: 600; color: var(--heading-color, #0A2540); }
+.amt-cs-field-desc { font-size: 10px; color: var(--text-muted, #697386); }
+
+.amt-cs-apply {
+	margin-top: 2px;
+	padding: 7px 10px;
+	border: none;
+	border-radius: 7px;
+	background: var(--primary);
+	color: #fff;
+	font-size: 12px;
+	font-weight: 600;
+	cursor: pointer;
+	transition: filter 0.15s ease;
+}
+.amt-cs-apply:hover { filter: brightness(0.94); }
+
+// ===========================================================================
+// Page-head cohesion tint
+// ===========================================================================
+// Frappe's own `.page-head{ background:var(--bg-color) }` is the SAME token
+// the whole page canvas uses, so it can't be repointed globally without
+// bleeding into unrelated surfaces. Overriding `.page-head` itself (later
+// source order, equal specificity — no !important needed, verified) lets the
+// page's top title bar pick up a whisper of the active brand colour — same
+// light weight as the page background, just leaning toward whichever scheme
+// (including the default navy) is active, so "the light shade" the user asked
+// to keep now has "character" instead of being a flat, scheme-blind grey.
+// Light mode only, matching every other cohesion tint in this file.
+:root:not([data-theme="dark"]) .page-head {
+	background: color-mix(in srgb, var(--primary) 6%, var(--bg-color, #F6F9FC));
+}

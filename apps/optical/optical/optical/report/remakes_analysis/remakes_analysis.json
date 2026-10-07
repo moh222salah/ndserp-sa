@@ -1,0 +1,33 @@
+{
+ "add_total_row": 0,
+ "creation": "2026-09-28 00:00:00",
+ "disabled": 0,
+ "docstatus": 0,
+ "doctype": "Report",
+ "idx": 0,
+ "is_standard": "Yes",
+ "modified": "2026-09-28 00:00:00",
+ "modified_by": "Administrator",
+ "module": "Optical",
+ "name": "Remakes Analysis",
+ "owner": "Administrator",
+ "prepared_report": 0,
+ "query": "SELECT\n reason AS \"Reason::160\",\n responsibility AS \"Responsibility::130\",\n COUNT(*) AS \"Remakes:Int:90\",\n SUM(CASE WHEN warranty_covered = 1 THEN 1 ELSE 0 END) AS \"Under Warranty:Int:120\",\n SUM(IFNULL(cost, 0)) AS \"Total Cost:Currency:110\"\nFROM `tabOptical Remake`\nWHERE status != 'Rejected'\nGROUP BY reason, responsibility\nORDER BY COUNT(*) DESC",
+ "ref_doctype": "Optical Remake",
+ "report_name": "Remakes Analysis",
+ "report_type": "Query Report",
+ "roles": [
+  {
+   "role": "System Manager"
+  },
+  {
+   "role": "Optical Manager"
+  },
+  {
+   "role": "Optical Branch Manager"
+  },
+  {
+   "role": "Optical Lab Technician"
+  }
+ ]
+}

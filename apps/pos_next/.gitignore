@@ -1,0 +1,66 @@
+.DS_Store
+*.pyc
+*.egg-info
+*.swp
+tags
+node_modules
+__pycache__
+
+# Build artifacts
+pos_next/public/pos/
+pos_next/www/
+yarn.lock
+package-lock.json
+
+# IDE and editor files
+.vscode/
+.idea/
+*.sublime-*
+.editorconfig
+
+# OS files
+Thumbs.db
+.DS_Store
+
+# Logs
+*.log
+logs/
+
+# Runtime data
+pids
+*.pid
+*.seed
+*.pid.lock
+
+# Coverage directory used by tools like istanbul
+coverage/
+.nyc_output
+
+# Dependency directories
+node_modules/
+jspm_packages/
+
+# Build outputs
+dist/
+dist-ssr/
+build/
+out/
+dev-dist/
+# Environment variables
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Cache
+.cache/
+.parcel-cache/
+
+# Vite
+.vite/
+*.png
+!docs/screenshots/*.png
+!docs/screenshots/*.gif
+.playwright-mcp/*
+TODO.md

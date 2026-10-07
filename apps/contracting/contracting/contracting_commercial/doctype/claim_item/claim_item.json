@@ -1,0 +1,66 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2026-09-08 00:00:00.000000",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "boq_item",
+  "basis",
+  "claimed_amount",
+  "assessed_amount",
+  "approved_amount",
+  "comments"
+ ],
+ "fields": [
+  {
+   "fieldname": "boq_item",
+   "fieldtype": "Link",
+   "label": "BOQ Item",
+   "options": "Budget BOQ Item",
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "basis",
+   "fieldtype": "Data",
+   "label": "Basis",
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "claimed_amount",
+   "fieldtype": "Currency",
+   "label": "Claimed",
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "assessed_amount",
+   "fieldtype": "Currency",
+   "label": "Assessed"
+  },
+  {
+   "fieldname": "approved_amount",
+   "fieldtype": "Currency",
+   "label": "Approved",
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "comments",
+   "fieldtype": "Small Text",
+   "label": "Comments"
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "is_submittable": 0,
+ "issingle": 0,
+ "istable": 1,
+ "links": [],
+ "modified": "2026-09-08 00:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Contracting Commercial",
+ "name": "Claim Item",
+ "owner": "Administrator",
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "track_changes": 1
+}

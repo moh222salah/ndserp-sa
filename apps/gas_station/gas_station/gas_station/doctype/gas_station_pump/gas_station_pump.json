@@ -1,0 +1,156 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2026-01-15 00:00:00.000000",
+ "description": "Fuel dispenser. Holds a child table of nozzles.",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "sb_identity",
+  "station",
+  "pump_number",
+  "pts_pump_id",
+  "cb_identity",
+  "pts_controller",
+  "enabled",
+  "description",
+  "current_status",
+  "sb_nozzles",
+  "nozzles"
+ ],
+ "fields": [
+  {
+   "fieldname": "sb_identity",
+   "fieldtype": "Section Break",
+   "label": "Identity"
+  },
+  {
+   "fieldname": "station",
+   "fieldtype": "Link",
+   "label": "Station",
+   "options": "Gas Station",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "pump_number",
+   "fieldtype": "Data",
+   "label": "Pump #",
+   "reqd": 1,
+   "in_list_view": 1,
+   "description": "Unique within the station, e.g. 01."
+  },
+  {
+   "fieldname": "pts_pump_id",
+   "fieldtype": "Int",
+   "label": "PTS Pump ID",
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "cb_identity",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "pts_controller",
+   "fieldtype": "Link",
+   "label": "PTS Controller",
+   "options": "PTS Controller"
+  },
+  {
+   "fieldname": "enabled",
+   "fieldtype": "Check",
+   "label": "Enabled",
+   "default": "1"
+  },
+  {
+   "fieldname": "description",
+   "fieldtype": "Data",
+   "label": "Description"
+  },
+  {
+   "fieldname": "current_status",
+   "fieldtype": "Select",
+   "label": "Status",
+   "options": "Unknown\nIdle\nDispensing\nCalling\nError\nOffline",
+   "default": "Unknown",
+   "read_only": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "sb_nozzles",
+   "fieldtype": "Section Break",
+   "label": "Nozzles"
+  },
+  {
+   "fieldname": "nozzles",
+   "fieldtype": "Table",
+   "label": "Nozzles",
+   "options": "Gas Station Nozzle"
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2026-01-15 00:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Gas Station",
+ "name": "Gas Station Pump",
+ "owner": "Administrator",
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "track_changes": 1,
+ "permissions": [
+  {
+   "role": "System Manager",
+   "read": 1,
+   "permlevel": 0,
+   "create": 1,
+   "write": 1,
+   "delete": 1,
+   "report": 1,
+   "export": 1,
+   "email": 1,
+   "print": 1,
+   "share": 1
+  },
+  {
+   "role": "Gas Station Administrator",
+   "read": 1,
+   "permlevel": 0,
+   "create": 1,
+   "write": 1,
+   "delete": 1,
+   "report": 1,
+   "export": 1,
+   "email": 1,
+   "print": 1,
+   "share": 1
+  },
+  {
+   "role": "Station Manager",
+   "read": 1,
+   "permlevel": 0,
+   "write": 1,
+   "report": 1,
+   "print": 1,
+   "email": 1
+  },
+  {
+   "role": "Station Operator",
+   "read": 1,
+   "permlevel": 0,
+   "report": 1,
+   "print": 1
+  },
+  {
+   "role": "Gas Station Viewer",
+   "read": 1,
+   "permlevel": 0,
+   "report": 1,
+   "print": 1
+  }
+ ],
+ "autoname": "format:{station}-P{pump_number}",
+ "naming_rule": "Expression",
+ "search_fields": "station,pump_number,description"
+}

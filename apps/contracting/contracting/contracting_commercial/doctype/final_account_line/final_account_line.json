@@ -1,0 +1,87 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2026-09-08 00:00:00.000000",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "boq_item",
+  "description",
+  "unit",
+  "current_qty",
+  "current_rate",
+  "fal_cb",
+  "current_amount",
+  "certified_qty",
+  "certified_value",
+  "remarks"
+ ],
+ "fields": [
+  {
+   "fieldname": "boq_item",
+   "fieldtype": "Link",
+   "label": "BOQ Item",
+   "options": "Budget BOQ Item",
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "description",
+   "fieldtype": "Data",
+   "label": "Description"
+  },
+  {
+   "fieldname": "unit",
+   "fieldtype": "Data",
+   "label": "Unit"
+  },
+  {
+   "fieldname": "current_qty",
+   "fieldtype": "Float",
+   "label": "Current Qty"
+  },
+  {
+   "fieldname": "current_rate",
+   "fieldtype": "Currency",
+   "label": "Current Rate"
+  },
+  {
+   "fieldname": "fal_cb",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "current_amount",
+   "fieldtype": "Currency",
+   "label": "Current Amount",
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "certified_qty",
+   "fieldtype": "Float",
+   "label": "Certified Qty"
+  },
+  {
+   "fieldname": "certified_value",
+   "fieldtype": "Currency",
+   "label": "Certified Value"
+  },
+  {
+   "fieldname": "remarks",
+   "fieldtype": "Small Text",
+   "label": "Remarks"
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "is_submittable": 0,
+ "issingle": 0,
+ "istable": 1,
+ "links": [],
+ "modified": "2026-09-08 00:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Contracting Commercial",
+ "name": "Final Account Line",
+ "owner": "Administrator",
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "track_changes": 1
+}

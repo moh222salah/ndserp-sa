@@ -1,0 +1,84 @@
+{
+ "actions": [],
+ "allow_rename": 0,
+ "creation": "2026-01-15 00:00:00.000000",
+ "description": "One reconciliation comparison line.",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "category",
+  "reference",
+  "expected",
+  "actual",
+  "variance",
+  "variance_pct",
+  "status"
+ ],
+ "fields": [
+  {
+   "fieldname": "category",
+   "fieldtype": "Data",
+   "label": "Category",
+   "in_list_view": 1,
+   "columns": 2
+  },
+  {
+   "fieldname": "reference",
+   "fieldtype": "Data",
+   "label": "Reference",
+   "in_list_view": 1,
+   "columns": 2
+  },
+  {
+   "fieldname": "expected",
+   "fieldtype": "Float",
+   "label": "Expected",
+   "precision": "3",
+   "in_list_view": 1,
+   "columns": 2
+  },
+  {
+   "fieldname": "actual",
+   "fieldtype": "Float",
+   "label": "Actual",
+   "precision": "3",
+   "in_list_view": 1,
+   "columns": 2
+  },
+  {
+   "fieldname": "variance",
+   "fieldtype": "Float",
+   "label": "Variance",
+   "precision": "3",
+   "in_list_view": 1,
+   "columns": 1
+  },
+  {
+   "fieldname": "variance_pct",
+   "fieldtype": "Percent",
+   "label": "Var %",
+   "in_list_view": 1,
+   "columns": 1
+  },
+  {
+   "fieldname": "status",
+   "fieldtype": "Data",
+   "label": "Status",
+   "in_list_view": 1,
+   "columns": 2
+  }
+ ],
+ "index_web_pages_for_search": 0,
+ "links": [],
+ "modified": "2026-01-15 00:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Gas Station",
+ "name": "Reconciliation Result",
+ "owner": "Administrator",
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "track_changes": 0,
+ "istable": 1,
+ "editable_grid": 1
+}

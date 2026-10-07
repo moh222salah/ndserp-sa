@@ -1,0 +1,104 @@
+{
+ "name": "NDS Recipe",
+ "autoname": "field:item",
+ "naming_rule": "By fieldname",
+ "field_order": [
+  "item",
+  "item_name",
+  "enabled",
+  "section_break_1",
+  "ingredients"
+ ],
+ "fields": [
+  {
+   "fieldname": "item",
+   "fieldtype": "Link",
+   "label": "Item",
+   "options": "Item",
+   "reqd": 1,
+   "unique": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "item_name",
+   "fieldtype": "Data",
+   "label": "Item Name",
+   "fetch_from": "item.item_name",
+   "read_only": 1
+  },
+  {
+   "fieldname": "enabled",
+   "fieldtype": "Check",
+   "label": "Enabled",
+   "default": "1",
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "section_break_1",
+   "fieldtype": "Section Break",
+   "label": "Ingredients"
+  },
+  {
+   "fieldname": "ingredients",
+   "fieldtype": "Table",
+   "label": "Ingredients",
+   "options": "NDS Recipe Item",
+   "reqd": 1
+  }
+ ],
+ "doctype": "DocType",
+ "module": "NDS Restaurant",
+ "engine": "InnoDB",
+ "actions": [],
+ "links": [],
+ "states": [],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "owner": "Administrator",
+ "modified_by": "Administrator",
+ "creation": "2026-09-24 00:00:00.000000",
+ "modified": "2026-09-24 00:00:00.000000",
+ "permissions": [
+  {
+   "role": "System Manager",
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "select": 1,
+   "share": 1,
+   "write": 1
+  },
+  {
+   "role": "NDS Manager",
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "select": 1,
+   "share": 1,
+   "write": 1
+  },
+  {
+   "role": "NDS Captain",
+   "email": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "select": 1
+  },
+  {
+   "role": "NDS Cashier",
+   "print": 1,
+   "read": 1,
+   "select": 1,
+   "write": 1
+  }
+ ]
+}

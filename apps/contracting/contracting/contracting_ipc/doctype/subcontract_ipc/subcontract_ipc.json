@@ -1,0 +1,386 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2026-09-08 00:00:00.000000",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "naming_series",
+  "subcontract",
+  "project",
+  "supplier",
+  "ct_dim_sb",
+  "ct_cost_code",
+  "ct_wbs",
+  "ct_boq_item",
+  "sipc_cb1",
+  "date",
+  "from_date",
+  "to_date",
+  "is_final",
+  "currency",
+  "exchange_rate",
+  "ipc_rates",
+  "advance_recovery_percent",
+  "retention_percent",
+  "insurance_percent",
+  "ipc_rates_cb",
+  "output_tax_percent",
+  "withholding_tax_percent",
+  "sipc_items_sec",
+  "items",
+  "sipc_hdr_ded",
+  "header_deductions",
+  "ipc_totals",
+  "gross_work_done",
+  "storage_total",
+  "gross_valuation",
+  "ipc_tot_cb1",
+  "temporary_deductions_total",
+  "item_deductions_total",
+  "header_deductions_total",
+  "ipc_stat",
+  "retention_current",
+  "advance_recovery_current",
+  "ipc_stat_cb",
+  "insurance_current",
+  "output_tax_amount",
+  "withholding_tax_amount",
+  "ipc_net",
+  "net_current",
+  "previous_net",
+  "ipc_net_cb",
+  "total_net",
+  "sipc_status_sec",
+  "status",
+  "net_payable",
+  "purchase_invoice"
+ ],
+ "fields": [
+  {
+   "fieldname": "naming_series",
+   "fieldtype": "Select",
+   "label": "Series",
+   "options": "CT-SIPC-.#####",
+   "default": "CT-SIPC-.#####",
+   "hidden": 1
+  },
+  {
+   "fieldname": "subcontract",
+   "fieldtype": "Link",
+   "label": "Subcontract",
+   "options": "Subcontract",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "project",
+   "fieldtype": "Link",
+   "label": "Project",
+   "options": "Project",
+   "fetch_from": "subcontract.project",
+   "read_only": 1
+  },
+  {
+   "fieldname": "supplier",
+   "fieldtype": "Link",
+   "label": "Supplier",
+   "options": "Supplier",
+   "fetch_from": "subcontract.supplier",
+   "read_only": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "ct_dim_sb",
+   "fieldtype": "Section Break",
+   "label": "Cost Dimensions"
+  },
+  {
+   "fieldname": "ct_cost_code",
+   "fieldtype": "Link",
+   "label": "Cost Code",
+   "options": "Cost Code"
+  },
+  {
+   "fieldname": "ct_wbs",
+   "fieldtype": "Link",
+   "label": "WBS",
+   "options": "WBS"
+  },
+  {
+   "fieldname": "ct_boq_item",
+   "fieldtype": "Link",
+   "label": "BOQ Item",
+   "options": "Budget BOQ Item"
+  },
+  {
+   "fieldname": "sipc_cb1",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "date",
+   "fieldtype": "Date",
+   "label": "Date",
+   "reqd": 1,
+   "default": "Today"
+  },
+  {
+   "fieldname": "from_date",
+   "fieldtype": "Date",
+   "label": "From Date"
+  },
+  {
+   "fieldname": "to_date",
+   "fieldtype": "Date",
+   "label": "To Date"
+  },
+  {
+   "fieldname": "is_final",
+   "fieldtype": "Check",
+   "label": "Final IPC",
+   "default": "0"
+  },
+  {
+   "fieldname": "currency",
+   "fieldtype": "Link",
+   "label": "Currency",
+   "options": "Currency",
+   "fetch_from": "subcontract.currency",
+   "read_only": 1
+  },
+  {
+   "fieldname": "exchange_rate",
+   "fieldtype": "Float",
+   "label": "Exchange Rate",
+   "default": "1",
+   "precision": "9"
+  },
+  {
+   "fieldname": "ipc_rates",
+   "fieldtype": "Section Break",
+   "label": "Deduction & Tax Rates"
+  },
+  {
+   "fieldname": "advance_recovery_percent",
+   "fieldtype": "Percent",
+   "label": "Advance Recovery %"
+  },
+  {
+   "fieldname": "retention_percent",
+   "fieldtype": "Percent",
+   "label": "Retention %"
+  },
+  {
+   "fieldname": "insurance_percent",
+   "fieldtype": "Percent",
+   "label": "Insurance %"
+  },
+  {
+   "fieldname": "ipc_rates_cb",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "output_tax_percent",
+   "fieldtype": "Percent",
+   "label": "Output Tax %"
+  },
+  {
+   "fieldname": "withholding_tax_percent",
+   "fieldtype": "Percent",
+   "label": "Withholding Tax %"
+  },
+  {
+   "fieldname": "sipc_items_sec",
+   "fieldtype": "Section Break",
+   "label": "Certified Items"
+  },
+  {
+   "fieldname": "items",
+   "fieldtype": "Table",
+   "label": "Items",
+   "options": "Subcontract IPC Item"
+  },
+  {
+   "fieldname": "sipc_hdr_ded",
+   "fieldtype": "Section Break",
+   "label": "Header Deductions"
+  },
+  {
+   "fieldname": "header_deductions",
+   "fieldtype": "Table",
+   "label": "Header Deductions",
+   "options": "IPC Header Deduction"
+  },
+  {
+   "fieldname": "ipc_totals",
+   "fieldtype": "Section Break",
+   "label": "Valuation Totals (derived \u2014 see ASSUMPTIONS.md)"
+  },
+  {
+   "fieldname": "gross_work_done",
+   "fieldtype": "Currency",
+   "label": "Gross Work Done",
+   "read_only": 1
+  },
+  {
+   "fieldname": "storage_total",
+   "fieldtype": "Currency",
+   "label": "Storage Total",
+   "read_only": 1
+  },
+  {
+   "fieldname": "gross_valuation",
+   "fieldtype": "Currency",
+   "label": "Gross Valuation",
+   "read_only": 1
+  },
+  {
+   "fieldname": "ipc_tot_cb1",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "temporary_deductions_total",
+   "fieldtype": "Currency",
+   "label": "Temporary Deductions",
+   "read_only": 1
+  },
+  {
+   "fieldname": "item_deductions_total",
+   "fieldtype": "Currency",
+   "label": "Item Deductions",
+   "read_only": 1
+  },
+  {
+   "fieldname": "header_deductions_total",
+   "fieldtype": "Currency",
+   "label": "Header Deductions",
+   "read_only": 1
+  },
+  {
+   "fieldname": "ipc_stat",
+   "fieldtype": "Section Break",
+   "label": "Statutory / Recovery"
+  },
+  {
+   "fieldname": "retention_current",
+   "fieldtype": "Currency",
+   "label": "Retention (current)",
+   "read_only": 1
+  },
+  {
+   "fieldname": "advance_recovery_current",
+   "fieldtype": "Currency",
+   "label": "Advance Recovery (current)",
+   "read_only": 1
+  },
+  {
+   "fieldname": "ipc_stat_cb",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "insurance_current",
+   "fieldtype": "Currency",
+   "label": "Insurance (current)",
+   "read_only": 1
+  },
+  {
+   "fieldname": "output_tax_amount",
+   "fieldtype": "Currency",
+   "label": "Output Tax",
+   "read_only": 1
+  },
+  {
+   "fieldname": "withholding_tax_amount",
+   "fieldtype": "Currency",
+   "label": "Withholding Tax",
+   "read_only": 1
+  },
+  {
+   "fieldname": "ipc_net",
+   "fieldtype": "Section Break",
+   "label": "Net Position"
+  },
+  {
+   "fieldname": "net_current",
+   "fieldtype": "Currency",
+   "label": "Net (current)",
+   "read_only": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "previous_net",
+   "fieldtype": "Currency",
+   "label": "Previous Net",
+   "read_only": 1
+  },
+  {
+   "fieldname": "ipc_net_cb",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "total_net",
+   "fieldtype": "Currency",
+   "label": "Total Net (cumulative)",
+   "read_only": 1
+  },
+  {
+   "fieldname": "sipc_status_sec",
+   "fieldtype": "Section Break",
+   "label": "Status & Posting"
+  },
+  {
+   "fieldname": "status",
+   "fieldtype": "Select",
+   "label": "Status",
+   "options": "Draft\nReview\nApproved\nPosted\nCancelled",
+   "default": "Draft",
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "net_payable",
+   "fieldtype": "Currency",
+   "label": "Net Payable",
+   "read_only": 1
+  },
+  {
+   "fieldname": "purchase_invoice",
+   "fieldtype": "Link",
+   "label": "Purchase Invoice",
+   "options": "Purchase Invoice",
+   "read_only": 1
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "is_submittable": 0,
+ "issingle": 0,
+ "istable": 0,
+ "links": [],
+ "modified": "2026-09-08 00:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Contracting IPC",
+ "name": "Subcontract IPC",
+ "owner": "Administrator",
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "track_changes": 1,
+ "autoname": "naming_series:",
+ "title_field": "subcontract",
+ "search_fields": "subcontract,supplier,status",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1,
+   "submit": 0,
+   "cancel": 0
+  }
+ ]
+}

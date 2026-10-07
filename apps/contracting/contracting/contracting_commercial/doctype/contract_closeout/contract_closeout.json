@@ -1,0 +1,114 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2026-09-08 00:00:00.000000",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "naming_series",
+  "company",
+  "project",
+  "clo_cb",
+  "date",
+  "status",
+  "can_close",
+  "clo_check",
+  "checklist"
+ ],
+ "fields": [
+  {
+   "fieldname": "naming_series",
+   "fieldtype": "Select",
+   "label": "Series",
+   "options": "CT-CLO-.#####",
+   "default": "CT-CLO-.#####",
+   "hidden": 1
+  },
+  {
+   "fieldname": "company",
+   "fieldtype": "Link",
+   "label": "Company",
+   "options": "Company",
+   "fetch_from": "project.company",
+   "read_only": 1
+  },
+  {
+   "fieldname": "project",
+   "fieldtype": "Link",
+   "label": "Project",
+   "options": "Project",
+   "read_only": 0,
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "clo_cb",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "date",
+   "fieldtype": "Date",
+   "label": "Date",
+   "reqd": 1,
+   "default": "Today"
+  },
+  {
+   "fieldname": "status",
+   "fieldtype": "Select",
+   "label": "Status",
+   "options": "Draft\nIn Progress\nReady\nClosed",
+   "default": "Draft",
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "can_close",
+   "fieldtype": "Check",
+   "label": "Can Close",
+   "read_only": 1
+  },
+  {
+   "fieldname": "clo_check",
+   "fieldtype": "Section Break",
+   "label": "Closeout Checklist"
+  },
+  {
+   "fieldname": "checklist",
+   "fieldtype": "Table",
+   "label": "Checklist",
+   "options": "Closeout Checklist Item"
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "is_submittable": 0,
+ "issingle": 0,
+ "istable": 0,
+ "links": [],
+ "modified": "2026-09-08 00:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Contracting Commercial",
+ "name": "Contract Closeout",
+ "owner": "Administrator",
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "track_changes": 1,
+ "autoname": "naming_series:",
+ "title_field": "contract",
+ "search_fields": "contract,status",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1,
+   "submit": 0,
+   "cancel": 0
+  }
+ ]
+}

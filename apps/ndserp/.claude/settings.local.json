@@ -1,0 +1,15 @@
+{
+  "permissions": {
+    "allow": [
+      "Read(//home/frappe/frappe/frappe-bench/**)",
+      "Bash(bench --site ndserpsa.nds-sa.com execute frappe.get_all --kwargs '{\"doctype\":\"Print Format\",\"filters\":{\"doc_type\":\"Payment Entry\"},\"fields\":[\"name\",\"disabled\",\"standard\"]}')",
+      "Bash(bench --site ndserpsa.nds-sa.com execute frappe.db.get_value --args '[\"DocType\",\"Payment Entry\",\"default_print_format\"]')",
+      "Read(//home/frappe/.apidog/**)",
+      "Bash(sed 's/\\\\\\(token\\\\|key\\\\|secret\\\\\\)\\\\s*=.*/\\\\1 = <redacted>/I' ~/.apidog/config.toml)",
+      "Bash(apidog --help)",
+      "Bash(apidog folder *)",
+      "Bash(python3 -c ' *)",
+      "Bash(apidog cli-schema *)"
+    ]
+  }
+}

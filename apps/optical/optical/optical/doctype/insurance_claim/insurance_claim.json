@@ -1,0 +1,175 @@
+{
+ "actions": [],
+ "creation": "2026-09-28 00:00:00",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "optical_order",
+  "customer_name",
+  "insurance_company",
+  "insurance_plan",
+  "claim_col",
+  "status",
+  "approval_no",
+  "claim_amount",
+  "settle_section",
+  "insurer_invoice",
+  "settled_amount",
+  "settle_col",
+  "settlement_date",
+  "notes"
+ ],
+ "fields": [
+  {
+   "fieldname": "optical_order",
+   "fieldtype": "Link",
+   "label": "Optical Order",
+   "options": "Optical Order",
+   "reqd": 1,
+   "in_list_view": 1,
+   "set_only_once": 1
+  },
+  {
+   "fieldname": "customer_name",
+   "fieldtype": "Data",
+   "label": "Customer Name",
+   "fetch_from": "optical_order.customer_name",
+   "read_only": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "insurance_company",
+   "fieldtype": "Link",
+   "label": "Insurance Company",
+   "options": "Insurance Company",
+   "fetch_from": "optical_order.insurance_company",
+   "read_only": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "insurance_plan",
+   "fieldtype": "Link",
+   "label": "Insurance Plan",
+   "options": "Insurance Plan",
+   "fetch_from": "optical_order.insurance_plan",
+   "read_only": 1
+  },
+  {
+   "fieldname": "claim_col",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "status",
+   "fieldtype": "Select",
+   "label": "Status",
+   "options": "Pending\nApproved\nSubmitted\nSettled\nRejected",
+   "default": "Pending",
+   "in_list_view": 1,
+   "in_standard_filter": 1
+  },
+  {
+   "fieldname": "approval_no",
+   "fieldtype": "Data",
+   "label": "Approval Number"
+  },
+  {
+   "fieldname": "claim_amount",
+   "fieldtype": "Currency",
+   "label": "Claim Amount",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "settle_section",
+   "fieldtype": "Section Break",
+   "label": "Settlement"
+  },
+  {
+   "fieldname": "insurer_invoice",
+   "fieldtype": "Link",
+   "label": "Insurer Invoice",
+   "options": "Sales Invoice",
+   "read_only": 1,
+   "no_copy": 1
+  },
+  {
+   "fieldname": "settled_amount",
+   "fieldtype": "Currency",
+   "label": "Settled Amount"
+  },
+  {
+   "fieldname": "settle_col",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "settlement_date",
+   "fieldtype": "Date",
+   "label": "Settlement Date"
+  },
+  {
+   "fieldname": "notes",
+   "fieldtype": "Small Text",
+   "label": "Notes"
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2026-09-28 00:00:00",
+ "modified_by": "Administrator",
+ "module": "Optical",
+ "name": "Insurance Claim",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "role": "System Manager",
+   "read": 1,
+   "report": 1,
+   "export": 1,
+   "print": 1,
+   "email": 1,
+   "share": 1,
+   "write": 1,
+   "create": 1,
+   "delete": 1
+  },
+  {
+   "role": "Optical Manager",
+   "read": 1,
+   "report": 1,
+   "export": 1,
+   "print": 1,
+   "email": 1,
+   "share": 1,
+   "write": 1,
+   "create": 1,
+   "delete": 1
+  },
+  {
+   "role": "Optical Branch Manager",
+   "read": 1,
+   "report": 1,
+   "export": 1,
+   "print": 1,
+   "email": 1,
+   "share": 1,
+   "write": 1,
+   "create": 1
+  },
+  {
+   "role": "Optical Cashier",
+   "read": 1,
+   "report": 1,
+   "export": 1,
+   "print": 1,
+   "email": 1,
+   "share": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "track_changes": 1,
+ "autoname": "format:OPT-CLM-{YYYY}-{#####}",
+ "naming_rule": "Expression",
+ "title_field": "customer_name"
+}

@@ -1,0 +1,525 @@
+{
+ "actions": [],
+ "creation": "2026-09-28 00:00:00",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "customer",
+  "customer_name",
+  "order_date",
+  "expected_delivery",
+  "order_col",
+  "status",
+  "payment_status",
+  "company",
+  "cost_center",
+  "warehouse",
+  "laboratory",
+  "rx_section",
+  "prescription",
+  "items_section",
+  "items",
+  "advanced_section",
+  "od_pd",
+  "os_pd",
+  "binocular_pd",
+  "near_pd",
+  "adv_col1",
+  "od_fitting_height",
+  "os_fitting_height",
+  "od_seg_height",
+  "os_seg_height",
+  "adv_col2",
+  "od_prism",
+  "os_prism",
+  "od_base",
+  "os_base",
+  "adv_col3",
+  "pantoscopic_tilt",
+  "wrap_angle",
+  "vertex_distance",
+  "insurance_section",
+  "insurance_plan",
+  "insurance_company",
+  "ins_col",
+  "insurance_approved",
+  "insurance_approval_no",
+  "totals_section",
+  "gross_total",
+  "discount_percent",
+  "discount_amount",
+  "totals_col",
+  "net_total",
+  "insurance_amount",
+  "customer_amount",
+  "totals_col2",
+  "paid_amount",
+  "outstanding_amount",
+  "links_section",
+  "sales_invoice",
+  "insurer_invoice",
+  "links_col",
+  "optical_job",
+  "insurance_claim",
+  "order_notes_section",
+  "notes"
+ ],
+ "fields": [
+  {
+   "fieldname": "customer",
+   "fieldtype": "Link",
+   "label": "Customer",
+   "options": "Customer",
+   "reqd": 1,
+   "in_list_view": 1,
+   "in_standard_filter": 1
+  },
+  {
+   "fieldname": "customer_name",
+   "fieldtype": "Data",
+   "label": "Customer Name",
+   "fetch_from": "customer.customer_name",
+   "read_only": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "order_date",
+   "fieldtype": "Date",
+   "label": "Order Date",
+   "default": "Today",
+   "reqd": 1
+  },
+  {
+   "fieldname": "expected_delivery",
+   "fieldtype": "Date",
+   "label": "Expected Delivery",
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "order_col",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "status",
+   "fieldtype": "Select",
+   "label": "Status",
+   "options": "Draft\nConfirmed\nIn Production\nReady\nDelivered\nCancelled",
+   "default": "Draft",
+   "read_only": 1,
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "no_copy": 1
+  },
+  {
+   "fieldname": "payment_status",
+   "fieldtype": "Select",
+   "label": "Payment Status",
+   "options": "Unpaid\nPartly Paid\nPaid",
+   "default": "Unpaid",
+   "read_only": 1,
+   "in_list_view": 1,
+   "no_copy": 1
+  },
+  {
+   "fieldname": "company",
+   "fieldtype": "Link",
+   "label": "Company",
+   "options": "Company",
+   "reqd": 1
+  },
+  {
+   "fieldname": "cost_center",
+   "fieldtype": "Link",
+   "label": "Branch (Cost Center)",
+   "options": "Cost Center",
+   "reqd": 1
+  },
+  {
+   "fieldname": "warehouse",
+   "fieldtype": "Link",
+   "label": "Branch Warehouse",
+   "options": "Warehouse",
+   "reqd": 1
+  },
+  {
+   "fieldname": "laboratory",
+   "fieldtype": "Link",
+   "label": "Laboratory",
+   "options": "Optical Laboratory"
+  },
+  {
+   "fieldname": "rx_section",
+   "fieldtype": "Section Break",
+   "label": "Prescription"
+  },
+  {
+   "fieldname": "prescription",
+   "fieldtype": "Link",
+   "label": "Prescription",
+   "options": "Optical Prescription"
+  },
+  {
+   "fieldname": "items_section",
+   "fieldtype": "Section Break",
+   "label": "Items"
+  },
+  {
+   "fieldname": "items",
+   "fieldtype": "Table",
+   "label": "Items",
+   "options": "Optical Order Item",
+   "reqd": 1
+  },
+  {
+   "fieldname": "advanced_section",
+   "fieldtype": "Section Break",
+   "label": "Advanced Measurements",
+   "collapsible": 1
+  },
+  {
+   "fieldname": "od_pd",
+   "fieldtype": "Float",
+   "label": "PD (OD)",
+   "precision": "1"
+  },
+  {
+   "fieldname": "os_pd",
+   "fieldtype": "Float",
+   "label": "PD (OS)",
+   "precision": "1"
+  },
+  {
+   "fieldname": "binocular_pd",
+   "fieldtype": "Float",
+   "label": "Binocular PD",
+   "precision": "1"
+  },
+  {
+   "fieldname": "near_pd",
+   "fieldtype": "Float",
+   "label": "Near PD",
+   "precision": "1"
+  },
+  {
+   "fieldname": "adv_col1",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "od_fitting_height",
+   "fieldtype": "Float",
+   "label": "Fitting Height (OD)",
+   "precision": "1"
+  },
+  {
+   "fieldname": "os_fitting_height",
+   "fieldtype": "Float",
+   "label": "Fitting Height (OS)",
+   "precision": "1"
+  },
+  {
+   "fieldname": "od_seg_height",
+   "fieldtype": "Float",
+   "label": "Seg Height (OD)",
+   "precision": "1"
+  },
+  {
+   "fieldname": "os_seg_height",
+   "fieldtype": "Float",
+   "label": "Seg Height (OS)",
+   "precision": "1"
+  },
+  {
+   "fieldname": "adv_col2",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "od_prism",
+   "fieldtype": "Float",
+   "label": "Prism (OD)",
+   "precision": "2"
+  },
+  {
+   "fieldname": "os_prism",
+   "fieldtype": "Float",
+   "label": "Prism (OS)",
+   "precision": "2"
+  },
+  {
+   "fieldname": "od_base",
+   "fieldtype": "Select",
+   "label": "Base (OD)",
+   "options": "\nUp\nDown\nIn\nOut"
+  },
+  {
+   "fieldname": "os_base",
+   "fieldtype": "Select",
+   "label": "Base (OS)",
+   "options": "\nUp\nDown\nIn\nOut"
+  },
+  {
+   "fieldname": "adv_col3",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "pantoscopic_tilt",
+   "fieldtype": "Float",
+   "label": "Pantoscopic Tilt",
+   "precision": "1"
+  },
+  {
+   "fieldname": "wrap_angle",
+   "fieldtype": "Float",
+   "label": "Wrap Angle",
+   "precision": "1"
+  },
+  {
+   "fieldname": "vertex_distance",
+   "fieldtype": "Float",
+   "label": "Vertex Distance",
+   "precision": "1"
+  },
+  {
+   "fieldname": "insurance_section",
+   "fieldtype": "Section Break",
+   "label": "Insurance",
+   "collapsible": 1
+  },
+  {
+   "fieldname": "insurance_plan",
+   "fieldtype": "Link",
+   "label": "Insurance Plan",
+   "options": "Insurance Plan"
+  },
+  {
+   "fieldname": "insurance_company",
+   "fieldtype": "Link",
+   "label": "Insurance Company",
+   "options": "Insurance Company",
+   "read_only": 1,
+   "fetch_from": "insurance_plan.insurance_company"
+  },
+  {
+   "fieldname": "ins_col",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "insurance_approved",
+   "fieldtype": "Check",
+   "label": "Insurance Approved",
+   "no_copy": 1
+  },
+  {
+   "fieldname": "insurance_approval_no",
+   "fieldtype": "Data",
+   "label": "Approval Number",
+   "no_copy": 1
+  },
+  {
+   "fieldname": "totals_section",
+   "fieldtype": "Section Break",
+   "label": "Totals"
+  },
+  {
+   "fieldname": "gross_total",
+   "fieldtype": "Currency",
+   "label": "Gross Total",
+   "read_only": 1
+  },
+  {
+   "fieldname": "discount_percent",
+   "fieldtype": "Percent",
+   "label": "Discount %",
+   "description": "When set, it takes precedence over the discount amount."
+  },
+  {
+   "fieldname": "discount_amount",
+   "fieldtype": "Currency",
+   "label": "Discount Amount"
+  },
+  {
+   "fieldname": "totals_col",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "net_total",
+   "fieldtype": "Currency",
+   "label": "Net Total",
+   "read_only": 1
+  },
+  {
+   "fieldname": "insurance_amount",
+   "fieldtype": "Currency",
+   "label": "Insurance Portion",
+   "read_only": 1
+  },
+  {
+   "fieldname": "customer_amount",
+   "fieldtype": "Currency",
+   "label": "Customer Portion",
+   "read_only": 1
+  },
+  {
+   "fieldname": "totals_col2",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "paid_amount",
+   "fieldtype": "Currency",
+   "label": "Paid Amount",
+   "read_only": 1,
+   "no_copy": 1
+  },
+  {
+   "fieldname": "outstanding_amount",
+   "fieldtype": "Currency",
+   "label": "Outstanding Amount",
+   "read_only": 1,
+   "no_copy": 1
+  },
+  {
+   "fieldname": "links_section",
+   "fieldtype": "Section Break",
+   "label": "Links",
+   "collapsible": 1
+  },
+  {
+   "fieldname": "sales_invoice",
+   "fieldtype": "Link",
+   "label": "Customer Invoice",
+   "options": "Sales Invoice",
+   "read_only": 1,
+   "no_copy": 1
+  },
+  {
+   "fieldname": "insurer_invoice",
+   "fieldtype": "Link",
+   "label": "Insurer Invoice",
+   "options": "Sales Invoice",
+   "read_only": 1,
+   "no_copy": 1
+  },
+  {
+   "fieldname": "links_col",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "optical_job",
+   "fieldtype": "Link",
+   "label": "Optical Job",
+   "options": "Optical Job",
+   "read_only": 1,
+   "no_copy": 1
+  },
+  {
+   "fieldname": "insurance_claim",
+   "fieldtype": "Link",
+   "label": "Insurance Claim",
+   "options": "Insurance Claim",
+   "read_only": 1,
+   "no_copy": 1
+  },
+  {
+   "fieldname": "order_notes_section",
+   "fieldtype": "Section Break",
+   "label": "Notes"
+  },
+  {
+   "fieldname": "notes",
+   "fieldtype": "Small Text",
+   "label": "Notes"
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2026-09-28 00:00:00",
+ "modified_by": "Administrator",
+ "module": "Optical",
+ "name": "Optical Order",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "role": "System Manager",
+   "read": 1,
+   "report": 1,
+   "export": 1,
+   "print": 1,
+   "email": 1,
+   "share": 1,
+   "write": 1,
+   "create": 1,
+   "delete": 1
+  },
+  {
+   "role": "Optical Manager",
+   "read": 1,
+   "report": 1,
+   "export": 1,
+   "print": 1,
+   "email": 1,
+   "share": 1,
+   "write": 1,
+   "create": 1,
+   "delete": 1
+  },
+  {
+   "role": "Optical Branch Manager",
+   "read": 1,
+   "report": 1,
+   "export": 1,
+   "print": 1,
+   "email": 1,
+   "share": 1,
+   "write": 1,
+   "create": 1,
+   "delete": 1
+  },
+  {
+   "role": "Optical Cashier",
+   "read": 1,
+   "report": 1,
+   "export": 1,
+   "print": 1,
+   "email": 1,
+   "share": 1,
+   "write": 1,
+   "create": 1
+  },
+  {
+   "role": "Optician",
+   "read": 1,
+   "report": 1,
+   "export": 1,
+   "print": 1,
+   "email": 1,
+   "share": 1,
+   "write": 1,
+   "create": 1
+  },
+  {
+   "role": "Optical Lab Technician",
+   "read": 1,
+   "report": 1,
+   "export": 1,
+   "print": 1,
+   "email": 1,
+   "share": 1
+  },
+  {
+   "role": "Optical Warehouse User",
+   "read": 1,
+   "report": 1,
+   "export": 1,
+   "print": 1,
+   "email": 1,
+   "share": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "track_changes": 1,
+ "autoname": "format:OPT-ORD-{YYYY}-{#####}",
+ "naming_rule": "Expression",
+ "title_field": "customer_name",
+ "search_fields": "customer_name,status"
+}

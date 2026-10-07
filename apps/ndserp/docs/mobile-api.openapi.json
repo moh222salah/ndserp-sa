@@ -1,0 +1,1081 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "NDS ERP Mobile API",
+    "version": "1.0.0",
+    "description": "Mobile sales API on ERPNext v16 (app: ndserp).\n\nEvery response is wrapped by Frappe in a `message` key. Check `message.success`; on failure use `message.error_code` / `message.errors`.\n\nAuth: call `login`, then send `Authorization: token <api_key>:<api_secret>`."
+  },
+  "servers": [
+    {
+      "url": "https://ndserpsa.nds-sa.com",
+      "description": "ndserpsa"
+    }
+  ],
+  "security": [
+    {
+      "FrappeToken": []
+    }
+  ],
+  "tags": [
+    {
+      "name": "Auth",
+      "description": "Login and API credentials"
+    },
+    {
+      "name": "Master data",
+      "description": "Customers, items and payment methods for the user's warehouse"
+    },
+    {
+      "name": "Sales Invoice",
+      "description": "Calculate totals, then create draft invoices and returns"
+    }
+  ],
+  "paths": {
+    "/api/method/ndserp.api.auth.login": {
+      "post": {
+        "tags": [
+          "Auth"
+        ],
+        "summary": "Login",
+        "operationId": "login",
+        "security": [],
+        "description": "Checks credentials and that the user has exactly one Branch and one Warehouse User Permission. Returns API key/secret, company (of the warehouse), stock and permitted doctypes.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "user",
+                  "password"
+                ],
+                "properties": {
+                  "user": {
+                    "type": "string",
+                    "example": "user@example.com"
+                  },
+                  "password": {
+                    "type": "string",
+                    "format": "password"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Logged in",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "$ref": "#/components/schemas/LoginResult"
+                    }
+                  },
+                  "required": [
+                    "message"
+                  ]
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Invalid credentials",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "$ref": "#/components/schemas/Error"
+                    }
+                  },
+                  "required": [
+                    "message"
+                  ]
+                },
+                "example": {
+                  "message": {
+                    "success": false,
+                    "message": "Invalid credentials"
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Account setup incomplete",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "$ref": "#/components/schemas/Error"
+                    }
+                  },
+                  "required": [
+                    "message"
+                  ]
+                },
+                "example": {
+                  "message": {
+                    "success": false,
+                    "message": "Account setup incomplete",
+                    "errors": [
+                      "No Warehouse permission assigned"
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/method/ndserp.api.customer.get_customers": {
+      "get": {
+        "tags": [
+          "Master data"
+        ],
+        "summary": "List customers",
+        "operationId": "getCustomers",
+        "parameters": [
+          {
+            "name": "search",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            },
+            "description": "Matches ID, name or VAT number"
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "default": 1
+            }
+          },
+          {
+            "name": "page_size",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "default": 50,
+              "maximum": 500
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Customers",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "$ref": "#/components/schemas/CustomerPage"
+                    }
+                  },
+                  "required": [
+                    "message"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/method/ndserp.api.item.get_items": {
+      "get": {
+        "tags": [
+          "Master data"
+        ],
+        "summary": "List items in stock in the user's warehouse",
+        "operationId": "getItems",
+        "parameters": [
+          {
+            "name": "search",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            },
+            "description": "Matches item code or name"
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "default": 1
+            }
+          },
+          {
+            "name": "page_size",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "default": 50,
+              "maximum": 500
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Items",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "$ref": "#/components/schemas/ItemPage"
+                    }
+                  },
+                  "required": [
+                    "message"
+                  ]
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Account setup incomplete",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "$ref": "#/components/schemas/Error"
+                    }
+                  },
+                  "required": [
+                    "message"
+                  ]
+                },
+                "example": {
+                  "message": {
+                    "success": false,
+                    "message": "Account setup incomplete",
+                    "errors": [
+                      "No Warehouse permission assigned"
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/method/ndserp.api.payment.get_payment_types": {
+      "get": {
+        "tags": [
+          "Master data"
+        ],
+        "summary": "List payment methods",
+        "operationId": "getPaymentTypes",
+        "parameters": [
+          {
+            "name": "company",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            },
+            "description": "Only methods with an account for this company",
+            "example": "الحارثي جروب"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Payment methods",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "$ref": "#/components/schemas/PaymentTypes"
+                    }
+                  },
+                  "required": [
+                    "message"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/method/ndserp.api.sales_invoice.calculate_invoice": {
+      "post": {
+        "tags": [
+          "Sales Invoice"
+        ],
+        "summary": "Calculate totals (VAT, grand total) without saving",
+        "operationId": "calculateInvoice",
+        "description": "Runs the same checks and calculation as create_invoice and saves nothing. All amounts are positive, also for returns. Use net_total and grand_total in create_invoice.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CalculateInvoiceRequest"
+              },
+              "examples": {
+                "regular": {
+                  "value": {
+                    "customer": "شركه شمس الرياض",
+                    "items": [
+                      {
+                        "item_code": "ZATCA-TEST-ITEM",
+                        "qty": 2,
+                        "uom": "Nos"
+                      }
+                    ]
+                  }
+                },
+                "return": {
+                  "value": {
+                    "customer": "ZATCA Test Customer",
+                    "is_return": 1,
+                    "return_against": "ACC-SINV-2026-00007",
+                    "items": [
+                      {
+                        "item_code": "ZATCA-TEST-ITEM",
+                        "qty": 1,
+                        "uom": "Nos"
+                      }
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Calculated totals",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "$ref": "#/components/schemas/CalculateInvoiceResult"
+                    }
+                  },
+                  "required": [
+                    "message"
+                  ]
+                }
+              }
+            }
+          },
+          "4XX": {
+            "description": "Error (see error_code)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "$ref": "#/components/schemas/Error"
+                    }
+                  },
+                  "required": [
+                    "message"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/method/ndserp.api.sales_invoice.create_invoice": {
+      "post": {
+        "tags": [
+          "Sales Invoice"
+        ],
+        "summary": "Create a draft Sales Invoice or return",
+        "operationId": "createInvoice",
+        "description": "Creates a DRAFT invoice. Send positive numbers for returns; the response stores return amounts as negative.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateInvoiceRequest"
+              },
+              "examples": {
+                "regular": {
+                  "value": {
+                    "customer": "شركه شمس الرياض",
+                    "posting_datetime": "2026-09-27 10:30:00",
+                    "items": [
+                      {
+                        "item_code": "ZATCA-TEST-ITEM",
+                        "qty": 2,
+                        "uom": "Nos"
+                      }
+                    ],
+                    "payments": [
+                      {
+                        "mode_of_payment": "Cash",
+                        "amount": 230
+                      }
+                    ],
+                    "net_total": 200
+                  }
+                },
+                "return": {
+                  "value": {
+                    "customer": "ZATCA Test Customer",
+                    "posting_datetime": "2026-09-27 11:00:00",
+                    "is_return": 1,
+                    "return_against": "ACC-SINV-2026-00007",
+                    "return_reason": "Customer returned the item",
+                    "items": [
+                      {
+                        "item_code": "ZATCA-TEST-ITEM",
+                        "qty": 1,
+                        "uom": "Nos"
+                      }
+                    ],
+                    "payments": [
+                      {
+                        "mode_of_payment": "Cash",
+                        "amount": 115
+                      }
+                    ],
+                    "net_total": 100
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Draft created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "$ref": "#/components/schemas/CreateInvoiceResult"
+                    }
+                  },
+                  "required": [
+                    "message"
+                  ]
+                }
+              }
+            }
+          },
+          "4XX": {
+            "description": "Error (see error_code)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "$ref": "#/components/schemas/Error"
+                    }
+                  },
+                  "required": [
+                    "message"
+                  ]
+                },
+                "example": {
+                  "message": {
+                    "success": false,
+                    "message": "Net total sent by the app does not match the calculated net total",
+                    "error_code": "TOTAL_MISMATCH",
+                    "errors": [
+                      {
+                        "field": "net_total",
+                        "sent": 190.0,
+                        "calculated": 200.0
+                      }
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "FrappeToken": {
+        "type": "apiKey",
+        "in": "header",
+        "name": "Authorization",
+        "description": "token <api_key>:<api_secret> (from login)"
+      }
+    },
+    "schemas": {
+      "Error": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean",
+            "example": false
+          },
+          "message": {
+            "type": "string"
+          },
+          "error_code": {
+            "type": "string",
+            "enum": [
+              "INVALID_REQUEST",
+              "NOT_PERMITTED",
+              "ACCOUNT_SETUP_INCOMPLETE",
+              "CUSTOMER_NOT_FOUND",
+              "CUSTOMER_DISABLED",
+              "CUSTOMER_NOT_PERMITTED",
+              "PRICE_LIST_INVALID",
+              "TAX_TEMPLATE_NOT_FOUND",
+              "TAX_TEMPLATE_AMBIGUOUS",
+              "INVALID_ITEMS",
+              "INVALID_PAYMENTS",
+              "ITEM_PRICE_NOT_FOUND",
+              "INSUFFICIENT_STOCK",
+              "PAYMENT_EXCEEDS_TOTAL",
+              "TOTAL_MISMATCH",
+              "ORIGINAL_NOT_FOUND",
+              "ORIGINAL_IS_RETURN",
+              "ORIGINAL_NOT_SUBMITTED",
+              "ORIGINAL_CANCELLED",
+              "CUSTOMER_MISMATCH",
+              "COMPANY_MISMATCH",
+              "RETURN_ALREADY_EXISTS",
+              "RETURN_BEFORE_ORIGINAL",
+              "WAREHOUSE_MISMATCH",
+              "RETURN_ITEMS_MISMATCH",
+              "NOT_FOUND",
+              "BUSY",
+              "ERP_VALIDATION"
+            ]
+          },
+          "errors": {
+            "type": "array",
+            "items": {}
+          }
+        }
+      },
+      "LoginResult": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean"
+          },
+          "user": {
+            "type": "string"
+          },
+          "full_name": {
+            "type": "string"
+          },
+          "api_key": {
+            "type": "string"
+          },
+          "api_secret": {
+            "type": "string"
+          },
+          "company": {
+            "type": "string"
+          },
+          "branch": {
+            "type": "string"
+          },
+          "stock_warehouse": {
+            "type": "string"
+          },
+          "stock": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "item_code": {
+                  "type": "string"
+                },
+                "item_name": {
+                  "type": "string"
+                },
+                "uom": {
+                  "type": "string"
+                },
+                "actual_qty": {
+                  "type": "number"
+                },
+                "reserved_qty": {
+                  "type": "number"
+                },
+                "available_qty": {
+                  "type": "number"
+                }
+              }
+            }
+          },
+          "permitted_doctypes": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "doctype": {
+                  "type": "string"
+                },
+                "read": {
+                  "type": "boolean"
+                },
+                "create": {
+                  "type": "boolean"
+                }
+              }
+            }
+          }
+        }
+      },
+      "CustomerPage": {
+        "type": "object",
+        "properties": {
+          "page": {
+            "type": "integer"
+          },
+          "page_size": {
+            "type": "integer"
+          },
+          "total": {
+            "type": "integer"
+          },
+          "data": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "customer_id": {
+                  "type": "string"
+                },
+                "customer_name": {
+                  "type": "string"
+                },
+                "vat_no": {
+                  "type": "string",
+                  "nullable": true
+                }
+              }
+            }
+          }
+        }
+      },
+      "ItemPage": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean"
+          },
+          "warehouse": {
+            "type": "string"
+          },
+          "page": {
+            "type": "integer"
+          },
+          "page_size": {
+            "type": "integer"
+          },
+          "total": {
+            "type": "integer"
+          },
+          "data": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "item_code": {
+                  "type": "string"
+                },
+                "item_name": {
+                  "type": "string"
+                },
+                "unit": {
+                  "type": "string"
+                },
+                "cost_price": {
+                  "type": "number"
+                },
+                "sales_price": {
+                  "type": "number"
+                },
+                "available_qty": {
+                  "type": "number"
+                }
+              }
+            }
+          }
+        }
+      },
+      "PaymentTypes": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean"
+          },
+          "data": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "payment_id": {
+                  "type": "string"
+                },
+                "payment_name": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      },
+      "ItemLine": {
+        "type": "object",
+        "required": [
+          "item_code",
+          "qty"
+        ],
+        "properties": {
+          "item_code": {
+            "type": "string",
+            "example": "ZATCA-TEST-ITEM"
+          },
+          "qty": {
+            "type": "number",
+            "description": "Positive, also for returns",
+            "example": 2,
+            "minimum": 0,
+            "exclusiveMinimum": true
+          },
+          "uom": {
+            "type": "string",
+            "description": "Defaults to the item's stock UOM",
+            "example": "Nos"
+          }
+        }
+      },
+      "PaymentLine": {
+        "type": "object",
+        "required": [
+          "mode_of_payment",
+          "amount"
+        ],
+        "properties": {
+          "mode_of_payment": {
+            "type": "string",
+            "example": "Cash"
+          },
+          "amount": {
+            "type": "number",
+            "description": "Positive, also for returns",
+            "example": 230,
+            "minimum": 0,
+            "exclusiveMinimum": true
+          }
+        }
+      },
+      "CalculateInvoiceRequest": {
+        "type": "object",
+        "required": [
+          "customer",
+          "items"
+        ],
+        "properties": {
+          "customer": {
+            "type": "string",
+            "example": "شركه شمس الرياض"
+          },
+          "is_return": {
+            "type": "integer",
+            "enum": [
+              0,
+              1
+            ],
+            "default": 0
+          },
+          "return_against": {
+            "type": "string",
+            "description": "Submitted invoice to return in full (only with is_return=1)",
+            "example": "ACC-SINV-2026-00007"
+          },
+          "items": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "$ref": "#/components/schemas/ItemLine"
+            }
+          },
+          "posting_datetime": {
+            "type": "string",
+            "description": "Optional, defaults to now",
+            "example": "2026-09-27 10:30:00"
+          }
+        }
+      },
+      "CreateInvoiceRequest": {
+        "type": "object",
+        "required": [
+          "customer",
+          "posting_datetime",
+          "items",
+          "net_total"
+        ],
+        "properties": {
+          "customer": {
+            "type": "string",
+            "example": "شركه شمس الرياض"
+          },
+          "is_return": {
+            "type": "integer",
+            "enum": [
+              0,
+              1
+            ],
+            "default": 0
+          },
+          "return_against": {
+            "type": "string",
+            "description": "Submitted invoice to return in full (only with is_return=1)",
+            "example": "ACC-SINV-2026-00007"
+          },
+          "items": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "$ref": "#/components/schemas/ItemLine"
+            }
+          },
+          "return_reason": {
+            "type": "string",
+            "description": "Required when is_return=1"
+          },
+          "posting_datetime": {
+            "type": "string",
+            "example": "2026-09-27 10:30:00",
+            "description": "YYYY-MM-DD HH:MM:SS, not in the future"
+          },
+          "payments": {
+            "type": "array",
+            "description": "Empty = credit invoice",
+            "items": {
+              "$ref": "#/components/schemas/PaymentLine"
+            }
+          },
+          "net_total": {
+            "type": "number",
+            "description": "Total before VAT (positive). Checked against the server with 0.05 tolerance.",
+            "example": 200
+          }
+        }
+      },
+      "CalculateInvoiceResult": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean"
+          },
+          "data": {
+            "type": "object",
+            "properties": {
+              "customer": {
+                "type": "string"
+              },
+              "is_return": {
+                "type": "boolean"
+              },
+              "return_against": {
+                "type": "string",
+                "nullable": true
+              },
+              "currency": {
+                "type": "string"
+              },
+              "taxes_and_charges": {
+                "type": "string"
+              },
+              "net_total": {
+                "type": "number",
+                "example": 200
+              },
+              "taxes": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "description": {
+                      "type": "string"
+                    },
+                    "rate": {
+                      "type": "number"
+                    },
+                    "amount": {
+                      "type": "number"
+                    }
+                  }
+                }
+              },
+              "total_taxes_and_charges": {
+                "type": "number",
+                "example": 30
+              },
+              "grand_total": {
+                "type": "number",
+                "example": 230
+              },
+              "items": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "item_code": {
+                      "type": "string"
+                    },
+                    "item_name": {
+                      "type": "string"
+                    },
+                    "qty": {
+                      "type": "number"
+                    },
+                    "uom": {
+                      "type": "string"
+                    },
+                    "rate": {
+                      "type": "number"
+                    },
+                    "amount": {
+                      "type": "number"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "CreateInvoiceResult": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean"
+          },
+          "data": {
+            "type": "object",
+            "properties": {
+              "invoice_id": {
+                "type": "string"
+              },
+              "status": {
+                "type": "string"
+              },
+              "docstatus": {
+                "type": "integer"
+              },
+              "is_return": {
+                "type": "boolean"
+              },
+              "return_against": {
+                "type": "string",
+                "nullable": true
+              },
+              "customer": {
+                "type": "string"
+              },
+              "posting_date": {
+                "type": "string"
+              },
+              "posting_time": {
+                "type": "string"
+              },
+              "warehouse": {
+                "type": "string"
+              },
+              "currency": {
+                "type": "string"
+              },
+              "taxes_and_charges": {
+                "type": "string"
+              },
+              "net_total": {
+                "type": "number"
+              },
+              "total_taxes_and_charges": {
+                "type": "number"
+              },
+              "grand_total": {
+                "type": "number"
+              },
+              "paid_amount": {
+                "type": "number"
+              },
+              "outstanding_amount": {
+                "type": "number"
+              },
+              "items": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "item_code": {
+                      "type": "string"
+                    },
+                    "item_name": {
+                      "type": "string"
+                    },
+                    "qty": {
+                      "type": "number"
+                    },
+                    "uom": {
+                      "type": "string"
+                    },
+                    "rate": {
+                      "type": "number"
+                    },
+                    "amount": {
+                      "type": "number"
+                    }
+                  }
+                }
+              },
+              "payments": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "mode_of_payment": {
+                      "type": "string"
+                    },
+                    "amount": {
+                      "type": "number"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

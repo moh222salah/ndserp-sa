@@ -1,0 +1,168 @@
+{
+ "actions": [],
+ "allow_rename": 0,
+ "creation": "2026-01-15 00:00:00.000000",
+ "description": "Global settings for the Gas Station app.",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "sb_demo",
+  "demo_mode",
+  "cb_demo",
+  "demo_company",
+  "sb_erp",
+  "auto_create_sales_invoice",
+  "default_customer",
+  "cb_erp",
+  "selling_price_list",
+  "update_stock_on_sale",
+  "sb_conn",
+  "default_stale_seconds"
+ ],
+ "fields": [
+  {
+   "fieldname": "sb_demo",
+   "fieldtype": "Section Break",
+   "label": "Demo & Mode"
+  },
+  {
+   "fieldname": "demo_mode",
+   "fieldtype": "Check",
+   "label": "Demo Mode",
+   "default": "1",
+   "description": "Shows a DEMO banner. Does not affect production records."
+  },
+  {
+   "fieldname": "cb_demo",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "demo_company",
+   "fieldtype": "Link",
+   "label": "Demo Company",
+   "options": "Company"
+  },
+  {
+   "fieldname": "sb_erp",
+   "fieldtype": "Section Break",
+   "label": "ERPNext Mapping"
+  },
+  {
+   "fieldname": "auto_create_sales_invoice",
+   "fieldtype": "Check",
+   "label": "Auto-create Sales Invoice from processed PTS transactions"
+  },
+  {
+   "fieldname": "default_customer",
+   "fieldtype": "Link",
+   "label": "Walk-in Customer",
+   "options": "Customer"
+  },
+  {
+   "fieldname": "cb_erp",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "selling_price_list",
+   "fieldtype": "Link",
+   "label": "Selling Price List",
+   "options": "Price List"
+  },
+  {
+   "fieldname": "update_stock_on_sale",
+   "fieldtype": "Check",
+   "label": "Reduce stock on fuel sale",
+   "default": "1"
+  },
+  {
+   "fieldname": "sb_conn",
+   "fieldtype": "Section Break",
+   "label": "Connectivity Defaults"
+  },
+  {
+   "fieldname": "default_stale_seconds",
+   "fieldtype": "Int",
+   "label": "Default Stale Window (s)",
+   "default": "120"
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2026-01-15 00:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Gas Station",
+ "name": "Gas Station Settings",
+ "owner": "Administrator",
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "track_changes": 1,
+ "issingle": 1,
+ "permissions": [
+  {
+   "role": "System Manager",
+   "read": 1,
+   "permlevel": 0,
+   "create": 1,
+   "write": 1,
+   "delete": 1,
+   "report": 1,
+   "export": 1,
+   "email": 1,
+   "print": 1,
+   "share": 1
+  },
+  {
+   "role": "Gas Station Administrator",
+   "read": 1,
+   "permlevel": 0,
+   "create": 1,
+   "write": 1,
+   "delete": 1,
+   "report": 1,
+   "export": 1,
+   "email": 1,
+   "print": 1,
+   "share": 1
+  },
+  {
+   "role": "Gas Station Integration Manager",
+   "read": 1,
+   "permlevel": 0,
+   "create": 1,
+   "write": 1,
+   "delete": 1,
+   "report": 1,
+   "export": 1,
+   "email": 1,
+   "print": 1,
+   "share": 1
+  },
+  {
+   "role": "Station Manager",
+   "read": 1,
+   "permlevel": 0,
+   "write": 1,
+   "create": 1,
+   "report": 1,
+   "print": 1,
+   "email": 1
+  },
+  {
+   "role": "Station Operator",
+   "read": 1,
+   "permlevel": 0,
+   "report": 1,
+   "print": 1,
+   "export": 1
+  },
+  {
+   "role": "Gas Station Viewer",
+   "read": 1,
+   "permlevel": 0,
+   "report": 1,
+   "print": 1,
+   "export": 1
+  }
+ ]
+}

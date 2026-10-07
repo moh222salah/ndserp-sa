@@ -1,0 +1,181 @@
+// ===========================================================================
+// Workspace enhancements — sidebar "＋ new" button + card-title topic icons
+// (behaviour in core/workspace_enhance.js). Both accent colours follow the
+// active colour scheme via --primary, tying them into the palette feature.
+// ===========================================================================
+//
+// NOTE: Frappe's `.icon` helper ships `margin: 2px 2px 2px 12px`, which shoves
+// the glyph to one side of any wrapper. Every icon here resets that to 0 so it
+// sits dead-centre in its chip.
+
+// --- "＋ new" beside creatable-doctype sidebar links ------------------------
+// A proper bordered "add" chip: quiet by default, and on hover it lights up in
+// the active scheme accent (border + tint + colour) so it matches the palette.
+.body-sidebar .standard-sidebar-item .amt-sidebar-new {
+	margin-inline-start: auto;
+	flex-shrink: 0;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	width: 22px;
+	height: 22px;
+	border-radius: 6px;
+	// Same accent as the primary buttons, so "create" reads consistently across
+	// the UI; a faint accent border + tint keep it a quiet chip until hovered.
+	border: 1px solid color-mix(in srgb, var(--primary) 28%, var(--border-color, #E3E8EE));
+	background: color-mix(in srgb, var(--primary) 6%, var(--fg-color, #fff));
+	color: var(--primary);
+	opacity: 0.82;
+	cursor: pointer;
+	transition: opacity 0.13s ease, background 0.13s ease, color 0.13s ease,
+		border-color 0.13s ease, box-shadow 0.13s ease;
+}
+.body-sidebar .standard-sidebar-item .amt-sidebar-new svg {
+	width: 13px;
+	height: 13px;
+	margin: 0 !important;
+}
+// Only meaningful next to a visible label — hide it while the panel is the
+// icon-only collapsed rail, where it would crowd each item's icon.
+.body-sidebar-container:not(.expanded) .amt-sidebar-new { display: none; }
+
+.body-sidebar .standard-sidebar-item:hover .amt-sidebar-new { opacity: 1; }
+.body-sidebar .standard-sidebar-item .amt-sidebar-new:hover {
+	opacity: 1;
+	color: var(--primary);
+	border-color: color-mix(in srgb, var(--primary) 55%, var(--border-color));
+	background: color-mix(in srgb, var(--primary) 12%, var(--fg-color, #fff));
+	box-shadow: 0 1px 3px color-mix(in srgb, var(--primary) 22%, transparent);
+}
+
+// --- topic icon beside a link-card group title -----------------------------
+// The icon is prepended BEFORE the title (see JS): it leads, sitting at the
+// header's start edge, with the title text following on its inner side —
+// conventional icon-then-label order.
+.widget.links-widget-box .widget-head .widget-title {
+	display: inline-flex;
+	align-items: center;
+	gap: 8px;
+	min-width: 0;
+	// The header carries 14px more start-padding than the link rows below, so a
+	// right-hugging title still sat 14px inside the links. Pull it back by exactly
+	// that so the title text lines up flush with every link's text (verified: 0px
+	// offset across all cards).
+	margin-inline-start: -14px;
+}
+// Reference-matched chip: a flat, softly-tinted square per topic hue — not one
+// flat grey for every card. Colours are Frappe's OWN semantic tokens
+// (--{hue}-500/600 from desk.bundle, confirmed identical in light AND dark
+// mode), so this reuses the framework's native palette instead of inventing
+// hex — every hue already exists elsewhere in the product (indicators, tags…).
+.amt-card-icon {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	flex-shrink: 0;
+	width: 24px;
+	height: 24px;
+	border-radius: 6px;
+	// Sensible fallback if a hue is ever missing so a card is never colourless.
+	color: var(--text-muted, #697386);
+	background: var(--subtle-accent, #F6F9FC);
+}
+
+// Frappe ships "violet" and "purple" as two DISTINCT hue families (not
+// aliases) — both are used across the CARD_ICONS map, so both must be listed.
+$amt-card-hues: blue, teal, violet, purple, orange, pink, green, gray, cyan, amber, red;
+@each $hue in $amt-card-hues {
+	.amt-card-icon[data-hue="#{$hue}"] {
+		color: var(--#{$hue}-600);
+		background: color-mix(in srgb, var(--#{$hue}-500) 15%, var(--fg-color, #fff));
+		border: 1px solid color-mix(in srgb, var(--#{$hue}-500) 24%, transparent);
+	}
+}
+// --- hairline divider between a card's document links -----------------------
+// The link rows (Item, Item Price, Price List, …) sat with no separation at
+// all — a wall of text. A whisper-light line BETWEEN rows (never above the
+// first or below the last, so it never touches the card's own border) groups
+// them visually without adding real weight. `:not(:first-child)` keeps it a
+// true divider rather than a top/bottom rule on every row.
+.widget.links-widget-box .widget-body > a.link-item:not(:first-child) {
+	border-top: 1px solid color-mix(in srgb, var(--border-color, #E3E8EE) 65%, transparent);
+}
+
+// --- plain leading "←" marker before each link row's label ------------------
+// User-corrected spec (no border/box — a bare glyph) placed BEFORE the label,
+// not after. Since `.link-content` is a fixed-width, `white-space:nowrap`,
+// `text-align:right` block, this marker (prepended as its first inline child,
+// see workspace_enhance.js) always sits flush against that same right edge no
+// matter how long the label is — every row's arrow lines up in one straight
+// column automatically, with zero manual positioning.
+.amt-link-lead-arrow {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	flex-shrink: 0;
+	margin-inline-end: 8px;
+	color: var(--text-muted, #697386);
+	vertical-align: middle;
+}
+.amt-link-lead-arrow svg {
+	width: 12px;
+	height: 12px;
+	margin: 0 !important;
+	color: inherit;
+	// This glyph must always read "←", regardless of any RTL auto-mirroring
+	// Frappe's icon system might apply to directional icons.
+	transform: none !important;
+}
+
+// The native trailing arrow (`es-line-arrow-up-right`) is superseded by the
+// leading marker above. Kept in the DOM (untouched) and only visually hidden,
+// so nothing that might reference the node (a11y, Frappe's own JS) breaks.
+.widget.links-widget-box .widget-body > a.link-item svg.amt-native-arrow-hidden {
+	display: none !important;
+}
+
+// --- sidebar module badge: composed SVG replacing the native <img> ---------
+// Match the original <img>'s rendered box exactly (36×36 — see
+// core/workspace_enhance.js) so swapping element types causes no layout shift.
+// The JS draws a <rect> plate filled `var(--primary)` plus a Lucide <use>;
+// the ink colour lives here so the badge follows the scheme with no JS branch.
+.body-sidebar .sidebar-header .header-logo .amt-module-badge-svg {
+	width: 36px;
+	height: 36px;
+	display: block;
+
+	// --amt-dp-on-accent already means "ink that reads on a filled --primary
+	// chip" (white on the light theme's navy, near-black on the dark theme's
+	// light-blue primary). Reused rather than duplicated so the two surfaces can
+	// never disagree; it is declared in components/_hijri-date.scss.
+	color: var(--amt-dp-on-accent);
+
+	// Frappe's Lucide sprite ships each path with NO fill/stroke attribute of
+	// its own (verified in the live sprite), so the glyph inherits whatever the
+	// <use> carries — without this it renders as a solid black fill, i.e. an
+	// invisible blob on the plate. Same recipe the launcher tiles already use
+	// (layouts/_desk-launcher.scss). Scoped to `use` so the plate <rect> keeps
+	// its own `fill` and is never blanked by an inherited `fill: none`.
+	use {
+		stroke: currentColor;
+		fill: none;
+		// vector-effect pins this to CSS pixels, so the weight is independent of
+		// the 24→26 unit mapping and of the 54-unit canvas scale.
+		stroke-width: 1.8;
+		vector-effect: non-scaling-stroke;
+		stroke-linecap: round;
+		stroke-linejoin: round;
+		shape-rendering: geometricPrecision;
+	}
+}
+
+// Frappe ships `.widget.links-widget-box …. .widget-title svg{ margin-left:12px
+// !important }` — same !important as ours but MORE specific, so it wins and
+// shoves the glyph off-centre. Match its full specificity to reclaim a centred
+// icon (margin-inline belt-and-suspenders for the RTL bundle).
+.widget.links-widget-box .widget-head .widget-label .widget-title .amt-card-icon svg {
+	width: 14px;
+	height: 14px;
+	margin: 0 !important;
+	margin-inline: 0 !important;
+}

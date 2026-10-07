@@ -1,0 +1,272 @@
+{
+ "actions": [],
+ "creation": "2026-09-28 00:00:00",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "optical_order",
+  "customer",
+  "customer_name",
+  "cost_center",
+  "job_col",
+  "status",
+  "priority",
+  "technician",
+  "is_remake",
+  "optical_remake",
+  "lab_section",
+  "laboratory",
+  "lab_type",
+  "lab_cost",
+  "lab_col2",
+  "date_sent",
+  "expected_return",
+  "actual_return",
+  "purchase_order",
+  "log_section",
+  "stage_log",
+  "job_notes_section",
+  "notes"
+ ],
+ "fields": [
+  {
+   "fieldname": "optical_order",
+   "fieldtype": "Link",
+   "label": "Optical Order",
+   "options": "Optical Order",
+   "reqd": 1,
+   "in_list_view": 1,
+   "set_only_once": 1
+  },
+  {
+   "fieldname": "customer",
+   "fieldtype": "Link",
+   "label": "Customer",
+   "options": "Customer",
+   "fetch_from": "optical_order.customer",
+   "read_only": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "customer_name",
+   "fieldtype": "Data",
+   "label": "Customer Name",
+   "fetch_from": "optical_order.customer_name",
+   "read_only": 1
+  },
+  {
+   "fieldname": "cost_center",
+   "fieldtype": "Link",
+   "label": "Branch (Cost Center)",
+   "options": "Cost Center",
+   "fetch_from": "optical_order.cost_center",
+   "read_only": 1
+  },
+  {
+   "fieldname": "job_col",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "status",
+   "fieldtype": "Select",
+   "label": "Status",
+   "options": "New\nPrescription Verification\nMeasurements Confirmed\nPreparation\nLaboratory\nAssembly\nQuality Control\nReady\nNotified\nDelivered\nCancelled",
+   "default": "New",
+   "read_only": 1,
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "no_copy": 1
+  },
+  {
+   "fieldname": "priority",
+   "fieldtype": "Select",
+   "label": "Priority",
+   "options": "Low\nNormal\nUrgent",
+   "default": "Normal",
+   "in_standard_filter": 1
+  },
+  {
+   "fieldname": "technician",
+   "fieldtype": "Link",
+   "label": "Technician",
+   "options": "User"
+  },
+  {
+   "fieldname": "is_remake",
+   "fieldtype": "Check",
+   "label": "Remake",
+   "read_only": 1,
+   "no_copy": 1
+  },
+  {
+   "fieldname": "optical_remake",
+   "fieldtype": "Link",
+   "label": "Optical Remake",
+   "options": "Optical Remake",
+   "read_only": 1,
+   "no_copy": 1
+  },
+  {
+   "fieldname": "lab_section",
+   "fieldtype": "Section Break",
+   "label": "Laboratory"
+  },
+  {
+   "fieldname": "laboratory",
+   "fieldtype": "Link",
+   "label": "Laboratory",
+   "options": "Optical Laboratory"
+  },
+  {
+   "fieldname": "lab_type",
+   "fieldtype": "Data",
+   "label": "Laboratory Type",
+   "fetch_from": "laboratory.lab_type",
+   "read_only": 1
+  },
+  {
+   "fieldname": "lab_cost",
+   "fieldtype": "Currency",
+   "label": "Laboratory Cost"
+  },
+  {
+   "fieldname": "lab_col2",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "date_sent",
+   "fieldtype": "Date",
+   "label": "Date Sent"
+  },
+  {
+   "fieldname": "expected_return",
+   "fieldtype": "Date",
+   "label": "Expected Return"
+  },
+  {
+   "fieldname": "actual_return",
+   "fieldtype": "Date",
+   "label": "Actual Return"
+  },
+  {
+   "fieldname": "purchase_order",
+   "fieldtype": "Link",
+   "label": "Purchase Order",
+   "options": "Purchase Order",
+   "read_only": 1,
+   "no_copy": 1
+  },
+  {
+   "fieldname": "log_section",
+   "fieldtype": "Section Break",
+   "label": "Stage History",
+   "collapsible": 1
+  },
+  {
+   "fieldname": "stage_log",
+   "fieldtype": "Table",
+   "label": "Stage History",
+   "options": "Optical Job Stage Log",
+   "read_only": 1,
+   "no_copy": 1
+  },
+  {
+   "fieldname": "job_notes_section",
+   "fieldtype": "Section Break",
+   "label": "Notes"
+  },
+  {
+   "fieldname": "notes",
+   "fieldtype": "Small Text",
+   "label": "Notes"
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2026-09-28 00:00:00",
+ "modified_by": "Administrator",
+ "module": "Optical",
+ "name": "Optical Job",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "role": "System Manager",
+   "read": 1,
+   "report": 1,
+   "export": 1,
+   "print": 1,
+   "email": 1,
+   "share": 1,
+   "write": 1,
+   "create": 1,
+   "delete": 1
+  },
+  {
+   "role": "Optical Manager",
+   "read": 1,
+   "report": 1,
+   "export": 1,
+   "print": 1,
+   "email": 1,
+   "share": 1,
+   "write": 1,
+   "create": 1,
+   "delete": 1
+  },
+  {
+   "role": "Optical Branch Manager",
+   "read": 1,
+   "report": 1,
+   "export": 1,
+   "print": 1,
+   "email": 1,
+   "share": 1,
+   "write": 1,
+   "create": 1
+  },
+  {
+   "role": "Optical Lab Technician",
+   "read": 1,
+   "report": 1,
+   "export": 1,
+   "print": 1,
+   "email": 1,
+   "share": 1,
+   "write": 1
+  },
+  {
+   "role": "Optical Cashier",
+   "read": 1,
+   "report": 1,
+   "export": 1,
+   "print": 1,
+   "email": 1,
+   "share": 1
+  },
+  {
+   "role": "Optician",
+   "read": 1,
+   "report": 1,
+   "export": 1,
+   "print": 1,
+   "email": 1,
+   "share": 1
+  },
+  {
+   "role": "Optical Warehouse User",
+   "read": 1,
+   "report": 1,
+   "export": 1,
+   "print": 1,
+   "email": 1,
+   "share": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "track_changes": 1,
+ "autoname": "format:OPT-JOB-{YYYY}-{#####}",
+ "naming_rule": "Expression",
+ "title_field": "customer_name"
+}

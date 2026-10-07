@@ -1,0 +1,59 @@
+# Runtime / local environments
+env/
+.venv/
+venv/
+sites/
+node_modules/
+**/node_modules/
+
+# Generated Python artifacts
+__pycache__/
+**/__pycache__/
+*.pyc
+*.pyo
+
+# Runtime logs / temporary data
+*.log
+logs/
+tmp/
+.cache/
+*.pid
+
+# Historical UI backup snapshots
+**/.login-ui-backups/
+
+# OS / editor
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# Secrets / runtime configuration
+.env
+.env.*
+*.secret
+*.secrets
+*.pem
+*.key
+*.p12
+*.pfx
+site_config.json
+**/site_config.json
+private/
+**/private/
+certs/private/
+**/certs/private/
+
+# Database / backup payloads
+*.sql
+*.sql.gz
+*.dump
+*.bak
+*.backup
+
+# Compressed backup archives
+*.tar.gz
+*.tgz
+*.zip
+*.7z
+*.rar

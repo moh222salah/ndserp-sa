@@ -1,0 +1,243 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2026-01-15 00:00:00.000000",
+ "description": "Physical delivery event from PTS. A physical delivery is NOT a commercial purchase; link a Purchase Receipt manually.",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "station",
+  "tank",
+  "pts_controller",
+  "delivery_id",
+  "cb1",
+  "start_datetime",
+  "end_datetime",
+  "status",
+  "sb_vol",
+  "opening_volume",
+  "delivery_volume",
+  "closing_volume",
+  "cb2",
+  "temperature",
+  "temperature_compensated_volume",
+  "sb_erp",
+  "erpnext_purchase_reference",
+  "erpnext_stock_reference",
+  "reconciliation_status",
+  "sb_raw",
+  "raw_payload"
+ ],
+ "fields": [
+  {
+   "fieldname": "station",
+   "fieldtype": "Link",
+   "label": "Station",
+   "options": "Gas Station",
+   "reqd": 1,
+   "search_index": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "tank",
+   "fieldtype": "Link",
+   "label": "Tank",
+   "options": "Gas Station Tank",
+   "reqd": 1,
+   "search_index": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "pts_controller",
+   "fieldtype": "Link",
+   "label": "PTS Controller",
+   "options": "PTS Controller"
+  },
+  {
+   "fieldname": "delivery_id",
+   "fieldtype": "Data",
+   "label": "Delivery ID",
+   "search_index": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "cb1",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "start_datetime",
+   "fieldtype": "Datetime",
+   "label": "Start",
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "end_datetime",
+   "fieldtype": "Datetime",
+   "label": "End"
+  },
+  {
+   "fieldname": "status",
+   "fieldtype": "Select",
+   "label": "Status",
+   "options": "In Progress\nCompleted\nAborted",
+   "default": "Completed",
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "sb_vol",
+   "fieldtype": "Section Break",
+   "label": "Volumes"
+  },
+  {
+   "fieldname": "opening_volume",
+   "fieldtype": "Float",
+   "label": "Opening Volume (L)",
+   "precision": "3"
+  },
+  {
+   "fieldname": "delivery_volume",
+   "fieldtype": "Float",
+   "label": "Delivered Volume (L)",
+   "precision": "3",
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "closing_volume",
+   "fieldtype": "Float",
+   "label": "Closing Volume (L)",
+   "precision": "3"
+  },
+  {
+   "fieldname": "cb2",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "temperature",
+   "fieldtype": "Float",
+   "label": "Temperature (\u00b0C)",
+   "precision": "2"
+  },
+  {
+   "fieldname": "temperature_compensated_volume",
+   "fieldtype": "Float",
+   "label": "TC Volume (L)",
+   "precision": "3"
+  },
+  {
+   "fieldname": "sb_erp",
+   "fieldtype": "Section Break",
+   "label": "ERPNext Links (manual)"
+  },
+  {
+   "fieldname": "erpnext_purchase_reference",
+   "fieldtype": "Link",
+   "label": "Purchase Receipt",
+   "options": "Purchase Receipt"
+  },
+  {
+   "fieldname": "erpnext_stock_reference",
+   "fieldtype": "Link",
+   "label": "Stock Entry",
+   "options": "Stock Entry"
+  },
+  {
+   "fieldname": "reconciliation_status",
+   "fieldtype": "Select",
+   "label": "Reconciliation",
+   "options": "Pending\nMatched\nMismatch\nUnlinked",
+   "default": "Pending"
+  },
+  {
+   "fieldname": "sb_raw",
+   "fieldtype": "Section Break",
+   "label": "Raw"
+  },
+  {
+   "fieldname": "raw_payload",
+   "fieldtype": "Code",
+   "label": "Raw Payload",
+   "options": "JSON"
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2026-01-15 00:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Gas Station",
+ "name": "Tank Delivery",
+ "owner": "Administrator",
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "track_changes": 1,
+ "autoname": "TANK-DEL-.YYYY.-.#####",
+ "naming_rule": "Expression (old style)",
+ "search_fields": "tank,delivery_id",
+ "permissions": [
+  {
+   "role": "System Manager",
+   "read": 1,
+   "permlevel": 0,
+   "create": 1,
+   "write": 1,
+   "delete": 1,
+   "report": 1,
+   "export": 1,
+   "email": 1,
+   "print": 1,
+   "share": 1
+  },
+  {
+   "role": "Gas Station Administrator",
+   "read": 1,
+   "permlevel": 0,
+   "create": 1,
+   "write": 1,
+   "delete": 1,
+   "report": 1,
+   "export": 1,
+   "email": 1,
+   "print": 1,
+   "share": 1
+  },
+  {
+   "role": "Gas Station Integration Manager",
+   "read": 1,
+   "permlevel": 0,
+   "create": 1,
+   "write": 1,
+   "delete": 1,
+   "report": 1,
+   "export": 1,
+   "email": 1,
+   "print": 1,
+   "share": 1
+  },
+  {
+   "role": "Station Manager",
+   "read": 1,
+   "permlevel": 0,
+   "write": 1,
+   "create": 1,
+   "report": 1,
+   "print": 1,
+   "email": 1
+  },
+  {
+   "role": "Station Operator",
+   "read": 1,
+   "permlevel": 0,
+   "report": 1,
+   "print": 1,
+   "export": 1
+  },
+  {
+   "role": "Gas Station Viewer",
+   "read": 1,
+   "permlevel": 0,
+   "report": 1,
+   "print": 1,
+   "export": 1
+  }
+ ]
+}

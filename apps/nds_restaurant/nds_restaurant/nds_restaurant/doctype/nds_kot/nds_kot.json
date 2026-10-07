@@ -1,0 +1,252 @@
+{
+ "name": "NDS KOT",
+ "autoname": "naming_series:",
+ "naming_rule": "By \"Naming Series\" field",
+ "is_submittable": 1,
+ "field_order": [
+  "naming_series",
+  "kot_type",
+  "production_unit",
+  "pos_invoice",
+  "column_break_1",
+  "table",
+  "order_type",
+  "pos_profile",
+  "user",
+  "branch",
+  "customer_name",
+  "daily_order_no",
+  "order_status",
+  "production_time",
+  "original_kot",
+  "section_items",
+  "items",
+  "comments",
+  "section_serve",
+  "served",
+  "serve_time",
+  "picked_up_time",
+  "delay_notified",
+  "confirmed",
+  "verified_by"
+ ],
+ "fields": [
+  {
+   "fieldname": "naming_series",
+   "fieldtype": "Select",
+   "label": "Naming Series",
+   "options": "KOT-.#####\nCNCL-KOT-.#####",
+   "default": "KOT-.#####",
+   "reqd": 1
+  },
+  {
+   "fieldname": "kot_type",
+   "fieldtype": "Select",
+   "label": "KOT Type",
+   "options": "New Order\nModified\nPartially Cancelled\nCancelled\nDuplicate",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "production_unit",
+   "fieldtype": "Link",
+   "label": "Production Unit",
+   "options": "NDS Production Unit",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "pos_invoice",
+   "fieldtype": "Link",
+   "label": "POS Invoice",
+   "options": "POS Invoice",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "column_break_1",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "table",
+   "fieldtype": "Link",
+   "label": "Table",
+   "options": "NDS Table"
+  },
+  {
+   "fieldname": "order_type",
+   "fieldtype": "Select",
+   "label": "Order Type",
+   "options": "Dine In\nTake Away\nDelivery\nAggregator"
+  },
+  {
+   "fieldname": "pos_profile",
+   "fieldtype": "Link",
+   "label": "POS Profile",
+   "options": "POS Profile"
+  },
+  {
+   "fieldname": "user",
+   "fieldtype": "Link",
+   "label": "User",
+   "options": "User"
+  },
+  {
+   "fieldname": "branch",
+   "fieldtype": "Link",
+   "label": "Branch",
+   "options": "Branch"
+  },
+  {
+   "fieldname": "customer_name",
+   "fieldtype": "Data",
+   "label": "Customer Name"
+  },
+  {
+   "fieldname": "daily_order_no",
+   "fieldtype": "Int",
+   "label": "Daily Order No"
+  },
+  {
+   "fieldname": "order_status",
+   "fieldtype": "Select",
+   "label": "Order Status",
+   "options": "Ready For Prepare\nServed\nPicked Up",
+   "default": "Ready For Prepare",
+   "allow_on_submit": 1
+  },
+  {
+   "fieldname": "production_time",
+   "fieldtype": "Int",
+   "label": "Production Time (minutes)",
+   "allow_on_submit": 1
+  },
+  {
+   "fieldname": "original_kot",
+   "fieldtype": "Link",
+   "label": "Original KOT",
+   "options": "NDS KOT"
+  },
+  {
+   "fieldname": "section_items",
+   "fieldtype": "Section Break",
+   "label": "Items"
+  },
+  {
+   "fieldname": "items",
+   "fieldtype": "Table",
+   "label": "Items",
+   "options": "NDS KOT Items",
+   "reqd": 1
+  },
+  {
+   "fieldname": "comments",
+   "fieldtype": "Small Text",
+   "label": "Order Comments"
+  },
+  {
+   "fieldname": "section_serve",
+   "fieldtype": "Section Break",
+   "label": "Serve"
+  },
+  {
+   "fieldname": "served",
+   "fieldtype": "Check",
+   "label": "Served",
+   "default": "0",
+   "allow_on_submit": 1
+  },
+  {
+   "fieldname": "serve_time",
+   "fieldtype": "Datetime",
+   "label": "Serve Time",
+   "read_only": 1,
+   "allow_on_submit": 1
+  },
+  {
+   "fieldname": "picked_up_time",
+   "fieldtype": "Datetime",
+   "label": "Picked Up Time",
+   "read_only": 1,
+   "allow_on_submit": 1
+  },
+  {
+   "fieldname": "delay_notified",
+   "fieldtype": "Check",
+   "label": "Delay Notified",
+   "default": "0",
+   "hidden": 1,
+   "allow_on_submit": 1
+  },
+  {
+   "fieldname": "confirmed",
+   "fieldtype": "Check",
+   "label": "Verified",
+   "default": "0",
+   "allow_on_submit": 1
+  },
+  {
+   "fieldname": "verified_by",
+   "fieldtype": "Link",
+   "label": "Verified By",
+   "options": "User",
+   "read_only": 1,
+   "allow_on_submit": 1
+  }
+ ],
+ "doctype": "DocType",
+ "module": "NDS Restaurant",
+ "engine": "InnoDB",
+ "actions": [],
+ "links": [],
+ "states": [],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "owner": "Administrator",
+ "modified_by": "Administrator",
+ "creation": "2026-09-24 00:00:00.000000",
+ "modified": "2026-09-24 00:00:00.000000",
+ "permissions": [
+  {
+   "role": "System Manager",
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "select": 1,
+   "share": 1,
+   "write": 1
+  },
+  {
+   "role": "NDS Manager",
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "select": 1,
+   "share": 1,
+   "write": 1
+  },
+  {
+   "role": "NDS Captain",
+   "email": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "select": 1
+  },
+  {
+   "role": "NDS Cashier",
+   "print": 1,
+   "read": 1,
+   "select": 1,
+   "write": 1
+  }
+ ]
+}

@@ -1,0 +1,170 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2026-09-08 00:00:00.000000",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "naming_series",
+  "project",
+  "date",
+  "om_cb",
+  "from_date",
+  "to_date",
+  "status",
+  "om_items",
+  "items",
+  "om_parts",
+  "parts",
+  "om_ded",
+  "deductions",
+  "om_totals",
+  "gross_value",
+  "total_deductions",
+  "om_totals_cb",
+  "net_value"
+ ],
+ "fields": [
+  {
+   "fieldname": "naming_series",
+   "fieldtype": "Select",
+   "label": "Series",
+   "options": "CT-OM-.#####",
+   "default": "CT-OM-.#####",
+   "hidden": 1
+  },
+  {
+   "fieldname": "project",
+   "fieldtype": "Link",
+   "label": "Project",
+   "options": "Project",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "date",
+   "fieldtype": "Date",
+   "label": "Date",
+   "reqd": 1,
+   "default": "Today"
+  },
+  {
+   "fieldname": "om_cb",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "from_date",
+   "fieldtype": "Date",
+   "label": "From Date",
+   "reqd": 1
+  },
+  {
+   "fieldname": "to_date",
+   "fieldtype": "Date",
+   "label": "To Date",
+   "reqd": 1
+  },
+  {
+   "fieldname": "status",
+   "fieldtype": "Select",
+   "label": "Status",
+   "options": "Draft\nSubmitted\nApproved\nCancelled",
+   "default": "Draft",
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "om_items",
+   "fieldtype": "Section Break",
+   "label": "Measured Items"
+  },
+  {
+   "fieldname": "items",
+   "fieldtype": "Table",
+   "label": "Items",
+   "options": "Operation Measurement Item"
+  },
+  {
+   "fieldname": "om_parts",
+   "fieldtype": "Section Break",
+   "label": "Measurement Parts (informational until Part Type / Period Per Days confirmed)"
+  },
+  {
+   "fieldname": "parts",
+   "fieldtype": "Table",
+   "label": "Parts",
+   "options": "Measurement Part"
+  },
+  {
+   "fieldname": "om_ded",
+   "fieldtype": "Section Break",
+   "label": "Deductions"
+  },
+  {
+   "fieldname": "deductions",
+   "fieldtype": "Table",
+   "label": "Deductions",
+   "options": "Operation Measurement Deduction"
+  },
+  {
+   "fieldname": "om_totals",
+   "fieldtype": "Section Break",
+   "label": "Totals"
+  },
+  {
+   "fieldname": "gross_value",
+   "fieldtype": "Currency",
+   "label": "Gross Value",
+   "read_only": 1
+  },
+  {
+   "fieldname": "total_deductions",
+   "fieldtype": "Currency",
+   "label": "Total Deductions",
+   "read_only": 1
+  },
+  {
+   "fieldname": "om_totals_cb",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "net_value",
+   "fieldtype": "Currency",
+   "label": "Net Value",
+   "read_only": 1,
+   "in_list_view": 1
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "is_submittable": 0,
+ "issingle": 0,
+ "istable": 0,
+ "links": [],
+ "modified": "2026-09-08 00:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Contracting Execution",
+ "name": "Operation Measurement",
+ "owner": "Administrator",
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "track_changes": 1,
+ "autoname": "naming_series:",
+ "title_field": "project",
+ "search_fields": "project,contract,status",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1,
+   "submit": 0,
+   "cancel": 0
+  }
+ ]
+}

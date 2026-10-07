@@ -1,0 +1,11 @@
+[pre_model_sync]
+
+[post_model_sync]
+nds_restaurant.patches.v1_0.create_custom_fields
+nds_restaurant.patches.v1_1.validate_report_settings_buying_price_list
+nds_restaurant.patches.v1_1.backfill_pos_profile_branch
+nds_restaurant.patches.v1_1.backfill_kot_status
+nds_restaurant.patches.v1_1.migrate_production_unit_branch
+nds_restaurant.patches.v1_1.migrate_burning_materials_to_daily_amount
+nds_restaurant.patches.v1_1.create_p3_item_fields
+nds_restaurant.patches.v1_1.migrate_menu_variants_addons

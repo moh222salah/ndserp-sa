@@ -1,0 +1,381 @@
+// ===========================================================================
+// Dual Gregorian + Hijri dates
+// ===========================================================================
+// Styling for hijri_date.js: the two-number calendar cells, the popup header's
+// Hijri line, and the Hijri caption under each Date/Datetime field.
+//
+// Scope discipline: everything that paints the popup is nested under
+// `.datepicker` (air-datepicker's body-appended root), so nothing leaks into
+// the desk. The popup is absolutely positioned and body-appended — it cannot
+// trap the Child Table's position:fixed editor — so it is safe to give it real
+// geometry (cell height, width). The field caption below is layout-scoped away
+// from compact grid cells for the same trap-safety reason.
+//
+// Colour comes entirely from the theme's own tokens (--primary, --text-*,
+// --fg-color, --border-color), so light/dark and any future accent retint for
+// free. One derived token, --amt-dp-on-accent, carries the text colour that
+// reads on a filled primary chip: white on the light theme's navy, near-black
+// on the dark theme's light-blue primary.
+// ===========================================================================
+
+:root {
+	--amt-dp-on-accent: #ffffff;
+}
+[data-theme="dark"] {
+	// Dark-mode --primary is a light blue (#8AB4E8); a filled chip needs dark
+	// ink, not white, to stay legible.
+	--amt-dp-on-accent: #0d1117;
+}
+
+// ---------------------------------------------------------------------------
+// Calendar cell — Gregorian number over a smaller Hijri number
+// ---------------------------------------------------------------------------
+.amt-dc {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	gap: 3px;
+	line-height: 1;
+	width: 100%;
+	// Uniform Western figures across both rows → perfect tabular alignment.
+	font-variant-numeric: tabular-nums;
+	font-feature-settings: "tnum" 1;
+	// Sit above the cell's ::after card so the figures never fall behind a
+	// filled (selected) card.
+	position: relative;
+	z-index: 1;
+}
+
+// Each row is [marker][number]. inline-flex so the small م / هـ label sits on
+// the leading side of the figure and mirrors correctly in RTL and LTR.
+.amt-dc-g,
+.amt-dc-h {
+	display: inline-flex;
+	align-items: baseline;
+	gap: 3px;
+}
+
+.amt-dc-g {
+	font-size: 15px;
+	font-weight: 650;
+	color: var(--text-color);
+	letter-spacing: 0.01em;
+}
+
+.amt-dc-h {
+	font-size: 12px;
+	font-weight: 500;
+	// A touch stronger than pure --text-muted so the Hijri figure is legible at
+	// a glance, still clearly secondary to the larger Gregorian figure above it.
+	color: color-mix(in srgb, var(--text-muted) 82%, var(--text-color));
+}
+
+// The م / هـ (or G / H) system marker. Small and quiet — it labels, it does not
+// compete. No own colour: it inherits the row's, so it retints automatically on
+// the selected, today and adjacent-month states below.
+.amt-dc-mk {
+	font-style: normal;
+	font-size: 9px;
+	font-weight: 700;
+	opacity: 0.6;
+	letter-spacing: 0;
+	// hold the numerals' width so a marker never nudges a column
+	font-variant-numeric: normal;
+}
+
+// ---------------------------------------------------------------------------
+// air-datepicker chrome, reskinned with theme tokens
+// ---------------------------------------------------------------------------
+// Scoped to [data-amt-hijri], which hijri_date.js sets on <html> only once it
+// has actually patched ControlDate. The skin below recolours the selected day
+// through the .amt-dc-* spans that file injects, so without the renderer it
+// would fill the cell with --primary and leave the bare day number dark AND
+// behind the card — an unreadable blank chip. No renderer => stock
+// air-datepicker styling, which is perfectly legible on its own.
+[data-amt-hijri] .datepicker {
+	// Wider than the 250px default to carry two numbers per cell comfortably,
+	// but never wider than the viewport on a phone.
+	width: min(352px, calc(100vw - 24px)) !important;
+	box-sizing: border-box !important;
+	padding: 8px !important;
+	background: var(--fg-color) !important;
+	border: 1px solid var(--border-color) !important;
+	border-radius: 14px !important;
+	box-shadow:
+		0 18px 44px rgba(15, 23, 42, 0.20),
+		0 4px 12px rgba(15, 23, 42, 0.08) !important;
+	color: var(--text-color) !important;
+
+	// A light but clearly visible card border; all cell states paint onto the
+	// ::after card, never the cell box. Solid --border-color reads as a clean
+	// hairline on the popup surface in either theme.
+	--amt-dp-card-border: var(--border-color);
+
+	// Cells grow to hold the stacked numbers at a comfortable, readable size.
+	// Every visual — border, hover tint, today ring, selected fill — is drawn
+	// by a single inset ::after so the tiles read as separated rounded cards
+	// (an ERP data-grid), not a continuous ruled table, and so one transition
+	// covers all states.
+	.datepicker--cell {
+		height: 46px !important;
+		position: relative;
+		background: transparent !important;
+
+		&::after {
+			content: "";
+			position: absolute;
+			inset: 2.5px;
+			border: 1px solid var(--amt-dp-card-border);
+			border-radius: 9px;
+			background: transparent;
+			pointer-events: none;
+			z-index: 0;
+			transition:
+				border-color 0.13s ease,
+				background-color 0.13s ease,
+				box-shadow 0.13s ease;
+		}
+	}
+
+	.datepicker--cells-months .datepicker--cell,
+	.datepicker--cells-years .datepicker--cell {
+		height: 52px !important;
+	}
+
+	// --- navigation header ---
+	.datepicker--nav {
+		border-bottom: 1px solid color-mix(in srgb, var(--border-color) 70%, transparent) !important;
+		padding-bottom: 6px;
+		margin-bottom: 4px;
+		min-height: auto;
+	}
+	.datepicker--nav-title {
+		display: flex !important;
+		flex-direction: column;
+		align-items: center;
+		line-height: 1.2;
+		font-size: 13.5px !important;
+		font-weight: 700 !important;
+		color: var(--heading-color) !important;
+		border-radius: 8px;
+
+		i {
+			font-style: normal;
+			color: var(--text-muted) !important;
+			margin: 0 4px;
+		}
+		&:hover {
+			background: color-mix(in srgb, var(--primary) 9%, transparent);
+		}
+	}
+	// the Hijri sub-line injected into the header — a crescent marks it as the
+	// lunar calendar, echoing the caption tag under the field.
+	.amt-dp-hijri {
+		display: inline-flex;
+		align-items: center;
+		gap: 5px;
+		font-size: 12.5px;
+		font-weight: 600;
+		color: var(--primary);
+		margin-top: 2px;
+		font-feature-settings: "tnum" 1;
+
+		&::before {
+			content: "";
+			flex: 0 0 auto;
+			width: 12px;
+			height: 12px;
+			background-color: currentColor;
+			-webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='black'%3E%3Cpath d='M21.64 13a1 1 0 0 0-1.05-.14 8 8 0 0 1-3.37.74 8.15 8.15 0 0 1-8.14-8.1 8 8 0 0 1 .25-2A1 1 0 0 0 8 2.36a10.14 10.14 0 1 0 14 11.69 1 1 0 0 0-.36-1.05z'/%3E%3C/svg%3E") no-repeat center / contain;
+			mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='black'%3E%3Cpath d='M21.64 13a1 1 0 0 0-1.05-.14 8 8 0 0 1-3.37.74 8.15 8.15 0 0 1-8.14-8.1 8 8 0 0 1 .25-2A1 1 0 0 0 8 2.36a10.14 10.14 0 1 0 14 11.69 1 1 0 0 0-.36-1.05z'/%3E%3C/svg%3E") no-repeat center / contain;
+			opacity: 0.9;
+		}
+	}
+
+	.datepicker--nav-action {
+		border-radius: 8px;
+		&:hover {
+			background: color-mix(in srgb, var(--primary) 12%, transparent);
+		}
+		path {
+			stroke: var(--text-muted);
+		}
+	}
+
+	.datepicker--day-name {
+		color: var(--text-muted) !important;
+		font-size: 11.5px !important;
+		font-weight: 700;
+		text-transform: uppercase;
+		letter-spacing: 0.02em;
+	}
+
+	.datepicker--button {
+		color: var(--primary) !important;
+		font-weight: 600 !important;
+		border-radius: 8px;
+		&:hover {
+			background: color-mix(in srgb, var(--primary) 10%, transparent) !important;
+		}
+	}
+
+	// --- states (air-datepicker prefixes state classes with dashes) ---
+	// All states restyle the ::after card; the cell box stays transparent so
+	// air-datepicker's own grey hover never shows through.
+
+	// hover / keyboard focus — the card lifts to a light brand tint
+	.datepicker--cell.-focus- {
+		background: transparent !important;
+		&::after {
+			border-color: color-mix(in srgb, var(--primary) 38%, transparent);
+			background: color-mix(in srgb, var(--primary) 9%, transparent);
+		}
+	}
+
+	// today — a stronger card outline plus a faint inner ring
+	.datepicker--cell.-current- {
+		&::after {
+			border-color: color-mix(in srgb, var(--primary) 55%, transparent);
+			box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--primary) 28%, transparent);
+		}
+		.amt-dc-g {
+			color: var(--primary);
+			font-weight: 800;
+		}
+	}
+
+	// selected value — the card fills with the brand colour and lifts
+	.datepicker--cell.-selected-,
+	.datepicker--cell.-selected-.-focus- {
+		background: transparent !important;
+		// Belt-and-braces alongside the .amt-dc-* rules below: colour the cell
+		// itself so anything the renderer did not wrap in a span still reads
+		// against the filled card instead of inheriting the dark body ink.
+		color: var(--amt-dp-on-accent);
+		&::after {
+			background: var(--primary);
+			border-color: var(--primary);
+			box-shadow: 0 3px 9px color-mix(in srgb, var(--primary) 32%, transparent);
+		}
+		.amt-dc-g {
+			color: var(--amt-dp-on-accent);
+			font-weight: 700;
+		}
+		.amt-dc-h {
+			color: var(--amt-dp-on-accent);
+			opacity: 0.82;
+		}
+	}
+
+	// adjacent month / decade — the card fades, the figures recede
+	.datepicker--cell.-other-month-,
+	.datepicker--cell.-other-decade- {
+		&::after {
+			border-color: color-mix(in srgb, var(--border-color) 32%, transparent);
+		}
+		.amt-dc-g {
+			color: color-mix(in srgb, var(--text-muted) 60%, transparent);
+			font-weight: 500;
+		}
+		.amt-dc-h {
+			opacity: 0.4;
+		}
+	}
+
+	// disabled (e.g. min/max or disabled_dates)
+	.datepicker--cell.-disabled- {
+		.amt-dc-g,
+		.amt-dc-h {
+			color: var(--text-muted);
+			opacity: 0.4;
+		}
+	}
+}
+
+// ---------------------------------------------------------------------------
+// Field caption — the value's Hijri equivalent, as a calm pill under the input
+// ---------------------------------------------------------------------------
+.amt-hijri-value {
+	// A grounded tag under the value, aligned to the field's start edge so it
+	// reads as belonging to the input rather than floating. Sized for real
+	// legibility — the previous 12px centred pill read as an afterthought.
+	display: flex;
+	align-items: center;
+	gap: 7px;
+	width: fit-content;
+	max-width: 100%;
+	margin-block: 7px 2px;
+	// Block-level flex + fit-content + auto inline-end margin pins the tag to
+	// the field's start edge, correctly in both RTL and LTR.
+	margin-inline: 0 auto;
+	padding: 4px 12px 4px 11px;
+	font-size: 13px;
+	font-weight: 600;
+	line-height: 1.5;
+	white-space: nowrap;
+	color: var(--primary);
+	background: color-mix(in srgb, var(--primary) 9%, var(--fg-color));
+	border: 1px solid color-mix(in srgb, var(--primary) 26%, var(--border-color));
+	border-radius: 9px;
+	letter-spacing: 0.01em;
+	font-feature-settings: "tnum" 1;
+	pointer-events: none;
+	transition: background-color 0.14s ease, border-color 0.14s ease;
+
+	// Crescent-moon marker so the tag is unmistakably the Hijri date, not a
+	// second Gregorian rendering. Masked from currentColor, so it always
+	// matches the tag's text colour in either theme.
+	&::before {
+		content: "";
+		flex: 0 0 auto;
+		width: 13px;
+		height: 13px;
+		background-color: currentColor;
+		-webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='black'%3E%3Cpath d='M21.64 13a1 1 0 0 0-1.05-.14 8 8 0 0 1-3.37.74 8.15 8.15 0 0 1-8.14-8.1 8 8 0 0 1 .25-2A1 1 0 0 0 8 2.36a10.14 10.14 0 1 0 14 11.69 1 1 0 0 0-.36-1.05z'/%3E%3C/svg%3E") no-repeat center / contain;
+		mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='black'%3E%3Cpath d='M21.64 13a1 1 0 0 0-1.05-.14 8 8 0 0 1-3.37.74 8.15 8.15 0 0 1-8.14-8.1 8 8 0 0 1 .25-2A1 1 0 0 0 8 2.36a10.14 10.14 0 1 0 14 11.69 1 1 0 0 0-.36-1.05z'/%3E%3C/svg%3E") no-repeat center / contain;
+		opacity: 0.85;
+	}
+
+	&:empty {
+		display: none !important;
+	}
+}
+
+// Brighten with the field on focus/hover — a quiet sign the two move together.
+.frappe-control:hover .amt-hijri-value,
+.frappe-control:focus-within .amt-hijri-value {
+	background: color-mix(in srgb, var(--primary) 14%, var(--fg-color));
+	border-color: color-mix(in srgb, var(--primary) 44%, var(--border-color));
+}
+
+// Backstop: never render the caption inside a compact child-table cell or a
+// filter strip/popover, even if a future Frappe markup change slips past the
+// JS guard. Row-open editors are none of these, so they keep it.
+.grid-static-col .amt-hijri-value,
+.standard-filter-section .amt-hijri-value,
+.filter-section .amt-hijri-value,
+.filter-box .amt-hijri-value,
+.filter-edit-area .amt-hijri-value {
+	display: none !important;
+}
+
+// The row-open editor is a real form; keep the caption but tighten it slightly.
+.grid-row-open .amt-hijri-value {
+	font-size: 12px;
+	padding: 3px 10px;
+	margin-top: 5px;
+	gap: 6px;
+
+	&::before {
+		width: 12px;
+		height: 12px;
+	}
+}
+
+@media (prefers-reduced-motion: reduce) {
+	[data-amt-hijri] .datepicker .datepicker--cell,
+	.amt-hijri-value {
+		transition: none !important;
+	}
+}

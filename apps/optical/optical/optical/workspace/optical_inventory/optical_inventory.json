@@ -1,0 +1,144 @@
+{
+ "charts": [],
+ "content": "[{\"id\": \"hdr\", \"type\": \"header\", \"data\": {\"text\": \"<span class=\\\"h4\\\"><b>Optical Inventory</b></span>\", \"col\": 12}}, {\"id\": \"nc0\", \"type\": \"number_card\", \"data\": {\"number_card_name\": \"Open Optical Orders\", \"col\": 3}}, {\"id\": \"sp1\", \"type\": \"spacer\", \"data\": {\"col\": 12}}, {\"id\": \"hdr2\", \"type\": \"header\", \"data\": {\"text\": \"<span class=\\\"h5\\\"><b>Shortcuts</b></span>\", \"col\": 12}}, {\"id\": \"sc0\", \"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"Item\", \"col\": 3}}, {\"id\": \"sc1\", \"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"Stock Entry\", \"col\": 3}}, {\"id\": \"sc2\", \"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"Stock Reconciliation\", \"col\": 3}}, {\"id\": \"sc3\", \"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"Purchase Order\", \"col\": 3}}, {\"id\": \"sp2\", \"type\": \"spacer\", \"data\": {\"col\": 12}}, {\"id\": \"cd0\", \"type\": \"card\", \"data\": {\"card_name\": \"Inventory\", \"col\": 4}}, {\"id\": \"cd1\", \"type\": \"card\", \"data\": {\"card_name\": \"Purchasing\", \"col\": 4}}]",
+ "creation": "2026-09-28 00:00:00",
+ "custom_blocks": [],
+ "docstatus": 0,
+ "doctype": "Workspace",
+ "for_user": "",
+ "hide_custom": 0,
+ "icon": "stock",
+ "idx": 0,
+ "indicator_color": "",
+ "is_hidden": 0,
+ "label": "Optical Inventory",
+ "links": [
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Inventory",
+   "link_count": 4,
+   "onboard": 0,
+   "type": "Card Break"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Item",
+   "link_to": "Item",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Stock Entry",
+   "link_to": "Stock Entry",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Stock Reconciliation",
+   "link_to": "Stock Reconciliation",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 1,
+   "label": "Stock Balance",
+   "link_to": "Stock Balance",
+   "link_type": "Report",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Purchasing",
+   "link_count": 2,
+   "onboard": 0,
+   "type": "Card Break"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Purchase Order",
+   "link_to": "Purchase Order",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Purchase Receipt",
+   "link_to": "Purchase Receipt",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  }
+ ],
+ "modified": "2026-09-28 00:00:00",
+ "modified_by": "Administrator",
+ "module": "Optical",
+ "name": "Optical Inventory",
+ "number_cards": [
+  {
+   "label": "Open Optical Orders",
+   "number_card_name": "Open Optical Orders"
+  }
+ ],
+ "owner": "Administrator",
+ "parent_page": "",
+ "public": 1,
+ "restrict_to_domain": "",
+ "roles": [
+  {
+   "role": "System Manager"
+  },
+  {
+   "role": "Optical Warehouse User"
+  },
+  {
+   "role": "Optical Manager"
+  }
+ ],
+ "sequence_id": 4,
+ "title": "Optical Inventory",
+ "shortcuts": [
+  {
+   "color": "Grey",
+   "doc_view": "List",
+   "label": "Item",
+   "link_to": "Item",
+   "type": "DocType"
+  },
+  {
+   "color": "Grey",
+   "doc_view": "List",
+   "label": "Stock Entry",
+   "link_to": "Stock Entry",
+   "type": "DocType"
+  },
+  {
+   "color": "Grey",
+   "doc_view": "List",
+   "label": "Stock Reconciliation",
+   "link_to": "Stock Reconciliation",
+   "type": "DocType"
+  },
+  {
+   "color": "Grey",
+   "doc_view": "List",
+   "label": "Purchase Order",
+   "link_to": "Purchase Order",
+   "type": "DocType"
+  }
+ ]
+}

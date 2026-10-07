@@ -1,0 +1,39 @@
+// ---------------------------------------------------------------------------
+// Launcher surface tokens
+// ---------------------------------------------------------------------------
+// Kept separate from the layout so light/dark values live in one place and the
+// layout file never hard-codes a colour.
+// ---------------------------------------------------------------------------
+
+:root {
+	--amt-launcher-bg: #F7F8FB;
+	--amt-card-bg: #FFFFFF;
+	--amt-card-border: #E8EDF3;
+	--amt-card-ink: #2B3445;
+	--amt-card-muted: #697586;
+
+	// Enterprise shadows: present enough to lift the card off the field, quiet
+	// enough that a wall of twelve of them does not read as noise.
+	--amt-card-shadow: 0 1px 2px rgba(20, 30, 55, 0.03),
+		0 2px 8px rgba(20, 30, 55, 0.04);
+	--amt-card-shadow-hover: 0 2px 6px rgba(20, 30, 55, 0.06),
+		0 10px 24px rgba(20, 30, 55, 0.09);
+
+	// Geometry — single source of truth for the grid maths below.
+	--amt-tile-w: 170px;
+	--amt-tile-h: 140px;
+	--amt-tile-radius: 18px;
+	--amt-tile-gap-x: 28px;
+	--amt-tile-gap-y: 26px;
+	--amt-motion: 180ms;
+}
+
+[data-theme="dark"] {
+	--amt-launcher-bg: #0B0F16;
+	--amt-card-bg: #151B25;
+	--amt-card-border: #232B38;
+	--amt-card-ink: #E6EAF2;
+	--amt-card-muted: #94A0B4;
+	--amt-card-shadow: 0 1px 2px rgba(0, 0, 0, 0.4);
+	--amt-card-shadow-hover: 0 12px 28px rgba(0, 0, 0, 0.55);
+}

@@ -1,0 +1,45 @@
+{
+ "actions": [],
+ "creation": "2026-09-28 00:00:00",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "check_item",
+  "passed",
+  "remarks"
+ ],
+ "fields": [
+  {
+   "fieldname": "check_item",
+   "fieldtype": "Data",
+   "label": "Check",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "passed",
+   "fieldtype": "Check",
+   "label": "Passed",
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "remarks",
+   "fieldtype": "Data",
+   "label": "Remarks",
+   "in_list_view": 1
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2026-09-28 00:00:00",
+ "modified_by": "Administrator",
+ "module": "Optical",
+ "name": "Optical QC Check",
+ "owner": "Administrator",
+ "permissions": [],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "istable": 1,
+ "editable_grid": 1
+}

@@ -1,0 +1,102 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2026-09-08 00:00:00.000000",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "naming_series",
+  "subcontract",
+  "client_boq_item",
+  "subcontract_boq_item",
+  "map_cb",
+  "allocation_qty",
+  "allocation_percent",
+  "comments"
+ ],
+ "fields": [
+  {
+   "fieldname": "naming_series",
+   "fieldtype": "Select",
+   "label": "Series",
+   "options": "CT-SBMAP-.#####",
+   "default": "CT-SBMAP-.#####",
+   "hidden": 1
+  },
+  {
+   "fieldname": "subcontract",
+   "fieldtype": "Link",
+   "label": "Subcontract",
+   "options": "Subcontract",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "client_boq_item",
+   "fieldtype": "Link",
+   "label": "Client BOQ Item",
+   "options": "Budget BOQ Item",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "subcontract_boq_item",
+   "fieldtype": "Link",
+   "label": "Subcontract BOQ Item",
+   "options": "Subcontract BOQ Item",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "map_cb",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "allocation_qty",
+   "fieldtype": "Float",
+   "label": "Allocation Qty"
+  },
+  {
+   "fieldname": "allocation_percent",
+   "fieldtype": "Percent",
+   "label": "Allocation %"
+  },
+  {
+   "fieldname": "comments",
+   "fieldtype": "Small Text",
+   "label": "Comments"
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "is_submittable": 0,
+ "issingle": 0,
+ "istable": 0,
+ "links": [],
+ "modified": "2026-09-08 00:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Contracting Subcontract",
+ "name": "Subcontract BOQ Mapping",
+ "owner": "Administrator",
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "track_changes": 1,
+ "autoname": "naming_series:",
+ "search_fields": "subcontract,client_boq_item,subcontract_boq_item",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1,
+   "submit": 0,
+   "cancel": 0
+  }
+ ]
+}

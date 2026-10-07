@@ -1,0 +1,17 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --nds-green: #1a3a2a;
+  --nds-cream: #f0e6d2;
+  --nds-accent: #c4a35a;
+}
+
+body {
+  margin: 0;
+  background: linear-gradient(160deg, #0f2419 0%, #1a3a2a 45%, #243d32 100%);
+  min-height: 100vh;
+  color: #f0e6d2;
+  font-family: "Segoe UI", Helvetica Neue, Arial, sans-serif;
+}

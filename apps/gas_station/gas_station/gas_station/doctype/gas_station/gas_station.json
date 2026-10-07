@@ -1,0 +1,193 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2026-01-15 00:00:00.000000",
+ "description": "Physical fuel station. Links ERPNext Company + Warehouse.",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "sb_identity",
+  "station_code",
+  "station_name",
+  "cb_identity",
+  "enabled",
+  "is_demo",
+  "sb_erpnext",
+  "company",
+  "default_warehouse",
+  "cb_erpnext",
+  "default_cost_center",
+  "default_pos_profile",
+  "sb_location",
+  "city",
+  "address",
+  "cb_location",
+  "phone"
+ ],
+ "fields": [
+  {
+   "fieldname": "sb_identity",
+   "fieldtype": "Section Break",
+   "label": "Identity"
+  },
+  {
+   "fieldname": "station_code",
+   "fieldtype": "Data",
+   "label": "Station Code",
+   "reqd": 1,
+   "unique": 1,
+   "bold": 1,
+   "description": "Short unique code, e.g. RYD-N. Used as the record name."
+  },
+  {
+   "fieldname": "station_name",
+   "fieldtype": "Data",
+   "label": "Station Name",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "cb_identity",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "enabled",
+   "fieldtype": "Check",
+   "label": "Enabled",
+   "default": "1"
+  },
+  {
+   "fieldname": "is_demo",
+   "fieldtype": "Check",
+   "label": "Demo Data",
+   "description": "Marks this as DEMO-only. Never mixed with production."
+  },
+  {
+   "fieldname": "sb_erpnext",
+   "fieldtype": "Section Break",
+   "label": "ERPNext Links"
+  },
+  {
+   "fieldname": "company",
+   "fieldtype": "Link",
+   "label": "Company",
+   "options": "Company",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "default_warehouse",
+   "fieldtype": "Link",
+   "label": "Default Warehouse",
+   "options": "Warehouse"
+  },
+  {
+   "fieldname": "cb_erpnext",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "default_cost_center",
+   "fieldtype": "Link",
+   "label": "Default Cost Center",
+   "options": "Cost Center"
+  },
+  {
+   "fieldname": "default_pos_profile",
+   "fieldtype": "Link",
+   "label": "Default POS Profile",
+   "options": "POS Profile",
+   "description": "POS Profile used when mapping PTS transactions to ERPNext POS/Sales."
+  },
+  {
+   "fieldname": "sb_location",
+   "fieldtype": "Section Break",
+   "label": "Location & Contact"
+  },
+  {
+   "fieldname": "city",
+   "fieldtype": "Data",
+   "label": "City",
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "address",
+   "fieldtype": "Small Text",
+   "label": "Address"
+  },
+  {
+   "fieldname": "cb_location",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "phone",
+   "fieldtype": "Data",
+   "label": "Phone"
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2026-01-15 00:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Gas Station",
+ "name": "Gas Station",
+ "owner": "Administrator",
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "track_changes": 1,
+ "permissions": [
+  {
+   "role": "System Manager",
+   "read": 1,
+   "permlevel": 0,
+   "create": 1,
+   "write": 1,
+   "delete": 1,
+   "report": 1,
+   "export": 1,
+   "email": 1,
+   "print": 1,
+   "share": 1
+  },
+  {
+   "role": "Gas Station Administrator",
+   "read": 1,
+   "permlevel": 0,
+   "create": 1,
+   "write": 1,
+   "delete": 1,
+   "report": 1,
+   "export": 1,
+   "email": 1,
+   "print": 1,
+   "share": 1
+  },
+  {
+   "role": "Station Manager",
+   "read": 1,
+   "permlevel": 0,
+   "write": 1,
+   "report": 1,
+   "print": 1,
+   "email": 1
+  },
+  {
+   "role": "Station Operator",
+   "read": 1,
+   "permlevel": 0,
+   "report": 1,
+   "print": 1
+  },
+  {
+   "role": "Gas Station Viewer",
+   "read": 1,
+   "permlevel": 0,
+   "report": 1,
+   "print": 1
+  }
+ ],
+ "autoname": "field:station_code",
+ "naming_rule": "By fieldname",
+ "title_field": "station_name",
+ "search_fields": "station_name,city,company"
+}

@@ -1,0 +1,11 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.eggs/
+# Node / build
+node_modules/
+contracting/public/dist/
+# Frappe/bench artifacts
+*.log
+.DS_Store

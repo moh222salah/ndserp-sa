@@ -1,0 +1,1261 @@
+# Optical Retail - Arabic translation
+msgid ""
+msgstr ""
+"Project-Id-Version: Optical Retail 0.1.0\n"
+"Report-Msgid-Bugs-To: dev@example.com\n"
+"POT-Creation-Date: 2026-09-28 00:00+0000\n"
+"PO-Revision-Date: 2026-09-28 00:00+0000\n"
+"Last-Translator: Ahmed\n"
+"Language-Team: Arabic\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: ar\n"
+"Plural-Forms: nplurals=6; plural=(n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 && n%100<=10 ? 3 : n%100>=11 ? 4 : 5);\n"
+"Generated-By: optical build\n"
+
+msgid "0 = no limit"
+msgstr "0 = بلا حد"
+
+msgid "A passed quality control is required before the job can be Ready"
+msgstr "يلزم اجتياز فحص الجودة قبل أن يصبح الأمر جاهزاً"
+
+msgid "A prescription is required for orders that include lenses"
+msgstr "وصفة النظر مطلوبة للطلبات التي تتضمن عدسات"
+
+msgid "A remake can only be requested for a failed QC"
+msgstr "لا يمكن طلب إعادة التصنيع إلا عند رسوب فحص الجودة"
+
+msgid "A remake requires a confirmed optical order"
+msgstr "إعادة التصنيع تتطلب طلب نظارة مؤكداً"
+
+msgid "A {0} job cannot be advanced"
+msgstr "لا يمكن تقديم أمر تجهيز بحالة {0}"
+
+msgid "A {0} order cannot be cancelled"
+msgstr "لا يمكن إلغاء طلب بحالة {0}"
+
+msgid "ADD"
+msgstr "ADD"
+
+msgid "AXIS"
+msgstr "AXIS"
+
+msgid "Accessory"
+msgstr "إكسسوار"
+
+msgid "Actions"
+msgstr "إجراءات"
+
+msgid "Active"
+msgstr "نشط"
+
+msgid "Actual Return"
+msgstr "تاريخ الاستلام الفعلي"
+
+msgid "Actual Return cannot be before Date Sent"
+msgstr "تاريخ الاستلام الفعلي لا يمكن أن يسبق تاريخ الإرسال"
+
+msgid "Adaptation Issue"
+msgstr "مشكلة تأقلم"
+
+msgid "Add at least one item"
+msgstr "أضف صنفاً واحداً على الأقل"
+
+msgid "Additional Measurements"
+msgstr "قياسات إضافية"
+
+msgid "Advanced Measurements"
+msgstr "قياسات متقدمة"
+
+msgid "After Sales"
+msgstr "خدمة ما بعد البيع"
+
+msgid "All checklist items must be passed to pass quality control"
+msgstr "يجب اجتياز جميع بنود القائمة لاجتياز فحص الجودة"
+
+msgid "Allow Delivery With Outstanding Balance"
+msgstr "السماح بالتسليم مع وجود رصيد مستحق"
+
+msgid "Amount"
+msgstr "المبلغ"
+
+msgid "Approval Number"
+msgstr "رقم الموافقة"
+
+msgid "Approval Number is required to approve a claim"
+msgstr "رقم الموافقة مطلوب لاعتماد المطالبة"
+
+msgid "Approval Number is required when insurance is approved"
+msgstr "رقم الموافقة مطلوب عند اعتماد التأمين"
+
+msgid "Approve the claim first"
+msgstr "اعتمد المطالبة أولاً"
+
+msgid "Approved"
+msgstr "معتمد"
+
+msgid "Approved By"
+msgstr "اعتمده"
+
+msgid "Assembly"
+msgstr "التركيب"
+
+msgid "Assembly Defect"
+msgstr "عيب في التركيب"
+
+msgid "Authorized Signature"
+msgstr "التوقيع المعتمد"
+
+msgid "Avg Turnaround (Days)"
+msgstr "متوسط مدة التنفيذ (أيام)"
+
+msgid "Base"
+msgstr "القاعدة"
+
+msgid "Base (OD)"
+msgstr "القاعدة (OD)"
+
+msgid "Base (OS)"
+msgstr "القاعدة (OS)"
+
+msgid "Base Curve"
+msgstr "الانحناء الأساسي"
+
+msgid "Batch No"
+msgstr "رقم الدفعة"
+
+msgid "Bi-weekly"
+msgstr "كل أسبوعين"
+
+msgid "Bifocal"
+msgstr "ثنائية البؤرة"
+
+msgid "Binocular PD"
+msgstr "المسافة بين الحدقتين (ثنائية)"
+
+msgid "Branch"
+msgstr "الفرع"
+
+msgid "Branch (Cost Center)"
+msgstr "الفرع (مركز التكلفة)"
+
+msgid "Branch Warehouse"
+msgstr "مخزن الفرع"
+
+msgid "Brand"
+msgstr "العلامة التجارية"
+
+msgid "Bridge (mm)"
+msgstr "الجسر (مم)"
+
+msgid "CYL"
+msgstr "CYL"
+
+msgid "Cancel Order"
+msgstr "إلغاء الطلب"
+
+msgid "Cancel Sales Invoice {0} first"
+msgstr "ألغِ فاتورة المبيعات {0} أولاً"
+
+msgid "Cancel this optical order?"
+msgstr "هل تريد إلغاء طلب النظارة هذا؟"
+
+msgid "Cancelled"
+msgstr "ملغي"
+
+msgid "Changed By"
+msgstr "تم التغيير بواسطة"
+
+msgid "Changed On"
+msgstr "تاريخ التغيير"
+
+msgid "Check"
+msgstr "بند الفحص"
+
+msgid "Checklist"
+msgstr "قائمة الفحص"
+
+msgid "Claim Amount"
+msgstr "مبلغ المطالبة"
+
+msgid "Claim Date"
+msgstr "تاريخ المطالبة"
+
+msgid "Claim Type"
+msgstr "نوع المطالبة"
+
+msgid "Claim type must be Remake"
+msgstr "يجب أن يكون نوع المطالبة إعادة التصنيع"
+
+msgid "Claimed"
+msgstr "تمت المطالبة"
+
+msgid "Coating"
+msgstr "معالجة العدسة"
+
+msgid "Coating Defect"
+msgstr "عيب في المعالجة"
+
+msgid "Collection"
+msgstr "المجموعة"
+
+msgid "Color"
+msgstr "اللون"
+
+msgid "Company"
+msgstr "الشركة"
+
+msgid "Compare with Previous"
+msgstr "مقارنة مع السابقة"
+
+msgid "Completed"
+msgstr "مكتمل"
+
+msgid "Computer"
+msgstr "كمبيوتر"
+
+msgid "Confirm Order"
+msgstr "تأكيد الطلب"
+
+msgid "Confirm the order first"
+msgstr "أكّد الطلب أولاً"
+
+msgid "Confirmed"
+msgstr "مؤكد"
+
+msgid "Contact Lens"
+msgstr "العدسات اللاصقة"
+
+msgid "Contact Person"
+msgstr "جهة الاتصال"
+
+msgid "Contact Phone"
+msgstr "هاتف التواصل"
+
+msgid "Cost"
+msgstr "التكلفة"
+
+msgid "Cost and Supplier"
+msgstr "التكلفة والمورد"
+
+msgid "Coverage Percentage"
+msgstr "نسبة التغطية"
+
+msgid "Coverage Percentage must be between 0 and 100"
+msgstr "نسبة التغطية يجب أن تكون بين 0 و 100"
+
+msgid "Covered Item"
+msgstr "الصنف المشمول"
+
+msgid "Covered by Warranty"
+msgstr "مشمول بالضمان"
+
+msgid "Create"
+msgstr "إنشاء"
+
+msgid "Created automatically. The insurer's share is invoiced to this customer."
+msgstr "يُنشأ تلقائياً. تُفوتر حصة شركة التأمين على هذا العميل."
+
+msgid "Current"
+msgstr "حالية"
+
+msgid "Customer"
+msgstr "العميل"
+
+msgid "Customer Invoice"
+msgstr "فاتورة العميل"
+
+msgid "Customer Name"
+msgstr "اسم العميل"
+
+msgid "Customer Notification"
+msgstr "إشعار العميل"
+
+msgid "Customer Portion"
+msgstr "حصة العميل"
+
+msgid "Customer has an outstanding balance of {0}"
+msgstr "على العميل رصيد مستحق قدره {0}"
+
+msgid "Customer invoice {0} already exists"
+msgstr "فاتورة العميل {0} موجودة بالفعل"
+
+msgid "Customers"
+msgstr "العملاء"
+
+msgid "Daily"
+msgstr "يومي"
+
+msgid "Date"
+msgstr "التاريخ"
+
+msgid "Date Sent"
+msgstr "تاريخ الإرسال"
+
+msgid "Days Overdue"
+msgstr "أيام التأخير"
+
+msgid "Deductible"
+msgstr "المبلغ المتحمَّل (الخصم التأميني)"
+
+msgid "Default Delivery Days"
+msgstr "أيام التسليم الافتراضية"
+
+msgid "Default Insurance Plan"
+msgstr "خطة التأمين الافتراضية"
+
+msgid "Default Laboratory"
+msgstr "المعمل الافتراضي"
+
+msgid "Default Turnaround (Days)"
+msgstr "مدة التنفيذ الافتراضية (أيام)"
+
+msgid "Default Warranty (Days)"
+msgstr "مدة الضمان الافتراضية (أيام)"
+
+msgid "Defective Material"
+msgstr "خامة معيبة"
+
+msgid "Defects"
+msgstr "العيوب"
+
+msgid "Delayed Orders"
+msgstr "الطلبات المتأخرة"
+
+msgid "Delivered"
+msgstr "تم التسليم"
+
+msgid "Delivered by"
+msgstr "سلّمه"
+
+msgid "Delivery Receipt"
+msgstr "إيصال تسليم"
+
+msgid "Design"
+msgstr "التصميم"
+
+msgid "Diameter (mm)"
+msgstr "القطر (مم)"
+
+msgid "Discount"
+msgstr "الخصم"
+
+msgid "Discount %"
+msgstr "نسبة الخصم %"
+
+msgid "Discount Amount"
+msgstr "مبلغ الخصم"
+
+msgid "Discount cannot exceed the gross total"
+msgstr "لا يمكن أن يتجاوز الخصم الإجمالي"
+
+msgid "Distance Vision"
+msgstr "الرؤية البعيدة"
+
+msgid "Down"
+msgstr "أسفل"
+
+msgid "Draft"
+msgstr "مسودة"
+
+msgid "Email"
+msgstr "بريد إلكتروني"
+
+msgid "End Date"
+msgstr "تاريخ الانتهاء"
+
+msgid "End Date cannot be before Start Date"
+msgstr "تاريخ الانتهاء لا يمكن أن يسبق تاريخ البداية"
+
+msgid "Examination Date"
+msgstr "تاريخ الفحص"
+
+msgid "Expected Delivery"
+msgstr "التسليم المتوقع"
+
+msgid "Expected Return"
+msgstr "الاستلام المتوقع"
+
+msgid "Expired"
+msgstr "منتهي"
+
+msgid "Expiry Date"
+msgstr "تاريخ الانتهاء"
+
+msgid "Expiry Date cannot be before Prescription Date"
+msgstr "تاريخ الانتهاء لا يمكن أن يسبق تاريخ الوصفة"
+
+msgid "Extended"
+msgstr "ممتد"
+
+msgid "External"
+msgstr "خارجي"
+
+msgid "Eye Examination"
+msgstr "فحص النظر"
+
+msgid "Fail"
+msgstr "رسوب"
+
+msgid "Fitting Height"
+msgstr "ارتفاع التركيب"
+
+msgid "Fitting Height (OD)"
+msgstr "ارتفاع التركيب (OD)"
+
+msgid "Fitting Height (OS)"
+msgstr "ارتفاع التركيب (OS)"
+
+msgid "Frame"
+msgstr "الإطار"
+
+msgid "Frame Damage"
+msgstr "تلف في الإطار"
+
+msgid "Frame Type"
+msgstr "نوع الإطار"
+
+msgid "Frame verification"
+msgstr "التحقق من الإطار"
+
+msgid "Free-text lens/frame details such as tint, index or coating."
+msgstr "تفاصيل حرة للعدسة أو الإطار مثل التلوين أو معامل الانكسار أو المعالجة."
+
+msgid "Full Rim"
+msgstr "إطار كامل"
+
+msgid "Gender"
+msgstr "الفئة"
+
+msgid "General"
+msgstr "عام"
+
+msgid "Grand Total"
+msgstr "الإجمالي الكلي"
+
+msgid "Gross Total"
+msgstr "الإجمالي قبل الخصم"
+
+msgid "I confirm that I have received the items listed above in good condition."
+msgstr "أقر باستلام الأصناف المذكورة أعلاه بحالة جيدة."
+
+msgid "In"
+msgstr "أنفي"
+
+msgid "In Production"
+msgstr "قيد التجهيز"
+
+msgid "In Progress"
+msgstr "قيد التنفيذ"
+
+msgid "Index"
+msgstr "معامل الانكسار"
+
+msgid "Inspector"
+msgstr "الفاحص"
+
+msgid "Insurance"
+msgstr "التأمين"
+
+msgid "Insurance Approved"
+msgstr "تمت موافقة التأمين"
+
+msgid "Insurance Claim"
+msgstr "مطالبة تأمين"
+
+msgid "Insurance Company"
+msgstr "شركة التأمين"
+
+msgid "Insurance Company Name"
+msgstr "اسم شركة التأمين"
+
+msgid "Insurance Plan"
+msgstr "خطة التأمين"
+
+msgid "Insurance Plan {0} is not active"
+msgstr "خطة التأمين {0} غير نشطة"
+
+msgid "Insurance Portion"
+msgstr "حصة التأمين"
+
+msgid "Insurance Service Item"
+msgstr "صنف خدمة التأمين"
+
+msgid "Insurance Valid Till"
+msgstr "صلاحية التأمين حتى"
+
+msgid "Insurance approval is required before invoicing"
+msgstr "موافقة التأمين مطلوبة قبل إصدار الفاتورة"
+
+msgid "Insurance approval is required before invoicing the insurer"
+msgstr "موافقة التأمين مطلوبة قبل فوترة شركة التأمين"
+
+msgid "Insurance coverage for optical order {0} ({1})"
+msgstr "تغطية تأمينية لطلب النظارة {0} ({1})"
+
+msgid "Insurer Invoice"
+msgstr "فاتورة شركة التأمين"
+
+msgid "Insurer invoice {0} already exists"
+msgstr "فاتورة شركة التأمين {0} موجودة بالفعل"
+
+msgid "Internal"
+msgstr "داخلي"
+
+msgid "Inventory"
+msgstr "المخزون"
+
+msgid "Invoice"
+msgstr "فاتورة"
+
+msgid "Issue"
+msgstr "المشكلة"
+
+msgid "Issue Description"
+msgstr "وصف المشكلة"
+
+msgid "Item"
+msgstr "الصنف"
+
+msgid "Item Name"
+msgstr "اسم الصنف"
+
+msgid "Item Price"
+msgstr "سعر الصنف"
+
+msgid "Item {0} not found"
+msgstr "الصنف {0} غير موجود"
+
+msgid "Items"
+msgstr "الأصناف"
+
+msgid "Items, pricing, customer and insurance cannot be changed after the order is confirmed."
+msgstr "لا يمكن تغيير الأصناف والتسعير والعميل والتأمين بعد تأكيد الطلب."
+
+msgid "Job"
+msgstr "أمر التجهيز"
+
+msgid "Jobs"
+msgstr "أوامر التجهيز"
+
+msgid "Kids"
+msgstr "أطفال"
+
+msgid "Lab Error"
+msgstr "خطأ في المعمل"
+
+msgid "Lab Instructions"
+msgstr "تعليمات المعمل"
+
+msgid "Lab Performance"
+msgstr "أداء المعامل"
+
+msgid "Laboratory"
+msgstr "المعمل"
+
+msgid "Laboratory Cost"
+msgstr "تكلفة المعمل"
+
+msgid "Laboratory Name"
+msgstr "اسم المعمل"
+
+msgid "Laboratory Service Item"
+msgstr "صنف خدمة المعمل"
+
+msgid "Laboratory Type"
+msgstr "نوع المعمل"
+
+msgid "Laboratory work for optical job {0}"
+msgstr "أعمال المعمل لأمر التجهيز {0}"
+
+msgid "Last Examination"
+msgstr "آخر فحص"
+
+msgid "Last Prescription"
+msgstr "آخر وصفة"
+
+msgid "Left Eye (OS)"
+msgstr "العين اليسرى (OS)"
+
+msgid "Left Lens"
+msgstr "العدسة اليسرى"
+
+msgid "Lens"
+msgstr "العدسة"
+
+msgid "Lens Defect"
+msgstr "عيب في العدسة"
+
+msgid "Lens Material"
+msgstr "خامة العدسة"
+
+msgid "Lens Type"
+msgstr "نوع العدسة"
+
+msgid "Lens Width (mm)"
+msgstr "عرض العدسة (مم)"
+
+msgid "Lens verification"
+msgstr "التحقق من العدسة"
+
+msgid "Links"
+msgstr "روابط"
+
+msgid "Low"
+msgstr "منخفضة"
+
+msgid "Manufacturer"
+msgstr "الشركة المصنعة"
+
+msgid "Manufacturing Defect"
+msgstr "عيب تصنيع"
+
+msgid "Material"
+msgstr "الخامة"
+
+msgid "Maximum Coverage"
+msgstr "الحد الأقصى للتغطية"
+
+msgid "Measurement Error"
+msgstr "خطأ في القياسات"
+
+msgid "Measurements"
+msgstr "القياسات"
+
+msgid "Measurements Confirmed"
+msgstr "تأكيد القياسات"
+
+msgid "Member ID"
+msgstr "رقم العضوية"
+
+msgid "Men"
+msgstr "رجالي"
+
+msgid "Mobile"
+msgstr "الجوال"
+
+msgid "Model"
+msgstr "الموديل"
+
+msgid "Monthly"
+msgstr "شهري"
+
+msgid "Near PD"
+msgstr "المسافة بين الحدقتين للقراءة"
+
+msgid "Near Vision"
+msgstr "الرؤية القريبة"
+
+msgid "Net Total"
+msgstr "الصافي"
+
+msgid "New"
+msgstr "جديد"
+
+msgid "New Eye Examination"
+msgstr "فحص نظر جديد"
+
+msgid "New Job"
+msgstr "أمر تجهيز جديد"
+
+msgid "New Optical Order"
+msgstr "طلب نظارة جديد"
+
+msgid "Next Stage"
+msgstr "المرحلة التالية"
+
+msgid "Non-stock item used on external laboratory purchase orders."
+msgstr "صنف غير مخزني يُستخدم في أوامر شراء المعامل الخارجية."
+
+msgid "Non-stock item used on the insurer invoice."
+msgstr "صنف غير مخزني يُستخدم في فاتورة شركة التأمين."
+
+msgid "Normal"
+msgstr "عادية"
+
+msgid "Notes"
+msgstr "ملاحظات"
+
+msgid "Notified"
+msgstr "تم إشعار العميل"
+
+msgid "OD"
+msgstr "OD"
+
+msgid "OS"
+msgstr "OS"
+
+msgid "On Time"
+msgstr "في الموعد"
+
+msgid "Only Draft orders can be confirmed"
+msgstr "يمكن تأكيد الطلبات بحالة مسودة فقط"
+
+msgid "Only Draft orders can be deleted. Cancel the order instead."
+msgstr "يمكن حذف الطلبات بحالة مسودة فقط. ألغِ الطلب بدلاً من ذلك."
+
+msgid "Open Optical Orders"
+msgstr "طلبات النظارات المفتوحة"
+
+msgid "Optical"
+msgstr "البصريات"
+
+msgid "Optical Delivery Receipt"
+msgstr "إيصال تسليم النظارة"
+
+msgid "Optical Details"
+msgstr "تفاصيل بصرية"
+
+msgid "Optical Front Desk"
+msgstr "مكتب الاستقبال البصري"
+
+msgid "Optical Inventory"
+msgstr "مخزون البصريات"
+
+msgid "Optical Item Type"
+msgstr "نوع الصنف البصري"
+
+msgid "Optical Job"
+msgstr "أمر تجهيز النظارة"
+
+msgid "Optical Job Stage Log"
+msgstr "سجل مراحل أمر التجهيز"
+
+msgid "Optical Job Stages"
+msgstr "مراحل أمر التجهيز"
+
+msgid "Optical Lab Sheet"
+msgstr "ورقة المعمل"
+
+msgid "Optical Laboratory"
+msgstr "المعمل"
+
+msgid "Optical Order"
+msgstr "طلب النظارة"
+
+msgid "Optical Order Item"
+msgstr "صنف طلب النظارة"
+
+msgid "Optical POS Receipt 80mm"
+msgstr "إيصال نقطة البيع 80 مم"
+
+msgid "Optical Prescription"
+msgstr "وصفة النظر"
+
+msgid "Optical Prescription Print"
+msgstr "طباعة وصفة النظر"
+
+msgid "Optical Profile"
+msgstr "الملف البصري"
+
+msgid "Optical QC"
+msgstr "فحص جودة النظارة"
+
+msgid "Optical QC Check"
+msgstr "بند فحص الجودة"
+
+msgid "Optical Remake"
+msgstr "إعادة التصنيع"
+
+msgid "Optical Remake Form"
+msgstr "نموذج إعادة التصنيع"
+
+msgid "Optical Sales by Item"
+msgstr "مبيعات البصريات حسب الصنف"
+
+msgid "Optical Settings"
+msgstr "إعدادات البصريات"
+
+msgid "Optical Tax Invoice A4"
+msgstr "فاتورة ضريبية A4"
+
+msgid "Optical Warranty"
+msgstr "ضمان النظارة"
+
+msgid "Optical Warranty Certificate"
+msgstr "شهادة الضمان"
+
+msgid "Optical Warranty Claim"
+msgstr "مطالبة ضمان"
+
+msgid "Optician"
+msgstr "أخصائي البصريات"
+
+msgid "Order"
+msgstr "الطلب"
+
+msgid "Order Date"
+msgstr "تاريخ الطلب"
+
+msgid "Orders"
+msgstr "الطلبات"
+
+msgid "Original Order"
+msgstr "الطلب الأصلي"
+
+msgid "Other"
+msgstr "أخرى"
+
+msgid "Out"
+msgstr "صدغي"
+
+msgid "Outstanding"
+msgstr "المستحق"
+
+msgid "Outstanding Amount"
+msgstr "المبلغ المستحق"
+
+msgid "PD"
+msgstr "PD"
+
+msgid "PD (OD)"
+msgstr "PD (OD)"
+
+msgid "PD (OS)"
+msgstr "PD (OS)"
+
+msgid "Pack Size"
+msgstr "حجم العبوة"
+
+msgid "Paid"
+msgstr "مدفوع"
+
+msgid "Paid Amount"
+msgstr "المبلغ المدفوع"
+
+msgid "Pantoscopic Tilt"
+msgstr "الميل الأمامي"
+
+msgid "Partly Paid"
+msgstr "مدفوع جزئياً"
+
+msgid "Pass"
+msgstr "نجاح"
+
+msgid "Passed"
+msgstr "ناجح"
+
+msgid "Payment Entry"
+msgstr "قيد دفع"
+
+msgid "Payment Status"
+msgstr "حالة الدفع"
+
+msgid "Pending"
+msgstr "قيد الانتظار"
+
+msgid "Pending Lab Jobs"
+msgstr "أوامر المعمل المعلقة"
+
+msgid "Phone"
+msgstr "هاتف"
+
+msgid "Plan Name"
+msgstr "اسم الخطة"
+
+msgid "Power Range"
+msgstr "مدى القوة"
+
+msgid "Preferred Contact"
+msgstr "وسيلة التواصل المفضلة"
+
+msgid "Preparation"
+msgstr "التحضير"
+
+msgid "Prescription"
+msgstr "وصفة النظر"
+
+msgid "Prescription Change"
+msgstr "تغيّر الوصفة"
+
+msgid "Prescription Comparison"
+msgstr "مقارنة الوصفات"
+
+msgid "Prescription Date"
+msgstr "تاريخ الوصفة"
+
+msgid "Prescription Sunglasses"
+msgstr "نظارات شمسية طبية"
+
+msgid "Prescription Validity (Days)"
+msgstr "صلاحية الوصفة (أيام)"
+
+msgid "Prescription Verification"
+msgstr "التحقق من الوصفة"
+
+msgid "Prescription verification"
+msgstr "التحقق من الوصفة"
+
+msgid "Prescription {0} does not belong to customer {1}"
+msgstr "الوصفة {0} لا تخص العميل {1}"
+
+msgid "Previous Prescription"
+msgstr "الوصفة السابقة"
+
+msgid "Priority"
+msgstr "الأولوية"
+
+msgid "Prism"
+msgstr "المنشور"
+
+msgid "Prism (OD)"
+msgstr "المنشور (OD)"
+
+msgid "Prism (OS)"
+msgstr "المنشور (OS)"
+
+msgid "Products"
+msgstr "المنتجات"
+
+msgid "Progressive"
+msgstr "متعددة البؤر (تدريجية)"
+
+msgid "Purchase Order"
+msgstr "أمر شراء"
+
+msgid "Purchase Order {0} already exists"
+msgstr "أمر الشراء {0} موجود بالفعل"
+
+msgid "Purchase Receipt"
+msgstr "إيصال استلام مشتريات"
+
+msgid "Purchase orders are only for external laboratories"
+msgstr "أوامر الشراء خاصة بالمعامل الخارجية فقط"
+
+msgid "Purchasing"
+msgstr "المشتريات"
+
+msgid "QC"
+msgstr "فحص الجودة"
+
+msgid "QC Date"
+msgstr "تاريخ فحص الجودة"
+
+msgid "QC Failures"
+msgstr "حالات رسوب فحص الجودة"
+
+msgid "Quality Control"
+msgstr "فحص الجودة"
+
+msgid "Quantity"
+msgstr "الكمية"
+
+msgid "Quarterly"
+msgstr "ربع سنوي"
+
+msgid "Rate"
+msgstr "السعر"
+
+msgid "Reading"
+msgstr "قراءة"
+
+msgid "Ready"
+msgstr "جاهز"
+
+msgid "Ready for Delivery"
+msgstr "جاهز للتسليم"
+
+msgid "Reason"
+msgstr "السبب"
+
+msgid "Receivable Customer"
+msgstr "العميل المدين"
+
+msgid "Received by"
+msgstr "استلمه"
+
+msgid "Rejected"
+msgstr "مرفوض"
+
+msgid "Rejection Reason"
+msgstr "سبب الرفض"
+
+msgid "Remake"
+msgstr "إعادة التصنيع"
+
+msgid "Remake Request"
+msgstr "طلب إعادة التصنيع"
+
+msgid "Remake {0} already exists"
+msgstr "طلب إعادة التصنيع {0} موجود بالفعل"
+
+msgid "Remakes"
+msgstr "إعادات التصنيع"
+
+msgid "Remakes Analysis"
+msgstr "تحليل إعادات التصنيع"
+
+msgid "Remarks"
+msgstr "ملاحظات"
+
+msgid "Repair"
+msgstr "إصلاح"
+
+msgid "Replacement"
+msgstr "استبدال"
+
+msgid "Replacement Items"
+msgstr "أصناف الاستبدال"
+
+msgid "Replacement Period"
+msgstr "فترة الاستبدال"
+
+msgid "Reports"
+msgstr "التقارير"
+
+msgid "Request Date"
+msgstr "تاريخ الطلب"
+
+msgid "Requested"
+msgstr "مطلوب"
+
+msgid "Requires Approval"
+msgstr "يتطلب موافقة"
+
+msgid "Responsibility"
+msgstr "المسؤولية"
+
+msgid "Result"
+msgstr "النتيجة"
+
+msgid "Right Eye (OD)"
+msgstr "العين اليمنى (OD)"
+
+msgid "Right Lens"
+msgstr "العدسة اليمنى"
+
+msgid "Rimless"
+msgstr "بدون إطار"
+
+msgid "Role"
+msgstr "الدور"
+
+msgid "Row {0}: Quantity must be greater than zero"
+msgstr "الصف {0}: يجب أن تكون الكمية أكبر من صفر"
+
+msgid "Row {0}: Rate cannot be negative"
+msgstr "الصف {0}: لا يمكن أن يكون السعر سالباً"
+
+msgid "SMS"
+msgstr "رسالة نصية"
+
+msgid "SPH"
+msgstr "SPH"
+
+msgid "Sales"
+msgstr "المبيعات"
+
+msgid "Sales Invoice"
+msgstr "فاتورة مبيعات"
+
+msgid "Seg Height"
+msgstr "ارتفاع القطعة"
+
+msgid "Seg Height (OD)"
+msgstr "ارتفاع القطعة (OD)"
+
+msgid "Seg Height (OS)"
+msgstr "ارتفاع القطعة (OS)"
+
+msgid "Select the laboratory first"
+msgstr "اختر المعمل أولاً"
+
+msgid "Semi Rimless"
+msgstr "نصف إطار"
+
+msgid "Service"
+msgstr "خدمة"
+
+msgid "Set the Insurance Service Item in Optical Settings and make sure the insurance company has a customer"
+msgstr "حدد صنف خدمة التأمين في إعدادات البصريات وتأكد من ارتباط شركة التأمين بعميل"
+
+msgid "Set the laboratory supplier and the Laboratory Service Item in Optical Settings"
+msgstr "حدد مورد المعمل وصنف خدمة المعمل في إعدادات البصريات"
+
+msgid "Settings"
+msgstr "الإعدادات"
+
+msgid "Settled"
+msgstr "تمت التسوية"
+
+msgid "Settled Amount"
+msgstr "المبلغ المسوّى"
+
+msgid "Settled Amount and Settlement Date are required for a settled claim"
+msgstr "المبلغ المسوّى وتاريخ التسوية مطلوبان للمطالبة المسوّاة"
+
+msgid "Settlement"
+msgstr "التسوية"
+
+msgid "Settlement Date"
+msgstr "تاريخ التسوية"
+
+msgid "Shape"
+msgstr "الشكل"
+
+msgid "Single Vision"
+msgstr "نظر أحادي"
+
+msgid "Size"
+msgstr "المقاس"
+
+msgid "Specifications"
+msgstr "المواصفات"
+
+msgid "Stage"
+msgstr "المرحلة"
+
+msgid "Stage History"
+msgstr "سجل المراحل"
+
+msgid "Start Date"
+msgstr "تاريخ البداية"
+
+msgid "Status"
+msgstr "الحالة"
+
+msgid "Still Open"
+msgstr "ما زالت مفتوحة"
+
+msgid "Stock Balance"
+msgstr "رصيد المخزون"
+
+msgid "Stock Entry"
+msgstr "حركة مخزون"
+
+msgid "Stock Reconciliation"
+msgstr "جرد المخزون"
+
+msgid "Store"
+msgstr "المتجر"
+
+msgid "Store Guarantee"
+msgstr "ضمان المتجر"
+
+msgid "Submit the customer invoice before delivery"
+msgstr "اعتمد فاتورة العميل قبل التسليم"
+
+msgid "Submitted"
+msgstr "تم التقديم"
+
+msgid "Superseded"
+msgstr "مستبدلة"
+
+msgid "Supplier"
+msgstr "المورد"
+
+msgid "Tax ID"
+msgstr "الرقم الضريبي"
+
+msgid "Tax Invoice"
+msgstr "فاتورة ضريبية"
+
+msgid "Technician"
+msgstr "الفني"
+
+msgid "Temple Length (mm)"
+msgstr "طول الذراع (مم)"
+
+msgid "Thank you"
+msgstr "شكراً لزيارتكم"
+
+msgid "The claim date is outside the warranty period"
+msgstr "تاريخ المطالبة خارج فترة الضمان"
+
+msgid "There is no next stage"
+msgstr "لا توجد مرحلة تالية"
+
+msgid "This order has no insurance portion"
+msgstr "هذا الطلب لا يتضمن حصة تأمين"
+
+msgid "This warranty covers manufacturing defects only and does not cover damage caused by misuse."
+msgstr "يغطي هذا الضمان عيوب التصنيع فقط ولا يشمل التلف الناتج عن سوء الاستخدام."
+
+msgid "Tint"
+msgstr "التلوين"
+
+msgid "Todays Collections"
+msgstr "تحصيلات اليوم"
+
+msgid "Todays Optical Orders"
+msgstr "طلبات النظارات اليوم"
+
+msgid "Todays Sales"
+msgstr "مبيعات اليوم"
+
+msgid "Total Cost"
+msgstr "إجمالي التكلفة"
+
+msgid "Totals"
+msgstr "الإجماليات"
+
+msgid "Under Warranty"
+msgstr "تحت الضمان"
+
+msgid "Unisex"
+msgstr "للجنسين"
+
+msgid "Unpaid"
+msgstr "غير مدفوع"
+
+msgid "Up"
+msgstr "أعلى"
+
+msgid "Urgent"
+msgstr "عاجلة"
+
+msgid "Vertex Distance"
+msgstr "مسافة الرأس"
+
+msgid "View"
+msgstr "عرض"
+
+msgid "Visual inspection"
+msgstr "الفحص البصري"
+
+msgid "Warranty"
+msgstr "الضمان"
+
+msgid "Warranty Certificate"
+msgstr "شهادة ضمان"
+
+msgid "Warranty Claim"
+msgstr "مطالبة ضمان"
+
+msgid "Warranty Type"
+msgstr "نوع الضمان"
+
+msgid "Weekly"
+msgstr "أسبوعي"
+
+msgid "WhatsApp"
+msgstr "واتساب"
+
+msgid "When set, it takes precedence over the discount amount."
+msgstr "عند تحديدها تكون لها الأولوية على مبلغ الخصم."
+
+msgid "Women"
+msgstr "نسائي"
+
+msgid "Wrap Angle"
+msgstr "زاوية الالتفاف"
+
+msgid "Wrong Measurements"
+msgstr "قياسات خاطئة"
+
+msgid "Wrong Prescription"
+msgstr "وصفة خاطئة"
+
+msgid "Yearly"
+msgstr "سنوي"
+
+msgid "{0}: Axis is required when cylinder is entered"
+msgstr "{0}: المحور مطلوب عند إدخال الأسطوانة"
+
+msgid "{0}: {1} must be between {2} and {3}"
+msgstr "{0}: يجب أن تكون قيمة {1} بين {2} و {3}"
+
+msgid "{0}: {1} must be in steps of {2}"
+msgstr "{0}: يجب أن تكون قيمة {1} بمضاعفات {2}"
+

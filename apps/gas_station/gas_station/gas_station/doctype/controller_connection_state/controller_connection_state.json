@@ -1,0 +1,174 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2026-01-15 00:00:00.000000",
+ "description": "Live connection state for a PTS controller (one row per controller).",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "controller",
+  "station",
+  "cb1",
+  "connection_status",
+  "consecutive_failures",
+  "latency_ms",
+  "sb_t",
+  "last_success_at",
+  "last_status_received_at",
+  "cb2",
+  "last_failure_at",
+  "last_error"
+ ],
+ "fields": [
+  {
+   "fieldname": "controller",
+   "fieldtype": "Link",
+   "label": "Controller",
+   "options": "PTS Controller",
+   "reqd": 1,
+   "unique": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "station",
+   "fieldtype": "Link",
+   "label": "Station",
+   "options": "Gas Station",
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "cb1",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "connection_status",
+   "fieldtype": "Select",
+   "label": "Status",
+   "options": "Unknown\nConnected\nDisconnected\nStale",
+   "default": "Unknown",
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "consecutive_failures",
+   "fieldtype": "Int",
+   "label": "Consecutive Failures",
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "latency_ms",
+   "fieldtype": "Float",
+   "label": "Latency (ms)",
+   "precision": "1"
+  },
+  {
+   "fieldname": "sb_t",
+   "fieldtype": "Section Break",
+   "label": "Timestamps"
+  },
+  {
+   "fieldname": "last_success_at",
+   "fieldtype": "Datetime",
+   "label": "Last Success"
+  },
+  {
+   "fieldname": "last_status_received_at",
+   "fieldtype": "Datetime",
+   "label": "Last Status Received"
+  },
+  {
+   "fieldname": "cb2",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "last_failure_at",
+   "fieldtype": "Datetime",
+   "label": "Last Failure"
+  },
+  {
+   "fieldname": "last_error",
+   "fieldtype": "Small Text",
+   "label": "Last Error"
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2026-01-15 00:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Gas Station",
+ "name": "Controller Connection State",
+ "owner": "Administrator",
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "track_changes": 1,
+ "autoname": "field:controller",
+ "naming_rule": "By fieldname",
+ "search_fields": "connection_status",
+ "permissions": [
+  {
+   "role": "System Manager",
+   "read": 1,
+   "permlevel": 0,
+   "create": 1,
+   "write": 1,
+   "delete": 1,
+   "report": 1,
+   "export": 1,
+   "email": 1,
+   "print": 1,
+   "share": 1
+  },
+  {
+   "role": "Gas Station Administrator",
+   "read": 1,
+   "permlevel": 0,
+   "create": 1,
+   "write": 1,
+   "delete": 1,
+   "report": 1,
+   "export": 1,
+   "email": 1,
+   "print": 1,
+   "share": 1
+  },
+  {
+   "role": "Gas Station Integration Manager",
+   "read": 1,
+   "permlevel": 0,
+   "create": 1,
+   "write": 1,
+   "delete": 1,
+   "report": 1,
+   "export": 1,
+   "email": 1,
+   "print": 1,
+   "share": 1
+  },
+  {
+   "role": "Station Manager",
+   "read": 1,
+   "permlevel": 0,
+   "write": 1,
+   "create": 1,
+   "report": 1,
+   "print": 1,
+   "email": 1
+  },
+  {
+   "role": "Station Operator",
+   "read": 1,
+   "permlevel": 0,
+   "report": 1,
+   "print": 1,
+   "export": 1
+  },
+  {
+   "role": "Gas Station Viewer",
+   "read": 1,
+   "permlevel": 0,
+   "report": 1,
+   "print": 1,
+   "export": 1
+  }
+ ]
+}

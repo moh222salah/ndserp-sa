@@ -1,0 +1,11 @@
+{
+	"private": true,
+	"scripts": {
+		"pos-install": "cd frontend/pos && yarn install --check-files",
+		"pos-build": "cd frontend/pos && yarn build",
+		"kds-install": "cd frontend/kotdisplay && yarn install --check-files",
+		"kds-build": "cd frontend/kotdisplay && yarn build",
+		"postinstall": "yarn pos-install && yarn kds-install",
+		"build": "yarn pos-build && yarn kds-build"
+	}
+}

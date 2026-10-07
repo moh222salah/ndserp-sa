@@ -1,0 +1,60 @@
+{
+ "name": "NDS Printer Settings",
+ "istable": 1,
+ "editable_grid": 1,
+ "field_order": [
+  "printer",
+  "bill",
+  "kot",
+  "kot_print_format",
+  "block_takeaway_kot"
+ ],
+ "fields": [
+  {
+   "fieldname": "printer",
+   "fieldtype": "Link",
+   "label": "Printer",
+   "options": "Network Printer Settings",
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "bill",
+   "fieldtype": "Check",
+   "label": "Bill",
+   "default": "0",
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "kot",
+   "fieldtype": "Check",
+   "label": "KOT Print",
+   "default": "0",
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "kot_print_format",
+   "fieldtype": "Link",
+   "label": "KOT Print Format",
+   "options": "Print Format"
+  },
+  {
+   "fieldname": "block_takeaway_kot",
+   "fieldtype": "Check",
+   "label": "Block Takeaway KOT",
+   "default": "0"
+  }
+ ],
+ "doctype": "DocType",
+ "module": "NDS Restaurant",
+ "engine": "InnoDB",
+ "actions": [],
+ "links": [],
+ "states": [],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "owner": "Administrator",
+ "modified_by": "Administrator",
+ "creation": "2026-09-24 00:00:00.000000",
+ "modified": "2026-09-24 00:00:00.000000",
+ "permissions": []
+}

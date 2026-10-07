@@ -1,0 +1,230 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2026-01-15 00:00:00.000000",
+ "description": "Latest known physical state of a pump (one row per pump).",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "pump",
+  "station",
+  "pts_controller",
+  "cb1",
+  "status",
+  "communication_status",
+  "last_updated_at",
+  "sb_live",
+  "current_nozzle",
+  "current_fuel_grade",
+  "current_transaction",
+  "cb2",
+  "current_volume",
+  "current_amount",
+  "flow_rate",
+  "sb_tot",
+  "totalizer_volume",
+  "totalizer_amount",
+  "cb3",
+  "last_transaction_id"
+ ],
+ "fields": [
+  {
+   "fieldname": "pump",
+   "fieldtype": "Link",
+   "label": "Pump",
+   "options": "Gas Station Pump",
+   "reqd": 1,
+   "unique": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "station",
+   "fieldtype": "Link",
+   "label": "Station",
+   "options": "Gas Station",
+   "in_list_view": 1,
+   "search_index": 1
+  },
+  {
+   "fieldname": "pts_controller",
+   "fieldtype": "Link",
+   "label": "PTS Controller",
+   "options": "PTS Controller"
+  },
+  {
+   "fieldname": "cb1",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "status",
+   "fieldtype": "Select",
+   "label": "Status",
+   "options": "Unknown\nIdle\nDispensing\nCalling\nError\nOffline",
+   "default": "Unknown",
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "communication_status",
+   "fieldtype": "Select",
+   "label": "Comm",
+   "options": "Live\nStale\nOffline",
+   "default": "Offline",
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "last_updated_at",
+   "fieldtype": "Datetime",
+   "label": "Last Updated",
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "sb_live",
+   "fieldtype": "Section Break",
+   "label": "Live Dispense"
+  },
+  {
+   "fieldname": "current_nozzle",
+   "fieldtype": "Data",
+   "label": "Current Nozzle"
+  },
+  {
+   "fieldname": "current_fuel_grade",
+   "fieldtype": "Data",
+   "label": "Current Fuel Grade"
+  },
+  {
+   "fieldname": "current_transaction",
+   "fieldtype": "Data",
+   "label": "Current Transaction"
+  },
+  {
+   "fieldname": "cb2",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "current_volume",
+   "fieldtype": "Float",
+   "label": "Current Volume (L)",
+   "precision": "3"
+  },
+  {
+   "fieldname": "current_amount",
+   "fieldtype": "Float",
+   "label": "Current Amount",
+   "precision": "2"
+  },
+  {
+   "fieldname": "flow_rate",
+   "fieldtype": "Float",
+   "label": "Flow Rate (L/min)",
+   "precision": "2"
+  },
+  {
+   "fieldname": "sb_tot",
+   "fieldtype": "Section Break",
+   "label": "Totalizers"
+  },
+  {
+   "fieldname": "totalizer_volume",
+   "fieldtype": "Float",
+   "label": "Totalizer Volume (L)",
+   "precision": "3"
+  },
+  {
+   "fieldname": "totalizer_amount",
+   "fieldtype": "Float",
+   "label": "Totalizer Amount",
+   "precision": "2"
+  },
+  {
+   "fieldname": "cb3",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "last_transaction_id",
+   "fieldtype": "Data",
+   "label": "Last Transaction ID"
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2026-01-15 00:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Gas Station",
+ "name": "Pump State",
+ "owner": "Administrator",
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "track_changes": 1,
+ "autoname": "field:pump",
+ "naming_rule": "By fieldname",
+ "search_fields": "station,status",
+ "permissions": [
+  {
+   "role": "System Manager",
+   "read": 1,
+   "permlevel": 0,
+   "create": 1,
+   "write": 1,
+   "delete": 1,
+   "report": 1,
+   "export": 1,
+   "email": 1,
+   "print": 1,
+   "share": 1
+  },
+  {
+   "role": "Gas Station Administrator",
+   "read": 1,
+   "permlevel": 0,
+   "create": 1,
+   "write": 1,
+   "delete": 1,
+   "report": 1,
+   "export": 1,
+   "email": 1,
+   "print": 1,
+   "share": 1
+  },
+  {
+   "role": "Gas Station Integration Manager",
+   "read": 1,
+   "permlevel": 0,
+   "create": 1,
+   "write": 1,
+   "delete": 1,
+   "report": 1,
+   "export": 1,
+   "email": 1,
+   "print": 1,
+   "share": 1
+  },
+  {
+   "role": "Station Manager",
+   "read": 1,
+   "permlevel": 0,
+   "write": 1,
+   "create": 1,
+   "report": 1,
+   "print": 1,
+   "email": 1
+  },
+  {
+   "role": "Station Operator",
+   "read": 1,
+   "permlevel": 0,
+   "report": 1,
+   "print": 1,
+   "export": 1
+  },
+  {
+   "role": "Gas Station Viewer",
+   "read": 1,
+   "permlevel": 0,
+   "report": 1,
+   "print": 1,
+   "export": 1
+  }
+ ]
+}

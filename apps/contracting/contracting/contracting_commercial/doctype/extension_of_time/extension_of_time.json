@@ -1,0 +1,131 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2026-09-08 00:00:00.000000",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "naming_series",
+  "project",
+  "company",
+  "request_date",
+  "from_date",
+  "eot_cb",
+  "requested_days",
+  "approved_days",
+  "new_end_date",
+  "status",
+  "eot_reason",
+  "reason"
+ ],
+ "fields": [
+  {
+   "fieldname": "naming_series",
+   "fieldtype": "Select",
+   "label": "Series",
+   "options": "CT-EOT-.#####",
+   "default": "CT-EOT-.#####",
+   "hidden": 1
+  },
+  {
+   "fieldname": "project",
+   "fieldtype": "Link",
+   "label": "Project",
+   "options": "Project",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "company",
+   "fieldtype": "Link",
+   "label": "Company",
+   "options": "Company",
+   "fetch_from": "project.company",
+   "read_only": 1
+  },
+  {
+   "fieldname": "request_date",
+   "fieldtype": "Date",
+   "label": "Request Date",
+   "reqd": 1,
+   "default": "Today"
+  },
+  {
+   "fieldname": "from_date",
+   "fieldtype": "Date",
+   "label": "From Date"
+  },
+  {
+   "fieldname": "eot_cb",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "requested_days",
+   "fieldtype": "Int",
+   "label": "Requested Days"
+  },
+  {
+   "fieldname": "approved_days",
+   "fieldtype": "Int",
+   "label": "Approved Days"
+  },
+  {
+   "fieldname": "new_end_date",
+   "fieldtype": "Date",
+   "label": "Approved New End Date",
+   "read_only": 1
+  },
+  {
+   "fieldname": "status",
+   "fieldtype": "Select",
+   "label": "Status",
+   "options": "Draft\nSubmitted\nUnder Review\nApproved\nRejected\nClosed",
+   "default": "Draft",
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "eot_reason",
+   "fieldtype": "Section Break",
+   "label": "Reason"
+  },
+  {
+   "fieldname": "reason",
+   "fieldtype": "Small Text",
+   "label": "Reason",
+   "reqd": 1
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "is_submittable": 0,
+ "issingle": 0,
+ "istable": 0,
+ "links": [],
+ "modified": "2026-09-08 00:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Contracting Commercial",
+ "name": "Extension of Time",
+ "owner": "Administrator",
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "track_changes": 1,
+ "autoname": "naming_series:",
+ "title_field": "contract",
+ "search_fields": "contract,status",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1,
+   "submit": 0,
+   "cancel": 0
+  }
+ ]
+}

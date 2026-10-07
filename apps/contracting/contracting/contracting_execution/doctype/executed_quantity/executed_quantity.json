@@ -1,0 +1,135 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2026-09-08 00:00:00.000000",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "naming_series",
+  "project",
+  "date",
+  "wbs",
+  "exq_cb",
+  "boq_item",
+  "quantity",
+  "unit",
+  "status",
+  "exq_evidence",
+  "reference",
+  "comments"
+ ],
+ "fields": [
+  {
+   "fieldname": "naming_series",
+   "fieldtype": "Select",
+   "label": "Series",
+   "options": "CT-EXQ-.#####",
+   "default": "CT-EXQ-.#####",
+   "hidden": 1
+  },
+  {
+   "fieldname": "project",
+   "fieldtype": "Link",
+   "label": "Project",
+   "options": "Project",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "date",
+   "fieldtype": "Date",
+   "label": "Date",
+   "reqd": 1,
+   "default": "Today"
+  },
+  {
+   "fieldname": "wbs",
+   "fieldtype": "Link",
+   "label": "WBS",
+   "options": "WBS",
+   "reqd": 1
+  },
+  {
+   "fieldname": "exq_cb",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "boq_item",
+   "fieldtype": "Link",
+   "label": "BOQ Item",
+   "options": "Budget BOQ Item",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "quantity",
+   "fieldtype": "Float",
+   "label": "Quantity",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "unit",
+   "fieldtype": "Data",
+   "label": "Unit",
+   "reqd": 1,
+   "fetch_from": "boq_item.unit"
+  },
+  {
+   "fieldname": "status",
+   "fieldtype": "Select",
+   "label": "Status",
+   "options": "Draft\nSubmitted\nApproved\nCancelled",
+   "default": "Draft",
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "exq_evidence",
+   "fieldtype": "Section Break",
+   "label": "Evidence"
+  },
+  {
+   "fieldname": "reference",
+   "fieldtype": "Data",
+   "label": "Source / Reference"
+  },
+  {
+   "fieldname": "comments",
+   "fieldtype": "Small Text",
+   "label": "Comments"
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "is_submittable": 0,
+ "issingle": 0,
+ "istable": 0,
+ "links": [],
+ "modified": "2026-09-08 00:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Contracting Execution",
+ "name": "Executed Quantity",
+ "owner": "Administrator",
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "track_changes": 1,
+ "autoname": "naming_series:",
+ "title_field": "boq_item",
+ "search_fields": "project,contract,boq_item,status",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1,
+   "submit": 0,
+   "cancel": 0
+  }
+ ]
+}

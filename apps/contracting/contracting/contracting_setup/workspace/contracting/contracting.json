@@ -1,0 +1,462 @@
+{
+ "app": "contracting",
+ "charts": [],
+ "content": "[{\"id\": \"hdr1\", \"type\": \"header\", \"data\": {\"text\": \"<span class=\\\"h4\\\"><b>Contracting</b></span>\", \"col\": 12}}, {\"id\": \"sc0\", \"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"Project Budget\", \"col\": 3}}, {\"id\": \"sc1\", \"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"Client IPC\", \"col\": 3}}, {\"id\": \"sc2\", \"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"Operation Measurement\", \"col\": 3}}, {\"id\": \"sc3\", \"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"Executed Quantity\", \"col\": 3}}, {\"id\": \"sp1\", \"type\": \"spacer\", \"data\": {\"col\": 12}}, {\"id\": \"cd0\", \"type\": \"card\", \"data\": {\"card_name\": \"Commercial\", \"col\": 4}}, {\"id\": \"cd1\", \"type\": \"card\", \"data\": {\"card_name\": \"Tender\", \"col\": 4}}, {\"id\": \"cd2\", \"type\": \"card\", \"data\": {\"card_name\": \"Execution\", \"col\": 4}}, {\"id\": \"cd3\", \"type\": \"card\", \"data\": {\"card_name\": \"Procurement & Subcontract\", \"col\": 4}}, {\"id\": \"cd4\", \"type\": \"card\", \"data\": {\"card_name\": \"IPC\", \"col\": 4}}, {\"id\": \"cd5\", \"type\": \"card\", \"data\": {\"card_name\": \"Budget\", \"col\": 4}}, {\"id\": \"cd6\", \"type\": \"card\", \"data\": {\"card_name\": \"Setup\", \"col\": 4}}, {\"id\": \"cd7\", \"type\": \"card\", \"data\": {\"card_name\": \"Reports\", \"col\": 4}}]",
+ "creation": "2026-10-04 04:30:06.825132",
+ "custom_blocks": [],
+ "docstatus": 0,
+ "doctype": "Workspace",
+ "hide_custom": 0,
+ "icon": "project",
+ "idx": 0,
+ "indicator_color": "green",
+ "is_hidden": 0,
+ "label": "Contracting",
+ "link_type": "DocType",
+ "links": [
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Commercial",
+   "link_count": 6,
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Card Break"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Contract Variation",
+   "link_count": 0,
+   "link_to": "Contract Variation",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Contract Claim",
+   "link_count": 0,
+   "link_to": "Contract Claim",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Extension of Time",
+   "link_count": 0,
+   "link_to": "Extension of Time",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Contract Amendment",
+   "link_count": 0,
+   "link_to": "Contract Amendment",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Final Account",
+   "link_count": 0,
+   "link_to": "Final Account",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Contract Closeout",
+   "link_count": 0,
+   "link_to": "Contract Closeout",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Tender",
+   "link_count": 2,
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Card Break"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Tender",
+   "link_count": 0,
+   "link_to": "Tender",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Tender BOQ Item",
+   "link_count": 0,
+   "link_to": "Tender BOQ Item",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Execution",
+   "link_count": 4,
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Card Break"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "WBS",
+   "link_count": 0,
+   "link_to": "WBS",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "WBS Allocation",
+   "link_count": 0,
+   "link_to": "WBS Allocation",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Executed Quantity",
+   "link_count": 0,
+   "link_to": "Executed Quantity",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Operation Measurement",
+   "link_count": 0,
+   "link_to": "Operation Measurement",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Procurement & Subcontract",
+   "link_count": 6,
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Card Break"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Material Requirement",
+   "link_count": 0,
+   "link_to": "Construction Material Requirement",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Procurement Plan",
+   "link_count": 0,
+   "link_to": "Procurement Plan",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Subcontract",
+   "link_count": 0,
+   "link_to": "Subcontract",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Subcontract BOQ Item",
+   "link_count": 0,
+   "link_to": "Subcontract BOQ Item",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Subcontract BOQ Mapping",
+   "link_count": 0,
+   "link_to": "Subcontract BOQ Mapping",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Subcontract Variation",
+   "link_count": 0,
+   "link_to": "Subcontract Variation",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "IPC",
+   "link_count": 2,
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Card Break"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Client IPC",
+   "link_count": 0,
+   "link_to": "Client IPC",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Subcontract IPC",
+   "link_count": 0,
+   "link_to": "Subcontract IPC",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Budget",
+   "link_count": 3,
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Card Break"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Project Budget",
+   "link_count": 0,
+   "link_to": "Project Budget",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Budget BOQ Item",
+   "link_count": 0,
+   "link_to": "Budget BOQ Item",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Budget Per Cost Code",
+   "link_count": 0,
+   "link_to": "Budget Per Cost Code",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Setup",
+   "link_count": 4,
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Card Break"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Construction Settings",
+   "link_count": 0,
+   "link_to": "Construction Settings",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "CSI Code",
+   "link_count": 0,
+   "link_to": "CSI Code",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Cost Code",
+   "link_count": 0,
+   "link_to": "Cost Code",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Deduction Type",
+   "link_count": 0,
+   "link_to": "Deduction Type",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Reports",
+   "link_count": 6,
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Card Break"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 1,
+   "label": "Contract BOQ Status",
+   "link_count": 0,
+   "link_to": "Contract BOQ Status",
+   "link_type": "Report",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 1,
+   "label": "Client IPC Register",
+   "link_count": 0,
+   "link_to": "Client IPC Register",
+   "link_type": "Report",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 1,
+   "label": "Subcontract IPC Register",
+   "link_count": 0,
+   "link_to": "Subcontract IPC Register",
+   "link_type": "Report",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 1,
+   "label": "Variation Register",
+   "link_count": 0,
+   "link_to": "Variation Register",
+   "link_type": "Report",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 1,
+   "label": "Cost Code Budget vs Actual",
+   "link_count": 0,
+   "link_to": "Cost Code Budget vs Actual",
+   "link_type": "Report",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 1,
+   "label": "BOQ Budget vs Actual",
+   "link_count": 0,
+   "link_to": "BOQ Budget vs Actual",
+   "link_type": "Report",
+   "onboard": 0,
+   "type": "Link"
+  }
+ ],
+ "modified": "2026-10-04 04:42:53.141182",
+ "modified_by": "Administrator",
+ "module": "Contracting Setup",
+ "name": "Contracting",
+ "number_cards": [],
+ "owner": "Administrator",
+ "public": 1,
+ "quick_lists": [],
+ "roles": [],
+ "sequence_id": 1.0,
+ "shortcuts": [
+  {
+   "color": "Blue",
+   "doc_view": "List",
+   "label": "Project Budget",
+   "link_to": "Project Budget",
+   "type": "DocType"
+  },
+  {
+   "color": "Green",
+   "doc_view": "List",
+   "label": "Client IPC",
+   "link_to": "Client IPC",
+   "type": "DocType"
+  },
+  {
+   "color": "Orange",
+   "doc_view": "List",
+   "label": "Operation Measurement",
+   "link_to": "Operation Measurement",
+   "type": "DocType"
+  },
+  {
+   "color": "Purple",
+   "doc_view": "List",
+   "label": "Executed Quantity",
+   "link_to": "Executed Quantity",
+   "type": "DocType"
+  }
+ ],
+ "title": "Contracting",
+ "type": "Workspace"
+}

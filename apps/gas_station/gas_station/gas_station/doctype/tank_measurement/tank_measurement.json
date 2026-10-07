@@ -1,0 +1,241 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2026-01-15 00:00:00.000000",
+ "description": "Historical ATG measurement. Not every sensor provides every value.",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "station",
+  "tank",
+  "probe",
+  "pts_controller",
+  "cb1",
+  "measurement_datetime",
+  "received_at",
+  "sb_m",
+  "product_level",
+  "water_level",
+  "product_volume",
+  "water_volume",
+  "cb2",
+  "temperature",
+  "density",
+  "mass",
+  "ullage",
+  "temperature_compensated_volume",
+  "sb_raw",
+  "alarms",
+  "raw_payload"
+ ],
+ "fields": [
+  {
+   "fieldname": "station",
+   "fieldtype": "Link",
+   "label": "Station",
+   "options": "Gas Station",
+   "reqd": 1,
+   "search_index": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "tank",
+   "fieldtype": "Link",
+   "label": "Tank",
+   "options": "Gas Station Tank",
+   "reqd": 1,
+   "search_index": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "probe",
+   "fieldtype": "Link",
+   "label": "Probe",
+   "options": "Gas Station Probe"
+  },
+  {
+   "fieldname": "pts_controller",
+   "fieldtype": "Link",
+   "label": "PTS Controller",
+   "options": "PTS Controller"
+  },
+  {
+   "fieldname": "cb1",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "measurement_datetime",
+   "fieldtype": "Datetime",
+   "label": "Measured At",
+   "reqd": 1,
+   "search_index": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "received_at",
+   "fieldtype": "Datetime",
+   "label": "Received At"
+  },
+  {
+   "fieldname": "sb_m",
+   "fieldtype": "Section Break",
+   "label": "Measurements"
+  },
+  {
+   "fieldname": "product_level",
+   "fieldtype": "Float",
+   "label": "Product Level (mm)",
+   "precision": "2"
+  },
+  {
+   "fieldname": "water_level",
+   "fieldtype": "Float",
+   "label": "Water Level (mm)",
+   "precision": "2"
+  },
+  {
+   "fieldname": "product_volume",
+   "fieldtype": "Float",
+   "label": "Product Volume (L)",
+   "precision": "3",
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "water_volume",
+   "fieldtype": "Float",
+   "label": "Water Volume (L)",
+   "precision": "3"
+  },
+  {
+   "fieldname": "cb2",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "temperature",
+   "fieldtype": "Float",
+   "label": "Temperature (\u00b0C)",
+   "precision": "2"
+  },
+  {
+   "fieldname": "density",
+   "fieldtype": "Float",
+   "label": "Density",
+   "precision": "2"
+  },
+  {
+   "fieldname": "mass",
+   "fieldtype": "Float",
+   "label": "Mass (kg)",
+   "precision": "2"
+  },
+  {
+   "fieldname": "ullage",
+   "fieldtype": "Float",
+   "label": "Ullage (L)",
+   "precision": "3"
+  },
+  {
+   "fieldname": "temperature_compensated_volume",
+   "fieldtype": "Float",
+   "label": "TC Volume (L)",
+   "precision": "3"
+  },
+  {
+   "fieldname": "sb_raw",
+   "fieldtype": "Section Break",
+   "label": "Raw"
+  },
+  {
+   "fieldname": "alarms",
+   "fieldtype": "Small Text",
+   "label": "Alarms"
+  },
+  {
+   "fieldname": "raw_payload",
+   "fieldtype": "Code",
+   "label": "Raw Payload",
+   "options": "JSON"
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2026-01-15 00:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Gas Station",
+ "name": "Tank Measurement",
+ "owner": "Administrator",
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "track_changes": 1,
+ "autoname": "TANK-MEAS-.YYYY.-.######",
+ "naming_rule": "Expression (old style)",
+ "search_fields": "tank,measurement_datetime",
+ "permissions": [
+  {
+   "role": "System Manager",
+   "read": 1,
+   "permlevel": 0,
+   "create": 1,
+   "write": 1,
+   "delete": 1,
+   "report": 1,
+   "export": 1,
+   "email": 1,
+   "print": 1,
+   "share": 1
+  },
+  {
+   "role": "Gas Station Administrator",
+   "read": 1,
+   "permlevel": 0,
+   "create": 1,
+   "write": 1,
+   "delete": 1,
+   "report": 1,
+   "export": 1,
+   "email": 1,
+   "print": 1,
+   "share": 1
+  },
+  {
+   "role": "Gas Station Integration Manager",
+   "read": 1,
+   "permlevel": 0,
+   "create": 1,
+   "write": 1,
+   "delete": 1,
+   "report": 1,
+   "export": 1,
+   "email": 1,
+   "print": 1,
+   "share": 1
+  },
+  {
+   "role": "Station Manager",
+   "read": 1,
+   "permlevel": 0,
+   "write": 1,
+   "create": 1,
+   "report": 1,
+   "print": 1,
+   "email": 1
+  },
+  {
+   "role": "Station Operator",
+   "read": 1,
+   "permlevel": 0,
+   "report": 1,
+   "print": 1,
+   "export": 1
+  },
+  {
+   "role": "Gas Station Viewer",
+   "read": 1,
+   "permlevel": 0,
+   "report": 1,
+   "print": 1,
+   "export": 1
+  }
+ ]
+}

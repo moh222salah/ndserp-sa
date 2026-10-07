@@ -1,0 +1,192 @@
+{
+ "actions": [],
+ "creation": "2026-09-28 00:00:00",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "optical_job",
+  "optical_order",
+  "customer_name",
+  "qc_col",
+  "qc_date",
+  "inspector",
+  "result",
+  "checks_section",
+  "checks",
+  "defects_section",
+  "defects",
+  "rejection_reason",
+  "remake"
+ ],
+ "fields": [
+  {
+   "fieldname": "optical_job",
+   "fieldtype": "Link",
+   "label": "Optical Job",
+   "options": "Optical Job",
+   "reqd": 1,
+   "in_list_view": 1,
+   "set_only_once": 1
+  },
+  {
+   "fieldname": "optical_order",
+   "fieldtype": "Link",
+   "label": "Optical Order",
+   "options": "Optical Order",
+   "fetch_from": "optical_job.optical_order",
+   "read_only": 1
+  },
+  {
+   "fieldname": "customer_name",
+   "fieldtype": "Data",
+   "label": "Customer Name",
+   "fetch_from": "optical_job.customer_name",
+   "read_only": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "qc_col",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "qc_date",
+   "fieldtype": "Date",
+   "label": "QC Date",
+   "default": "Today"
+  },
+  {
+   "fieldname": "inspector",
+   "fieldtype": "Link",
+   "label": "Inspector",
+   "options": "User",
+   "default": "__user"
+  },
+  {
+   "fieldname": "result",
+   "fieldtype": "Select",
+   "label": "Result",
+   "options": "Pending\nPass\nFail",
+   "default": "Pending",
+   "in_list_view": 1,
+   "in_standard_filter": 1
+  },
+  {
+   "fieldname": "checks_section",
+   "fieldtype": "Section Break",
+   "label": "Checklist"
+  },
+  {
+   "fieldname": "checks",
+   "fieldtype": "Table",
+   "label": "Checklist",
+   "options": "Optical QC Check"
+  },
+  {
+   "fieldname": "defects_section",
+   "fieldtype": "Section Break",
+   "label": "Defects"
+  },
+  {
+   "fieldname": "defects",
+   "fieldtype": "Small Text",
+   "label": "Defects",
+   "depends_on": "eval:doc.result=='Fail'"
+  },
+  {
+   "fieldname": "rejection_reason",
+   "fieldtype": "Select",
+   "label": "Rejection Reason",
+   "options": "\nLens Defect\nWrong Prescription\nWrong Measurements\nFrame Damage\nCoating Defect\nAssembly Defect\nOther",
+   "depends_on": "eval:doc.result=='Fail'",
+   "mandatory_depends_on": "eval:doc.result=='Fail'"
+  },
+  {
+   "fieldname": "remake",
+   "fieldtype": "Link",
+   "label": "Optical Remake",
+   "options": "Optical Remake",
+   "read_only": 1,
+   "no_copy": 1
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2026-09-28 00:00:00",
+ "modified_by": "Administrator",
+ "module": "Optical",
+ "name": "Optical QC",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "role": "System Manager",
+   "read": 1,
+   "report": 1,
+   "export": 1,
+   "print": 1,
+   "email": 1,
+   "share": 1,
+   "write": 1,
+   "create": 1,
+   "delete": 1
+  },
+  {
+   "role": "Optical Manager",
+   "read": 1,
+   "report": 1,
+   "export": 1,
+   "print": 1,
+   "email": 1,
+   "share": 1,
+   "write": 1,
+   "create": 1,
+   "delete": 1
+  },
+  {
+   "role": "Optical Branch Manager",
+   "read": 1,
+   "report": 1,
+   "export": 1,
+   "print": 1,
+   "email": 1,
+   "share": 1,
+   "write": 1,
+   "create": 1
+  },
+  {
+   "role": "Optical Lab Technician",
+   "read": 1,
+   "report": 1,
+   "export": 1,
+   "print": 1,
+   "email": 1,
+   "share": 1,
+   "write": 1,
+   "create": 1
+  },
+  {
+   "role": "Optician",
+   "read": 1,
+   "report": 1,
+   "export": 1,
+   "print": 1,
+   "email": 1,
+   "share": 1
+  },
+  {
+   "role": "Optical Cashier",
+   "read": 1,
+   "report": 1,
+   "export": 1,
+   "print": 1,
+   "email": 1,
+   "share": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "track_changes": 1,
+ "autoname": "format:OPT-QC-{YYYY}-{#####}",
+ "naming_rule": "Expression",
+ "title_field": "customer_name"
+}

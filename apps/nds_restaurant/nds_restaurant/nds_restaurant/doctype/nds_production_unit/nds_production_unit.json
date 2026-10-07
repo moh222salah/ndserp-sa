@@ -1,0 +1,133 @@
+{
+ "name": "NDS Production Unit",
+ "autoname": "prompt",
+ "naming_rule": "Set by user",
+ "allow_rename": 1,
+ "field_order": [
+  "pos_profile",
+  "warehouse",
+  "company",
+  "column_break_1",
+  "branch",
+  "section_groups",
+  "item_groups",
+  "section_printers",
+  "printer_settings"
+ ],
+ "fields": [
+  {
+   "fieldname": "pos_profile",
+   "fieldtype": "Link",
+   "label": "POS Profile",
+   "options": "POS Profile",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "warehouse",
+   "fieldtype": "Link",
+   "label": "Warehouse",
+   "options": "Warehouse",
+   "fetch_from": "pos_profile.warehouse",
+   "read_only": 1
+  },
+  {
+   "fieldname": "company",
+   "fieldtype": "Link",
+   "label": "Company",
+   "options": "Company",
+   "fetch_from": "pos_profile.company",
+   "read_only": 1
+  },
+  {
+   "fieldname": "column_break_1",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "branch",
+   "fieldtype": "Link",
+   "label": "Branch",
+   "options": "Branch",
+   "fetch_from": "pos_profile.custom_branch",
+   "read_only": 1
+  },
+  {
+   "fieldname": "section_groups",
+   "fieldtype": "Section Break",
+   "label": "Item Groups"
+  },
+  {
+   "fieldname": "item_groups",
+   "fieldtype": "Table",
+   "label": "Item Groups",
+   "options": "NDS Production Item Groups",
+   "reqd": 1
+  },
+  {
+   "fieldname": "section_printers",
+   "fieldtype": "Section Break",
+   "label": "Printers"
+  },
+  {
+   "fieldname": "printer_settings",
+   "fieldtype": "Table",
+   "label": "Printer Settings",
+   "options": "NDS Printer Settings"
+  }
+ ],
+ "doctype": "DocType",
+ "module": "NDS Restaurant",
+ "engine": "InnoDB",
+ "actions": [],
+ "links": [],
+ "states": [],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "owner": "Administrator",
+ "modified_by": "Administrator",
+ "creation": "2026-09-24 00:00:00.000000",
+ "modified": "2026-09-24 00:00:00.000000",
+ "permissions": [
+  {
+   "role": "System Manager",
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "select": 1,
+   "share": 1,
+   "write": 1
+  },
+  {
+   "role": "NDS Manager",
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "select": 1,
+   "share": 1,
+   "write": 1
+  },
+  {
+   "role": "NDS Captain",
+   "email": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "select": 1
+  },
+  {
+   "role": "NDS Cashier",
+   "print": 1,
+   "read": 1,
+   "select": 1,
+   "write": 1
+  }
+ ]
+}

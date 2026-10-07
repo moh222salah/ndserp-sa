@@ -1,0 +1,50 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 138 40" role="img" aria-label="ERP">
+  <title>ERP</title>
+  <!--
+    Default ERP mark.
+
+    Design intent: an ERP is layered systems sharing one spine. The mark is
+    three isometric plates stacked on a common axis — bottom widest (data),
+    top narrowest (decision) — beside three rising bars that read as reporting.
+    Abstract on purpose: it must not compete with a customer's own logo.
+
+    Everything uses `currentColor`, so one file works on the dark brand panel
+    and on the white card with no second asset and no background plate.
+
+    The wordmark is drawn as strokes, not <text>. An SVG used as a CSS
+    mask/background is rendered as an isolated image: web fonts never load
+    there, so a <text> element would silently fall back to a different system
+    font on every OS. Geometry renders identically everywhere.
+  -->
+  <g fill="none" stroke="currentColor" stroke-width="2.4"
+     stroke-linecap="round" stroke-linejoin="round">
+    <!-- lower plate — data -->
+    <path d="M3 28 L17 20.5 L31 28 L17 35.5 Z" opacity=".5"/>
+    <!-- middle plate — process -->
+    <path d="M3 20 L17 12.5 L31 20 L17 27.5 Z" opacity=".78"/>
+    <!-- upper plate — decision -->
+    <path d="M3 12 L17 4.5 L31 12 L17 19.5 Z"/>
+
+    <!-- reporting bars, rising -->
+    <path d="M41 30 L41 23" opacity=".5"/>
+    <path d="M48 30 L48 17.5" opacity=".78"/>
+    <path d="M55 30 L55 11"/>
+  </g>
+
+  <!-- wordmark: E R P -->
+  <g fill="none" stroke="currentColor" stroke-width="2.6"
+     stroke-linecap="round" stroke-linejoin="round">
+    <!-- E -->
+    <path d="M68 9 L68 30"/>
+    <path d="M68 9 L80 9"/>
+    <path d="M68 19.5 L78 19.5"/>
+    <path d="M68 30 L80 30"/>
+    <!-- R -->
+    <path d="M90 30 L90 9"/>
+    <path d="M90 9 L99 9 A5.4 5.4 0 0 1 99 19.8 L90 19.8"/>
+    <path d="M95 19.8 L103 30"/>
+    <!-- P -->
+    <path d="M113 30 L113 9"/>
+    <path d="M113 9 L122 9 A5.4 5.4 0 0 1 122 19.8 L113 19.8"/>
+  </g>
+</svg>

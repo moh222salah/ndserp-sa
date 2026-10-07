@@ -1,0 +1,18 @@
+# Claude Code Instructions
+
+## Package Manager
+- Always use `yarn` as the package manager for this project
+- Never use `npm` for installing, updating, or managing dependencies
+- When adding packages, use: `yarn add <package>`
+- When removing packages, use: `yarn remove <package>`
+- When installing dependencies, use: `yarn install`
+
+## File Creation
+- Never create unnecessary markdown (.md) files or documentation files
+- Only create documentation files when explicitly requested by the user
+- Prefer editing existing files over creating new ones
+
+## API Calls
+- Always use `call` function from `@/utils/apiWrapper` for API calls
+- Never use `window.frappe.call` or `frappe.call` directly
+- Import as: `import { call } from "@/utils/apiWrapper"`

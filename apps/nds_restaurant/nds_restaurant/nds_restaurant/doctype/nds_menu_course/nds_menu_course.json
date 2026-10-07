@@ -1,0 +1,90 @@
+{
+ "name": "NDS Menu Course",
+ "autoname": "field:course",
+ "naming_rule": "By fieldname",
+ "allow_rename": 1,
+ "allow_import": 1,
+ "document_type": "Setup",
+ "field_order": [
+  "course",
+  "serving_priority",
+  "indicate_in_kds"
+ ],
+ "fields": [
+  {
+   "fieldname": "course",
+   "fieldtype": "Data",
+   "label": "Course",
+   "reqd": 1,
+   "unique": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "serving_priority",
+   "fieldtype": "Int",
+   "label": "Serving Priority",
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "indicate_in_kds",
+   "fieldtype": "Check",
+   "label": "Indicate In KDS",
+   "default": "0"
+  }
+ ],
+ "doctype": "DocType",
+ "module": "NDS Restaurant",
+ "engine": "InnoDB",
+ "actions": [],
+ "links": [],
+ "states": [],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "owner": "Administrator",
+ "modified_by": "Administrator",
+ "creation": "2026-09-24 00:00:00.000000",
+ "modified": "2026-09-24 00:00:00.000000",
+ "permissions": [
+  {
+   "role": "System Manager",
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "select": 1,
+   "share": 1,
+   "write": 1
+  },
+  {
+   "role": "NDS Manager",
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "select": 1,
+   "share": 1,
+   "write": 1
+  },
+  {
+   "role": "NDS Captain",
+   "email": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "select": 1
+  },
+  {
+   "role": "NDS Cashier",
+   "print": 1,
+   "read": 1,
+   "select": 1,
+   "write": 1
+  }
+ ]
+}

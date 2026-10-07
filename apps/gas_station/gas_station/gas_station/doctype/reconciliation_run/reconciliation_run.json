@@ -1,0 +1,186 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2026-01-15 00:00:00.000000",
+ "description": "A saved reconciliation run with result lines.",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "recon_type",
+  "station",
+  "cb1",
+  "from_date",
+  "to_date",
+  "run_at",
+  "sb_sum",
+  "matched_count",
+  "exception_count",
+  "cb2",
+  "total_variance",
+  "sb_res",
+  "results"
+ ],
+ "fields": [
+  {
+   "fieldname": "recon_type",
+   "fieldtype": "Select",
+   "label": "Type",
+   "options": "PTS vs ERPNext Sales\nPump Totalizer\nTank Balance",
+   "default": "PTS vs ERPNext Sales",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "station",
+   "fieldtype": "Link",
+   "label": "Station",
+   "options": "Gas Station",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "cb1",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "from_date",
+   "fieldtype": "Datetime",
+   "label": "From",
+   "reqd": 1
+  },
+  {
+   "fieldname": "to_date",
+   "fieldtype": "Datetime",
+   "label": "To",
+   "reqd": 1
+  },
+  {
+   "fieldname": "run_at",
+   "fieldtype": "Datetime",
+   "label": "Run At",
+   "read_only": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "sb_sum",
+   "fieldtype": "Section Break",
+   "label": "Summary"
+  },
+  {
+   "fieldname": "matched_count",
+   "fieldtype": "Int",
+   "label": "Matched",
+   "read_only": 1
+  },
+  {
+   "fieldname": "exception_count",
+   "fieldtype": "Int",
+   "label": "Exceptions",
+   "read_only": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "cb2",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "total_variance",
+   "fieldtype": "Float",
+   "label": "Total Variance",
+   "precision": "3",
+   "read_only": 1
+  },
+  {
+   "fieldname": "sb_res",
+   "fieldtype": "Section Break",
+   "label": "Results"
+  },
+  {
+   "fieldname": "results",
+   "fieldtype": "Table",
+   "label": "Results",
+   "options": "Reconciliation Result"
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2026-01-15 00:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Gas Station",
+ "name": "Reconciliation Run",
+ "owner": "Administrator",
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "track_changes": 1,
+ "autoname": "RECON-.YYYY.-.#####",
+ "naming_rule": "Expression (old style)",
+ "title_field": "recon_type",
+ "permissions": [
+  {
+   "role": "System Manager",
+   "read": 1,
+   "permlevel": 0,
+   "create": 1,
+   "write": 1,
+   "delete": 1,
+   "report": 1,
+   "export": 1,
+   "email": 1,
+   "print": 1,
+   "share": 1
+  },
+  {
+   "role": "Gas Station Administrator",
+   "read": 1,
+   "permlevel": 0,
+   "create": 1,
+   "write": 1,
+   "delete": 1,
+   "report": 1,
+   "export": 1,
+   "email": 1,
+   "print": 1,
+   "share": 1
+  },
+  {
+   "role": "Gas Station Integration Manager",
+   "read": 1,
+   "permlevel": 0,
+   "create": 1,
+   "write": 1,
+   "delete": 1,
+   "report": 1,
+   "export": 1,
+   "email": 1,
+   "print": 1,
+   "share": 1
+  },
+  {
+   "role": "Station Manager",
+   "read": 1,
+   "permlevel": 0,
+   "write": 1,
+   "create": 1,
+   "report": 1,
+   "print": 1,
+   "email": 1
+  },
+  {
+   "role": "Station Operator",
+   "read": 1,
+   "permlevel": 0,
+   "report": 1,
+   "print": 1,
+   "export": 1
+  },
+  {
+   "role": "Gas Station Viewer",
+   "read": 1,
+   "permlevel": 0,
+   "report": 1,
+   "print": 1,
+   "export": 1
+  }
+ ]
+}

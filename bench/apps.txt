@@ -1,0 +1,17 @@
+frappe
+optical
+contracting
+changai
+crm
+ksa_compliance
+pos_next
+erpnext
+amir_theme_v16
+frappe_ai
+hrms
+healthcare
+frappe_vision
+ndserp
+gas_station
+optima_hr
+nds_restaurant

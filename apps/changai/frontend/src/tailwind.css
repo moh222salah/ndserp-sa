@@ -1,0 +1,285 @@
+@import "tailwindcss";
+
+@theme {
+  --color-brand-500: #6d4fc2;
+  --color-brand-600: #5f44ad;
+  --color-brand-50: #f6f2ff;
+  --color-accent-500: #12b981;
+  --color-ink-900: #0f172a;
+  --color-surface-50: #f8fafc;
+  --animate-dot-wave: dot-wave 1.4s ease-in-out infinite;
+  --animate-gemini-arc: gemini-arc 1.35s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+  --animate-gemini-spark: gemini-spark 1.45s cubic-bezier(0.34, 1.56, 0.64, 1) infinite;
+  --animate-think-pulse: think-pulse 1.15s cubic-bezier(0.16, 1, 0.3, 1) infinite;
+  --animate-think-sheen: think-sheen 1.8s linear infinite;
+  --animate-think-orbit: think-orbit 1.9s ease-in-out infinite;
+  --animate-soft-float: soft-float 4.8s ease-in-out infinite;
+  --animate-surface-in: surface-in 320ms cubic-bezier(0.22, 1, 0.36, 1);
+  --animate-fade-rise: fade-rise 280ms cubic-bezier(0.16, 1, 0.3, 1);
+  --animate-stop-button-pulse: stop-button-pulse 1.65s cubic-bezier(0.22, 1, 0.36, 1) infinite;
+}
+
+@keyframes dot-wave {
+
+  0%,
+  60%,
+  100% {
+    transform: translateY(0);
+    opacity: 0.35;
+  }
+
+  30% {
+    transform: translateY(-5px);
+    opacity: 1;
+  }
+}
+
+@keyframes gemini-arc {
+  0% {
+    transform: rotate(0deg);
+    opacity: 0.65;
+  }
+
+  100% {
+    transform: rotate(360deg);
+    opacity: 1;
+  }
+}
+
+@keyframes gemini-spark {
+
+  0%,
+  100% {
+    transform: scale(0.78);
+    opacity: 0.72;
+  }
+
+  50% {
+    transform: scale(1.04);
+    opacity: 1;
+  }
+}
+
+@keyframes think-pulse {
+
+  0%,
+  100% {
+    transform: scale(0.72);
+    opacity: 0.35;
+  }
+
+  45% {
+    transform: scale(1.08);
+    opacity: 1;
+  }
+}
+
+@keyframes think-sheen {
+  0% {
+    background-position: 0% 50%;
+  }
+
+  100% {
+    background-position: 200% 50%;
+  }
+}
+
+@keyframes think-orbit {
+  0% {
+    transform: translate(-130%, -50%);
+    opacity: 0;
+  }
+
+  20% {
+    opacity: 0.8;
+  }
+
+  80% {
+    opacity: 0.8;
+  }
+
+  100% {
+    transform: translate(460%, -50%);
+    opacity: 0;
+  }
+}
+
+@keyframes soft-float {
+
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(-4px);
+  }
+}
+
+@keyframes surface-in {
+  from {
+    opacity: 0;
+    transform: translateY(10px) scale(0.98);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes fade-rise {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes stop-button-pulse {
+
+  0%,
+  100% {
+    transform: scale(0.94);
+    opacity: 0.92;
+  }
+
+  50% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+@layer base {
+
+  #changai-chatbot-root,
+  #changai-chatbot-root * {
+    box-sizing: border-box;
+  }
+
+  #changai-chatbot-root {
+    font-family: "Plus Jakarta Sans", "Segoe UI", "Helvetica Neue", sans-serif;
+    color: #0f172a;
+  }
+
+  #changai-chatbot-root button,
+  #changai-chatbot-root input,
+  #changai-chatbot-root textarea,
+  #changai-chatbot-root select {
+    font: inherit;
+  }
+
+  #changai-chatbot-root button {
+    appearance: none;
+    -webkit-appearance: none;
+    border: 0;
+    background-clip: padding-box;
+  }
+
+  #changai-chatbot-root .chat-card strong {
+    font-weight: 700;
+  }
+
+  #changai-chatbot-root .chat-card em {
+    font-style: italic;
+  }
+
+  #changai-chatbot-root .chat-card p {
+    margin-bottom: 0.4rem;
+  }
+
+  #changai-chatbot-root .chat-card p:last-child {
+    margin-bottom: 0;
+  }
+
+  #changai-chatbot-root .chat-card ul {
+    list-style: disc;
+    padding-inline-start: 1.25rem;
+    margin-bottom: 0.4rem;
+  }
+
+  #changai-chatbot-root .chat-card ol {
+    list-style: decimal;
+    padding-inline-start: 1.25rem;
+    margin-bottom: 0.4rem;
+  }
+
+  #changai-chatbot-root .chat-card li {
+    margin-bottom: 0.15rem;
+  }
+
+  #changai-chatbot-root .chat-card code {
+    font-family: monospace;
+    font-size: 0.8em;
+    background: rgba(109, 79, 194, 0.08);
+    padding: 0.1em 0.35em;
+    border-radius: 4px;
+  }
+
+  #changai-chatbot-root button.rounded-full,
+  #changai-chatbot-root form.rounded-full {
+    border-radius: 9999px;
+  }
+
+  #changai-chatbot-root button.rounded-md {
+    border-radius: 0.375rem;
+  }
+
+  #changai-chatbot-root button.rounded-lg {
+    border-radius: 0.5rem;
+  }
+
+  #changai-chatbot-root .chat-scrollbar {
+    scrollbar-width: auto;
+    scrollbar-color: rgba(109, 79, 194, 0.68) rgba(109, 79, 194, 0.16);
+    scrollbar-gutter: stable;
+  }
+
+  #changai-chatbot-root .chat-scrollbar::-webkit-scrollbar {
+    width: 10px;
+  }
+
+  #changai-chatbot-root .chat-scrollbar::-webkit-scrollbar-track {
+    background: rgba(109, 79, 194, 0.12);
+    border-radius: 9999px;
+  }
+
+  #changai-chatbot-root .chat-scrollbar::-webkit-scrollbar-thumb {
+    background: linear-gradient(180deg, rgba(109, 79, 194, 0.78), rgba(109, 79, 194, 0.42));
+    border-radius: 9999px;
+    border: 2px solid rgba(109, 79, 194, 0.12);
+  }
+
+  #changai-chatbot-root .chat-scrollbar::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(180deg, rgba(109, 79, 194, 0.9), rgba(109, 79, 194, 0.52));
+  }
+
+  #changai-chatbot-root .chat-shell {
+    background:
+      radial-gradient(120% 120% at 100% 0%, rgba(109, 79, 194, 0.1) 0%, rgba(109, 79, 194, 0) 58%),
+      radial-gradient(120% 120% at 0% 100%, rgba(109, 79, 194, 0.06) 0%, rgba(109, 79, 194, 0) 55%),
+      #ffffff;
+  }
+
+  #changai-chatbot-root .chat-card {
+    border: 1px solid rgba(148, 163, 184, 0.2);
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.95), rgba(248, 250, 252, 0.92));
+    box-shadow: 0 12px 35px -28px rgba(15, 23, 42, 0.45);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+
+    #changai-chatbot-root *,
+    #changai-chatbot-root *::before,
+    #changai-chatbot-root *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+}

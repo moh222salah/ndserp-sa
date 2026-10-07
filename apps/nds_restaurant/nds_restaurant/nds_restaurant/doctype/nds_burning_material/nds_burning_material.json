@@ -1,0 +1,47 @@
+{
+ "name": "NDS Burning Material",
+ "istable": 1,
+ "editable_grid": 1,
+ "field_order": [
+  "material",
+  "cost_per_unit",
+  "units_per_day"
+ ],
+ "fields": [
+  {
+   "fieldname": "material",
+   "fieldtype": "Data",
+   "label": "Material",
+   "in_list_view": 1,
+   "reqd": 1
+  },
+  {
+   "fieldname": "cost_per_unit",
+   "fieldtype": "Currency",
+   "label": "Cost Per Unit",
+   "in_list_view": 1,
+   "reqd": 1
+  },
+  {
+   "fieldname": "units_per_day",
+   "fieldtype": "Float",
+   "label": "Units Per Day",
+   "in_list_view": 1,
+   "default": "1",
+   "reqd": 1
+  }
+ ],
+ "doctype": "DocType",
+ "module": "NDS Restaurant",
+ "engine": "InnoDB",
+ "actions": [],
+ "links": [],
+ "states": [],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "owner": "Administrator",
+ "modified_by": "Administrator",
+ "creation": "2026-09-28 00:00:00.000000",
+ "modified": "2026-09-28 00:00:00.000000",
+ "permissions": []
+}

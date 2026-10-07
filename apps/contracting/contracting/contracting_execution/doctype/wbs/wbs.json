@@ -1,0 +1,166 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2026-09-08 00:00:00.000000",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "naming_series",
+  "project",
+  "wbs_code",
+  "wbs_name",
+  "wbs_cb",
+  "is_group",
+  "parent_wbs",
+  "level",
+  "status",
+  "wbs_accounts_sb",
+  "default_cost_account",
+  "default_revenue_account",
+  "lft",
+  "rgt",
+  "old_parent"
+ ],
+ "fields": [
+  {
+   "fieldname": "naming_series",
+   "fieldtype": "Select",
+   "label": "Series",
+   "options": "CT-WBS-.#####",
+   "default": "CT-WBS-.#####",
+   "hidden": 1
+  },
+  {
+   "fieldname": "project",
+   "fieldtype": "Link",
+   "label": "Project",
+   "options": "Project",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "wbs_code",
+   "fieldtype": "Data",
+   "label": "WBS Code",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "wbs_name",
+   "fieldtype": "Data",
+   "label": "Name",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "wbs_cb",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "is_group",
+   "fieldtype": "Check",
+   "label": "Is Group",
+   "default": "0"
+  },
+  {
+   "fieldname": "parent_wbs",
+   "fieldtype": "Link",
+   "label": "Parent WBS",
+   "options": "WBS"
+  },
+  {
+   "fieldname": "level",
+   "fieldtype": "Int",
+   "label": "Level",
+   "read_only": 1
+  },
+  {
+   "fieldname": "status",
+   "fieldtype": "Select",
+   "label": "Status",
+   "options": "Open\nOn Hold\nCompleted\nClosed",
+   "default": "Open"
+  },
+  {
+   "fieldname": "wbs_accounts_sb",
+   "fieldtype": "Section Break",
+   "label": "Default Accounts (override Project)"
+  },
+  {
+   "fieldname": "default_cost_account",
+   "fieldtype": "Link",
+   "label": "Default Cost Account",
+   "options": "Account"
+  },
+  {
+   "fieldname": "default_revenue_account",
+   "fieldtype": "Link",
+   "label": "Default Revenue Account",
+   "options": "Account"
+  },
+  {
+   "fieldname": "lft",
+   "fieldtype": "Int",
+   "label": "lft",
+   "hidden": 1,
+   "read_only": 1,
+   "no_copy": 1,
+   "print_hide": 1,
+   "search_index": 1
+  },
+  {
+   "fieldname": "rgt",
+   "fieldtype": "Int",
+   "label": "rgt",
+   "hidden": 1,
+   "read_only": 1,
+   "no_copy": 1,
+   "print_hide": 1,
+   "search_index": 1
+  },
+  {
+   "fieldname": "old_parent",
+   "fieldtype": "Link",
+   "label": "old_parent",
+   "options": "WBS",
+   "hidden": 1,
+   "read_only": 1,
+   "no_copy": 1,
+   "print_hide": 1
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "is_submittable": 0,
+ "issingle": 0,
+ "istable": 0,
+ "links": [],
+ "modified": "2026-09-08 00:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Contracting Execution",
+ "name": "WBS",
+ "owner": "Administrator",
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "track_changes": 1,
+ "is_tree": 1,
+ "autoname": "naming_series:",
+ "title_field": "wbs_name",
+ "search_fields": "wbs_code,project",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1,
+   "submit": 0,
+   "cancel": 0
+  }
+ ]
+}

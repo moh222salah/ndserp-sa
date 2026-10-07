@@ -1,0 +1,85 @@
+{
+ "actions": [],
+ "allow_rename": 0,
+ "creation": "2026-04-14 00:00:00.000000",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "enabled",
+  "agent_url",
+  "section_settings",
+  "timeout",
+  "section_ui",
+  "sidebar_width",
+  "keyboard_shortcut"
+ ],
+ "fields": [
+  {
+   "default": "1",
+   "fieldname": "enabled",
+   "fieldtype": "Check",
+   "label": "Enabled"
+  },
+  {
+   "description": "Set during installation. Use Test Connection to verify.",
+   "fieldname": "agent_url",
+   "fieldtype": "Data",
+   "label": "Agent URL",
+   "read_only": 1
+  },
+  {
+   "fieldname": "section_settings",
+   "fieldtype": "Section Break",
+   "label": "Connection Settings"
+  },
+  {
+   "default": "120",
+   "description": "Seconds before giving up on a reply. Default 120.",
+   "fieldname": "timeout",
+   "fieldtype": "Int",
+   "label": "Timeout (seconds)"
+  },
+  {
+   "fieldname": "section_ui",
+   "fieldtype": "Section Break",
+   "label": "Sidebar Settings"
+  },
+  {
+   "default": "380",
+   "description": "Chat panel width in pixels. Range 300–600.",
+   "fieldname": "sidebar_width",
+   "fieldtype": "Int",
+   "label": "Sidebar Width"
+  },
+  {
+   "default": "Alt+/",
+   "description": "Press to toggle the chat from anywhere on the desk.",
+   "fieldname": "keyboard_shortcut",
+   "fieldtype": "Data",
+   "label": "Keyboard Shortcut"
+  }
+ ],
+ "issingle": 1,
+ "links": [],
+ "modified": "2026-04-14 00:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "AI Assistant",
+ "name": "AI Assistant Settings",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "email": 1,
+   "print": 1,
+   "read": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "track_changes": 1
+}

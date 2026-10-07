@@ -1,0 +1,89 @@
+// ===========================================================================
+// Request progress bar
+// ===========================================================================
+// Paired with core/progress_bar.js, which only toggles two classes; the whole
+// motion lives here so it runs on the compositor and stays smooth while the
+// main thread is busy — the exact moment the bar is worth having.
+//
+// LAYERING: Frappe's modal sits at z-index 1140 (common/modal.scss:145). The
+// bar goes just above it so it stays visible during a request fired from a
+// dialog, and carries `pointer-events: none` so it can never intercept a click.
+// The modal backdrop's own z-index is NOT touched — raising it is the
+// documented way to break the Child Table editor.
+//
+// CONTAINING BLOCK: `position: fixed` + a transform-free fill. The element is a
+// leaf appended to <body>, so it never becomes an ancestor of `.form-grid` and
+// cannot trap the grid's position:fixed editor.
+
+.amt-progress {
+	position: fixed;
+	top: 0;
+	inset-inline: 0;
+	height: 2px;
+	z-index: 1200;
+	pointer-events: none;
+	opacity: 0;
+	// Only paint once JS has revealed it; until then the element may not even
+	// exist (it is created lazily on the first slow request).
+	display: none;
+
+	&.is-active {
+		display: block;
+		opacity: 1;
+	}
+
+	&.is-done {
+		opacity: 0;
+		transition: opacity 0.26s ease 0.14s;
+	}
+}
+
+.amt-progress__fill {
+	height: 100%;
+	width: 0;
+	// Reads as "the theme is working", not as a foreign UI element.
+	background: linear-gradient(90deg, var(--primary), var(--primary) 70%, color-mix(in srgb, var(--primary) 45%, transparent));
+	// A soft leading edge so the bar looks like motion rather than a block.
+	box-shadow: 0 0 8px color-mix(in srgb, var(--primary) 55%, transparent);
+	border-start-end-radius: 2px;
+	border-end-end-radius: 2px;
+}
+
+// The honest loading curve: fast at first, then asymptotic. It never reaches
+// 100% on its own — only a completed request does that — so the bar can never
+// claim to be finished while the server is still thinking.
+.amt-progress.is-active .amt-progress__fill {
+	animation: amt-progress-grow 14s cubic-bezier(0.16, 0.85, 0.34, 1) forwards;
+}
+
+.amt-progress.is-done .amt-progress__fill {
+	width: 100% !important;
+	transition: width 0.18s ease-out;
+}
+
+@keyframes amt-progress-grow {
+	0% { width: 0; }
+	12% { width: 32%; }
+	35% { width: 58%; }
+	65% { width: 76%; }
+	100% { width: 92%; }
+}
+
+// Motion here is decorative; the bar's presence alone carries the meaning.
+// Users who ask the OS for reduced motion still get the feedback, without the
+// travelling animation or the glow.
+@media (prefers-reduced-motion: reduce) {
+	.amt-progress__fill {
+		box-shadow: none;
+	}
+
+	.amt-progress.is-active .amt-progress__fill {
+		animation: none;
+		width: 92%;
+	}
+
+	.amt-progress.is-done .amt-progress__fill,
+	.amt-progress.is-done {
+		transition: none;
+	}
+}

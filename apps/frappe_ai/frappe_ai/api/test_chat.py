@@ -1,0 +1,459 @@
+# Copyright (c) 2026, Vyogo and contributors
+# For license information, please see license.txt
+
+"""Tests for frappe_ai.api.chat — both the pure-Python sanitiser and the
+whitelisted endpoints (with the agent + RQ enqueue mocked out)."""
+
+import json
+import unittest
+from unittest.mock import patch
+
+import frappe
+
+from frappe_ai.api import chat
+
+# ──────────────────────────────────────────────────────────────────────────
+# _sanitize_page_context — pure-function tests, no DB / no Frappe context
+# ──────────────────────────────────────────────────────────────────────────
+
+
+class TestSanitizePageContext(unittest.TestCase):
+	def test_empty_dict_returns_empty(self):
+		self.assertEqual(chat._sanitize_page_context({}), {})
+
+	def test_full_valid_dict_passes_through(self):
+		raw = {
+			"route": "/app/sales-invoice",
+			"doctype": "Sales Invoice",
+			"docname": "SINV-001",
+			"currency": "INR",
+		}
+		self.assertEqual(chat._sanitize_page_context(raw), raw)
+
+	def test_json_string_input_is_parsed(self):
+		raw = json.dumps({"route": "/app", "doctype": "User"})
+		self.assertEqual(
+			chat._sanitize_page_context(raw),
+			{"route": "/app", "doctype": "User"},
+		)
+
+	def test_malformed_json_string_returns_empty(self):
+		self.assertEqual(chat._sanitize_page_context("{not json"), {})
+
+	def test_non_dict_non_string_returns_empty(self):
+		self.assertEqual(chat._sanitize_page_context(None), {})
+		self.assertEqual(chat._sanitize_page_context(42), {})
+		self.assertEqual(chat._sanitize_page_context([1, 2, 3]), {})
+		self.assertEqual(chat._sanitize_page_context(True), {})
+
+	def test_extra_keys_are_dropped(self):
+		raw = {"route": "/app", "evil_key": "value", "another": 123}
+		self.assertEqual(chat._sanitize_page_context(raw), {"route": "/app"})
+
+	def test_non_string_values_are_dropped(self):
+		raw = {"route": "/app", "doctype": 42, "docname": ["list"], "currency": None}
+		self.assertEqual(chat._sanitize_page_context(raw), {"route": "/app"})
+
+	def test_empty_string_values_are_dropped(self):
+		# Falsy strings get filtered by `if val:` in the impl — keeps the
+		# agent payload tidy when the FE forwards a blank context field.
+		self.assertEqual(
+			chat._sanitize_page_context({"route": "", "doctype": "User"}),
+			{"doctype": "User"},
+		)
+
+	def test_strings_over_200_chars_are_truncated(self):
+		long = "a" * 500
+		out = chat._sanitize_page_context({"route": long})
+		self.assertEqual(len(out["route"]), 200)
+		self.assertTrue(out["route"].startswith("aaaa"))
+
+	def test_nested_dict_value_dropped(self):
+		# Whitelist requires string values; a dict for a key is treated
+		# the same as any non-string and dropped.
+		self.assertEqual(chat._sanitize_page_context({"route": {"nested": "x"}}), {})
+
+	def test_returned_dict_is_independent_of_input(self):
+		# Defensive: mutating the output must not mutate the input.
+		raw = {"route": "/app", "doctype": "User"}
+		out = chat._sanitize_page_context(raw)
+		out["route"] = "MUTATED"
+		self.assertEqual(raw["route"], "/app")
+
+
+# ──────────────────────────────────────────────────────────────────────────
+# _agent_url — reads site_config; needs frappe.local.conf
+# ──────────────────────────────────────────────────────────────────────────
+
+
+class TestValidateAgentUrl(unittest.TestCase):
+	def setUp(self):
+		self._original_escape = frappe.local.conf.get("frappe_ai_agent_url_unsafe_ok")
+		frappe.local.conf["frappe_ai_agent_url_unsafe_ok"] = 0
+
+	def tearDown(self):
+		if self._original_escape is None:
+			frappe.local.conf.pop("frappe_ai_agent_url_unsafe_ok", None)
+		else:
+			frappe.local.conf["frappe_ai_agent_url_unsafe_ok"] = self._original_escape
+
+	def test_accepts_https_url(self):
+		chat._validate_agent_url("https://agent.example.com")
+
+	def test_accepts_http_url(self):
+		chat._validate_agent_url("http://agent.example.com:8484")
+
+	def test_accepts_localhost_with_escape(self):
+		# Localhost is technically a private name; allow it when the
+		# escape hatch is set (local dev).
+		frappe.local.conf["frappe_ai_agent_url_unsafe_ok"] = 1
+		chat._validate_agent_url("http://localhost:8484")
+		chat._validate_agent_url("http://127.0.0.1:8484")
+
+	def test_rejects_non_http_scheme(self):
+		with self.assertRaises(frappe.ValidationError):
+			chat._validate_agent_url("ftp://agent.example.com")
+		with self.assertRaises(frappe.ValidationError):
+			chat._validate_agent_url("file:///etc/passwd")
+
+	def test_rejects_missing_scheme(self):
+		with self.assertRaises(frappe.ValidationError):
+			chat._validate_agent_url("agent.example.com:8484")
+
+	def test_rejects_missing_host(self):
+		with self.assertRaises(frappe.ValidationError):
+			chat._validate_agent_url("http://")
+
+	def test_rejects_cloud_metadata_endpoints(self):
+		# AWS / GCE / Azure IMDS — classic SSRF target.
+		with self.assertRaises(frappe.ValidationError):
+			chat._validate_agent_url("http://169.254.169.254/latest/meta-data/")
+		with self.assertRaises(frappe.ValidationError):
+			chat._validate_agent_url("http://metadata.google.internal/computeMetadata/")
+
+	def test_rejects_unspecified_address(self):
+		with self.assertRaises(frappe.ValidationError):
+			chat._validate_agent_url("http://0.0.0.0:8484")
+
+	def test_escape_hatch_allows_metadata_too(self):
+		# Operators who genuinely need internal-network targets opt-in
+		# via site_config. We don't second-guess them.
+		frappe.local.conf["frappe_ai_agent_url_unsafe_ok"] = 1
+		chat._validate_agent_url("http://169.254.169.254/")
+
+	def test_rejects_rfc1918_private_addresses(self):
+		# The worker forwards the user's sid; a misconfigured agent URL on a
+		# private range would silently leak the session to whatever happens
+		# to be listening there.
+		for url in (
+			"http://10.0.0.5:8484",
+			"http://172.16.0.5:8484",
+			"http://192.168.1.5:8484",
+		):
+			with self.assertRaises(frappe.ValidationError, msg=f"should reject {url}"):
+				chat._validate_agent_url(url)
+
+	def test_rejects_loopback_without_escape(self):
+		# Loopback only makes sense in local dev, gated behind the escape
+		# hatch. Without it, a typo pointing at 127.0.0.1 is a sid leak.
+		with self.assertRaises(frappe.ValidationError):
+			chat._validate_agent_url("http://127.0.0.1:8484")
+		with self.assertRaises(frappe.ValidationError):
+			chat._validate_agent_url("http://127.0.0.5:8484")
+
+	def test_rejects_non_imds_link_local(self):
+		# 169.254.0.0/16 outside the IMDS literal — still link-local, still
+		# rejected.
+		with self.assertRaises(frappe.ValidationError):
+			chat._validate_agent_url("http://169.254.1.1:8484")
+
+	def test_rejects_ipv6_loopback_and_ula_without_escape(self):
+		# IPv6 loopback (::1) and Unique Local Addresses (fc00::/7) are
+		# private; cover them explicitly so an IPv6-first deployment can't
+		# regress the IPv4-only guard.
+		with self.assertRaises(frappe.ValidationError):
+			chat._validate_agent_url("http://[::1]:8484")
+		with self.assertRaises(frappe.ValidationError):
+			chat._validate_agent_url("http://[fd00::1]:8484")
+
+	def test_accepts_public_ip_literal(self):
+		# Sanity: a publicly-allocated IPv4 (Cloudflare DNS) is fine.
+		chat._validate_agent_url("http://1.1.1.1:8484")
+
+
+class TestAgentUrl(unittest.TestCase):
+	def setUp(self):
+		self._original = frappe.local.conf.get("frappe_ai_agent_url")
+
+	def tearDown(self):
+		if self._original is None:
+			frappe.local.conf.pop("frappe_ai_agent_url", None)
+		else:
+			frappe.local.conf["frappe_ai_agent_url"] = self._original
+
+	def test_empty_when_unset(self):
+		frappe.local.conf.pop("frappe_ai_agent_url", None)
+		self.assertEqual(chat._agent_url(), "")
+
+	def test_trailing_slash_stripped(self):
+		frappe.local.conf["frappe_ai_agent_url"] = "http://localhost:8484/"
+		self.assertEqual(chat._agent_url(), "http://localhost:8484")
+
+	def test_no_trailing_slash_unchanged(self):
+		frappe.local.conf["frappe_ai_agent_url"] = "http://localhost:8484"
+		self.assertEqual(chat._agent_url(), "http://localhost:8484")
+
+	def test_multiple_trailing_slashes_all_stripped(self):
+		frappe.local.conf["frappe_ai_agent_url"] = "http://localhost:8484///"
+		self.assertEqual(chat._agent_url(), "http://localhost:8484")
+
+
+# ──────────────────────────────────────────────────────────────────────────
+# start_stream — whitelisted endpoint. Mocks frappe.enqueue.
+# ──────────────────────────────────────────────────────────────────────────
+
+
+class TestStartStream(unittest.TestCase):
+	def setUp(self):
+		# Establish a known-good baseline for the singleton + site_config.
+		self._original_url = frappe.local.conf.get("frappe_ai_agent_url")
+		frappe.local.conf["frappe_ai_agent_url"] = "http://localhost:8484"
+		# _validate_agent_url rejects loopback (::1, 127.0.0.0/8) outside
+		# the explicit escape hatch. These tests use a localhost URL and
+		# mock frappe.enqueue, so the URL is only validated, never reached.
+		# Setting the hatch keeps validation permissive without changing
+		# what the tests actually exercise.
+		self._original_escape = frappe.local.conf.get("frappe_ai_agent_url_unsafe_ok")
+		frappe.local.conf["frappe_ai_agent_url_unsafe_ok"] = 1
+
+		self.settings = frappe.get_single("AI Assistant Settings")
+		self._original_enabled = self.settings.enabled
+		self.settings.enabled = 1
+		self.settings.save(ignore_version=True)
+
+	def tearDown(self):
+		settings = frappe.get_single("AI Assistant Settings")
+		settings.enabled = self._original_enabled
+		settings.save(ignore_version=True)
+		if self._original_url is None:
+			frappe.local.conf.pop("frappe_ai_agent_url", None)
+		else:
+			frappe.local.conf["frappe_ai_agent_url"] = self._original_url
+		if self._original_escape is None:
+			frappe.local.conf.pop("frappe_ai_agent_url_unsafe_ok", None)
+		else:
+			frappe.local.conf["frappe_ai_agent_url_unsafe_ok"] = self._original_escape
+
+	def test_empty_message_throws(self):
+		with self.assertRaises(frappe.ValidationError):
+			chat.start_stream(message="")
+
+	def test_whitespace_only_message_throws(self):
+		with self.assertRaises(frappe.ValidationError):
+			chat.start_stream(message="   \n\t  ")
+
+	def test_message_over_10k_throws(self):
+		with self.assertRaises(frappe.ValidationError):
+			chat.start_stream(message="x" * 10_001)
+
+	def test_disabled_assistant_throws(self):
+		self.settings.enabled = 0
+		self.settings.save(ignore_version=True)
+		with self.assertRaises(frappe.ValidationError):
+			chat.start_stream(message="hello")
+
+	def test_missing_agent_url_throws(self):
+		frappe.local.conf.pop("frappe_ai_agent_url", None)
+		with self.assertRaises(frappe.ValidationError):
+			chat.start_stream(message="hello")
+
+	@patch("frappe.enqueue")
+	def test_happy_path_returns_session_id_and_enqueues_worker(self, mock_enqueue):
+		result = chat.start_stream(message="hello", page_context={"route": "/app"})
+		self.assertIn("session_id", result)
+		self.assertEqual(len(result["session_id"]), 36)  # UUID4 string length
+		mock_enqueue.assert_called_once()
+		# Forwarded message + sanitised page_context land in the enqueue kwargs.
+		_, kwargs = mock_enqueue.call_args
+		self.assertEqual(kwargs["message"], "hello")
+		self.assertEqual(kwargs["page_context"], {"route": "/app"})
+		self.assertEqual(kwargs["agent_url"], "http://localhost:8484")
+		self.assertEqual(kwargs["queue"], "long")
+		self.assertTrue(kwargs["enqueue_after_commit"])
+
+	@patch("frappe.enqueue")
+	def test_supplied_session_id_is_reused(self, mock_enqueue):
+		result = chat.start_stream(message="hello", session_id="caller-supplied-id")
+		self.assertEqual(result["session_id"], "caller-supplied-id")
+
+	@patch("frappe.enqueue")
+	def test_malformed_page_context_is_filtered_not_rejected(self, mock_enqueue):
+		# Endpoint accepts anything; _sanitize_page_context filters internally.
+		chat.start_stream(message="hello", page_context={"junk": "x", "route": "/app"})
+		_, kwargs = mock_enqueue.call_args
+		self.assertEqual(kwargs["page_context"], {"route": "/app"})
+
+
+# ──────────────────────────────────────────────────────────────────────────
+# cancel_stream + _is_stream_cancelled — server-side stream cancellation
+# ──────────────────────────────────────────────────────────────────────────
+
+
+class TestCancelStream(unittest.TestCase):
+	"""BUG-003 + BUG-008: client must be able to signal cancel to the worker."""
+
+	def setUp(self):
+		self._sid = "test-cancel-session-id"
+		# Ensure clean state.
+		frappe.cache().delete_value(f"frappe_ai:cancel:{self._sid}")
+
+	def tearDown(self):
+		frappe.cache().delete_value(f"frappe_ai:cancel:{self._sid}")
+
+	def test_cancel_sets_redis_flag(self):
+		chat.cancel_stream(session_id=self._sid)
+		self.assertTrue(chat._is_stream_cancelled(self._sid))
+
+	def test_flag_false_without_cancel(self):
+		self.assertFalse(chat._is_stream_cancelled(self._sid))
+
+	def test_empty_session_id_is_noop(self):
+		# Must not raise, must not poison any cache key.
+		chat.cancel_stream(session_id="")
+		# Sanity: cancelling "" shouldn't affect a real session.
+		self.assertFalse(chat._is_stream_cancelled(self._sid))
+
+	def test_consume_clears_flag(self):
+		# Worker calls _is_stream_cancelled, which must clear so a follow-up
+		# turn on the same session isn't pre-cancelled.
+		chat.cancel_stream(session_id=self._sid)
+		self.assertTrue(chat._is_stream_cancelled(self._sid))
+		# Second call returns False (flag consumed).
+		self.assertFalse(chat._is_stream_cancelled(self._sid))
+
+
+# ──────────────────────────────────────────────────────────────────────────
+# get_recent_messages — hydrates the sidebar
+# ──────────────────────────────────────────────────────────────────────────
+
+
+class TestGetRecentMessages(unittest.TestCase):
+	@classmethod
+	def setUpClass(cls):
+		cls._user = frappe.session.user
+
+	def tearDown(self):
+		# Clean up any AI Chat Session / Message rows the test created.
+		for s in frappe.get_all("AI Chat Session", filters={"user": frappe.session.user}, pluck="name"):
+			frappe.delete_doc("AI Chat Session", s, ignore_permissions=True, force=True)
+		# Cascade for orphan messages just in case.
+		for m in frappe.get_all("AI Chat Message", pluck="name"):
+			frappe.delete_doc("AI Chat Message", m, ignore_permissions=True, force=True)
+
+	def test_empty_when_no_session(self):
+		out = chat.get_recent_messages()
+		self.assertEqual(out, {"session_id": None, "messages": []})
+
+	def test_returns_messages_for_most_recent_session(self):
+		session = frappe.get_doc(
+			{
+				"doctype": "AI Chat Session",
+				"name": "test-session-1",
+				"user": frappe.session.user,
+			}
+		).insert(ignore_permissions=True)
+		for i, role in enumerate(["user", "assistant"]):
+			frappe.get_doc(
+				{
+					"doctype": "AI Chat Message",
+					"session": session.name,
+					"role": role,
+					"content": f"msg-{i}",
+				}
+			).insert(ignore_permissions=True)
+		out = chat.get_recent_messages()
+		self.assertEqual(out["session_id"], session.name)
+		self.assertEqual(len(out["messages"]), 2)
+		self.assertEqual(out["messages"][0]["role"], "user")
+		self.assertEqual(out["messages"][0]["content"], "msg-0")
+
+	def test_timestamps_are_iso8601_with_explicit_utc_suffix(self):
+		# BUG-002 regression: pre-fix the API returned Frappe's naive datetime
+		# str (e.g. "2026-05-16 17:12:35.041386") which JS parses as LOCAL,
+		# producing a different display time after reload vs. fresh send.
+		# Fix: emit ISO 8601 with explicit "Z" so `new Date(ts)` is unambiguous.
+		session = frappe.get_doc(
+			{
+				"doctype": "AI Chat Session",
+				"name": "test-session-ts",
+				"user": frappe.session.user,
+			}
+		).insert(ignore_permissions=True)
+		frappe.get_doc(
+			{
+				"doctype": "AI Chat Message",
+				"session": session.name,
+				"role": "user",
+				"content": "ts probe",
+			}
+		).insert(ignore_permissions=True)
+		out = chat.get_recent_messages()
+		ts = out["messages"][0]["timestamp"]
+		self.assertIsNotNone(ts)
+		# ISO 8601 with "T" separator and trailing "Z" (UTC):
+		# "YYYY-MM-DDTHH:MM:SS[.ffffff]Z"
+		self.assertRegex(ts, r"^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(\.\d+)?Z$")
+
+	def test_limit_clamped_to_safe_range(self):
+		session = frappe.get_doc(
+			{
+				"doctype": "AI Chat Session",
+				"name": "test-session-limit",
+				"user": frappe.session.user,
+			}
+		).insert(ignore_permissions=True)
+		for i in range(5):
+			frappe.get_doc(
+				{
+					"doctype": "AI Chat Message",
+					"session": session.name,
+					"role": "user",
+					"content": f"msg-{i}",
+				}
+			).insert(ignore_permissions=True)
+		# limit=0 → clamped to 1
+		out = chat.get_recent_messages(limit=0)
+		self.assertEqual(len(out["messages"]), 1)
+		# limit=10000 → clamped to 200
+		out = chat.get_recent_messages(limit=10000)
+		self.assertLessEqual(len(out["messages"]), 200)
+
+	def test_string_limit_coerced_by_frappe_typing(self):
+		# Frappe v16 wraps whitelisted endpoints in pydantic-based type
+		# validation. A numeric string from the HTTP query layer is
+		# coerced to int before the function runs, so a caller-supplied
+		# "100" works identically to an integer 100.
+		session = frappe.get_doc(
+			{
+				"doctype": "AI Chat Session",
+				"name": "test-session-str-limit",
+				"user": frappe.session.user,
+			}
+		).insert(ignore_permissions=True)
+		frappe.get_doc(
+			{
+				"doctype": "AI Chat Message",
+				"session": session.name,
+				"role": "user",
+				"content": "ok",
+			}
+		).insert(ignore_permissions=True)
+		out = chat.get_recent_messages(limit="100")  # type: ignore[arg-type]
+		self.assertEqual(len(out["messages"]), 1)
+
+	def test_unparseable_limit_raises_frappe_type_error(self):
+		# Frappe's type validator rejects non-numeric strings upstream of
+		# the endpoint body. This documents that contract — callers who
+		# want defensive fallback must coerce themselves.
+		with self.assertRaises(frappe.exceptions.FrappeTypeError):
+			chat.get_recent_messages(limit="not-a-number")  # type: ignore[arg-type]

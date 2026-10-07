@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>No Internet - POSNext</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .container {
+      background: white;
+      border-radius: 20px;
+      padding: 60px 40px;
+      text-align: center;
+      max-width: 500px;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    }
+
+    .icon {
+      width: 120px;
+      height: 120px;
+      margin: 0 auto 30px;
+      background: linear-gradient(135deg, #EEF2FF 0%, #E0E7FF 100%);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      animation: pulse 2s ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+    }
+
+    .icon svg {
+      width: 60px;
+      height: 60px;
+      fill: #4F46E5;
+    }
+
+    h1 {
+      color: #1f2937;
+      font-size: 28px;
+      margin-bottom: 16px;
+      font-weight: 700;
+    }
+
+    p {
+      color: #6b7280;
+      font-size: 16px;
+      line-height: 1.6;
+      margin-bottom: 30px;
+    }
+
+    .status {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 20px;
+      background: #fee;
+      border-radius: 9999px;
+      color: #ef4444;
+      font-weight: 600;
+      font-size: 14px;
+      margin-bottom: 30px;
+    }
+
+    .status-dot {
+      width: 8px;
+      height: 8px;
+      background: #ef4444;
+      border-radius: 50%;
+      animation: blink 1.5s ease-in-out infinite;
+    }
+
+    @keyframes blink {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.3; }
+    }
+
+    button {
+      background: #4F46E5;
+      color: white;
+      border: none;
+      padding: 14px 32px;
+      border-radius: 10px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+      box-shadow: 0 4px 12px rgba(79, 70, 229, 0.3);
+    }
+
+    button:hover {
+      background: #4338ca;
+      transform: translateY(-2px);
+      box-shadow: 0 6px 16px rgba(79, 70, 229, 0.4);
+    }
+
+    button:active {
+      transform: translateY(0);
+    }
+
+    .tips {
+      margin-top: 40px;
+      padding-top: 30px;
+      border-top: 1px solid #e5e7eb;
+      text-align: left;
+    }
+
+    .tips h3 {
+      color: #374151;
+      font-size: 14px;
+      font-weight: 600;
+      margin-bottom: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .tips ul {
+      list-style: none;
+    }
+
+    .tips li {
+      color: #6b7280;
+      font-size: 14px;
+      padding: 8px 0;
+      padding-left: 24px;
+      position: relative;
+    }
+
+    .tips li:before {
+      content: "→";
+      position: absolute;
+      left: 0;
+      color: #4F46E5;
+      font-weight: bold;
+    }
+
+    .online-indicator {
+      display: none;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 20px;
+      background: #d1fae5;
+      border-radius: 9999px;
+      color: #059669;
+      font-weight: 600;
+      font-size: 14px;
+      margin-bottom: 20px;
+    }
+
+    .online-indicator.show {
+      display: inline-flex;
+    }
+
+    .online-dot {
+      width: 8px;
+      height: 8px;
+      background: #059669;
+      border-radius: 50%;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="icon">
+      <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+        <path d="M20 7h-4V4c0-1.1-.9-2-2-2h-4c-1.1 0-2 .9-2 2v3H4c-1.1 0-2 .9-2 2v11c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V9c0-1.1-.9-2-2-2zM10 4h4v3h-4V4zm10 16H4V9h16v11z"></path>
+      </svg>
+    </div>
+
+    <div class="status">
+      <span class="status-dot"></span>
+      Internet Disconnected
+    </div>
+
+    <div class="online-indicator" id="onlineIndicator">
+      <span class="online-dot"></span>
+      Connection Restored!
+    </div>
+
+    <h1>No Internet Connection</h1>
+    <p>Unable to connect to POS Next. Please check your internet connection and try again.</p>
+
+    <button onclick="location.reload()">Try Again</button>
+
+    <div class="tips">
+      <h3>Troubleshooting Tips</h3>
+      <ul>
+        <li>Check your WiFi or ethernet connection</li>
+        <li>Verify network settings are correct</li>
+        <li>Contact your network administrator if issue persists</li>
+      </ul>
+    </div>
+  </div>
+
+  <script>
+    // Auto-reload when connection is restored
+    window.addEventListener('online', () => {
+      const indicator = document.getElementById('onlineIndicator');
+      indicator.classList.add('show');
+
+      setTimeout(() => {
+        location.reload();
+      }, 1000);
+    });
+
+    // Check connection status periodically
+    setInterval(() => {
+      if (navigator.onLine) {
+        fetch('/api/method/frappe.auth.get_logged_user', {
+          method: 'GET',
+          cache: 'no-cache'
+        })
+        .then(() => {
+          location.reload();
+        })
+        .catch(() => {
+          // Still offline
+        });
+      }
+    }, 3000);
+  </script>
+</body>
+</html>

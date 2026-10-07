@@ -1,0 +1,144 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2026-09-08 00:00:00.000000",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "subcontract_boq_item",
+  "cost_account",
+  "unit",
+  "unit_price",
+  "previous_qty",
+  "current_qty",
+  "total_qty",
+  "ipci_cb1",
+  "current_value",
+  "previous_value",
+  "total_value",
+  "ipci_adj",
+  "storage_value",
+  "temporary_deduction_value",
+  "ipci_cb2",
+  "item_deduction_value",
+  "net_value",
+  "comments"
+ ],
+ "fields": [
+  {
+   "fieldname": "subcontract_boq_item",
+   "fieldtype": "Link",
+   "label": "Subcontract BOQ Item",
+   "options": "Subcontract BOQ Item",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "cost_account",
+   "fieldtype": "Link",
+   "label": "Cost Account",
+   "options": "Account"
+  },
+  {
+   "fieldname": "unit",
+   "fieldtype": "Data",
+   "label": "Unit",
+   "fetch_from": "subcontract_boq_item.unit"
+  },
+  {
+   "fieldname": "unit_price",
+   "fieldtype": "Currency",
+   "label": "Unit Price"
+  },
+  {
+   "fieldname": "previous_qty",
+   "fieldtype": "Float",
+   "label": "Previous Qty",
+   "read_only": 1
+  },
+  {
+   "fieldname": "current_qty",
+   "fieldtype": "Float",
+   "label": "Current Qty",
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "total_qty",
+   "fieldtype": "Float",
+   "label": "Total Qty",
+   "read_only": 1
+  },
+  {
+   "fieldname": "ipci_cb1",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "current_value",
+   "fieldtype": "Currency",
+   "label": "Current Value",
+   "read_only": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "previous_value",
+   "fieldtype": "Currency",
+   "label": "Previous Value",
+   "read_only": 1
+  },
+  {
+   "fieldname": "total_value",
+   "fieldtype": "Currency",
+   "label": "Total Value",
+   "read_only": 1
+  },
+  {
+   "fieldname": "ipci_adj",
+   "fieldtype": "Section Break",
+   "label": "Storage & Line Deductions"
+  },
+  {
+   "fieldname": "storage_value",
+   "fieldtype": "Currency",
+   "label": "Storage / Materials on Site (adds)"
+  },
+  {
+   "fieldname": "temporary_deduction_value",
+   "fieldtype": "Currency",
+   "label": "Temporary Deduction (holds back)"
+  },
+  {
+   "fieldname": "ipci_cb2",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "item_deduction_value",
+   "fieldtype": "Currency",
+   "label": "Item Deduction"
+  },
+  {
+   "fieldname": "net_value",
+   "fieldtype": "Currency",
+   "label": "Net Value",
+   "read_only": 1
+  },
+  {
+   "fieldname": "comments",
+   "fieldtype": "Small Text",
+   "label": "Comments"
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "is_submittable": 0,
+ "issingle": 0,
+ "istable": 1,
+ "links": [],
+ "modified": "2026-09-08 00:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Contracting IPC",
+ "name": "Subcontract IPC Item",
+ "owner": "Administrator",
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "track_changes": 1
+}

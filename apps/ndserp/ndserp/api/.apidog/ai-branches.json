@@ -1,0 +1,264 @@
+{
+  "version": 1,
+  "updatedAt": "2026-09-30T21:19:30.395Z",
+  "projects": {
+    "1384752": {
+      "branches": {
+        "1391070": {
+          "projectId": 1384752,
+          "branchId": 1391070,
+          "name": "main",
+          "branchKind": "main",
+          "branchType": "SPRINT",
+          "isAiBranch": false,
+          "isAiWritableBranch": false,
+          "automationLifecycleStatus": null,
+          "isArchived": false,
+          "fetchedAt": "2026-09-30T21:18:25.397Z"
+        },
+        "1394347": {
+          "projectId": 1384752,
+          "branchId": 1394347,
+          "name": "ai/20260927-from-main-listInvoices",
+          "branchKind": "ai",
+          "branchType": "SPRINT",
+          "sourceBranchId": 1391070,
+          "isAiBranch": true,
+          "isAiWritableBranch": false,
+          "automationLifecycleStatus": "ACTIVE",
+          "isArchived": true,
+          "fetchedAt": "2026-09-30T21:18:25.398Z",
+          "lastKnownStatus": "ACTIVE"
+        },
+        "1394910": {
+          "projectId": 1384752,
+          "branchId": 1394910,
+          "name": "ai/20260928-from-main-printInvoice",
+          "branchKind": "ai",
+          "branchType": "SPRINT",
+          "isAiBranch": true,
+          "isAiWritableBranch": false,
+          "automationLifecycleStatus": "ACTIVE",
+          "isArchived": true,
+          "fetchedAt": "2026-09-30T21:18:25.399Z",
+          "lastKnownStatus": "ACTIVE"
+        },
+        "1396117": {
+          "projectId": 1384752,
+          "branchId": 1396117,
+          "name": "ai/20260929-from-main-paymentsAndInvoiceDetails",
+          "branchKind": "ai",
+          "branchType": "SPRINT",
+          "isAiBranch": true,
+          "isAiWritableBranch": true,
+          "automationLifecycleStatus": "ACTIVE",
+          "isArchived": false,
+          "fetchedAt": "2026-09-30T21:18:25.399Z",
+          "lastKnownStatus": "ACTIVE"
+        },
+        "1397029": {
+          "projectId": 1384752,
+          "branchId": 1397029,
+          "name": "ai/20260930-from-main-deliveryNote",
+          "branchKind": "ai",
+          "branchType": "SPRINT",
+          "sourceBranchId": 1391070,
+          "isAiBranch": true,
+          "isAiWritableBranch": true,
+          "automationLifecycleStatus": "ACTIVE",
+          "isArchived": false,
+          "fetchedAt": "2026-09-30T21:19:30.395Z",
+          "lastKnownStatus": "ACTIVE"
+        }
+      },
+      "lastGuardError": {
+        "type": "guard_error",
+        "projectId": 1384752,
+        "message": "Automation caller branch required",
+        "createdAt": "2026-09-27T19:12:25.620Z"
+      },
+      "recentEvents": [
+        {
+          "type": "branch_recorded",
+          "projectId": 1384752,
+          "branchId": 1394347,
+          "createdAt": "2026-09-29T19:44:32.014Z"
+        },
+        {
+          "type": "branch_recorded",
+          "projectId": 1384752,
+          "branchId": 1394910,
+          "createdAt": "2026-09-29T19:44:32.014Z"
+        },
+        {
+          "type": "branch_recorded",
+          "projectId": 1384752,
+          "branchId": 1391070,
+          "createdAt": "2026-09-29T19:44:58.879Z"
+        },
+        {
+          "type": "branch_recorded",
+          "projectId": 1384752,
+          "branchId": 1394347,
+          "createdAt": "2026-09-29T19:44:58.880Z"
+        },
+        {
+          "type": "branch_recorded",
+          "projectId": 1384752,
+          "branchId": 1394910,
+          "createdAt": "2026-09-29T19:44:58.880Z"
+        },
+        {
+          "type": "branch_recorded",
+          "projectId": 1384752,
+          "branchId": 1391070,
+          "createdAt": "2026-09-30T21:18:25.397Z"
+        },
+        {
+          "type": "branch_recorded",
+          "projectId": 1384752,
+          "branchId": 1394347,
+          "createdAt": "2026-09-30T21:18:25.398Z"
+        },
+        {
+          "type": "branch_recorded",
+          "projectId": 1384752,
+          "branchId": 1394910,
+          "createdAt": "2026-09-30T21:18:25.399Z"
+        },
+        {
+          "type": "branch_recorded",
+          "projectId": 1384752,
+          "branchId": 1396117,
+          "createdAt": "2026-09-30T21:18:25.399Z"
+        },
+        {
+          "type": "branch_recorded",
+          "projectId": 1384752,
+          "branchId": 1397029,
+          "sourceBranchId": 1391070,
+          "createdAt": "2026-09-30T21:19:30.395Z"
+        }
+      ]
+    }
+  },
+  "recentEvents": [
+    {
+      "type": "guard_error",
+      "projectId": 1384752,
+      "message": "Automation caller branch required",
+      "createdAt": "2026-09-27T19:12:25.620Z"
+    },
+    {
+      "type": "branch_recorded",
+      "projectId": 1384752,
+      "branchId": 1391070,
+      "createdAt": "2026-09-27T19:13:05.997Z"
+    },
+    {
+      "type": "branch_recorded",
+      "projectId": 1384752,
+      "branchId": 1394343,
+      "sourceBranchId": 1391070,
+      "createdAt": "2026-09-27T19:13:14.439Z"
+    },
+    {
+      "type": "branch_deleted",
+      "projectId": 1384752,
+      "branchId": 1394343,
+      "createdAt": "2026-09-27T19:21:52.780Z"
+    },
+    {
+      "type": "branch_recorded",
+      "projectId": 1384752,
+      "branchId": 1391070,
+      "createdAt": "2026-09-27T19:21:55.439Z"
+    },
+    {
+      "type": "branch_recorded",
+      "projectId": 1384752,
+      "branchId": 1394347,
+      "sourceBranchId": 1391070,
+      "createdAt": "2026-09-27T19:27:10.022Z"
+    },
+    {
+      "type": "branch_recorded",
+      "projectId": 1384752,
+      "branchId": 1391070,
+      "createdAt": "2026-09-28T13:08:31.201Z"
+    },
+    {
+      "type": "branch_recorded",
+      "projectId": 1384752,
+      "branchId": 1394347,
+      "createdAt": "2026-09-28T13:08:31.202Z"
+    },
+    {
+      "type": "branch_recorded",
+      "projectId": 1384752,
+      "branchId": 1391070,
+      "createdAt": "2026-09-29T19:44:32.013Z"
+    },
+    {
+      "type": "branch_recorded",
+      "projectId": 1384752,
+      "branchId": 1394347,
+      "createdAt": "2026-09-29T19:44:32.014Z"
+    },
+    {
+      "type": "branch_recorded",
+      "projectId": 1384752,
+      "branchId": 1394910,
+      "createdAt": "2026-09-29T19:44:32.014Z"
+    },
+    {
+      "type": "branch_recorded",
+      "projectId": 1384752,
+      "branchId": 1391070,
+      "createdAt": "2026-09-29T19:44:58.879Z"
+    },
+    {
+      "type": "branch_recorded",
+      "projectId": 1384752,
+      "branchId": 1394347,
+      "createdAt": "2026-09-29T19:44:58.880Z"
+    },
+    {
+      "type": "branch_recorded",
+      "projectId": 1384752,
+      "branchId": 1394910,
+      "createdAt": "2026-09-29T19:44:58.880Z"
+    },
+    {
+      "type": "branch_recorded",
+      "projectId": 1384752,
+      "branchId": 1391070,
+      "createdAt": "2026-09-30T21:18:25.397Z"
+    },
+    {
+      "type": "branch_recorded",
+      "projectId": 1384752,
+      "branchId": 1394347,
+      "createdAt": "2026-09-30T21:18:25.398Z"
+    },
+    {
+      "type": "branch_recorded",
+      "projectId": 1384752,
+      "branchId": 1394910,
+      "createdAt": "2026-09-30T21:18:25.399Z"
+    },
+    {
+      "type": "branch_recorded",
+      "projectId": 1384752,
+      "branchId": 1396117,
+      "createdAt": "2026-09-30T21:18:25.399Z"
+    },
+    {
+      "type": "branch_recorded",
+      "projectId": 1384752,
+      "branchId": 1397029,
+      "sourceBranchId": 1391070,
+      "createdAt": "2026-09-30T21:19:30.395Z"
+    }
+  ]
+}

@@ -1,0 +1,229 @@
+// ===========================================================================
+// layouts/_report — Query Report (frappe-datatable) surface
+// ===========================================================================
+// Every rule here was measured against the live desk (General Ledger, RTL) and
+// verified not to disturb frappe-datatable's own layout maths. The datatable is
+// unusual: it renders its BODY rows with `position: absolute; top: Npx` at a
+// FIXED row height (clusterize virtual scroll), while the HEADER row is static
+// flow. That single fact drives the safe/unsafe line below.
+//
+//   SAFE   — restyling the header (static flow) freely, incl. 2-line wrapping.
+//   UNSAFE — wrapping BODY cells: growing a row past the fixed `top` step makes
+//            absolutely-positioned rows overlap. Body therefore stays single
+//            line + ellipsis; the width fix + horizontal scroll surface the
+//            content instead.
+//
+// Loaded LAST in the bundle, so it wins over the legacy datatable block at
+// equal specificity without needing !important for structural rules (a few
+// !important remain only where they must beat frappe-datatable's own
+// per-column injected `<style>` — e.g. text-align keyed by .dt-cell--col-N).
+// ===========================================================================
+
+// --- 1. Body fills its container ------------------------------------------
+// ROOT CAUSE of the large blank band beside reports: frappe-datatable writes an
+// inline `width:<px>` onto .dt-scrollable computed at first render (often while
+// the sidebar was open / viewport narrow) and never recomputes it on resize, so
+// the body sits far narrower than its 100%-wide header/footer, leaving dead
+// space and desyncing the header⇄body horizontal scroll. Forcing 100% (beats
+// the non-important inline width) makes the body span the datatable and keeps
+// the two scroll layers locked together. Universally correct for datatable.
+.datatable .dt-scrollable {
+	width: 100% !important;
+}
+
+// --- 2. Comfortable, symmetric cell padding -------------------------------
+// frappe-datatable ships the header content with a physical `padding-right:1rem`
+// (rtlcss flips it to padding-left in the RTL build), while body cells carry an
+// even, smaller pad. The asymmetry pushes a header label off the column its data
+// sits in. Equal padding on both re-anchors the header directly over its data.
+.datatable .dt-cell__content {
+	padding: 8px 11px !important;
+}
+
+.datatable .dt-cell--header .dt-cell__content {
+	padding: 9px 11px !important;
+}
+
+// The row-number column is only ~40-54px wide; the default 11px side padding
+// eats it and clips 2-3 digit numbers. Tight padding keeps "10"/"100" whole.
+// (report_autofit.js also widens this column to the largest index.)
+.datatable .dt-cell--col-0 .dt-cell__content {
+	padding-left: 4px !important;
+	padding-right: 4px !important;
+}
+
+// Body cells have a FIXED 32px content box, but inherit a ~23px line-height —
+// far taller than the 16px it leaves after 8px top/bottom padding, so the single
+// line overflowed downward and every value sat low in its row (clipped at the
+// bottom). A tighter line-height + 5px vertical padding re-centres the text
+// within the fixed box (measured gap 8px top / 7px bottom). Single-line only
+// (body cells are nowrap), so this cannot clip wrapped content.
+.datatable .dt-scrollable .dt-cell__content {
+	line-height: 1.3 !important;
+	padding-top: 5px !important;
+	padding-bottom: 5px !important;
+}
+
+// --- 3. RTL logical alignment ---------------------------------------------
+// frappe assigns column alignment PHYSICALLY (text→left, numeric→right) as if
+// the sheet were LTR. In an Arabic (RTL) report that scatters content to both
+// visual edges: Arabic labels flee to the far (left) edge, away from the reading
+// start. Pinning every data/header cell to the reading start (right) gives one
+// coherent RTL ledger — Arabic reads from the right, and amounts keep their
+// decimal line-up (right-alignment is decimal-alignment here). The row-number
+// column stays centred. English (LTR) reports are untouched: frappe's physical
+// defaults already read correctly there.
+//
+// CRITICAL — double-RTL trap: this whole block is written PHYSICALLY for the
+// RTL page (`[dir=rtl] { text-align:right }`). Frappe's esbuild runs rtlcss over
+// the css-rtl bundle, which would flip `right`→`left` (verified: it silently did,
+// making Arabic reports left-align — the exact bug this fixes). The
+// `rtl:begin/end:ignore` guard tells rtlcss to leave the block byte-identical in
+// BOTH bundles, so `right` stays `right` on the Arabic page. Do NOT remove it.
+/*rtl:begin:ignore*/
+[dir="rtl"] .datatable .dt-scrollable .dt-cell__content,
+[dir="rtl"] .datatable .dt-header .dt-cell--header .dt-cell__content {
+	text-align: right !important;
+}
+
+[dir="rtl"] .datatable .dt-cell--col-0 .dt-cell__content {
+	text-align: center !important;
+}
+/*rtl:end:ignore*/
+
+// --- 4. Header identity ----------------------------------------------------
+// Header read at the same weight as its data, so a wide report was an
+// undifferentiated field of text. Give it a tinted plate, a real weight step,
+// a defining bottom rule — and let long column titles wrap to two lines rather
+// than truncate (safe: the header row is static flow, so growth pushes the body
+// down instead of overlapping it).
+.datatable .dt-cell--header,
+.datatable .dt-row-header,
+.datatable .dt-row--header {
+	background: var(--subtle-accent) !important;
+}
+
+// Flexbox on the cell vertically centres the label — otherwise a header sits
+// at the top of its cell and reads as "dropped" next to taller neighbours.
+// The resize handle / dropdown are absolutely positioned, so flex only lays out
+// the single `.dt-cell__content` flex-item.
+.datatable .dt-cell--header {
+	border-bottom: 2px solid var(--dark-border-color) !important;
+	display: flex !important;
+	align-items: center !important;
+}
+
+.datatable .dt-cell--header .dt-cell__content {
+	width: 100%;
+	font-weight: 650 !important;
+	color: var(--heading-color) !important;
+	letter-spacing: 0.1px;
+	white-space: normal !important;
+	display: -webkit-box;
+	-webkit-line-clamp: 2;
+	-webkit-box-orient: vertical;
+	line-height: 1.35;
+}
+
+// --- 5. Body legibility ----------------------------------------------------
+// Hairline column edges, a whisper-quiet zebra, a clear hover band, and tabular
+// figures so digits lock into columns. Colours are theme tokens / text-derived
+// mixes, so light and dark both resolve correctly with no second rule set.
+.datatable .dt-cell {
+	border-color: var(--border-color) !important;
+}
+
+.datatable .dt-scrollable .dt-row:nth-of-type(even) .dt-cell {
+	background-color: var(--subtle-accent) !important;
+}
+
+.datatable .dt-scrollable .dt-row:hover .dt-cell {
+	background-color: color-mix(in srgb, var(--text-color) 6%, transparent) !important;
+}
+
+.datatable .dt-scrollable .dt-cell__content {
+	font-variant-numeric: tabular-nums;
+	font-feature-settings: "tnum" 1;
+}
+
+// The focused/selected cell must stay obvious while reading or editing.
+.datatable .dt-cell--focus {
+	outline: 2px solid color-mix(in srgb, var(--primary) 50%, transparent);
+	outline-offset: -2px;
+	border-radius: 2px;
+}
+
+// --- 6. Total / summary row ------------------------------------------------
+// frappe-datatable's opt-in total row (showTotalRow) gets a heavier weight and
+// a top rule so a report's bottom line reads as a conclusion, not another row.
+.datatable .dt-row-totalRow .dt-cell,
+.datatable .dt-row--total .dt-cell {
+	background: var(--subtle-accent) !important;
+	font-weight: 650 !important;
+	border-top: 2px solid var(--dark-border-color) !important;
+}
+
+// --- 7. Cross-app class-collision guard ------------------------------------
+// `.dt-*` is frappe-datatable's namespace, but it is generic enough that other
+// installed apps ship their OWN unscoped `.dt-*` rules that leak onto every
+// report. Measured culprit: `doc_trace` ships a global `.dt-header`/`.dt-footer`
+// (`padding: 4px 4px 14px; margin-bottom: 14px; border-bottom; align-items:
+// center`) meant for its own modal — on a report that injected ~28px of dead
+// space directly under the column titles and shoved the header off-centre.
+// The `.datatable` descendant scope (0,2,0) outranks a bare `.dt-header`
+// (0,1,0), so this restores the datatable's own neutral wrapper geometry
+// without touching the other app (its markup lives under `.doc-trace-modal`,
+// never `.datatable`, so it is unaffected).
+.datatable .dt-header,
+.datatable .dt-footer {
+	padding: 0 !important;
+	margin: 0 !important;
+	border: 0 !important;
+	gap: 0 !important;
+	align-items: stretch !important;
+	justify-content: flex-start !important;
+	background: transparent !important;
+}
+
+// --- 8. Inline per-column filter bar ---------------------------------------
+// Frappe force-shows the inline filter row in query reports
+// (`desk.bundle` `.dt-header .dt-row[data-is-filter]{ display:flex !important }`),
+// but its inputs ship borderless, 12px tall and near-white — so the row read as
+// an empty gap between the titles and the data rather than the filter tool it
+// is. Restyle it as a deliberate filter bar: a tinted band with real, rounded
+// search fields. Disabled column filters (e.g. the row-number column) stay
+// invisible so they don't read as broken inputs.
+.datatable .dt-header .dt-row-filter .dt-cell {
+	background: var(--subtle-accent) !important;
+	border-top: 1px solid var(--border-color) !important;
+}
+
+// The filter cell content box is only ~32px tall and datatable gives it
+// `overflow:hidden` + a 2px transparent focus border. A 26px bordered input
+// plus that border/padding overflowed and clipped the field's rounded top/bottom
+// (visible as half-hidden boxes). Drop the content's own border, let it overflow
+// visibly, and centre a shorter input so the whole rounded field always shows.
+.datatable .dt-header .dt-row-filter .dt-cell__content {
+	padding: 0 7px !important;
+	border: 0 !important;
+	overflow: visible !important;
+	display: flex;
+	align-items: center;
+}
+
+.datatable .dt-header .dt-row-filter input.dt-filter {
+	width: 100%;
+	height: 23px !important;
+	line-height: 23px;
+	padding: 0 9px !important;
+	font-size: 12px;
+	color: var(--text-color) !important;
+	background: var(--fg-color, #fff) !important;
+	border: 1px solid var(--border-color) !important;
+	border-radius: 6px !important;
+}
+
+.datatable .dt-header .dt-row-filter input.dt-filter:disabled {
+	background: transparent !important;
+	border-color: transparent !important;
+}

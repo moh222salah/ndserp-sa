@@ -1,0 +1,21 @@
+{
+ "creation": "2026-09-28 00:00:00",
+ "docstatus": 0,
+ "doctype": "Number Card",
+ "document_type": "Optical Order",
+ "dynamic_filters_json": "[[\"Optical Order\", \"expected_delivery\", \"<\", \"frappe.datetime.get_today()\"]]",
+ "filters_json": "[[\"Optical Order\", \"status\", \"in\", [\"Confirmed\", \"In Production\", \"Ready\"], false]]",
+ "function": "Count",
+ "idx": 0,
+ "is_public": 1,
+ "is_standard": 1,
+ "label": "Delayed Orders",
+ "modified": "2026-09-28 00:00:00",
+ "modified_by": "Administrator",
+ "module": "Optical",
+ "name": "Delayed Orders",
+ "owner": "Administrator",
+ "show_percentage_stats": 1,
+ "stats_time_interval": "Daily",
+ "type": "Document Type"
+}

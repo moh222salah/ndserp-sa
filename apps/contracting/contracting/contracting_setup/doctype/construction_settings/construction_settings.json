@@ -1,0 +1,124 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2026-09-08 00:00:00.000000",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "company",
+  "defaults_sb",
+  "defaults_cb",
+  "default_cost_account",
+  "default_revenue_account",
+  "policy_sb",
+  "project_warehouse_policy",
+  "enable_auto_cost_allocation",
+  "cost_dim_sb",
+  "enable_cost_code",
+  "enable_wbs",
+  "enable_boq_item"
+ ],
+ "fields": [
+  {
+   "fieldname": "company",
+   "fieldtype": "Link",
+   "label": "Company",
+   "options": "Company",
+   "reqd": 1
+  },
+  {
+   "fieldname": "defaults_sb",
+   "fieldtype": "Section Break",
+   "label": "Defaults"
+  },
+  {
+   "fieldname": "defaults_cb",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "default_cost_account",
+   "fieldtype": "Link",
+   "label": "Default Cost Account",
+   "options": "Account"
+  },
+  {
+   "fieldname": "default_revenue_account",
+   "fieldtype": "Link",
+   "label": "Default Revenue Account",
+   "options": "Account"
+  },
+  {
+   "fieldname": "policy_sb",
+   "fieldtype": "Section Break",
+   "label": "Policy"
+  },
+  {
+   "fieldname": "project_warehouse_policy",
+   "fieldtype": "Select",
+   "label": "Project Warehouse Policy",
+   "options": "Company Default\nProject\nManual",
+   "default": "Company Default"
+  },
+  {
+   "fieldname": "enable_auto_cost_allocation",
+   "fieldtype": "Check",
+   "label": "Enable Auto Cost Allocation",
+   "default": "0",
+   "description": "Configuration flag only; posting logic must still validate."
+  },
+  {
+   "fieldname": "cost_dim_sb",
+   "fieldtype": "Section Break",
+   "label": "Construction Cost Dimensions"
+  },
+  {
+   "fieldname": "enable_cost_code",
+   "fieldtype": "Check",
+   "label": "Enable Cost Code",
+   "default": "1"
+  },
+  {
+   "fieldname": "enable_wbs",
+   "fieldtype": "Check",
+   "label": "Enable WBS",
+   "default": "1"
+  },
+  {
+   "fieldname": "enable_boq_item",
+   "fieldtype": "Check",
+   "label": "Enable BOQ Item",
+   "default": "1",
+   "description": "BOQ Item on actual-cost transactions comes from the Project's approved Budget BOQ."
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "is_submittable": 0,
+ "issingle": 1,
+ "istable": 0,
+ "links": [],
+ "modified": "2026-09-08 00:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Contracting Setup",
+ "name": "Construction Settings",
+ "owner": "Administrator",
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "track_changes": 1,
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1,
+   "submit": 0,
+   "cancel": 0
+  }
+ ]
+}

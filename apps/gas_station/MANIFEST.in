@@ -1,0 +1,16 @@
+include MANIFEST.in
+include requirements.txt
+include *.json
+include *.md
+include *.py
+recursive-include gas_station *.css
+recursive-include gas_station *.csv
+recursive-include gas_station *.html
+recursive-include gas_station *.ico
+recursive-include gas_station *.js
+recursive-include gas_station *.json
+recursive-include gas_station *.md
+recursive-include gas_station *.py
+recursive-include gas_station *.svg
+recursive-include gas_station *.txt
+recursive-exclude gas_station *.pyc

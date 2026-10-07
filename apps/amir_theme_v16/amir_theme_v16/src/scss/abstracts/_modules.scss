@@ -1,0 +1,103 @@
+// ---------------------------------------------------------------------------
+// Module identity — colour per business domain
+// ---------------------------------------------------------------------------
+// Keyed on the tile's `data-id`, which Frappe writes in ENGLISH and does not
+// translate. Keying on the visible caption would break the moment the user
+// switches language, so the map must never use labels.
+//
+// Hues are chosen for domain semantics and for separation on a white card:
+// every value clears 4.5:1 against #FFFFFF so the glyph stays legible, and
+// adjacent tiles in the grid never share a hue family.
+// ---------------------------------------------------------------------------
+
+$amt-modules: (
+	"Accounting":       #2563EB,  // blue    — ledgers, the system's spine
+	"Selling":          #0D9488,  // teal    — revenue
+	"Buying":           #7C3AED,  // violet  — procurement
+	"Stock":            #0284C7,  // sky     — inventory movement
+	"Manufacturing":    #DB2777,  // pink    — production
+	"Projects":         #7E22CE,  // purple  — delivery
+	"Quality":          #CA8A04,  // gold    — assurance
+	"Assets":           #16A34A,  // green   — owned value
+	"Subcontracting":   #EA580C,  // orange  — outsourced work
+	"Approvals":        #0F766E,  // deep teal — governance
+	"POSNext":          #1E3A8A,  // navy    — point of sale
+	"Framework":        #475569,  // slate   — platform
+	"ERPNext Settings": #64748B,  // grey    — configuration
+	"Payments":         #059669,
+	"Financial Reports":#1D4ED8,
+	"Accounts Setup":   #3730A3,
+	"Taxes":            #B45309,
+	"Banking":          #0E7490,
+	"Budget":           #9333EA,
+	"Subscription":     #C2410C,
+	"Share Management": #A16207,
+	"Users":            #4F46E5,
+	"Website":          #0891B2,
+	"Build":            #6D28D9,
+	"Automation":       #2563EB,
+	"Data":             #0369A1,
+	"Email":            #BE123C,
+	"Integrations":     #7C3AED,
+	"Printing":         #475569,
+	"System":           #334155,
+	"Invoicing":        #1D4ED8,
+	"Organization":     #0F766E,
+	"HR":               #16A34A,
+	"Human Resources":  #16A34A,
+
+	// ndserp's Arabic sections. The comment above says "never use labels" —
+	// that rule is about not keying on a *translated* caption. These workspaces
+	// are NAMED in Arabic (the name is the primary key, and `data-id` carries
+	// the untranslated name), so the Arabic string is the stable identifier
+	// here, not a label that changes with the UI language.
+	"الملفات الرئيسية NDS ERP": #64748B,  // grey   — master data / setup
+	"حسابات NDS ERP":           #2563EB,  // blue   — matches "Accounting"
+	"مخازن NDS ERP":            #0284C7,  // sky    — matches "Stock"
+	"المبيعات NDS ERP":         #0D9488,  // teal   — matches "Selling"
+	"المشتريات NDS ERP":        #7C3AED,  // violet — matches "Buying"
+	"الاصول NDS ERP":           #16A34A,  // green  — matches "Assets"
+);
+
+// Glyph per module, taken from the Lucide sprite Frappe already inlines
+// (1,784 symbols in the DOM). No icon library is added — `<use href="#id">`
+// resolves against that same-document sprite.
+$amt-module-icons: (
+	"Accounting":       "calculator",
+	"Selling":          "store",
+	"Buying":           "tag",
+	"Stock":            "package",
+	"Manufacturing":    "factory",
+	"Projects":         "kanban",
+	"Quality":          "shield-check",
+	"Assets":           "layers",
+	"Subcontracting":   "refresh-cw",
+	"Approvals":        "circle-check-big",
+	"POSNext":          "monitor",
+	"Framework":        "box",
+	"ERPNext Settings": "settings",
+	"Payments":         "credit-card",
+	"Financial Reports":"chart-column",
+	"Accounts Setup":   "sliders-horizontal",
+	"Taxes":            "receipt",
+	"Banking":          "landmark",
+	"Budget":           "wallet",
+	"Subscription":     "repeat",
+	"Share Management": "chart-pie",
+	"Users":            "users",
+	"Website":          "globe",
+	"Build":            "hammer",
+	"Automation":       "workflow",
+	"Data":             "database",
+	"Email":            "mail",
+	"Integrations":     "plug",
+	"Printing":         "printer",
+	"System":           "server",
+	"Invoicing":        "file-text",
+	"Organization":     "building-2",
+	"HR":               "user-round",
+	"Human Resources":  "user-round",
+);
+
+$amt-module-fallback:      #475569;
+$amt-module-fallback-icon: "layout-grid";

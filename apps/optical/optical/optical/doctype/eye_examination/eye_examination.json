@@ -1,0 +1,318 @@
+{
+ "actions": [],
+ "creation": "2026-09-28 00:00:00",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "customer",
+  "customer_name",
+  "exam_col",
+  "exam_date",
+  "optician",
+  "prescription",
+  "od_section",
+  "od_sph",
+  "od_cyl",
+  "od_axis",
+  "od_add",
+  "od_pd",
+  "od_col",
+  "od_prism",
+  "od_base",
+  "od_va_distance",
+  "od_va_near",
+  "os_section",
+  "os_sph",
+  "os_cyl",
+  "os_axis",
+  "os_add",
+  "os_pd",
+  "os_col",
+  "os_prism",
+  "os_base",
+  "os_va_distance",
+  "os_va_near",
+  "measurements_section",
+  "binocular_pd",
+  "measurements_col",
+  "near_pd",
+  "exam_notes_section",
+  "notes"
+ ],
+ "fields": [
+  {
+   "fieldname": "customer",
+   "fieldtype": "Link",
+   "label": "Customer",
+   "options": "Customer",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "customer_name",
+   "fieldtype": "Data",
+   "label": "Customer Name",
+   "fetch_from": "customer.customer_name",
+   "read_only": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "exam_col",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "exam_date",
+   "fieldtype": "Date",
+   "label": "Examination Date",
+   "default": "Today",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "optician",
+   "fieldtype": "Link",
+   "label": "Optician",
+   "options": "User",
+   "default": "__user"
+  },
+  {
+   "fieldname": "prescription",
+   "fieldtype": "Link",
+   "label": "Prescription",
+   "options": "Optical Prescription",
+   "read_only": 1,
+   "no_copy": 1
+  },
+  {
+   "fieldname": "od_section",
+   "fieldtype": "Section Break",
+   "label": "Right Eye (OD)"
+  },
+  {
+   "fieldname": "od_sph",
+   "fieldtype": "Float",
+   "label": "SPH",
+   "precision": "2"
+  },
+  {
+   "fieldname": "od_cyl",
+   "fieldtype": "Float",
+   "label": "CYL",
+   "precision": "2"
+  },
+  {
+   "fieldname": "od_axis",
+   "fieldtype": "Int",
+   "label": "AXIS"
+  },
+  {
+   "fieldname": "od_add",
+   "fieldtype": "Float",
+   "label": "ADD",
+   "precision": "2"
+  },
+  {
+   "fieldname": "od_pd",
+   "fieldtype": "Float",
+   "label": "PD",
+   "precision": "1"
+  },
+  {
+   "fieldname": "od_col",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "od_prism",
+   "fieldtype": "Float",
+   "label": "Prism",
+   "precision": "2"
+  },
+  {
+   "fieldname": "od_base",
+   "fieldtype": "Select",
+   "label": "Base",
+   "options": "\nUp\nDown\nIn\nOut"
+  },
+  {
+   "fieldname": "od_va_distance",
+   "fieldtype": "Data",
+   "label": "Distance Vision"
+  },
+  {
+   "fieldname": "od_va_near",
+   "fieldtype": "Data",
+   "label": "Near Vision"
+  },
+  {
+   "fieldname": "os_section",
+   "fieldtype": "Section Break",
+   "label": "Left Eye (OS)"
+  },
+  {
+   "fieldname": "os_sph",
+   "fieldtype": "Float",
+   "label": "SPH",
+   "precision": "2"
+  },
+  {
+   "fieldname": "os_cyl",
+   "fieldtype": "Float",
+   "label": "CYL",
+   "precision": "2"
+  },
+  {
+   "fieldname": "os_axis",
+   "fieldtype": "Int",
+   "label": "AXIS"
+  },
+  {
+   "fieldname": "os_add",
+   "fieldtype": "Float",
+   "label": "ADD",
+   "precision": "2"
+  },
+  {
+   "fieldname": "os_pd",
+   "fieldtype": "Float",
+   "label": "PD",
+   "precision": "1"
+  },
+  {
+   "fieldname": "os_col",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "os_prism",
+   "fieldtype": "Float",
+   "label": "Prism",
+   "precision": "2"
+  },
+  {
+   "fieldname": "os_base",
+   "fieldtype": "Select",
+   "label": "Base",
+   "options": "\nUp\nDown\nIn\nOut"
+  },
+  {
+   "fieldname": "os_va_distance",
+   "fieldtype": "Data",
+   "label": "Distance Vision"
+  },
+  {
+   "fieldname": "os_va_near",
+   "fieldtype": "Data",
+   "label": "Near Vision"
+  },
+  {
+   "fieldname": "measurements_section",
+   "fieldtype": "Section Break",
+   "label": "Additional Measurements"
+  },
+  {
+   "fieldname": "binocular_pd",
+   "fieldtype": "Float",
+   "label": "Binocular PD",
+   "precision": "1"
+  },
+  {
+   "fieldname": "measurements_col",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "near_pd",
+   "fieldtype": "Float",
+   "label": "Near PD",
+   "precision": "1"
+  },
+  {
+   "fieldname": "exam_notes_section",
+   "fieldtype": "Section Break",
+   "label": "Notes"
+  },
+  {
+   "fieldname": "notes",
+   "fieldtype": "Small Text",
+   "label": "Notes"
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2026-09-28 00:00:00",
+ "modified_by": "Administrator",
+ "module": "Optical",
+ "name": "Eye Examination",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "role": "System Manager",
+   "read": 1,
+   "report": 1,
+   "export": 1,
+   "print": 1,
+   "email": 1,
+   "share": 1,
+   "write": 1,
+   "create": 1,
+   "delete": 1
+  },
+  {
+   "role": "Optical Manager",
+   "read": 1,
+   "report": 1,
+   "export": 1,
+   "print": 1,
+   "email": 1,
+   "share": 1,
+   "write": 1,
+   "create": 1,
+   "delete": 1
+  },
+  {
+   "role": "Optical Branch Manager",
+   "read": 1,
+   "report": 1,
+   "export": 1,
+   "print": 1,
+   "email": 1,
+   "share": 1,
+   "write": 1,
+   "create": 1
+  },
+  {
+   "role": "Optician",
+   "read": 1,
+   "report": 1,
+   "export": 1,
+   "print": 1,
+   "email": 1,
+   "share": 1,
+   "write": 1,
+   "create": 1
+  },
+  {
+   "role": "Optical Cashier",
+   "read": 1,
+   "report": 1,
+   "export": 1,
+   "print": 1,
+   "email": 1,
+   "share": 1
+  },
+  {
+   "role": "Optical Lab Technician",
+   "read": 1,
+   "report": 1,
+   "export": 1,
+   "print": 1,
+   "email": 1,
+   "share": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "track_changes": 1,
+ "autoname": "format:OPT-EX-{YYYY}-{#####}",
+ "naming_rule": "Expression",
+ "title_field": "customer_name"
+}

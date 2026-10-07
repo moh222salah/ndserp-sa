@@ -1,0 +1,3 @@
+# Runtime deps are resolved through the bench (frappe, erpnext).
+# jsonschema is used by the integration layer for PTS payload validation.
+jsonschema>=4.0.0

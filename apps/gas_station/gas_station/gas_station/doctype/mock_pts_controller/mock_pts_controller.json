@@ -1,0 +1,223 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2026-01-15 00:00:00.000000",
+ "description": "Simulator config that drives the SAME integration handlers as a real PTS-2.",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "sb_id",
+  "mock_name",
+  "pts_controller",
+  "cb_id",
+  "enabled",
+  "is_running",
+  "last_tick_at",
+  "sb_freq",
+  "transaction_frequency_seconds",
+  "measurement_frequency_seconds",
+  "cb_freq",
+  "alert_probability",
+  "sb_fault",
+  "simulate_connection_failures",
+  "simulate_delayed_packets",
+  "cb_fault",
+  "simulate_duplicate_packets",
+  "simulate_transaction_failures",
+  "sb_help",
+  "controls_html"
+ ],
+ "fields": [
+  {
+   "fieldname": "sb_id",
+   "fieldtype": "Section Break",
+   "label": "Simulator"
+  },
+  {
+   "fieldname": "mock_name",
+   "fieldtype": "Data",
+   "label": "Name",
+   "reqd": 1,
+   "unique": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "pts_controller",
+   "fieldtype": "Link",
+   "label": "Target PTS Controller",
+   "options": "PTS Controller",
+   "reqd": 1,
+   "in_list_view": 1,
+   "description": "Must be a controller with provider = Mock."
+  },
+  {
+   "fieldname": "cb_id",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "enabled",
+   "fieldtype": "Check",
+   "label": "Enabled",
+   "default": "1"
+  },
+  {
+   "fieldname": "is_running",
+   "fieldtype": "Check",
+   "label": "Running",
+   "read_only": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "last_tick_at",
+   "fieldtype": "Datetime",
+   "label": "Last Tick",
+   "read_only": 1
+  },
+  {
+   "fieldname": "sb_freq",
+   "fieldtype": "Section Break",
+   "label": "Frequencies"
+  },
+  {
+   "fieldname": "transaction_frequency_seconds",
+   "fieldtype": "Int",
+   "label": "Transaction Every (s)",
+   "default": "20"
+  },
+  {
+   "fieldname": "measurement_frequency_seconds",
+   "fieldtype": "Int",
+   "label": "Measurement Every (s)",
+   "default": "60"
+  },
+  {
+   "fieldname": "cb_freq",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "alert_probability",
+   "fieldtype": "Percent",
+   "label": "Alert Probability",
+   "default": "3"
+  },
+  {
+   "fieldname": "sb_fault",
+   "fieldtype": "Section Break",
+   "label": "Fault Injection"
+  },
+  {
+   "fieldname": "simulate_connection_failures",
+   "fieldtype": "Check",
+   "label": "Connection Failures"
+  },
+  {
+   "fieldname": "simulate_delayed_packets",
+   "fieldtype": "Check",
+   "label": "Delayed Packets"
+  },
+  {
+   "fieldname": "cb_fault",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "simulate_duplicate_packets",
+   "fieldtype": "Check",
+   "label": "Duplicate Packets"
+  },
+  {
+   "fieldname": "simulate_transaction_failures",
+   "fieldtype": "Check",
+   "label": "Transaction Failures"
+  },
+  {
+   "fieldname": "sb_help",
+   "fieldtype": "Section Break",
+   "label": "Controls"
+  },
+  {
+   "fieldname": "controls_html",
+   "fieldtype": "HTML",
+   "options": "<p class='text-muted'>Use the buttons in the toolbar to Start/Stop and generate one-off events. Generation always flows through the real integration endpoints \u2014 no fake dashboard data.</p>"
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2026-01-15 00:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Gas Station",
+ "name": "Mock PTS Controller",
+ "owner": "Administrator",
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "track_changes": 1,
+ "autoname": "field:mock_name",
+ "naming_rule": "By fieldname",
+ "permissions": [
+  {
+   "role": "System Manager",
+   "read": 1,
+   "permlevel": 0,
+   "create": 1,
+   "write": 1,
+   "delete": 1,
+   "report": 1,
+   "export": 1,
+   "email": 1,
+   "print": 1,
+   "share": 1
+  },
+  {
+   "role": "Gas Station Administrator",
+   "read": 1,
+   "permlevel": 0,
+   "create": 1,
+   "write": 1,
+   "delete": 1,
+   "report": 1,
+   "export": 1,
+   "email": 1,
+   "print": 1,
+   "share": 1
+  },
+  {
+   "role": "Gas Station Integration Manager",
+   "read": 1,
+   "permlevel": 0,
+   "create": 1,
+   "write": 1,
+   "delete": 1,
+   "report": 1,
+   "export": 1,
+   "email": 1,
+   "print": 1,
+   "share": 1
+  },
+  {
+   "role": "Station Manager",
+   "read": 1,
+   "permlevel": 0,
+   "write": 1,
+   "create": 1,
+   "report": 1,
+   "print": 1,
+   "email": 1
+  },
+  {
+   "role": "Station Operator",
+   "read": 1,
+   "permlevel": 0,
+   "report": 1,
+   "print": 1,
+   "export": 1
+  },
+  {
+   "role": "Gas Station Viewer",
+   "read": 1,
+   "permlevel": 0,
+   "report": 1,
+   "print": 1,
+   "export": 1
+  }
+ ]
+}

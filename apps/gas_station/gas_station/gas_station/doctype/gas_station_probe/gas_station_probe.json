@@ -1,0 +1,212 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2026-01-15 00:00:00.000000",
+ "description": "ATG probe/sensor. Capability flags gate which measurements are shown.",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "sb_identity",
+  "station",
+  "probe_id",
+  "probe_type",
+  "tank",
+  "cb_identity",
+  "pts_controller",
+  "enabled",
+  "status",
+  "sb_hardware",
+  "manufacturer",
+  "model",
+  "sb_caps",
+  "caps_html",
+  "supports_level",
+  "supports_water",
+  "cb_caps",
+  "supports_temperature",
+  "supports_density",
+  "supports_leak"
+ ],
+ "fields": [
+  {
+   "fieldname": "sb_identity",
+   "fieldtype": "Section Break",
+   "label": "Identity"
+  },
+  {
+   "fieldname": "station",
+   "fieldtype": "Link",
+   "label": "Station",
+   "options": "Gas Station",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "probe_id",
+   "fieldtype": "Data",
+   "label": "Probe ID",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "probe_type",
+   "fieldtype": "Select",
+   "label": "Probe Type",
+   "options": "Level\nTemperature\nWater\nDensity\nLeak Detection\nMulti Parameter",
+   "default": "Multi Parameter",
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "tank",
+   "fieldtype": "Link",
+   "label": "Tank",
+   "options": "Gas Station Tank",
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "cb_identity",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "pts_controller",
+   "fieldtype": "Link",
+   "label": "PTS Controller",
+   "options": "PTS Controller"
+  },
+  {
+   "fieldname": "enabled",
+   "fieldtype": "Check",
+   "label": "Enabled",
+   "default": "1"
+  },
+  {
+   "fieldname": "status",
+   "fieldtype": "Select",
+   "label": "Status",
+   "options": "Unknown\nOnline\nOffline\nFault",
+   "default": "Unknown",
+   "read_only": 1
+  },
+  {
+   "fieldname": "sb_hardware",
+   "fieldtype": "Section Break",
+   "label": "Hardware"
+  },
+  {
+   "fieldname": "manufacturer",
+   "fieldtype": "Data",
+   "label": "Manufacturer"
+  },
+  {
+   "fieldname": "model",
+   "fieldtype": "Data",
+   "label": "Model"
+  },
+  {
+   "fieldname": "sb_caps",
+   "fieldtype": "Section Break",
+   "label": "Capabilities"
+  },
+  {
+   "fieldname": "caps_html",
+   "fieldtype": "HTML",
+   "options": "<p class='text-muted'>Only capabilities enabled here are displayed on the dashboard. Unavailable values are shown as <b>\u2014</b>, never as 0.</p>"
+  },
+  {
+   "fieldname": "supports_level",
+   "fieldtype": "Check",
+   "label": "Provides Product Level",
+   "default": "1"
+  },
+  {
+   "fieldname": "supports_water",
+   "fieldtype": "Check",
+   "label": "Provides Water Level"
+  },
+  {
+   "fieldname": "cb_caps",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "supports_temperature",
+   "fieldtype": "Check",
+   "label": "Provides Temperature",
+   "default": "1"
+  },
+  {
+   "fieldname": "supports_density",
+   "fieldtype": "Check",
+   "label": "Provides Density"
+  },
+  {
+   "fieldname": "supports_leak",
+   "fieldtype": "Check",
+   "label": "Provides Leak Detection"
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2026-01-15 00:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Gas Station",
+ "name": "Gas Station Probe",
+ "owner": "Administrator",
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "track_changes": 1,
+ "permissions": [
+  {
+   "role": "System Manager",
+   "read": 1,
+   "permlevel": 0,
+   "create": 1,
+   "write": 1,
+   "delete": 1,
+   "report": 1,
+   "export": 1,
+   "email": 1,
+   "print": 1,
+   "share": 1
+  },
+  {
+   "role": "Gas Station Administrator",
+   "read": 1,
+   "permlevel": 0,
+   "create": 1,
+   "write": 1,
+   "delete": 1,
+   "report": 1,
+   "export": 1,
+   "email": 1,
+   "print": 1,
+   "share": 1
+  },
+  {
+   "role": "Station Manager",
+   "read": 1,
+   "permlevel": 0,
+   "write": 1,
+   "report": 1,
+   "print": 1,
+   "email": 1
+  },
+  {
+   "role": "Station Operator",
+   "read": 1,
+   "permlevel": 0,
+   "report": 1,
+   "print": 1
+  },
+  {
+   "role": "Gas Station Viewer",
+   "read": 1,
+   "permlevel": 0,
+   "report": 1,
+   "print": 1
+  }
+ ],
+ "autoname": "format:{station}-PR-{probe_id}",
+ "naming_rule": "Expression",
+ "search_fields": "station,probe_id,probe_type"
+}

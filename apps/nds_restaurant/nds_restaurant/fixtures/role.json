@@ -1,0 +1,20 @@
+[
+  {
+    "doctype": "Role",
+    "name": "NDS Manager",
+    "role_name": "NDS Manager",
+    "desk_access": 1
+  },
+  {
+    "doctype": "Role",
+    "name": "NDS Cashier",
+    "role_name": "NDS Cashier",
+    "desk_access": 1
+  },
+  {
+    "doctype": "Role",
+    "name": "NDS Captain",
+    "role_name": "NDS Captain",
+    "desk_access": 1
+  }
+]

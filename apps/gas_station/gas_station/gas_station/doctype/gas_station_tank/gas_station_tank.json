@@ -1,0 +1,175 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2026-01-15 00:00:00.000000",
+ "description": "Underground fuel tank. Product is an ERPNext Item; stock maps to a Warehouse.",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "sb_identity",
+  "station",
+  "tank_number",
+  "tank_name",
+  "pts_tank_id",
+  "cb_identity",
+  "pts_controller",
+  "enabled",
+  "sb_product",
+  "erpnext_item",
+  "warehouse",
+  "cb_product",
+  "capacity",
+  "probe"
+ ],
+ "fields": [
+  {
+   "fieldname": "sb_identity",
+   "fieldtype": "Section Break",
+   "label": "Identity"
+  },
+  {
+   "fieldname": "station",
+   "fieldtype": "Link",
+   "label": "Station",
+   "options": "Gas Station",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "tank_number",
+   "fieldtype": "Data",
+   "label": "Tank #",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "tank_name",
+   "fieldtype": "Data",
+   "label": "Tank Name",
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "pts_tank_id",
+   "fieldtype": "Int",
+   "label": "PTS Tank ID"
+  },
+  {
+   "fieldname": "cb_identity",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "pts_controller",
+   "fieldtype": "Link",
+   "label": "PTS Controller",
+   "options": "PTS Controller"
+  },
+  {
+   "fieldname": "enabled",
+   "fieldtype": "Check",
+   "label": "Enabled",
+   "default": "1"
+  },
+  {
+   "fieldname": "sb_product",
+   "fieldtype": "Section Break",
+   "label": "Product & Capacity"
+  },
+  {
+   "fieldname": "erpnext_item",
+   "fieldtype": "Link",
+   "label": "Fuel Item",
+   "options": "Item",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "warehouse",
+   "fieldtype": "Link",
+   "label": "Warehouse",
+   "options": "Warehouse",
+   "description": "Warehouse this tank's stock is tracked in (ERPNext)."
+  },
+  {
+   "fieldname": "cb_product",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "capacity",
+   "fieldtype": "Float",
+   "label": "Capacity (L)",
+   "precision": "2"
+  },
+  {
+   "fieldname": "probe",
+   "fieldtype": "Link",
+   "label": "Primary Probe",
+   "options": "Gas Station Probe"
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2026-01-15 00:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Gas Station",
+ "name": "Gas Station Tank",
+ "owner": "Administrator",
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "track_changes": 1,
+ "permissions": [
+  {
+   "role": "System Manager",
+   "read": 1,
+   "permlevel": 0,
+   "create": 1,
+   "write": 1,
+   "delete": 1,
+   "report": 1,
+   "export": 1,
+   "email": 1,
+   "print": 1,
+   "share": 1
+  },
+  {
+   "role": "Gas Station Administrator",
+   "read": 1,
+   "permlevel": 0,
+   "create": 1,
+   "write": 1,
+   "delete": 1,
+   "report": 1,
+   "export": 1,
+   "email": 1,
+   "print": 1,
+   "share": 1
+  },
+  {
+   "role": "Station Manager",
+   "read": 1,
+   "permlevel": 0,
+   "write": 1,
+   "report": 1,
+   "print": 1,
+   "email": 1
+  },
+  {
+   "role": "Station Operator",
+   "read": 1,
+   "permlevel": 0,
+   "report": 1,
+   "print": 1
+  },
+  {
+   "role": "Gas Station Viewer",
+   "read": 1,
+   "permlevel": 0,
+   "report": 1,
+   "print": 1
+  }
+ ],
+ "autoname": "format:{station}-T{tank_number}",
+ "naming_rule": "Expression",
+ "title_field": "tank_name",
+ "search_fields": "station,tank_name,erpnext_item"
+}

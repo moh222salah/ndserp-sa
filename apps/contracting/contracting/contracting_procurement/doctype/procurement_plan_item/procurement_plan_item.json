@@ -1,0 +1,122 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2026-09-08 00:00:00.000000",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "item_code",
+  "boq_item",
+  "wbs",
+  "unit",
+  "required_qty",
+  "planned_qty",
+  "ppi_cb",
+  "ordered_qty",
+  "received_qty",
+  "issued_qty",
+  "remaining_qty",
+  "commitment",
+  "required_date",
+  "planned_date",
+  "remarks"
+ ],
+ "fields": [
+  {
+   "fieldname": "item_code",
+   "fieldtype": "Link",
+   "label": "Item",
+   "options": "Item",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "boq_item",
+   "fieldtype": "Link",
+   "label": "BOQ Item",
+   "options": "Budget BOQ Item"
+  },
+  {
+   "fieldname": "wbs",
+   "fieldtype": "Link",
+   "label": "WBS",
+   "options": "WBS"
+  },
+  {
+   "fieldname": "unit",
+   "fieldtype": "Data",
+   "label": "Unit"
+  },
+  {
+   "fieldname": "required_qty",
+   "fieldtype": "Float",
+   "label": "Required"
+  },
+  {
+   "fieldname": "planned_qty",
+   "fieldtype": "Float",
+   "label": "Planned",
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "ppi_cb",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "ordered_qty",
+   "fieldtype": "Float",
+   "label": "Ordered"
+  },
+  {
+   "fieldname": "received_qty",
+   "fieldtype": "Float",
+   "label": "Received"
+  },
+  {
+   "fieldname": "issued_qty",
+   "fieldtype": "Float",
+   "label": "Issued"
+  },
+  {
+   "fieldname": "remaining_qty",
+   "fieldtype": "Float",
+   "label": "Remaining",
+   "read_only": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "commitment",
+   "fieldtype": "Currency",
+   "label": "Commitment"
+  },
+  {
+   "fieldname": "required_date",
+   "fieldtype": "Date",
+   "label": "Required Date"
+  },
+  {
+   "fieldname": "planned_date",
+   "fieldtype": "Date",
+   "label": "Planned Date"
+  },
+  {
+   "fieldname": "remarks",
+   "fieldtype": "Small Text",
+   "label": "Remarks"
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "is_submittable": 0,
+ "issingle": 0,
+ "istable": 1,
+ "links": [],
+ "modified": "2026-09-08 00:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Contracting Procurement",
+ "name": "Procurement Plan Item",
+ "owner": "Administrator",
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "track_changes": 1
+}

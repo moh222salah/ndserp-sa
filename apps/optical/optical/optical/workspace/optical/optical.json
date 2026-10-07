@@ -1,0 +1,451 @@
+{
+ "app": "optical",
+ "charts": [],
+ "content": "[{\"id\": \"hdr\", \"type\": \"header\", \"data\": {\"text\": \"<span class=\\\"h4\\\"><b>Optical</b></span>\", \"col\": 12}}, {\"id\": \"nc0\", \"type\": \"number_card\", \"data\": {\"number_card_name\": \"Open Optical Orders\", \"col\": 3}}, {\"id\": \"nc1\", \"type\": \"number_card\", \"data\": {\"number_card_name\": \"Ready for Delivery\", \"col\": 3}}, {\"id\": \"nc2\", \"type\": \"number_card\", \"data\": {\"number_card_name\": \"Delayed Orders\", \"col\": 3}}, {\"id\": \"nc3\", \"type\": \"number_card\", \"data\": {\"number_card_name\": \"Pending Lab Jobs\", \"col\": 3}}, {\"id\": \"nc4\", \"type\": \"number_card\", \"data\": {\"number_card_name\": \"Todays Sales\", \"col\": 3}}, {\"id\": \"nc5\", \"type\": \"number_card\", \"data\": {\"number_card_name\": \"Todays Collections\", \"col\": 3}}, {\"id\": \"sp1\", \"type\": \"spacer\", \"data\": {\"col\": 12}}, {\"id\": \"hdr2\", \"type\": \"header\", \"data\": {\"text\": \"<span class=\\\"h5\\\"><b>Shortcuts</b></span>\", \"col\": 12}}, {\"id\": \"sc0\", \"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"Optical Order\", \"col\": 3}}, {\"id\": \"sc1\", \"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"Optical Job\", \"col\": 3}}, {\"id\": \"sc2\", \"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"Customer\", \"col\": 3}}, {\"id\": \"sc3\", \"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"Optical Remake\", \"col\": 3}}, {\"id\": \"sp2\", \"type\": \"spacer\", \"data\": {\"col\": 12}}, {\"id\": \"cd0\", \"type\": \"card\", \"data\": {\"card_name\": \"Customers\", \"col\": 4}}, {\"id\": \"cd1\", \"type\": \"card\", \"data\": {\"card_name\": \"Sales\", \"col\": 4}}, {\"id\": \"cd2\", \"type\": \"card\", \"data\": {\"card_name\": \"Laboratory\", \"col\": 4}}, {\"id\": \"cd3\", \"type\": \"card\", \"data\": {\"card_name\": \"After Sales\", \"col\": 4}}, {\"id\": \"cd4\", \"type\": \"card\", \"data\": {\"card_name\": \"Products\", \"col\": 4}}, {\"id\": \"cd5\", \"type\": \"card\", \"data\": {\"card_name\": \"Inventory\", \"col\": 4}}, {\"id\": \"cd6\", \"type\": \"card\", \"data\": {\"card_name\": \"Reports\", \"col\": 4}}, {\"id\": \"cd7\", \"type\": \"card\", \"data\": {\"card_name\": \"Settings\", \"col\": 4}}]",
+ "creation": "2026-09-28 00:00:00",
+ "custom_blocks": [],
+ "docstatus": 0,
+ "doctype": "Workspace",
+ "for_user": "",
+ "hide_custom": 0,
+ "icon": "eye",
+ "idx": 0,
+ "indicator_color": "",
+ "is_hidden": 0,
+ "label": "Optical",
+ "links": [
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Customers",
+   "link_count": 4,
+   "onboard": 0,
+   "type": "Card Break"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Customer",
+   "link_count": 0,
+   "link_to": "Customer",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Optical Profile",
+   "link_count": 0,
+   "link_to": "Optical Profile",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Eye Examination",
+   "link_count": 0,
+   "link_to": "Eye Examination",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Optical Prescription",
+   "link_count": 0,
+   "link_to": "Optical Prescription",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Sales",
+   "link_count": 4,
+   "onboard": 0,
+   "type": "Card Break"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Optical Order",
+   "link_count": 0,
+   "link_to": "Optical Order",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Sales Invoice",
+   "link_count": 0,
+   "link_to": "Sales Invoice",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Insurance Claim",
+   "link_count": 0,
+   "link_to": "Insurance Claim",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Payment Entry",
+   "link_count": 0,
+   "link_to": "Payment Entry",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Laboratory",
+   "link_count": 4,
+   "onboard": 0,
+   "type": "Card Break"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Optical Job",
+   "link_count": 0,
+   "link_to": "Optical Job",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Optical QC",
+   "link_count": 0,
+   "link_to": "Optical QC",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Optical Laboratory",
+   "link_count": 0,
+   "link_to": "Optical Laboratory",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Optical Remake",
+   "link_count": 0,
+   "link_to": "Optical Remake",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "After Sales",
+   "link_count": 2,
+   "onboard": 0,
+   "type": "Card Break"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Optical Warranty",
+   "link_count": 0,
+   "link_to": "Optical Warranty",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Optical Warranty Claim",
+   "link_count": 0,
+   "link_to": "Optical Warranty Claim",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Products",
+   "link_count": 3,
+   "onboard": 0,
+   "type": "Card Break"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Item",
+   "link_count": 0,
+   "link_to": "Item",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Item Price",
+   "link_count": 0,
+   "link_to": "Item Price",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Brand",
+   "link_count": 0,
+   "link_to": "Brand",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Inventory",
+   "link_count": 4,
+   "onboard": 0,
+   "type": "Card Break"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Stock Entry",
+   "link_count": 0,
+   "link_to": "Stock Entry",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Stock Reconciliation",
+   "link_count": 0,
+   "link_to": "Stock Reconciliation",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 1,
+   "label": "Stock Balance",
+   "link_count": 0,
+   "link_to": "Stock Balance",
+   "link_type": "Report",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Purchase Order",
+   "link_count": 0,
+   "link_to": "Purchase Order",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Reports",
+   "link_count": 5,
+   "onboard": 0,
+   "type": "Card Break"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 1,
+   "label": "Open Optical Orders",
+   "link_count": 0,
+   "link_to": "Open Optical Orders",
+   "link_type": "Report",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 1,
+   "label": "Lab Performance",
+   "link_count": 0,
+   "link_to": "Lab Performance",
+   "link_type": "Report",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 1,
+   "label": "Remakes Analysis",
+   "link_count": 0,
+   "link_to": "Remakes Analysis",
+   "link_type": "Report",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 1,
+   "label": "QC Failures",
+   "link_count": 0,
+   "link_to": "QC Failures",
+   "link_type": "Report",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 1,
+   "label": "Optical Sales by Item",
+   "link_count": 0,
+   "link_to": "Optical Sales by Item",
+   "link_type": "Report",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Settings",
+   "link_count": 3,
+   "onboard": 0,
+   "type": "Card Break"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Optical Settings",
+   "link_count": 0,
+   "link_to": "Optical Settings",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Insurance Company",
+   "link_count": 0,
+   "link_to": "Insurance Company",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Insurance Plan",
+   "link_count": 0,
+   "link_to": "Insurance Plan",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  }
+ ],
+ "modified": "2026-09-28 13:32:08.411562",
+ "modified_by": "Administrator",
+ "module": "Optical",
+ "name": "Optical",
+ "number_cards": [
+  {
+   "label": "Open Optical Orders",
+   "number_card_name": "Open Optical Orders"
+  },
+  {
+   "label": "Ready for Delivery",
+   "number_card_name": "Ready for Delivery"
+  },
+  {
+   "label": "Delayed Orders",
+   "number_card_name": "Delayed Orders"
+  },
+  {
+   "label": "Pending Lab Jobs",
+   "number_card_name": "Pending Lab Jobs"
+  },
+  {
+   "label": "Todays Sales",
+   "number_card_name": "Todays Sales"
+  },
+  {
+   "label": "Todays Collections",
+   "number_card_name": "Todays Collections"
+  }
+ ],
+ "owner": "Administrator",
+ "parent_page": "",
+ "public": 1,
+ "quick_lists": [],
+ "restrict_to_domain": "",
+ "roles": [
+  {
+   "role": "System Manager"
+  },
+  {
+   "role": "Optical Manager"
+  },
+  {
+   "role": "Optical Branch Manager"
+  }
+ ],
+ "sequence_id": 9.0,
+ "shortcuts": [
+  {
+   "color": "Grey",
+   "doc_view": "List",
+   "label": "Optical Order",
+   "link_to": "Optical Order",
+   "type": "DocType"
+  },
+  {
+   "color": "Grey",
+   "doc_view": "List",
+   "label": "Optical Job",
+   "link_to": "Optical Job",
+   "type": "DocType"
+  },
+  {
+   "color": "Grey",
+   "doc_view": "List",
+   "label": "Customer",
+   "link_to": "Customer",
+   "type": "DocType"
+  },
+  {
+   "color": "Grey",
+   "doc_view": "List",
+   "label": "Optical Remake",
+   "link_to": "Optical Remake",
+   "type": "DocType"
+  }
+ ],
+ "title": "Optical",
+ "type": "Workspace"
+}

@@ -1,0 +1,180 @@
+{
+ "actions": [],
+ "creation": "2026-09-28 00:00:00",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "customer",
+  "customer_name",
+  "mobile_no",
+  "profile_col",
+  "last_examination",
+  "last_prescription",
+  "preferred_contact",
+  "profile_insurance_section",
+  "default_insurance_plan",
+  "insurance_member_id",
+  "profile_ins_col",
+  "insurance_valid_till",
+  "profile_notes_section",
+  "notes"
+ ],
+ "fields": [
+  {
+   "fieldname": "customer",
+   "fieldtype": "Link",
+   "label": "Customer",
+   "options": "Customer",
+   "reqd": 1,
+   "unique": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "customer_name",
+   "fieldtype": "Data",
+   "label": "Customer Name",
+   "fetch_from": "customer.customer_name",
+   "read_only": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "mobile_no",
+   "fieldtype": "Data",
+   "label": "Mobile",
+   "fetch_from": "customer.mobile_no",
+   "read_only": 1
+  },
+  {
+   "fieldname": "profile_col",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "last_examination",
+   "fieldtype": "Date",
+   "label": "Last Examination",
+   "read_only": 1
+  },
+  {
+   "fieldname": "last_prescription",
+   "fieldtype": "Link",
+   "label": "Last Prescription",
+   "options": "Optical Prescription",
+   "read_only": 1
+  },
+  {
+   "fieldname": "preferred_contact",
+   "fieldtype": "Select",
+   "label": "Preferred Contact",
+   "options": "\nPhone\nWhatsApp\nSMS\nEmail"
+  },
+  {
+   "fieldname": "profile_insurance_section",
+   "fieldtype": "Section Break",
+   "label": "Insurance"
+  },
+  {
+   "fieldname": "default_insurance_plan",
+   "fieldtype": "Link",
+   "label": "Default Insurance Plan",
+   "options": "Insurance Plan"
+  },
+  {
+   "fieldname": "insurance_member_id",
+   "fieldtype": "Data",
+   "label": "Member ID"
+  },
+  {
+   "fieldname": "profile_ins_col",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "insurance_valid_till",
+   "fieldtype": "Date",
+   "label": "Insurance Valid Till"
+  },
+  {
+   "fieldname": "profile_notes_section",
+   "fieldtype": "Section Break",
+   "label": "Notes"
+  },
+  {
+   "fieldname": "notes",
+   "fieldtype": "Small Text",
+   "label": "Notes"
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2026-09-28 00:00:00",
+ "modified_by": "Administrator",
+ "module": "Optical",
+ "name": "Optical Profile",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "role": "System Manager",
+   "read": 1,
+   "report": 1,
+   "export": 1,
+   "print": 1,
+   "email": 1,
+   "share": 1,
+   "write": 1,
+   "create": 1,
+   "delete": 1
+  },
+  {
+   "role": "Optical Manager",
+   "read": 1,
+   "report": 1,
+   "export": 1,
+   "print": 1,
+   "email": 1,
+   "share": 1,
+   "write": 1,
+   "create": 1,
+   "delete": 1
+  },
+  {
+   "role": "Optical Branch Manager",
+   "read": 1,
+   "report": 1,
+   "export": 1,
+   "print": 1,
+   "email": 1,
+   "share": 1,
+   "write": 1,
+   "create": 1
+  },
+  {
+   "role": "Optical Cashier",
+   "read": 1,
+   "report": 1,
+   "export": 1,
+   "print": 1,
+   "email": 1,
+   "share": 1,
+   "write": 1,
+   "create": 1
+  },
+  {
+   "role": "Optician",
+   "read": 1,
+   "report": 1,
+   "export": 1,
+   "print": 1,
+   "email": 1,
+   "share": 1,
+   "write": 1,
+   "create": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "track_changes": 1,
+ "autoname": "field:customer",
+ "naming_rule": "By fieldname",
+ "title_field": "customer_name",
+ "search_fields": "customer_name,mobile_no"
+}

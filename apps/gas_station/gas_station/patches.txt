@@ -1,0 +1,3 @@
+# Patches added in this section will be executed after every `bench migrate`.
+# [pre_model_sync]
+# [post_model_sync]

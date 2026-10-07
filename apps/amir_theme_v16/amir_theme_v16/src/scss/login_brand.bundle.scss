@@ -1,0 +1,694 @@
+// LOGIN — calm bilingual split screen.
+// The page stays scrollable on small screens, uses logical alignment for RTL,
+// and avoids infinite animation/filter work on the first public page.
+
+html.amt-lb-on,
+html.amt-lb-on body {
+	min-height: 100dvh !important;
+	margin: 0 !important;
+	background:
+		linear-gradient(135deg, #f8fafc 0%, #eef6f3 48%, #eef2ff 100%) !important;
+	color: #0f172a;
+	overflow-x: hidden !important;
+}
+
+html.amt-lb-on {
+	--amt-lb-accent: var(--amt-lb-accent-global, var(--primary, #14477E));
+	--amt-lb-panel-bg: #0f3f3a;
+	--amt-lb-card: rgba(255, 255, 255, .96);
+	--amt-lb-ink: #0f172a;
+	--amt-lb-muted: #64748b;
+	--amt-lb-border: rgba(15, 23, 42, .10);
+
+	.navbar,
+	.login-headline,
+	.page-card-head {
+		display: none !important;
+	}
+
+	.login-content,
+	.page-card-container {
+		width: 100% !important;
+		max-width: none !important;
+		min-height: 100dvh !important;
+		margin: 0 !important;
+		padding: 0 !important;
+		display: block !important;
+	}
+}
+
+.amt-lb-split {
+	min-height: 100dvh;
+	display: grid;
+	grid-template-columns: minmax(420px, .9fr) minmax(460px, 1.1fr);
+	background:
+		radial-gradient(circle at 18% 20%, color-mix(in srgb, var(--amt-lb-accent) 12%, transparent), transparent 36%),
+		radial-gradient(circle at 82% 78%, rgba(37, 99, 235, .10), transparent 34%),
+		#f8fafc;
+}
+
+.amt-lb-split--brand-left {
+	grid-template-columns: minmax(460px, 1.1fr) minmax(420px, .9fr);
+}
+
+.amt-lb-form-side {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	padding: clamp(24px, 5vw, 64px);
+	min-width: 0;
+}
+
+.amt-lb-card {
+	width: min(100%, 440px);
+	background: var(--amt-lb-card);
+	border: 1px solid var(--amt-lb-border);
+	border-radius: 18px;
+	padding: clamp(24px, 4vw, 38px);
+	box-shadow: 0 18px 50px rgba(15, 23, 42, .10);
+
+	.for-login,
+	.page-card,
+	.login-card,
+	form,
+	.page-card-actions,
+	.page-card-body {
+		width: 100% !important;
+		max-width: none !important;
+		margin: 0 !important;
+		padding: 0 !important;
+		background: transparent !important;
+		border: 0 !important;
+		box-shadow: none !important;
+	}
+}
+
+.amt-lb-form-head {
+	display: flex;
+	flex-direction: column;
+	align-items: flex-start;
+	gap: 8px;
+	margin-bottom: 24px;
+}
+
+.amt-lb-form-brand {
+	display: inline-flex;
+	align-items: center;
+	gap: 12px;
+	margin-bottom: 10px;
+}
+
+// Logo slot. Rectangular and transparent: a logo carries its own shape, and
+// boxing it in a coloured square makes every brand look like the same app icon.
+// The plate and its shadow are gone; the mark stands on the card directly.
+.amt-lb-form-logo-wrap {
+	display: inline-flex;
+	align-items: center;
+	justify-content: flex-start;
+	flex: 0 0 auto;
+	height: 30px;
+	background: none;
+	box-shadow: none;
+	border-radius: 0;
+	padding: 0;
+	color: var(--amt-lb-accent);
+}
+
+// Customer upload: fit inside the slot without cropping or distorting whatever
+// aspect ratio they gave us.
+.amt-lb-form-logo-wrap--custom {
+	max-width: 190px;
+
+	.amt-lb-form-logo {
+		max-width: 100%;
+		max-height: 30px;
+		width: auto;
+		height: auto;
+		object-fit: contain;
+		border-radius: 0;
+	}
+}
+
+// Shipped default. Masked rather than <img> so the single SVG file adapts to
+// whatever colour it sits on — dark panel or white card — with no second asset.
+.amt-lb-form-logo-wrap--default {
+	// 138:40 — the mark's own aspect ratio, so `contain` letterboxes nothing.
+	width: 104px;
+	height: 30px;
+	background-color: currentColor;
+	-webkit-mask: url("/assets/amir_theme_v16/images/erp-mark.svg") no-repeat center / contain;
+	mask: url("/assets/amir_theme_v16/images/erp-mark.svg") no-repeat center / contain;
+}
+
+.amt-lb-form-logo-wrap--mono .amt-lb-monogram {
+	font-family: var(--font-mono, ui-monospace, monospace);
+	font-size: 18px;
+	font-weight: 800;
+}
+
+.amt-lb-form-logo {
+	max-width: 100%;
+	max-height: 100%;
+	object-fit: contain;
+	border-radius: 9px;
+}
+
+.amt-lb-form-brand-name {
+	font-size: 17px;
+	font-weight: 800;
+	color: var(--amt-lb-ink);
+	line-height: 1.25;
+}
+
+.amt-lb-form-title {
+	margin: 0;
+	color: var(--amt-lb-ink);
+	font-size: clamp(25px, 3vw, 32px);
+	font-weight: 850;
+	line-height: 1.15;
+	letter-spacing: 0;
+}
+
+.amt-lb-form-sub {
+	margin: 0;
+	color: var(--amt-lb-muted);
+	font-size: 14px;
+	line-height: 1.6;
+}
+
+.amt-lb-form-side {
+	.form-group {
+		margin-bottom: 14px !important;
+	}
+
+	label,
+	.control-label {
+		margin-bottom: 6px !important;
+		color: #475569 !important;
+		font-size: 12.5px !important;
+		font-weight: 700 !important;
+	}
+
+	input.form-control,
+	.input-with-feedback {
+		width: 100% !important;
+		min-height: 46px !important;
+		padding: 11px 13px !important;
+		background: #fff !important;
+		border: 1px solid #dbe3ef !important;
+		border-radius: 12px !important;
+		color: #0f172a !important;
+		font-size: 14.5px !important;
+		box-shadow: none !important;
+		transition: border-color 120ms ease, box-shadow 120ms ease !important;
+	}
+
+	input.form-control:focus,
+	.input-with-feedback:focus {
+		border-color: var(--amt-lb-accent) !important;
+		box-shadow: 0 0 0 4px color-mix(in srgb, var(--amt-lb-accent) 16%, transparent) !important;
+		outline: 0 !important;
+	}
+
+	.btn-login,
+	.btn-primary {
+		width: 100% !important;
+		min-height: 48px !important;
+		border: 0 !important;
+		border-radius: 12px !important;
+		background: var(--amt-lb-accent) !important;
+		color: #fff !important;
+		font-size: 14.5px !important;
+		font-weight: 800 !important;
+		box-shadow: 0 10px 24px color-mix(in srgb, var(--amt-lb-accent) 28%, transparent) !important;
+		transition: background-color 120ms ease, box-shadow 120ms ease !important;
+	}
+
+	.btn-login:hover,
+	.btn-primary:hover {
+		background: color-mix(in srgb, var(--amt-lb-accent) 88%, #020617) !important;
+		box-shadow: 0 12px 30px color-mix(in srgb, var(--amt-lb-accent) 34%, transparent) !important;
+	}
+
+	a {
+		color: var(--amt-lb-accent);
+		font-weight: 700;
+		text-decoration: none;
+	}
+
+	.divider,
+	hr {
+		border: 0 !important;
+		height: 1px !important;
+		background: #e2e8f0 !important;
+		margin: 22px 0 !important;
+	}
+}
+
+// =====================================================================
+// FIX 1 — Bilingual field icons + password "Show / إظهار" toggle.
+// Frappe renders a leading .field-icon (mail/lock) and a trailing
+// .toggle-password span; our card override neutralised Frappe's
+// padding so they overlapped the input text. We re-position both with
+// LOGICAL properties so they mirror automatically for LTR & RTL and
+// reserve matching input padding so text never sits underneath them.
+// =====================================================================
+.amt-lb-form-side {
+	.email-field,
+	.password-field {
+		position: relative !important;
+	}
+
+	// Reserve room: leading icon at the start, toggle text at the end.
+	.email-field input.form-control,
+	.password-field input.form-control {
+		padding-inline-start: 42px !important;
+	}
+	.password-field input.form-control {
+		// extra room for the "Show / إظهار" toggle on the trailing side
+		padding-inline-end: 64px !important;
+	}
+
+	// Leading mail / lock icon — logical start, vertically centred.
+	.field-icon,
+	.email-icon,
+	.password-icon {
+		position: absolute;
+		inset-inline-start: 15px;
+		inset-inline-end: auto;
+		left: auto;
+		right: auto;
+		top: 50%;
+		transform: translateY(-50%);
+		width: 16px;
+		height: 16px;
+		color: var(--amt-lb-muted);
+		pointer-events: none;
+		z-index: 2;
+	}
+
+	// "Show / إظهار" toggle — logical end, vertically centred, no overlap.
+	.toggle-password {
+		position: absolute;
+		inset-inline-end: 14px;
+		inset-inline-start: auto;
+		left: auto;
+		right: auto;
+		top: 50% !important;
+		transform: translateY(-50%);
+		z-index: 3;
+		padding: 0 2px;
+		font-size: 12px !important;
+		font-weight: 700;
+		line-height: 1;
+		color: var(--amt-lb-accent) !important;
+		background: transparent;
+		cursor: pointer;
+		user-select: none;
+		white-space: nowrap;
+	}
+
+	.toggle-password:hover {
+		color: color-mix(in srgb, var(--amt-lb-accent) 80%, #020617) !important;
+	}
+}
+
+// Never flip the brand-panel background banner (avoids mirrored text).
+.amt-lb-panel::before {
+	transform: none !important;
+}
+
+.amt-lb-panel {
+	position: relative;
+	// Clips the drifting facets to the panel edge.
+	overflow: hidden;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	min-width: 0;
+	padding: clamp(34px, 6vw, 72px);
+	color: #fff;
+	background:
+		linear-gradient(135deg,
+			color-mix(in srgb, var(--amt-lb-accent) 82%, #052e2b) 0%,
+			color-mix(in srgb, var(--amt-lb-accent) 48%, #0f172a) 100%);
+	overflow: hidden;
+}
+
+.amt-lb-panel::before {
+	content: "";
+	position: absolute;
+	inset: 0;
+	background-image: var(--amt-lb-bg, none);
+	background-size: cover;
+	background-position: center;
+	opacity: .10;
+}
+
+.amt-lb-panel::after {
+	content: "";
+	position: absolute;
+	inset: 18px;
+	border: 1px solid rgba(255, 255, 255, .16);
+	border-radius: 26px;
+	pointer-events: none;
+}
+
+.amt-lb-deco {
+	display: none !important;
+}
+
+// ---------------------------------------------------------------------------
+// Crystalline brand panel
+// ---------------------------------------------------------------------------
+// Angular facets drifting behind the brand text, like light moving across cut
+// glass. Deliberately different from the desk background, which is static: the
+// login screen is looked at for a few seconds, not worked in for eight hours,
+// so a slow ambient motion reads as craft rather than as distraction.
+//
+// Cost: five clip-path polygons and one sheen, animated ONLY on `transform` and
+// `opacity`. Both are compositor properties, so the main thread does no layout
+// or paint work per frame — the panel stays at 60fps and the CPU stays idle.
+// No canvas, no WebGL, no JavaScript loop, no images.
+// ---------------------------------------------------------------------------
+
+.amt-lb-crystal {
+	position: absolute;
+	inset: 0;
+	overflow: hidden;
+	pointer-events: none;
+	z-index: 0;
+	// Contains the facets' paint so the browser can treat this as its own layer.
+	contain: strict;
+}
+
+.amt-lb-facet {
+	position: absolute;
+	display: block;
+	// Facets are lit from a single direction so the panel reads as one solid
+	// crystal rather than as scattered shards.
+	background: linear-gradient(
+		135deg,
+		rgba(255, 255, 255, 0.16) 0%,
+		rgba(255, 255, 255, 0.04) 42%,
+		rgba(255, 255, 255, 0) 72%
+	);
+	will-change: transform;
+	animation-timing-function: cubic-bezier(0.45, 0.05, 0.55, 0.95);
+	animation-iteration-count: infinite;
+	animation-direction: alternate;
+}
+
+.amt-lb-facet--1 {
+	top: -12%;
+	inset-inline-start: -8%;
+	width: 62%;
+	height: 58%;
+	clip-path: polygon(0% 18%, 58% 0%, 100% 46%, 34% 100%);
+	animation-name: amt-lb-drift-a;
+	animation-duration: 19s;
+}
+
+.amt-lb-facet--2 {
+	top: 22%;
+	inset-inline-end: -14%;
+	width: 58%;
+	height: 64%;
+	clip-path: polygon(22% 0%, 100% 26%, 74% 100%, 0% 62%);
+	opacity: 0.8;
+	animation-name: amt-lb-drift-b;
+	animation-duration: 24s;
+}
+
+.amt-lb-facet--3 {
+	bottom: -16%;
+	inset-inline-start: 14%;
+	width: 66%;
+	height: 52%;
+	clip-path: polygon(0% 40%, 46% 0%, 100% 30%, 62% 100%);
+	opacity: 0.55;
+	animation-name: amt-lb-drift-c;
+	animation-duration: 28s;
+}
+
+.amt-lb-facet--4 {
+	top: 6%;
+	inset-inline-end: 8%;
+	width: 34%;
+	height: 34%;
+	clip-path: polygon(50% 0%, 100% 62%, 18% 100%);
+	opacity: 0.42;
+	animation-name: amt-lb-drift-b;
+	animation-duration: 16s;
+	animation-delay: -6s;
+}
+
+.amt-lb-facet--5 {
+	bottom: 18%;
+	inset-inline-end: 26%;
+	width: 28%;
+	height: 30%;
+	clip-path: polygon(0% 0%, 100% 34%, 56% 100%);
+	opacity: 0.35;
+	animation-name: amt-lb-drift-a;
+	animation-duration: 21s;
+	animation-delay: -9s;
+}
+
+// A single slow highlight passing across the whole panel, tying the facets
+// together into one surface.
+.amt-lb-sheen {
+	position: absolute;
+	top: -30%;
+	inset-inline-start: -60%;
+	width: 55%;
+	height: 160%;
+	background: linear-gradient(
+		100deg,
+		transparent 0%,
+		rgba(255, 255, 255, 0.10) 45%,
+		rgba(255, 255, 255, 0.16) 50%,
+		rgba(255, 255, 255, 0.10) 55%,
+		transparent 100%
+	);
+	filter: blur(6px);
+	will-change: transform;
+	// Sweeps from the inline START edge. The translate stays physical on
+	// purpose: rtlcss negates transform translations and rotations when it
+	// builds css-rtl/, so this one declaration is correct in both writing
+	// modes. Adding a direction variable on top of that double-flips it.
+	animation: amt-lb-sheen 14s cubic-bezier(0.5, 0, 0.5, 1) infinite;
+}
+
+@keyframes amt-lb-drift-a {
+	from { transform: translate3d(0, 0, 0) rotate(0deg) scale(1); }
+	to   { transform: translate3d(4%, -5%, 0) rotate(6deg) scale(1.08); }
+}
+
+@keyframes amt-lb-drift-b {
+	from { transform: translate3d(0, 0, 0) rotate(0deg) scale(1); }
+	to   { transform: translate3d(-5%, 4%, 0) rotate(-7deg) scale(1.1); }
+}
+
+@keyframes amt-lb-drift-c {
+	from { transform: translate3d(0, 0, 0) rotate(0deg) scale(1.05); }
+	to   { transform: translate3d(6%, 3%, 0) rotate(5deg) scale(1); }
+}
+
+@keyframes amt-lb-sheen {
+	0%        { transform: translate3d(0, 0, 0) rotate(8deg); }
+	55%, 100% { transform: translate3d(320%, 0, 0) rotate(8deg); }
+}
+
+// Motion is decoration here. Users who ask the OS for less of it get the same
+// faceted surface, held still.
+@media (prefers-reduced-motion: reduce) {
+	.amt-lb-facet,
+	.amt-lb-sheen {
+		animation: none !important;
+	}
+
+	.amt-lb-sheen { display: none; }
+}
+
+.amt-lb-content {
+	position: relative;
+	z-index: 1;
+	width: min(100%, 520px);
+	display: flex;
+	flex-direction: column;
+	gap: 16px;
+	text-align: start;
+}
+
+.amt-lb-quote {
+	display: none;
+}
+
+.amt-lb-title {
+	margin: 0;
+	color: #fff;
+	font-size: clamp(34px, 5vw, 54px);
+	font-weight: 900;
+	line-height: 1.08;
+	letter-spacing: 0;
+}
+
+.amt-lb-tagline {
+	margin: 0;
+	color: rgba(255, 255, 255, .88);
+	font-size: clamp(17px, 2vw, 22px);
+	font-weight: 700;
+	line-height: 1.45;
+}
+
+.amt-lb-desc {
+	max-width: 58ch;
+	margin: 0;
+	color: rgba(255, 255, 255, .76);
+	font-size: 14.5px;
+	line-height: 1.8;
+}
+
+.amt-lb-contacts {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 10px;
+	margin-top: 10px;
+}
+
+.amt-lb-contact {
+	display: inline-flex;
+	align-items: center;
+	gap: 9px;
+	max-width: 100%;
+	padding: 9px 12px;
+	border-radius: 999px;
+	background: rgba(255, 255, 255, .12);
+	border: 1px solid rgba(255, 255, 255, .20);
+	color: #fff;
+	font-size: 13px;
+	font-weight: 650;
+	line-height: 1.35;
+	text-decoration: none;
+}
+
+.amt-lb-contact:hover {
+	color: #fff;
+	background: rgba(255, 255, 255, .18);
+	text-decoration: none;
+}
+
+.amt-lb-icn {
+	display: inline-flex;
+	flex: 0 0 auto;
+}
+
+.amt-lb-social {
+	display: flex;
+	gap: 10px;
+	margin-top: 8px;
+}
+
+.amt-lb-social a {
+	width: 36px;
+	height: 36px;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	border-radius: 999px;
+	background: rgba(255, 255, 255, .13);
+	border: 1px solid rgba(255, 255, 255, .22);
+	color: #fff;
+}
+
+/* This block is already written FOR the RTL case by hand. The build also runs
+   rtlcss over the bundle to emit css-rtl/, and rtlcss flips `direction` and
+   `text-align` values — which double-negated these rules: in the RTL build
+   .amt-lb-split became rtl and .amt-lb-panel became ltr, the exact inverse of
+   the intent. That is what pushed the trailing "!" in "أهلاً بعودتك!" to the
+   visual left. rtl:ignore tells rtlcss to pass this block through untouched. */
+/*rtl:begin:ignore*/
+html[dir="rtl"] {
+	/* The split stays LTR so the configured panel_position (left/right) means
+	   the same thing in both languages; each side then re-asserts RTL. */
+	.amt-lb-split {
+		direction: ltr;
+	}
+
+	.amt-lb-form-side,
+	.amt-lb-panel {
+		direction: rtl;
+	}
+
+	.amt-lb-form-head {
+		align-items: flex-start;
+		text-align: right;
+	}
+
+	.amt-lb-content {
+		text-align: right;
+	}
+}
+/*rtl:end:ignore*/
+
+:root[data-theme="dark"] {
+	--amt-lb-card: rgba(15, 23, 42, .96);
+	--amt-lb-ink: #e5e7eb;
+	--amt-lb-muted: #94a3b8;
+	--amt-lb-border: rgba(148, 163, 184, .22);
+}
+
+:root[data-theme="dark"] .amt-lb-split {
+	background:
+		radial-gradient(circle at 18% 20%, color-mix(in srgb, var(--amt-lb-accent) 16%, transparent), transparent 36%),
+		#020617;
+}
+
+:root[data-theme="dark"] .amt-lb-form-side input.form-control,
+:root[data-theme="dark"] .amt-lb-form-side .input-with-feedback {
+	background: #0f172a !important;
+	color: #e5e7eb !important;
+	border-color: #334155 !important;
+}
+
+html.amt-lb-on[data-theme="dark"],
+html.amt-lb-on[data-theme="dark"] body {
+	background: #020617 !important;
+}
+
+@media (max-width: 980px) {
+	.amt-lb-split,
+	.amt-lb-split--brand-left { grid-template-columns: 1fr; }
+
+	.amt-lb-panel {
+		min-height: 34dvh;
+		order: -1;
+		padding: 30px 22px;
+	}
+
+	.amt-lb-panel::after {
+		inset: 12px;
+		border-radius: 18px;
+	}
+
+	.amt-lb-form-side {
+		padding: 22px;
+		align-items: flex-start;
+	}
+
+	.amt-lb-card {
+		width: 100%;
+		border-radius: 16px;
+	}
+}
+
+@media (max-width: 560px) {
+	.amt-lb-panel { min-height: auto; }
+
+	.amt-lb-desc,
+	.amt-lb-contacts,
+	.amt-lb-social { display: none; }
+
+	.amt-lb-card { padding: 22px; }
+}

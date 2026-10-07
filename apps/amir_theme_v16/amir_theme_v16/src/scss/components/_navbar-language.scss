@@ -1,0 +1,76 @@
+// ===========================================================================
+// Language switcher — navbar (page-header) placement
+// ===========================================================================
+// The rail placement is styled in _legacy (`.amt-rail-lang`). This is the
+// header variant, injected into `.page-head-content .standard-items-section`
+// by `amir_theme.sidebar.mount_navbar_language_toggle()` when
+// "Amir Theme Settings → Language Switcher Position" is `Navbar`.
+//
+// It deliberately borrows Frappe's own header-button metrics rather than
+// inventing its own, so it lines up with the page's action buttons at every
+// breakpoint and in both directions. No fixed left/right offsets: placement
+// comes from the flex row it is prepended to, which is what makes it correct
+// in RTL without a mirrored rule.
+
+.amt-nav-lang {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	gap: 6px;
+
+	height: 28px;
+	padding: 0 10px;
+	margin-inline-end: 8px;
+
+	border: 1px solid var(--border-color);
+	border-radius: var(--border-radius-md, 8px);
+	background: var(--fg-color, var(--card-bg));
+	color: var(--text-color);
+
+	font-size: var(--text-sm);
+	font-weight: 500;
+	line-height: 1;
+	white-space: nowrap;
+	cursor: pointer;
+
+	transition: background-color 0.15s ease, border-color 0.15s ease, opacity 0.15s ease;
+
+	svg {
+		width: 15px;
+		height: 15px;
+		flex: 0 0 auto;
+	}
+
+	&:hover {
+		background: var(--fg-hover-color, var(--bg-color));
+		border-color: var(--gray-400);
+	}
+
+	&:focus-visible {
+		outline: 2px solid var(--primary);
+		outline-offset: 1px;
+	}
+
+	// Set while the language call is in flight — the page reloads on success,
+	// so this only ever needs to communicate "working", never a final state.
+	&.amt-busy {
+		opacity: 0.6;
+		pointer-events: none;
+	}
+}
+
+.amt-nav-lang-code {
+	font-variant-numeric: tabular-nums;
+	letter-spacing: 0.02em;
+}
+
+// Narrow screens: the header gets crowded, so drop the code and keep the globe.
+@media (max-width: 767px) {
+	.amt-nav-lang {
+		padding: 0 8px;
+	}
+
+	.amt-nav-lang-code {
+		display: none;
+	}
+}

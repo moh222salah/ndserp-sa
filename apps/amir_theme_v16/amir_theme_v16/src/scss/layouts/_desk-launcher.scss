@@ -1,0 +1,338 @@
+// ---------------------------------------------------------------------------
+// Desk launcher — card grid
+// ---------------------------------------------------------------------------
+// Scope note: `.desktop-container` exists ONLY on /desk (list views render
+// `.page-head`), so nothing here can reach form or list chrome.
+//
+// Override strategy: this file is imported AFTER _legacy, and its selectors
+// out-specify Frappe's own desk.css (which uses bare `.desktop-icon`). Where a
+// framework rule still wins on source order alone, !important is used and
+// annotated — never sprinkled.
+//
+// Structure Frappe gives us, and the constraints it imposes:
+//   .desktop-container > .icons-container > .icons > a.desktop-icon
+//                                                    > .icon-container  (swatch)
+//                                                    > .icon-caption    (label)
+// The `.icons` grid carries an INLINE `style="display:grid"` written by
+// Frappe's JS, so changing it needs !important — one of the few places this
+// file uses it, and it is annotated where it happens.
+//
+// A folder tile nests the SAME classes inside its swatch, so every selector
+// below uses the direct-child chain. A descendant selector here silently
+// resizes the folder's 2x2 preview.
+// ---------------------------------------------------------------------------
+
+@use "../abstracts/modules" as m;
+
+// Top bar: 58px per spec. Frappe reads --navbar-height when sizing the desk
+// column, so the variable is set alongside the height rather than hard-coding
+// 58 in two places.
+//
+// The wrapper becomes a flex column so the status bar can be docked by
+// LAYOUT rather than by arithmetic. Reserving a fixed --amt-statusbar-space and
+// subtracting it from the container's min-height always left slack equal to the
+// difference between the guess and the bar's real height (3px, most recently),
+// and drifted every time the bar's padding changed. With the container growing
+// to fill and the bar taking its natural height at the end, the fit is exact by
+// construction and there is no number to keep in sync.
+.desktop-wrapper {
+	--navbar-height: 58px;
+
+	display: flex;
+	flex-direction: column;
+	min-height: 100vh;
+}
+
+.desktop-navbar {
+	height: 58px !important;
+	min-height: 58px !important;
+}
+
+.desktop-container {
+	background-color: var(--amt-launcher-bg);
+
+	// Frappe sizes this to fill the viewport below the navbar, which pushed the
+	// status bar past the fold. Reclaim the strip's height so both fit without
+	// scrolling. --amt-statusbar-space is declared by the status bar itself
+	// (components/_status-bar.scss) so the value cannot drift from the padding
+	// that produces it; the fallback covers the bar being absent entirely.
+	// Grow to fill whatever the navbar and status bar leave. No subtraction, no
+	// reserved constant — see the wrapper comment above.
+	flex: 1 1 auto;
+	min-height: 0 !important;
+
+	// Frappe centres the grid in this column, which left 117px of dead space
+	// above it at 860px tall. Top-aligning with a measured offset lifts the
+	// content without pinning it to the navbar: clamp keeps the offset
+	// proportional on tall screens and stops it collapsing on short ones.
+	align-items: flex-start !important;
+	padding-top: clamp(40px, 7vh, 76px) !important;
+
+
+	// Flex (not grid) so a partial last row centres itself for ANY app count.
+	// CSS Grid cannot centre final-row orphans.
+	> .icons-container > .icons {
+		display: flex !important; // beats Frappe's inline display:grid
+		flex-wrap: wrap;
+		justify-content: center;
+		align-content: flex-start;
+		gap: var(--amt-tile-gap-y) var(--amt-tile-gap-x) !important;
+	}
+
+	// Column count is governed by the container width, not by media queries on
+	// the tile — tiles never stretch (flex-basis is fixed), so capping the
+	// container is what decides how many fit per row.
+	//   n columns = n * 170 + (n - 1) * 28
+	//   6 -> 1160   5 -> 962   4 -> 764   3 -> 566   2 -> 368
+	> .icons-container {
+		max-width: 1280px !important;
+		width: 1160px;
+	}
+
+	@media (max-width: 1199px) { > .icons-container { width: 962px; } }
+	@media (max-width: 1023px) { > .icons-container { width: 764px; } }
+	@media (max-width: 819px)  { > .icons-container { width: 566px; } }
+	@media (max-width: 599px)  { > .icons-container { width: 368px; } }
+}
+
+// --- The card ------------------------------------------------------------
+.desktop-container > .icons-container > .icons > .desktop-icon {
+	--amt-accent: #{m.$amt-module-fallback};
+
+	position: relative;
+	flex: 0 0 var(--amt-tile-w) !important;
+	max-width: var(--amt-tile-w) !important;
+	min-height: var(--amt-tile-h);
+	display: flex !important;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	gap: 14px !important;
+	padding: 24px !important;
+	overflow: hidden;
+
+	background: var(--amt-card-bg) !important;
+	// Frappe's desk.css declares `.desktop-icon { border-radius: 20px;
+	// border-color: transparent }` unlayered and later in the cascade, so these
+	// three need !important to land. Verified individually — not defensive.
+	border: 1px solid var(--amt-card-border) !important;
+	border-radius: var(--amt-tile-radius) !important;
+	box-shadow: var(--amt-card-shadow) !important;
+	text-decoration: none !important;
+
+	// 180ms, standard ease-out. Deliberately no overshoot: a bounce reads as
+	// playful, and this surface is used eight hours a day.
+	transition:
+		transform var(--amt-motion) cubic-bezier(0.2, 0.7, 0.3, 1),
+		box-shadow var(--amt-motion) ease,
+		border-color var(--amt-motion) ease;
+
+	// The accent bar. A pseudo-element rather than border-bottom so it can sit
+	// flush inside the rounded corners without fighting the radius.
+	&::after {
+		content: "";
+		position: absolute;
+		inset-inline: 0;
+		bottom: 0;
+		height: 3px;
+		background: var(--amt-accent);
+		transition: height var(--amt-motion) ease;
+	}
+
+	&:hover {
+		transform: translateY(-3px);
+		box-shadow: var(--amt-card-shadow-hover);
+		border-color: color-mix(in srgb, var(--amt-accent) 30%, var(--amt-card-border));
+
+		&::after { height: 4px; }
+
+		> .icon-container > .amt-tile-glyph { transform: scale(1.05); }
+	}
+
+	&:active { transform: translateY(-1px); }
+
+	// Keyboard parity: the same affordance a mouse user gets.
+	// Keyboard parity — identical affordance to hover, plus a visible ring.
+	&:focus-visible {
+		outline: 2px solid var(--amt-accent);
+		outline-offset: 2px;
+		transform: translateY(-3px);
+		box-shadow: var(--amt-card-shadow-hover);
+
+		&::after { height: 4px; }
+		> .icon-container > .amt-tile-glyph { transform: scale(1.05); }
+	}
+}
+
+// --- Glyph ---------------------------------------------------------------
+// The swatch loses its plate entirely: the reference draws a bare coloured
+// line icon, so the container becomes a transparent box holding the SVG.
+.desktop-container > .icons-container > .icons > .desktop-icon > .icon-container {
+	width: 46px !important;
+	height: 46px !important;
+	padding: 0 !important;
+	background: none !important;
+	background-color: transparent !important;
+	background-image: none !important;
+	border: 0 !important;
+	border-radius: 0 !important;
+	box-shadow: none !important;
+	display: flex !important;
+	align-items: center;
+	justify-content: center;
+	overflow: visible;
+
+	// Frappe's own artwork is replaced by the Lucide glyph the JS injects.
+	> img.app-icon { display: none !important; }
+
+	> .amt-tile-glyph {
+		// flex-shrink squeezed this to 33x40 because an <svg> with a viewBox has
+		// an intrinsic aspect ratio the flex algorithm is free to compress.
+		flex: 0 0 auto;
+		width: 38px;
+		min-width: 38px;
+		height: 38px;
+		color: var(--amt-accent);
+		stroke: currentColor;
+		fill: none;
+		// 2px at a 24 viewBox rendered into 38px keeps the optical weight the
+		// same across every glyph in the set.
+		stroke-width: 2;
+		stroke-linecap: round;
+		stroke-linejoin: round;
+		// A 24-unit viewBox scaled to 38px lands strokes on fractional pixels;
+		// geometricPrecision tells the rasteriser to keep true geometry instead
+		// of snapping, which is what removes the soft/uneven edges.
+		shape-rendering: geometricPrecision;
+		// Keeps the 2px weight exact through the hover scale, so the icon does
+		// not visually thicken as it grows.
+		vector-effect: non-scaling-stroke;
+		transition: transform var(--amt-motion) cubic-bezier(0.2, 0.7, 0.3, 1);
+	}
+}
+
+// --- Glyph drawn OVER a letter avatar ------------------------------------
+// A workspace with an Arabic name has no shipped artwork, so Frappe falls back
+// to alphabets.svg — which has Latin glyphs only, leaving an EMPTY coloured
+// square. The JS injects a module glyph for those (see desk_launcher.js); the
+// dead letter element has to go with it, and the plate stays off so the glyph
+// reads as a line icon exactly like every other tile.
+.desktop-container > .icons-container > .icons
+	> .desktop-icon[data-amt-glyph-over-letter] > .icon-container > .desktop-alphabet {
+	display: none !important;
+}
+
+// --- Uploaded artwork ----------------------------------------------------
+// `icon_image` on the Desktop Icon is an explicit branding choice, so the tile
+// keeps the image the site owner uploaded instead of a stock glyph. Undoes the
+// blanket `img.app-icon { display: none }` above for exactly these tiles.
+.desktop-container > .icons-container > .icons
+	> .desktop-icon[data-amt-glyph="custom"] > .icon-container > img.app-icon {
+	display: block !important;
+	width: 46px;
+	height: 46px;
+	object-fit: contain;
+	border-radius: 11px;
+}
+
+// --- Letter-avatar tiles -------------------------------------------------
+// An app with no shipped artwork (POSNext, Approvals) is drawn by Frappe as an
+// <svg class="desktop-alphabet"> whose fill is var(--white). Stripping the
+// plate above left a white letter on a white card — invisible. The reference
+// keeps these as a FILLED square in the module colour, so the plate comes back
+// here, tinted, and the white letter reads against it.
+.desktop-container > .icons-container > .icons > .desktop-icon[data-amt-letter]
+	> .icon-container {
+	background: var(--amt-accent) !important;
+	border-radius: 13px !important;
+	box-shadow: 0 2px 6px color-mix(in srgb, var(--amt-accent) 30%, transparent);
+
+	> .desktop-alphabet {
+		width: 24px !important;
+		height: 24px !important;
+		color: #FFFFFF !important;
+		fill: currentColor;
+	}
+}
+
+// --- Label ---------------------------------------------------------------
+.desktop-container > .icons-container > .icons > .desktop-icon > .icon-caption {
+	font-size: 13.5px !important;
+	font-weight: 600 !important;
+	line-height: 1.45 !important;
+	color: var(--amt-card-ink) !important;
+	color: var(--amt-card-ink) !important;
+	text-align: center;
+	letter-spacing: 0;
+}
+
+// --- Folder tile ---------------------------------------------------------
+// A folder has no artwork of its own; it keeps the 2x2 preview, scaled to the
+// new glyph box. Direct-child chain everywhere: the preview reuses these very
+// class names one level deeper.
+.desktop-container > .icons-container > .icons > .desktop-icon > .icon-container.folder-icon {
+	background: color-mix(in srgb, var(--amt-accent) 8%, transparent) !important;
+	border: 1px solid color-mix(in srgb, var(--amt-accent) 22%, transparent) !important;
+	border-radius: 12px !important;
+	width: 46px !important;
+	height: 46px !important;
+}
+
+.desktop-icon > .icon-container.folder-icon .icons {
+	display: grid !important;
+	grid-template-columns: repeat(2, 13px) !important;
+	grid-auto-rows: 13px !important;
+	gap: 3px !important;
+	width: auto !important;
+	height: auto !important;
+	justify-content: center;
+	align-content: center;
+}
+
+.desktop-icon > .icon-container.folder-icon .icons > .desktop-icon:nth-child(n + 5) {
+	display: none !important; // four previews only; more would spill a third row
+}
+
+.desktop-icon > .icon-container.folder-icon .icons > .desktop-icon,
+.desktop-icon > .icon-container.folder-icon .icon-container,
+.desktop-icon > .icon-container.folder-icon img.app-icon {
+	width: 13px !important;
+	height: 13px !important;
+	min-height: 0 !important;
+	padding: 0 !important;
+	margin: 0 !important;
+	border: 0 !important;
+	border-radius: 3px !important;
+	background: none !important;
+	box-shadow: none !important;
+	flex: none !important;
+	max-width: none !important;
+	overflow: hidden;
+
+	&::after { content: none !important; } // no accent bar on a preview
+}
+
+.desktop-icon > .icon-container.folder-icon .icon-caption { display: none !important; }
+
+// --- Module colours ------------------------------------------------------
+// One declaration per module; everything else reads var(--amt-accent).
+@each $id, $colour in m.$amt-modules {
+	.desktop-container > .icons-container > .icons > .desktop-icon[data-id="#{$id}"] {
+		--amt-accent: #{$colour};
+	}
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.desktop-container > .icons-container > .icons > .desktop-icon,
+	.desktop-container > .icons-container > .icons > .desktop-icon:hover,
+	.desktop-container > .icons-container > .icons > .desktop-icon:active {
+		transform: none !important;
+		transition: none !important;
+	}
+
+	.desktop-container > .icons-container > .icons > .desktop-icon
+		> .icon-container > .amt-tile-glyph {
+		transform: none !important;
+		transition: none !important;
+	}
+}

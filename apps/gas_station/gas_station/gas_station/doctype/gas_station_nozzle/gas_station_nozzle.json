@@ -1,0 +1,95 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2026-01-15 00:00:00.000000",
+ "description": "Nozzle on a pump. Fuel product is an ERPNext Item (no duplicate master).",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "nozzle_number",
+  "pts_nozzle_id",
+  "erpnext_item",
+  "fuel_grade_name",
+  "fuel_grade_id",
+  "tank",
+  "enabled",
+  "current_status"
+ ],
+ "fields": [
+  {
+   "fieldname": "nozzle_number",
+   "fieldtype": "Int",
+   "label": "Nozzle #",
+   "in_list_view": 1,
+   "columns": 1,
+   "reqd": 1
+  },
+  {
+   "fieldname": "pts_nozzle_id",
+   "fieldtype": "Int",
+   "label": "PTS Nozzle ID",
+   "in_list_view": 1,
+   "columns": 1
+  },
+  {
+   "fieldname": "erpnext_item",
+   "fieldtype": "Link",
+   "label": "Fuel Item",
+   "options": "Item",
+   "reqd": 1,
+   "in_list_view": 1,
+   "columns": 2
+  },
+  {
+   "fieldname": "fuel_grade_name",
+   "fieldtype": "Data",
+   "label": "Fuel Grade",
+   "in_list_view": 1,
+   "columns": 2
+  },
+  {
+   "fieldname": "fuel_grade_id",
+   "fieldtype": "Int",
+   "label": "PTS Grade ID"
+  },
+  {
+   "fieldname": "tank",
+   "fieldtype": "Link",
+   "label": "Tank",
+   "options": "Gas Station Tank",
+   "in_list_view": 1,
+   "columns": 2
+  },
+  {
+   "fieldname": "enabled",
+   "fieldtype": "Check",
+   "label": "On",
+   "default": "1",
+   "in_list_view": 1,
+   "columns": 1
+  },
+  {
+   "fieldname": "current_status",
+   "fieldtype": "Select",
+   "label": "Status",
+   "options": "Unknown\nIdle\nDispensing\nCalling\nError\nOffline",
+   "default": "Unknown",
+   "read_only": 1,
+   "in_list_view": 1,
+   "columns": 1
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2026-01-15 00:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Gas Station",
+ "name": "Gas Station Nozzle",
+ "owner": "Administrator",
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "track_changes": 1,
+ "istable": 1,
+ "editable_grid": 1
+}

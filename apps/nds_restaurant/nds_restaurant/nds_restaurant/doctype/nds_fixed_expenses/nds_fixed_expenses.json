@@ -1,0 +1,47 @@
+{
+ "name": "NDS Fixed Expenses",
+ "istable": 1,
+ "editable_grid": 1,
+ "field_order": [
+  "expense_name",
+  "amount",
+  "expense_type"
+ ],
+ "fields": [
+  {
+   "fieldname": "expense_name",
+   "fieldtype": "Data",
+   "label": "Expense Name",
+   "in_list_view": 1,
+   "reqd": 1
+  },
+  {
+   "fieldname": "amount",
+   "fieldtype": "Currency",
+   "label": "Daily Amount",
+   "in_list_view": 1,
+   "reqd": 1
+  },
+  {
+   "fieldname": "expense_type",
+   "fieldtype": "Select",
+   "label": "Type",
+   "options": "Direct\nIndirect\nEmployee\nDepreciation",
+   "in_list_view": 1,
+   "default": "Direct"
+  }
+ ],
+ "doctype": "DocType",
+ "module": "NDS Restaurant",
+ "engine": "InnoDB",
+ "actions": [],
+ "links": [],
+ "states": [],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "owner": "Administrator",
+ "modified_by": "Administrator",
+ "creation": "2026-09-24 00:00:00.000000",
+ "modified": "2026-09-24 00:00:00.000000",
+ "permissions": []
+}

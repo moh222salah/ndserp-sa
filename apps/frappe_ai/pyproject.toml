@@ -1,0 +1,72 @@
+[project]
+name = "frappe_ai"
+authors = [
+    { name = "Vyogo", email = "developers@vyogo.com"}
+]
+description = "In-desk AI assistant for Frappe/ERPNext — streams responses from a configured AI agent into a chat sidebar."
+requires-python = ">=3.10"
+readme = "README.md"
+dynamic = ["version"]
+dependencies = [
+    # Frappe itself is provided by the bench at runtime (`bench get-app` clones
+    # this app into a bench that already has frappe installed). We pin the
+    # supported framework range here purely as documentation — pip/uv won't
+    # see frappe in the venv, but the value tells humans + tooling which
+    # major-version line this app targets.
+    # "frappe>=16.0.0,<17"
+    "requests",
+]
+
+[build-system]
+requires = ["flit_core >=3.4,<4"]
+build-backend = "flit_core.buildapi"
+
+# These dependencies are only installed when developer mode is enabled
+[tool.bench.dev-dependencies]
+# package_name = "~=1.1.0"
+
+[tool.pyrefly]
+# `frappe` is provided by the bench at runtime, not installed in the local venv.
+# Treat it as Any only when the import cannot be resolved.
+ignore-missing-imports = ["frappe", "frappe.*"]
+
+[tool.ruff]
+line-length = 110
+target-version = "py310"
+
+[tool.ruff.lint]
+select = [
+    "F",
+    "E",
+    "W",
+    "I",
+    "UP",
+    "B",
+    "RUF",
+]
+ignore = [
+    "B017", # assertRaises(Exception) - should be more specific
+    "B018", # useless expression, not assigned to anything
+    "B023", # function doesn't bind loop variable - will have last iteration's value
+    "B904", # raise inside except without from
+    "E101", # indentation contains mixed spaces and tabs
+    "E402", # module level import not at top of file
+    "E501", # line too long
+    "E741", # ambiguous variable name
+    "F401", # "unused" imports
+    "F403", # can't detect undefined names from * import
+    "F405", # can't detect undefined names from * import
+    "F722", # syntax error in forward type annotation
+    "W191", # indentation contains tabs
+]
+typing-modules = ["frappe.types.DF"]
+
+[tool.ruff.format]
+quote-style = "double"
+indent-style = "tab"
+docstring-code-format = true
+
+[dependency-groups]
+dev = [
+    "types-requests>=2.33.0.20260513",
+]

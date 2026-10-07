@@ -1,0 +1,148 @@
+{
+ "actions": [],
+ "creation": "2026-09-28 00:00:00",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "insurance_company",
+  "plan_name",
+  "is_active",
+  "plan_col",
+  "coverage_percent",
+  "max_coverage",
+  "deductible",
+  "requires_approval",
+  "plan_notes_section",
+  "notes"
+ ],
+ "fields": [
+  {
+   "fieldname": "insurance_company",
+   "fieldtype": "Link",
+   "label": "Insurance Company",
+   "options": "Insurance Company",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "plan_name",
+   "fieldtype": "Data",
+   "label": "Plan Name",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "is_active",
+   "fieldtype": "Check",
+   "label": "Active",
+   "default": "1",
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "plan_col",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "coverage_percent",
+   "fieldtype": "Percent",
+   "label": "Coverage Percentage",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "max_coverage",
+   "fieldtype": "Currency",
+   "label": "Maximum Coverage",
+   "description": "0 = no limit"
+  },
+  {
+   "fieldname": "deductible",
+   "fieldtype": "Currency",
+   "label": "Deductible"
+  },
+  {
+   "fieldname": "requires_approval",
+   "fieldtype": "Check",
+   "label": "Requires Approval",
+   "default": "1"
+  },
+  {
+   "fieldname": "plan_notes_section",
+   "fieldtype": "Section Break",
+   "label": "Notes"
+  },
+  {
+   "fieldname": "notes",
+   "fieldtype": "Small Text",
+   "label": "Notes"
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2026-09-28 00:00:00",
+ "modified_by": "Administrator",
+ "module": "Optical",
+ "name": "Insurance Plan",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "role": "System Manager",
+   "read": 1,
+   "report": 1,
+   "export": 1,
+   "print": 1,
+   "email": 1,
+   "share": 1,
+   "write": 1,
+   "create": 1,
+   "delete": 1
+  },
+  {
+   "role": "Optical Manager",
+   "read": 1,
+   "report": 1,
+   "export": 1,
+   "print": 1,
+   "email": 1,
+   "share": 1,
+   "write": 1,
+   "create": 1,
+   "delete": 1
+  },
+  {
+   "role": "Optical Branch Manager",
+   "read": 1,
+   "report": 1,
+   "export": 1,
+   "print": 1,
+   "email": 1,
+   "share": 1,
+   "write": 1
+  },
+  {
+   "role": "Optical Cashier",
+   "read": 1,
+   "report": 1,
+   "export": 1,
+   "print": 1,
+   "email": 1,
+   "share": 1
+  },
+  {
+   "role": "Optician",
+   "read": 1,
+   "report": 1,
+   "export": 1,
+   "print": 1,
+   "email": 1,
+   "share": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "track_changes": 1,
+ "autoname": "format:{insurance_company}-{plan_name}",
+ "naming_rule": "Expression",
+ "title_field": "plan_name"
+}
