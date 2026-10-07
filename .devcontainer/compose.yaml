@@ -1,0 +1,32 @@
+services:
+  app:
+    image: mcr.microsoft.com/devcontainers/base:ubuntu-24.04
+    command: sleep infinity
+    volumes:
+      - ..:/workspaces/ndserp-sa:cached
+    depends_on:
+      mariadb:
+        condition: service_healthy
+    environment:
+      NDSERP_DB_HOST: mariadb
+      NDSERP_DB_PORT: "3306"
+      NDSERP_SITE: ndserpsa.nds-sa.com
+      NDSERP_PORT: "6000"
+
+  mariadb:
+    image: mariadb:11.8
+    restart: unless-stopped
+    environment:
+      MARIADB_ROOT_PASSWORD: nds_codespace_root
+      MARIADB_DATABASE: mysql
+      MARIADB_INITDB_SKIP_TZINFO: "1"
+    volumes:
+      - ndserp-mariadb:/var/lib/mysql
+    healthcheck:
+      test: ["CMD-SHELL", "mariadb-admin ping -h 127.0.0.1 -uroot -pnds_codespace_root --silent"]
+      interval: 5s
+      timeout: 5s
+      retries: 30
+
+volumes:
+  ndserp-mariadb:
