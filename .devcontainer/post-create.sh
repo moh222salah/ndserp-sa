@@ -13,10 +13,13 @@ SITE="ndserpsa.nds-sa.com"
 sudo apt-get update
 sudo DEBIAN_FRONTEND=noninteractive apt-get install -y \
   build-essential libffi-dev libjpeg-dev libmariadb-dev libmariadb-dev-compat \
-  libssl-dev mariadb-client redis-server pkg-config xvfb fontconfig libfontconfig1 curl iproute2
+  libssl-dev mariadb-client mariadb-server redis-server pkg-config xvfb fontconfig libfontconfig1 curl iproute2
 
 sudo corepack enable
 sudo corepack prepare yarn@1.22.22 --activate
+
+sudo service mariadb start
+sudo mariadb -e "ALTER USER root@localhost IDENTIFIED BY 'nds_codespace_root'; FLUSH PRIVILEGES;"
 
 if ! command -v bench >/dev/null 2>&1; then
   python3 -m pip install --user --break-system-packages "frappe-bench==5.31.0"
