@@ -1,0 +1,44 @@
+name: Saudi ERP Codespaces Validation
+
+on:
+  push:
+    branches: ["main"]
+  workflow_dispatch:
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Validate JSON configuration
+        run: |
+          python3 - <<'PY'
+          import json
+          for path in [
+              ".devcontainer/devcontainer.json",
+              "bench/common_site_config.json",
+          ]:
+              with open(path, encoding="utf-8") as f:
+                  json.load(f)
+              print(f"JSON_OK={path}")
+          PY
+
+      - name: Validate shell scripts
+        run: |
+          bash -n .devcontainer/post-create.sh
+          bash -n .devcontainer/post-start.sh
+          echo "BASH_SYNTAX=PASS"
+
+      - name: Validate Saudi app source tree
+        run: |
+          test -f bench/apps.txt
+          while IFS= read -r app; do
+            [ -z "$app" ] && continue
+            test -d "apps/$app"
+            echo "APP_SOURCE=PASS:$app"
+          done < bench/apps.txt
+
+      - name: Git whitespace check
+        run: git diff --check
