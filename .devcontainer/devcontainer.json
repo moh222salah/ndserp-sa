@@ -9,64 +9,13 @@
       "label": "NDS ERP Saudi",
       "onAutoForward": "openBrowser"
     },
-    "6787": {
-      "label": "Frappe File Watcher",
-      "onAutoForward": "silent"
-    },
     "9000": {
       "label": "Frappe Socket.IO",
       "onAutoForward": "silent"
-    }
-  },
-  "hostRequirements": {
-    "cpus": 4,
-    "memory": "8gb",
-    "storage": "32gb"
-  },
-  "features": {
-    "ghcr.io/devcontainers/features/python:1.8.0": {
-      "version": "3.14.2",
-      "installTools": false
     },
-    "ghcr.io/devcontainers/features/node:2": {
-      "version": "24",
-      "nodeGypDependencies": true,
-      "installYarnUsingApt": false
+    "6787": {
+      "label": "Frappe File Watcher",
+      "onAutoForward": "silent"
     }
-  },
-  "secrets": {
-    "NDSERP_DB_DUMP_URL": {
-      "description": "HTTPS URL for the exact Saudi MariaDB backup (.sql.gz)."
-    },
-    "NDSERP_FILES_ARCHIVE_URL": {
-      "description": "HTTPS URL for the exact Saudi site files archive (.tar.gz)."
-    },
-    "NDSERP_SITE_CONFIG_JSON": {
-      "description": "Saudi site_config.json JSON; never commit production credentials."
-    }
-  },
-  "customizations": {
-    "vscode": {
-      "extensions": [
-        "ms-python.python",
-        "ms-python.vscode-pylance",
-        "dbaeumer.vscode-eslint",
-        "redhat.vscode-yaml",
-        "ms-azuretools.vscode-docker",
-        "eamodio.gitlens"
-      ],
-      "settings": {
-        "python.defaultInterpreterPath": "/workspaces/ndserp-sa/env/bin/python"
-      }
-    }
-  },
-  "containerEnv": {
-    "PYTHONPATH": "/workspaces/ndserp-sa/apps",
-    "NDSERP_SITE": "ndserpsa.nds-sa.com",
-    "NDSERP_PORT": "6000",
-    "NDSERP_DB_HOST": "127.0.0.1",
-    "NDSERP_DB_PORT": "3306"
-  },
-  "postCreateCommand": "bash .devcontainer/post-create.sh",
-  "postStartCommand": "bash .devcontainer/post-start.sh"
+  }
 }
