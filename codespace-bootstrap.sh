@@ -55,12 +55,13 @@ mkdir -p sites logs config
 cp bench/apps.txt sites/apps.txt
 
 echo "=== VERIFY/REPAIR ERPNEXT SOURCE ==="
-if [ ! -s "$ROOT/apps/erpnext/erpnext/__init__.py" ] || [ ! -s "$ROOT/apps/erpnext/erpnext/modules.txt" ]; then
+if [ ! -s "$ROOT/apps/erpnext/erpnext/__init__.py" ] || [ ! -s "$ROOT/apps/erpnext/erpnext/hooks.py" ] || [ ! -s "$ROOT/apps/erpnext/erpnext/modules.txt" ]; then
   echo "ERPNext source is incomplete; replacing it with official ERPNext ${ERPNEXT_VERSION}."
   rm -rf "$ROOT/apps/erpnext"
   git clone --depth 1 --branch "$ERPNEXT_VERSION" https://github.com/frappe/erpnext.git "$ROOT/apps/erpnext"
 fi
 test -s "$ROOT/apps/erpnext/erpnext/__init__.py"
+test -s "$ROOT/apps/erpnext/erpnext/hooks.py"
 test -s "$ROOT/apps/erpnext/erpnext/modules.txt"
 echo "ERPNEXT_SOURCE=PASS"
 
