@@ -9,11 +9,21 @@ export PATH="$HOME/.local/bin:$PATH"
 
 DB_ROOT_PASSWORD="nds_codespace_root"
 SITE="ndserpsa.nds-sa.com"
+export NDSERP_DB_HOST="${NDSERP_DB_HOST:-127.0.0.1}"
+export NDSERP_DB_PORT="${NDSERP_DB_PORT:-3306}"
 
 sudo apt-get update
 sudo DEBIAN_FRONTEND=noninteractive apt-get install -y \
   build-essential libffi-dev libjpeg-dev libmariadb-dev libmariadb-dev-compat \
   libssl-dev mariadb-client mariadb-server redis-server pkg-config xvfb fontconfig libfontconfig1 curl iproute2
+
+echo "=== INSTALL NODE 24 ==="
+if ! command -v node >/dev/null 2>&1 || ! node --version | grep -q '^v24\.'; then
+  curl -fsSL https://deb.nodesource.com/setup_24.x | sudo -E bash -
+  sudo DEBIAN_FRONTEND=noninteractive apt-get install -y nodejs
+fi
+node --version
+npm --version
 
 sudo corepack enable
 sudo corepack prepare yarn@1.22.22 --activate
