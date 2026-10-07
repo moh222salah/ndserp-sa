@@ -3,7 +3,7 @@
   "dockerComposeFile": "compose.yaml",
   "service": "app",
   "workspaceFolder": "/workspaces/ndserp-sa",
-  "remoteUser": "codespace",
+  "remoteUser": "vscode",
   "forwardPorts": [
     6000,
     9000,
