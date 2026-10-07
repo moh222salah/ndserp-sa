@@ -33,7 +33,7 @@
       "version": "3.14.2",
       "installTools": false
     },
-    "ghcr.io/devcontainers/features/node:2.3.0": {
+    "ghcr.io/devcontainers/features/node:2": {
       "version": "24",
       "nodeGypDependencies": true,
       "installYarnUsingApt": false
