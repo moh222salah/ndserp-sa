@@ -49,13 +49,26 @@ if [ ! -d env ]; then
 fi
 ./env/bin/python -m pip install --upgrade pip setuptools wheel
 
+echo "=== PREPARE PYTHON ENV ==="
+if grep -qxF "/workspaces/ndserp-sa/apps" "$ROOT/env/lib/python3.14/site-packages/nds_apps.pth" 2>/dev/null; then :; else echo "/workspaces/ndserp-sa/apps" > "$ROOT/env/lib/python3.14/site-packages/nds_apps.pth"; fi
+if grep -qx "changai" bench/apps.txt 2>/dev/null; then
+  echo "=== INSTALL CPU-ONLY PYTORCH FOR CHANGAI ==="
+  ./env/bin/pip install --index-url https://download.pytorch.org/whl/cpu torch
+fi
+
 echo "=== INSTALL PYTHON APPS ==="
 while IFS= read -r app; do
   [ -z "$app" ] && continue
   app_dir="$ROOT/apps/$app"
   if [ -f "$app_dir/pyproject.toml" ] || [ -f "$app_dir/setup.py" ] || [ -f "$app_dir/setup.cfg" ]; then
     echo "--- Python: $app"
-    ./env/bin/pip install -e "$app_dir"
+    if [ "$app" = "erpnext" ]; then
+      echo "ERPNext is source-loaded via PYTHONPATH; no standalone pip package metadata required."
+    elif [ "$app" = "pos_next" ]; then
+      ./env/bin/pip install -e "$app_dir" --no-deps
+    else
+      ./env/bin/pip install -e "$app_dir"
+    fi
   fi
 done < bench/apps.txt
 
