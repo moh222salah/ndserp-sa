@@ -1,6 +1,7 @@
 services:
   app:
     image: mcr.microsoft.com/devcontainers/base:ubuntu-24.04
+    user: vscode
     command: sleep infinity
     volumes:
       - ..:/workspaces/ndserp-sa:cached
