@@ -4,27 +4,72 @@
   "service": "app",
   "workspaceFolder": "/workspaces/ndserp-sa",
   "remoteUser": "codespace",
-  "forwardPorts": [6000, 9000, 6787],
+  "forwardPorts": [
+    6000,
+    9000,
+    6787
+  ],
   "portsAttributes": {
-    "6000": {"label": "NDS ERP Saudi", "onAutoForward": "openBrowser"},
-    "9000": {"label": "Frappe Socket.IO", "onAutoForward": "silent"},
-    "6787": {"label": "Frappe File Watcher", "onAutoForward": "silent"}
+    "6000": {
+      "label": "NDS ERP Saudi",
+      "onAutoForward": "openBrowser"
+    },
+    "6787": {
+      "label": "Frappe File Watcher",
+      "onAutoForward": "silent"
+    },
+    "9000": {
+      "label": "Frappe Socket.IO",
+      "onAutoForward": "silent"
+    }
   },
-  "hostRequirements": {"cpus": 4, "memory": "8gb", "storage": "32gb"},
+  "hostRequirements": {
+    "cpus": 4,
+    "memory": "8gb",
+    "storage": "32gb"
+  },
   "features": {
-    "ghcr.io/devcontainers/features/python:1.8.0": {"version": "3.14.2", "installTools": false},
-    "ghcr.io/devcontainers/features/node:2.3.0": {"version": "24", "nodeGypDependencies": true, "installYarnUsingApt": false}
+    "ghcr.io/devcontainers/features/python:1.8.0": {
+      "version": "3.14.2",
+      "installTools": false
+    },
+    "ghcr.io/devcontainers/features/node:2.3.0": {
+      "version": "24",
+      "nodeGypDependencies": true,
+      "installYarnUsingApt": false
+    }
   },
   "secrets": {
-    "NDSERP_DB_DUMP_URL": {"description": "HTTPS URL for the exact Saudi MariaDB backup (.sql.gz)."},
-    "NDSERP_FILES_ARCHIVE_URL": {"description": "HTTPS URL for the exact Saudi site files archive (.tar.gz)."},
-    "NDSERP_SITE_CONFIG_JSON": {"description": "Saudi site_config.json JSON; never commit production credentials."}
+    "NDSERP_DB_DUMP_URL": {
+      "description": "HTTPS URL for the exact Saudi MariaDB backup (.sql.gz)."
+    },
+    "NDSERP_FILES_ARCHIVE_URL": {
+      "description": "HTTPS URL for the exact Saudi site files archive (.tar.gz)."
+    },
+    "NDSERP_SITE_CONFIG_JSON": {
+      "description": "Saudi site_config.json JSON; never commit production credentials."
+    }
   },
   "customizations": {
     "vscode": {
-      "extensions": ["ms-python.python","ms-python.vscode-pylance","dbaeumer.vscode-eslint","redhat.vscode-yaml","ms-azuretools.vscode-docker","eamodio.gitlens"],
-      "settings": {"python.defaultInterpreterPath": "/workspaces/ndserp-sa/env/bin/python"}
+      "extensions": [
+        "ms-python.python",
+        "ms-python.vscode-pylance",
+        "dbaeumer.vscode-eslint",
+        "redhat.vscode-yaml",
+        "ms-azuretools.vscode-docker",
+        "eamodio.gitlens"
+      ],
+      "settings": {
+        "python.defaultInterpreterPath": "/workspaces/ndserp-sa/env/bin/python"
+      }
     }
   },
-  "postCreateCommand": "bash .devcontainer/post-create.sh"
+  "postCreateCommand": "bash .devcontainer/post-create.sh",
+  "containerEnv": {
+    "PYTHONPATH": "/workspaces/ndserp-sa/apps",
+    "NDSERP_SITE": "ndserpsa.nds-sa.com",
+    "NDSERP_PORT": "6000"
+  },
+  "postStartCommand": "bash .devcontainer/post-start.sh"
 }
