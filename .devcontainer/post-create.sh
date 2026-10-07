@@ -18,7 +18,7 @@ corepack enable
 corepack prepare yarn@1.22.22 --activate
 
 if ! command -v bench >/dev/null 2>&1; then
-  python3 -m pip install --user "frappe-bench==5.31.0"
+  python3 -m pip install --user --break-system-packages "frappe-bench==5.31.0"
 fi
 
 mkdir -p sites logs config
@@ -206,10 +206,18 @@ if [ "$DB_RESTORED" -eq 1 ]; then
   echo "Production database restored: no install-app/migrate step is performed."
   bench --site "$SITE" list-apps
 else
+  installed_apps="$(bench --site "$SITE" list-apps 2>/dev/null | awk '{print $1}' || true)"
+  if ! printf '%s\n' "$installed_apps" | grep -qx "ERPNext"; then
+    echo "--- Install dependency root: erpnext"
+    bench --site "$SITE" install-app erpnext --skip-assets
+  fi
+
   while IFS= read -r app; do
     [ -z "$app" ] && continue
     [ "$app" = "frappe" ] && continue
-    if ! bench --site "$SITE" list-apps 2>/dev/null | awk '{print $1}' | grep -qx "$app"; then
+    [ "$app" = "erpnext" ] && continue
+    installed_apps="$(bench --site "$SITE" list-apps 2>/dev/null | awk '{print $1}' || true)"
+    if ! printf '%s\n' "$installed_apps" | grep -qx "$app"; then
       echo "--- Install: $app"
       bench --site "$SITE" install-app "$app" --skip-assets
     fi
