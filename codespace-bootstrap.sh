@@ -4,6 +4,8 @@ set -Eeuo pipefail
 ROOT="/workspaces/ndserp-sa"
 SITE="ndserpsa.nds-sa.com"
 BENCH_VERSION="5.31.0"
+ERPNEXT_VERSION="v16.36.1"
+DB_ROOT_PASSWORD="nds_codespace_root"
 
 cd "$ROOT"
 export PATH="$HOME/.local/bin:$HOME/.cargo/bin:$PATH"
@@ -30,7 +32,17 @@ echo "PYTHON=$PYTHON_BIN"
 "$PYTHON_BIN" --version
 
 sudo service mariadb start
-sudo mariadb -e "ALTER USER root@localhost IDENTIFIED BY 'nds_codespace_root'; FLUSH PRIVILEGES;"
+
+if sudo mariadb -uroot -p"$DB_ROOT_PASSWORD" -e "SELECT 1" >/dev/null 2>&1; then
+  echo "MARIADB_ROOT_AUTH=PASSWORD"
+elif sudo mariadb -e "SELECT 1" >/dev/null 2>&1; then
+  sudo mariadb -e "ALTER USER root@localhost IDENTIFIED BY '$DB_ROOT_PASSWORD'; FLUSH PRIVILEGES;"
+  echo "MARIADB_ROOT_AUTH=SOCKET_SET"
+else
+  echo "MARIADB_ROOT_AUTH=FAIL"
+  exit 1
+fi
+
 sudo service redis-server start || true
 
 if ! command -v bench >/dev/null 2>&1; then
@@ -41,6 +53,16 @@ bench --version
 
 mkdir -p sites logs config
 cp bench/apps.txt sites/apps.txt
+
+echo "=== VERIFY/REPAIR ERPNEXT SOURCE ==="
+if [ ! -s "$ROOT/apps/erpnext/erpnext/__init__.py" ] || [ ! -s "$ROOT/apps/erpnext/erpnext/modules.txt" ]; then
+  echo "ERPNext source is incomplete; replacing it with official ERPNext ${ERPNEXT_VERSION}."
+  rm -rf "$ROOT/apps/erpnext"
+  git clone --depth 1 --branch "$ERPNEXT_VERSION" https://github.com/frappe/erpnext.git "$ROOT/apps/erpnext"
+fi
+test -s "$ROOT/apps/erpnext/erpnext/__init__.py"
+test -s "$ROOT/apps/erpnext/erpnext/modules.txt"
+echo "ERPNEXT_SOURCE=PASS"
 
 if [ ! -x env/bin/python ]; then
   "$PYTHON_BIN" -m venv env
@@ -140,7 +162,7 @@ if [ ! -f "sites/$SITE/site_config.json" ]; then
     --db-host 127.0.0.1 \
     --db-port 3306 \
     --db-root-username root \
-    --db-root-password nds_codespace_root \
+    --db-root-password "$DB_ROOT_PASSWORD" \
     --admin-password admin \
     --set-default
 fi
