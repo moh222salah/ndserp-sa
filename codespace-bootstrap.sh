@@ -1,0 +1,162 @@
+#!/usr/bin/env bash
+set -Eeuo pipefail
+
+ROOT="/workspaces/ndserp-sa"
+SITE="ndserpsa.nds-sa.com"
+BENCH_VERSION="5.31.0"
+
+cd "$ROOT"
+export PATH="$HOME/.local/bin:$HOME/.cargo/bin:$PATH"
+
+echo "=== NDS ERP SAUDI CODESPACE ==="
+echo "ROOT=$ROOT"
+echo "SITE=$SITE"
+
+sudo apt-get update
+sudo DEBIAN_FRONTEND=noninteractive apt-get install -y \
+  build-essential pkg-config curl git \
+  libffi-dev libssl-dev libjpeg-dev libmariadb-dev libmariadb-dev-compat \
+  mariadb-server mariadb-client redis-server \
+  xvfb fontconfig libfontconfig1
+
+if ! command -v uv >/dev/null 2>&1; then
+  curl -LsSf https://astral.sh/uv/install.sh | sh
+  export PATH="$HOME/.local/bin:$PATH"
+fi
+
+uv python install 3.14
+PYTHON_BIN="$(uv python find 3.14)"
+echo "PYTHON=$PYTHON_BIN"
+"$PYTHON_BIN" --version
+
+sudo service mariadb start
+sudo mariadb -e "ALTER USER root@localhost IDENTIFIED BY 'nds_codespace_root'; FLUSH PRIVILEGES;"
+sudo service redis-server start || true
+
+if ! command -v bench >/dev/null 2>&1; then
+  "$PYTHON_BIN" -m pip install --user --break-system-packages "frappe-bench==${BENCH_VERSION}"
+fi
+export PATH="$HOME/.local/bin:$PATH"
+bench --version
+
+mkdir -p sites logs config
+cp bench/apps.txt sites/apps.txt
+
+if [ ! -x env/bin/python ]; then
+  "$PYTHON_BIN" -m venv env
+fi
+./env/bin/python -m pip install --upgrade pip setuptools wheel
+
+SITE_PACKAGES="$(./env/bin/python -c 'import site; print(site.getsitepackages()[0])')"
+printf '%s\n' "$ROOT/apps" > "$SITE_PACKAGES/nds_apps.pth"
+
+echo "=== INSTALL FRAPPE CORE ==="
+./env/bin/pip install -e "$ROOT/apps/frappe"
+
+echo "=== INSTALL SAUDI APP PYTHON PACKAGES ==="
+while IFS= read -r app; do
+  [ -z "$app" ] && continue
+  [ "$app" = "frappe" ] && continue
+  app_dir="$ROOT/apps/$app"
+
+  if [ ! -d "$app_dir" ]; then
+    echo "MISSING_APP=$app"
+    continue
+  fi
+
+  if [ "$app" = "erpnext" ]; then
+    echo "ERPNext: source-loaded; no standalone package install."
+  elif [ "$app" = "pos_next" ]; then
+    ./env/bin/pip install -e "$app_dir" --no-deps
+  elif [ "$app" = "changai" ]; then
+    echo "ChangAI source-loaded first; CPU ML dependency installed below."
+    ./env/bin/pip install -e "$app_dir" --no-deps
+  elif [ -f "$app_dir/pyproject.toml" ] || [ -f "$app_dir/setup.py" ] || [ -f "$app_dir/setup.cfg" ]; then
+    ./env/bin/pip install -e "$app_dir"
+  fi
+done < bench/apps.txt
+
+if grep -qx "changai" bench/apps.txt 2>/dev/null; then
+  echo "=== INSTALL CPU PYTORCH ONLY ==="
+  ./env/bin/pip install --index-url https://download.pytorch.org/whl/cpu torch
+fi
+
+echo "=== INSTALL YARN ==="
+sudo corepack enable
+sudo corepack prepare yarn@1.22.22 --activate
+yarn --version
+
+echo "=== INSTALL NODE DEPENDENCIES ==="
+while IFS= read -r app; do
+  [ -z "$app" ] && continue
+  app_dir="$ROOT/apps/$app"
+  if [ -f "$app_dir/package.json" ]; then
+    echo "--- Node: $app"
+    (
+      cd "$app_dir"
+      if [ -f yarn.lock ]; then
+        yarn install --frozen-lockfile --non-interactive
+      else
+        yarn install --non-interactive
+      fi
+    )
+  fi
+done < bench/apps.txt
+
+python3 - <<'PY'
+from pathlib import Path
+import json
+
+root = Path("/workspaces/ndserp-sa")
+src = root / "bench/common_site_config.json"
+dst = root / "sites/common_site_config.json"
+
+cfg = json.loads(src.read_text())
+cfg.update({
+    "default_site": "ndserpsa.nds-sa.com",
+    "serve_default_site": True,
+    "dns_multitenant": True,
+    "webserver_port": 6000,
+    "socketio_port": 9000,
+    "file_watcher_port": 6787,
+    "redis_cache": "redis://127.0.0.1:13000",
+    "redis_queue": "redis://127.0.0.1:11000",
+    "redis_socketio": "redis://127.0.0.1:13000"
+})
+dst.write_text(json.dumps(cfg, indent=2) + "\n")
+PY
+
+cp bench/Procfile Procfile
+
+bench setup redis
+bench setup socketio
+
+./env/bin/python -c 'import frappe; print("FRAPPE_IMPORT=PASS"); print("FRAPPE_VERSION=", getattr(frappe, "__version__", "unknown"))'
+
+if [ ! -f "sites/$SITE/site_config.json" ]; then
+  echo "=== CREATE CLEAN SAUDI SITE ==="
+  bench new-site "$SITE" \
+    --db-type mariadb \
+    --db-host 127.0.0.1 \
+    --db-port 3306 \
+    --db-root-username root \
+    --db-root-password nds_codespace_root \
+    --admin-password admin \
+    --set-default
+fi
+
+echo "=== INSTALL ERPNext ==="
+installed_apps="$(bench --site "$SITE" list-apps 2>/dev/null || true)"
+if ! printf '%s\n' "$installed_apps" | grep -q '^ERPNext'; then
+  bench --site "$SITE" install-app erpnext --skip-assets
+fi
+
+echo "=== BUILD ASSETS ==="
+bench build
+
+bench --site "$SITE" set-config developer_mode 1
+bench --site "$SITE" clear-cache
+
+echo "=== START SAUDI ERP ==="
+echo "Run: bench start"
+echo "Port: 6000"
