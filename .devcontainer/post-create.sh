@@ -12,7 +12,7 @@ SITE="ndserpsa.nds-sa.com"
 sudo apt-get update
 sudo DEBIAN_FRONTEND=noninteractive apt-get install -y \
   build-essential libffi-dev libjpeg-dev libmariadb-dev libmariadb-dev-compat \
-  libssl-dev mariadb-client redis-server pkg-config xvfb fontconfig libfontconfig1
+  libssl-dev mariadb-client redis-server pkg-config xvfb fontconfig libfontconfig1 curl iproute2
 
 corepack enable
 corepack prepare yarn@1.22.22 --activate
