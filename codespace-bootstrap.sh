@@ -170,7 +170,7 @@ fi
 echo "=== INSTALL ERPNext ==="
 installed_apps="$(bench --site "$SITE" list-apps 2>/dev/null || true)"
 if ! printf '%s\n' "$installed_apps" | grep -q '^ERPNext'; then
-  bench --site "$SITE" install-app erpnext --skip-assets
+  bench --site "$SITE" install-app erpnext
 fi
 
 echo "=== BUILD ASSETS ==="
