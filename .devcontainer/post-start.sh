@@ -23,7 +23,8 @@ ss -ltn 2>/dev/null | grep -E ':6000|:9000|:11000|:13000' || true
 
 if [ "$READY" -eq 1 ]; then
   echo "HTTP_6000=PASS"
-  echo "URL=http://127.0.0.1:6000/"
+  echo "http://127.0.0.1:6000/"
+echo "URL=http://127.0.0.1:6000/"
 else
   echo "HTTP_6000=FAIL"
   echo "--- Runtime log ---"
