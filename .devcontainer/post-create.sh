@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-set -Eeop pipefail
+set -Eeuo pipefail
 
 ROOT="/workspaces/ndserp-sa"
 cd "$ROOT"
@@ -111,7 +111,7 @@ mkdir -p "sites/$SITE"
 SITE_FROM_SECRET=0
 DB_RESTORED=0
 
-if [ -n "$NDSERP_SITE_CONFIG_JSON" ]; then
+if [ -n "${NDSERP_SITE_CONFIG_JSON:-}" ]; then
   printf '%s' "$NDSERP_SITE_CONFIG_JSON" > "sites/$SITE/site_config.json"
   chmod 600 "sites/$SITE/site_config.json"
 
@@ -132,7 +132,7 @@ PY
   echo "SITE_CONFIG=FROM_CODESPACES_SECRET"
 fi
 
-if [ -n "$NDSERP_DB_DUMP_URL" ]; then
+if [ -n "${NDSERP_DB_DUMP_URL:-}" ]; then
   if [ "$SITE_FROM_SECRET" -ne 1 ]; then
     echo "ERROR: NDSERP_DB_DUMP_URL requires NDSERP_SITE_CONFIG_JSON." >&2
     exit 1
@@ -216,7 +216,7 @@ else
   done < bench/apps.txt
 fi
 
-if [ -n "$NDSERP_FILES_ARCHIVE_URL" ]; then
+if [ -n "${NDSERP_FILES_ARCHIVE_URL:-}" ]; then
   mkdir -p /tmp/nds-restore/files
   curl -fL --retry 3 --retry-all-errors "$NDSERP_FILES_ARCHIVE_URL" -o /tmp/nds-restore/files/files.tar.gz
   rm -rf /tmp/nds-restore/files/extracted
