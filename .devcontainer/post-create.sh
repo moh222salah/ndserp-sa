@@ -5,6 +5,7 @@ ROOT="/workspaces/ndserp-sa"
 cd "$ROOT"
 
 echo "=== NDS ERP SAUDI CODESPACE BOOTSTRAP ==="
+export PATH="$HOME/.local/bin:$PATH"
 
 DB_ROOT_PASSWORD="nds_codespace_root"
 SITE="ndserpsa.nds-sa.com"
@@ -14,8 +15,8 @@ sudo DEBIAN_FRONTEND=noninteractive apt-get install -y \
   build-essential libffi-dev libjpeg-dev libmariadb-dev libmariadb-dev-compat \
   libssl-dev mariadb-client redis-server pkg-config xvfb fontconfig libfontconfig1 curl iproute2
 
-corepack enable
-corepack prepare yarn@1.22.22 --activate
+sudo corepack enable
+sudo corepack prepare yarn@1.22.22 --activate
 
 if ! command -v bench >/dev/null 2>&1; then
   python3 -m pip install --user --break-system-packages "frappe-bench==5.31.0"
