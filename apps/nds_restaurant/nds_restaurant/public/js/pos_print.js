@@ -1,4 +1,4 @@
-# NDS Restaurant Print Helpers
+// NDS Restaurant Print Helpers (desk). QZ Tray support is guarded: without qz loaded it only shows a message.
 frappe.provide("nds_restaurant.print");
 
 nds_restaurant.print.print_via_qz = function (host, content) {

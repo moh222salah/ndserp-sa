@@ -9,3 +9,4 @@ nds_restaurant.patches.v1_1.migrate_production_unit_branch
 nds_restaurant.patches.v1_1.migrate_burning_materials_to_daily_amount
 nds_restaurant.patches.v1_1.create_p3_item_fields
 nds_restaurant.patches.v1_1.migrate_menu_variants_addons
+nds_restaurant.patches.v1_2.backfill_pos_invoice_cashier

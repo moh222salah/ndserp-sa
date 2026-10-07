@@ -52,7 +52,15 @@ export default function CustomerPicker() {
     setLoading(false);
   }
 
-  if (customer) {
+  const { context, orderType, selectedTable } = usePOSStore();
+  const defaultCustomer = context?.settings?.default_customer;
+  const isWalkIn =
+    !!customer &&
+    ((defaultCustomer && customer.name === defaultCustomer) ||
+      /^walk-?in customer$/i.test(String(customer.customer_name || customer.name || "").trim()));
+  const orderLabel = `${orderType || "Dine In"}${selectedTable && orderType !== "Take Away" ? ` · ${selectedTable}` : ""}`;
+
+  if (customer && !isWalkIn) {
     return (
       <div className="flex items-center justify-between bg-emerald-900/40 border border-emerald-500/50 p-2.5 rounded-lg mb-3">
         <div>
@@ -110,12 +118,15 @@ export default function CustomerPicker() {
 
   return (
     <div className="relative mb-3">
+      <p className="text-xs text-gray-300 mb-1" data-testid="order-label">
+        {orderLabel}
+      </p>
       <input
         type="text"
         placeholder="Search customer (Name or Mobile)..."
         value={query}
         onChange={(e) => setQuery(e.target.value)}
-        className="w-full bg-gray-900 border border-gray-700 rounded-lg px-3 py-2 text-sm text-white placeholder-gray-400 focus:outline-none focus:border-emerald-500"
+        className="w-full min-w-0 box-border bg-gray-900 border border-gray-700 rounded-lg px-3 py-2 text-sm text-white placeholder-gray-400 focus:outline-none focus:border-emerald-500"
       />
       
       {results.length > 0 && (

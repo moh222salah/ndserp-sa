@@ -4,12 +4,28 @@ import frappe
 def after_install():
 	create_roles()
 	create_custom_fields()
+	ensure_pos_operator_permissions()
+	ensure_cncl_kot_naming_series_option()
 	frappe.clear_cache()
 
 
 def after_migrate():
 	create_roles()
 	create_custom_fields()
+	ensure_pos_operator_permissions()
+	ensure_cncl_kot_naming_series_option()
+
+
+def ensure_pos_operator_permissions():
+	from nds_restaurant.role_permissions import ensure_pos_operator_permissions as _ensure
+
+	_ensure()
+
+
+def ensure_cncl_kot_naming_series_option():
+	from nds_restaurant.kot_naming import ensure_cncl_kot_naming_series_option as _ensure
+
+	_ensure()
 
 
 def create_custom_fields():
@@ -22,7 +38,7 @@ def create_custom_fields():
 
 
 def create_roles():
-	for role_name in ("NDS Manager", "NDS Cashier", "NDS Captain"):
+	for role_name in ("NDS Manager", "NDS Cashier", "NDS Captain", "NDS Kitchen"):
 		if not frappe.db.exists("Role", role_name):
 			doc = frappe.get_doc(
 				{

@@ -16,5 +16,11 @@
     "name": "NDS Captain",
     "role_name": "NDS Captain",
     "desk_access": 1
+  },
+  {
+    "doctype": "Role",
+    "name": "NDS Kitchen",
+    "role_name": "NDS Kitchen",
+    "desk_access": 1
   }
 ]

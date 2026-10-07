@@ -1,0 +1,55 @@
+{
+ "actions": [],
+ "creation": "2026-10-07 12:00:00.000000",
+ "description": "QZ Tray signing certificate and private key (P6-T5). The key stays on the server; the POS asks the server to sign QZ requests.",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "certificate",
+  "private_key",
+  "help"
+ ],
+ "fields": [
+  {
+   "description": "Public certificate (PEM) that QZ Tray trusts, e.g. digital-certificate.txt from QZ or your own self-signed cert.",
+   "fieldname": "certificate",
+   "fieldtype": "Long Text",
+   "label": "Certificate"
+  },
+  {
+   "description": "Matching RSA private key (PEM, unencrypted). Stored encrypted; only used server-side to sign QZ requests (SHA512).",
+   "fieldname": "private_key",
+   "fieldtype": "Password",
+   "label": "Private Key",
+   "length": 8000
+  },
+  {
+   "fieldname": "help",
+   "fieldtype": "HTML",
+   "options": "<p class=\"text-muted small\">Leave both empty to run QZ Tray unsigned (every till shows QZ's trust prompt). Turn QZ on per POS Profile with <b>QZ Print</b>, <b>QZ Host</b> and <b>QZ Printer</b>; printing falls back to network/browser printing when QZ is not reachable.</p>"
+  }
+ ],
+ "issingle": 1,
+ "links": [],
+ "modified": "2026-10-07 12:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "NDS Restaurant",
+ "name": "NDS QZ Settings",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 0,
+   "print": 0,
+   "read": 1,
+   "role": "System Manager",
+   "share": 0,
+   "write": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "track_changes": 1
+}

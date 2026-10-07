@@ -14,6 +14,9 @@ PHONE_PATTERN = re.compile(r"^\+?\d{9,15}$")
 CUSTOMER_GROUPS = {"Company": "Commercial", "Individual": "Individual"}
 
 
+ADDRESS_FIELDS = ["name", "address_line1", "address_line2", "city", "state", "pincode", "country", "phone"]
+
+
 @frappe.whitelist(methods=["GET"])
 def get_customers(search=None, page=1, page_size=50):
 	page, page_size, paging_error = parse_paging(page, page_size)
@@ -23,17 +26,57 @@ def get_customers(search=None, page=1, page_size=50):
 	or_filters = None
 	if search and search.strip():
 		like = f"%{search.strip()}%"
-		or_filters = {"name": ["like", like], "customer_name": ["like", like], "tax_id": ["like", like]}
+		or_filters = {
+			"name": ["like", like],
+			"customer_name": ["like", like],
+			"tax_id": ["like", like],
+			"mobile_no": ["like", like],
+		}
 
 	data = frappe.get_list(
 		"Customer",
 		filters=filters,
 		or_filters=or_filters,
-		fields=["name as customer_id", "customer_name", "tax_id as vat_no"],
+		fields=[
+			"name as customer_id",
+			"customer_name",
+			"tax_id as vat_no",
+			"mobile_no as phone",
+			"customer_primary_address",
+		],
 		order_by="customer_name asc",
 		start=(page - 1) * page_size,
 		page_length=page_size,
 	)
+
+	# One query for all primary addresses on this page instead of one per customer
+	address_names = list({d.customer_primary_address for d in data if d.customer_primary_address})
+	addresses = {}
+	if address_names:
+		addresses = {
+			a.name: a
+			for a in frappe.get_all("Address", filters={"name": ["in", address_names]}, fields=ADDRESS_FIELDS)
+		}
+
+	for d in data:
+		addr = addresses.get(d.pop("customer_primary_address"))
+		# Fall back to the address phone when the customer has no primary contact mobile
+		if not d.phone and addr:
+			d.phone = addr.phone
+		d.phone = d.phone or None
+		d.address = (
+			{
+				"address_line1": addr.address_line1,
+				"address_line2": addr.address_line2,
+				"city": addr.city,
+				"state": addr.state,
+				"pincode": addr.pincode,
+				"country": addr.country,
+			}
+			if addr
+			else None
+		)
+
 	# Same filters and user permissions as the page itself, so total matches what can be paged through
 	total = frappe.get_list(
 		"Customer", filters=filters, or_filters=or_filters, fields=[{"COUNT": "*", "as": "total"}]

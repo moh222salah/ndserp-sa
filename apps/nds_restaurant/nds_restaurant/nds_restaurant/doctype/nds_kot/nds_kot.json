@@ -16,6 +16,9 @@
   "branch",
   "customer_name",
   "daily_order_no",
+  "aggregator",
+  "aggregator_order_id",
+  "sales_invoice",
   "order_status",
   "production_time",
   "original_kot",
@@ -43,7 +46,7 @@
    "fieldname": "kot_type",
    "fieldtype": "Select",
    "label": "KOT Type",
-   "options": "New Order\nModified\nPartially Cancelled\nCancelled\nDuplicate",
+   "options": "New Order\nModified\nPartially Cancelled\nCancelled\nDuplicate\nTransfer",
    "reqd": 1,
    "in_list_view": 1
   },
@@ -108,12 +111,35 @@
    "label": "Daily Order No"
   },
   {
+   "description": "P8-T3: aggregator (platform) name shown on the KDS card",
+   "fieldname": "aggregator",
+   "fieldtype": "Data",
+   "label": "Aggregator",
+   "read_only": 1
+  },
+  {
+   "fieldname": "aggregator_order_id",
+   "fieldtype": "Data",
+   "label": "Aggregator Order ID",
+   "read_only": 1
+  },
+  {
+   "allow_on_submit": 1,
+   "description": "P8-T2: set when an unpaid aggregator order was converted to a Sales Invoice",
+   "fieldname": "sales_invoice",
+   "fieldtype": "Link",
+   "label": "Sales Invoice",
+   "options": "Sales Invoice",
+   "read_only": 1
+  },
+  {
    "fieldname": "order_status",
    "fieldtype": "Select",
    "label": "Order Status",
    "options": "Ready For Prepare\nServed\nPicked Up",
    "default": "Ready For Prepare",
-   "allow_on_submit": 1
+   "allow_on_submit": 1,
+   "search_index": 1
   },
   {
    "fieldname": "production_time",
@@ -176,7 +202,8 @@
    "label": "Delay Notified",
    "default": "0",
    "hidden": 1,
-   "allow_on_submit": 1
+   "allow_on_submit": 1,
+   "search_index": 1
   },
   {
    "fieldname": "confirmed",
@@ -205,7 +232,7 @@
  "owner": "Administrator",
  "modified_by": "Administrator",
  "creation": "2026-09-24 00:00:00.000000",
- "modified": "2026-09-24 00:00:00.000000",
+ "modified": "2026-10-07 13:30:00.000000",
  "permissions": [
   {
    "role": "System Manager",

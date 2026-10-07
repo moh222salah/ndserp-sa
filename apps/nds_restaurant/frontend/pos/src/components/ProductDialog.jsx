@@ -3,9 +3,28 @@
  * Opens on double-click. Single click still adds directly to cart.
  */
 import { useState, useEffect } from "react";
+import { ItemImage } from "../views/MenuView";
+
+export function variantLabel(parentName, v) {
+  if (v && typeof v === "object" && v.label) return v.label;
+  const name = String((v && typeof v === "object" ? v.item_name || v.item : v) || "").trim();
+  const parent = String(parentName || "").trim();
+  if (parent && name.toLowerCase().startsWith(parent.toLowerCase()) && name.length > parent.length) {
+    const short = name.slice(parent.length).replace(/^[\s\-_/:()]+|[\s\-_/:()]+$/g, "");
+    if (short) return short;
+  }
+  return name;
+}
 
 export default function ProductDialog({ item, context, onAdd, onClose }) {
-  const [selectedVariant, setSelectedVariant] = useState(null);
+  const variantList = Array.isArray(item.variants) ? item.variants : [];
+  const baseSellable = variantList.length === 0 || item.base_sellable === undefined || !!item.base_sellable;
+  const firstVariant = variantList.length
+    ? typeof variantList[0] === "object"
+      ? variantList[0]
+      : { item: variantList[0], item_name: variantList[0], rate: 0 }
+    : null;
+  const [selectedVariant, setSelectedVariant] = useState(baseSellable ? null : firstVariant);
   const [selectedAddons, setSelectedAddons] = useState(new Set());
   const [notes, setNotes] = useState("");
   const [qty, setQty] = useState(1);
@@ -58,27 +77,21 @@ export default function ProductDialog({ item, context, onAdd, onClose }) {
         <div className="flex p-5 border-b border-white/10">
           {/* Left: Image or placeholder */}
           <div className="shrink-0 mr-5">
-            {currentItem.image ? (
-              <img
-                src={encodeURI(currentItem.image)}
-                alt={currentItem.item_name}
-                className="w-32 h-32 object-cover rounded"
-              />
-            ) : (
-              <div className="w-32 h-32 rounded bg-white/5 flex items-center justify-center text-4xl font-display text-white/40">
-                {(currentItem.item_name || "")
-                  .split(/\s+/)
-                  .slice(0, 2)
-                  .map((w) => w[0] || "")
-                  .join("")
-                  .toUpperCase()}
-              </div>
-            )}
+            <ItemImage
+              key={currentItem.item}
+              image={currentItem.image || item.image}
+              name={currentItem.item_name}
+              className="w-32 h-32 rounded"
+              textClass="text-4xl"
+            />
           </div>
 
           {/* Middle: Name, notes, qty, variants */}
           <div className="flex-1">
-            <h2 className="font-display text-2xl mb-3">{currentItem.item_name}</h2>
+            <h2 className="font-display text-2xl mb-1 break-words" data-testid="product-dialog-title">{item.item_name}</h2>
+            <p className="text-sm text-nds-muted mb-3">
+              {selectedVariant ? variantLabel(item.item_name, selectedVariant) : variantList.length ? "Regular" : "\u00a0"}
+            </p>
 
             {/* Special instructions */}
             <textarea
@@ -111,19 +124,21 @@ export default function ProductDialog({ item, context, onAdd, onClose }) {
               <div className="mb-3">
                 <p className="text-sm text-nds-muted mb-2">Variants:</p>
                 <div className="flex flex-wrap gap-2">
-                  <button
-                    onClick={() => setSelectedVariant(null)}
-                    className={`px-3 py-1.5 rounded text-sm ${
-                      !selectedVariant
-                        ? "bg-nds-accent text-nds-green"
-                        : "bg-white/10 hover:bg-white/20"
-                    }`}
-                  >
-                    {item.item_name} ({item.rate})
-                  </button>
+                  {baseSellable && (
+                    <button
+                      onClick={() => setSelectedVariant(null)}
+                      className={`px-3 py-1.5 rounded text-sm ${
+                        !selectedVariant
+                          ? "bg-nds-accent text-nds-green"
+                          : "bg-white/10 hover:bg-white/20"
+                      }`}
+                    >
+                      Regular ({item.rate})
+                    </button>
+                  )}
                   {currentVariants.map((v) => {
                     const variantItem = typeof v === "object" ? v.item : v;
-                    const variantName = typeof v === "object" ? v.item_name : v;
+                    const variantName = variantLabel(item.item_name, v);
                     const variantRate = typeof v === "object" ? v.rate : 0;
                     const isSelected = selectedVariant && (typeof selectedVariant === "object" ? selectedVariant.item === variantItem : selectedVariant === variantItem);
                     return (

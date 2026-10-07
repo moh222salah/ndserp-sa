@@ -1,4 +1,34 @@
-import React from "react";
+import React, { useState } from "react";
+
+export function initials(name) {
+  return (name || "")
+    .split(/\s+/)
+    .slice(0, 2)
+    .map((w) => w[0] || "")
+    .join("")
+    .toUpperCase();
+}
+
+// Image with an initials placeholder when there is no image or it fails to load.
+export function ItemImage({ image, name, className = "", textClass = "text-2xl" }) {
+  const [failed, setFailed] = useState(false);
+  if (image && !failed) {
+    return (
+      <img
+        src={encodeURI(image)}
+        alt=""
+        loading="lazy"
+        className={`${className} max-w-full object-cover`}
+        onError={() => setFailed(true)}
+      />
+    );
+  }
+  return (
+    <div className={`${className} bg-white/5 flex items-center justify-center font-display text-white/40 ${textClass}`}>
+      {initials(name)}
+    </div>
+  );
+}
 
 function getStockBadge(availability, lowStockThreshold) {
   if (availability === null || availability === undefined) return null;
@@ -24,7 +54,7 @@ export default function MenuView({
 }) {
   return (
     <>
-      <aside className="w-44 shrink-0 border-r border-white/10 p-3 space-y-1 overflow-auto bg-black/15">
+      <aside className="w-32 lg:w-40 shrink-0 border-r border-white/10 p-3 space-y-1 overflow-auto bg-black/15">
         <button
           onClick={() => setCourseFilter(null)}
           className={`w-full text-left px-3 py-2 rounded text-sm ${
@@ -53,12 +83,12 @@ export default function MenuView({
           </button>
         ))}
       </aside>
-      <div className="flex-1 p-4 overflow-auto">
+      <div className="flex-1 min-w-0 p-3 lg:p-4 overflow-y-auto overflow-x-hidden">
         <div className="mb-3 text-sm text-nds-muted">
           {orderType}
           {selectedTable ? ` · ${selectedTable}` : ""}
         </div>
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
+        <div className="grid grid-cols-[repeat(auto-fill,minmax(150px,1fr))] gap-3">
           {items.map((item) => {
             const stockBadge = getStockBadge(item.availability, lowStockThreshold);
             const isDisabled = item.availability === 0;
@@ -68,41 +98,19 @@ export default function MenuView({
                 type="button"
                 onClick={() => !isDisabled && onItemClick(item)}
                 disabled={isDisabled}
-                className={`relative text-left p-3 rounded-lg bg-white/5 border border-white/10 hover:border-nds-accent transition ${
+                className={`relative min-w-0 overflow-hidden text-left p-3 rounded-lg bg-white/5 border border-white/10 hover:border-nds-accent transition ${
                   isDisabled ? "opacity-40 cursor-not-allowed" : ""
                 }`}
               >
-                {item.special_dish && (
+                {!!item.special_dish && (
                   <div className="absolute top-0 right-0 bg-nds-accent text-nds-green text-xs font-bold px-2 py-1 rounded-bl">
                     ★ Special
                   </div>
                 )}
-                {context.settings?.show_item_image && item.image ? (
-                  <img
-                    src={encodeURI(item.image)}
-                    alt=""
-                    loading="lazy"
-                    className="w-full h-24 object-cover rounded mb-2"
-                    onError={(e) => {
-                      e.target.style.display = "none";
-                      e.target.nextElementSibling.style.display = "flex";
-                    }}
-                  />
+                {context.settings?.show_item_image ? (
+                  <ItemImage image={item.image} name={item.item_name} className="w-full h-24 rounded mb-2" textClass="text-2xl" />
                 ) : null}
-                {context.settings?.show_item_image && (
-                  <div
-                    className="w-full h-24 rounded mb-2 bg-white/5 flex items-center justify-center text-2xl font-display text-white/40"
-                    style={{ display: item.image ? "none" : "flex" }}
-                  >
-                    {(item.item_name || "")
-                      .split(/\s+/)
-                      .slice(0, 2)
-                      .map((w) => w[0] || "")
-                      .join("")
-                      .toUpperCase()}
-                  </div>
-                )}
-                <div className="font-medium">{item.item_name}</div>
+                <div className="font-medium break-words">{item.item_name}</div>
                 <div className="flex justify-between text-sm mt-1">
                   <span className="text-nds-accent">{item.rate}</span>
                   {stockBadge && (

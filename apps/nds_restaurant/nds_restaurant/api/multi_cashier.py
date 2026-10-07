@@ -6,6 +6,11 @@ from frappe import _
 
 
 def validate_pos_opening(doc, method=None):
+	# P7-T3: the daily-close rule applies with or without multi-cashier mode
+	from nds_restaurant.api.shift import assert_previous_day_closed
+
+	assert_previous_day_closed(doc.pos_profile, exclude=doc.name if not doc.is_new() else None)
+
 	profile = frappe.get_cached_doc("POS Profile", doc.pos_profile)
 	if not profile.get("custom_enable_multiple_cashier"):
 		return
@@ -64,4 +69,14 @@ def validate_pos_closing(doc, method=None):
 		if not closed:
 			frappe.throw(
 				_("Sub cashier {0} must submit Sub POS Closing before final close").format(op.user)
+			)
+
+	# P7-T5: sub-cashiers working on the main cashier's opening close with a Sub POS Closing
+	from nds_restaurant.api.shift import unclosed_sub_cashiers
+
+	if doc.pos_opening_entry:
+		pending = unclosed_sub_cashiers(doc.pos_opening_entry, doc.pos_profile, main_users)
+		if pending:
+			frappe.throw(
+				_("Sub cashier {0} must submit Sub POS Closing before final close").format(", ".join(pending))
 			)

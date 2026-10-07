@@ -4,14 +4,18 @@
 	</div>
 	
 	<div class="section">
+		{% if doc.get("custom_daily_order_no") %}<div style="font-size: 18px; font-weight: bold;">Order #{{ doc.get("custom_daily_order_no") }}</div>{% endif %}
 		<strong>{{ doc.name }}</strong><br>
 		Date: {{ frappe.utils.format_datetime((doc.posting_date|string) + ' ' + ((doc.posting_time or '00:00:00')|string), 'dd/MM/yyyy HH:mm') }}<br>
-		Cashier: {{ frappe.db.get_value("User", doc.owner, "full_name") or doc.owner }}
+		Cashier: {{ frappe.db.get_value("User", doc.get("custom_cashier") or doc.owner, "full_name") or doc.get("custom_cashier") or doc.owner }}
 		{% if doc.custom_nds_table %}
 		<br>Table: {{ doc.custom_nds_table }}
 		{% endif %}
 		{% if doc.custom_nds_order_type and doc.custom_nds_order_type != 'Dine In' %}
 		<br>Type: {{ doc.custom_nds_order_type }}
+		{% endif %}
+		{% if doc.get("custom_aggregator") %}
+		<br><strong>{{ doc.customer_name or doc.custom_aggregator }}{% if doc.get("custom_aggregator_order_id") %} #{{ doc.custom_aggregator_order_id }}{% endif %}</strong>
 		{% endif %}
 	</div>
 	

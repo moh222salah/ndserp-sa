@@ -32,14 +32,13 @@ def get_daily_pnl(branch, date=None):
 	- Depreciation
 	- Net Profit = PBD - Depreciation
 	"""
-	# Permission check: only System Manager, NDS Manager, or users with read access to NDS Report Settings
+	# Permission check: management roles only (not POS operators with Report Settings read)
 	if not (
 		frappe.session.user == "Administrator"
 		or "System Manager" in frappe.get_roles()
 		or "NDS Manager" in frappe.get_roles()
-		or frappe.has_permission("NDS Report Settings", "read")
 	):
-		frappe.throw(_("Not permitted to view Daily P&L reports"))
+		frappe.throw(_("Not permitted to view Daily P&L reports"), frappe.PermissionError)
 	
 	date = getdate(date) if date else getdate()
 	settings_name = frappe.db.exists("NDS Report Settings", {"branch": branch})

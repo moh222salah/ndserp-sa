@@ -37,7 +37,7 @@ website_route_rules = [
 fixtures = [
 	{
 		"dt": "Role",
-		"filters": [["name", "in", ["NDS Manager", "NDS Cashier", "NDS Captain"]]],
+		"filters": [["name", "in", ["NDS Manager", "NDS Cashier", "NDS Captain", "NDS Kitchen"]]],
 	},
 	{
 		"dt": "Custom Field",
@@ -48,13 +48,22 @@ fixtures = [
 doc_events = {
 	"POS Invoice": {
 		"before_naming": "nds_restaurant.api.naming.set_pos_invoice_naming",
+		"validate": "nds_restaurant.api.pos_invoice_validate.validate_nds_menu_selling_price_list",
+		"before_cancel": "nds_restaurant.api.kot.before_pos_invoice_cancel",
 		"on_submit": "nds_restaurant.api.recipe.on_pos_invoice_submit",
-		"on_cancel": "nds_restaurant.api.recipe.on_pos_invoice_cancel",
+		"on_cancel": [
+			"nds_restaurant.api.recipe.on_pos_invoice_cancel",
+			"nds_restaurant.api.kot.on_pos_invoice_cancel",
+		],
 		"on_update": "nds_restaurant.api.kot.on_pos_invoice_update",
 		"on_trash": "nds_restaurant.api.kot.on_pos_invoice_trash",
 	},
 	"Sales Invoice": {
 		"before_naming": "nds_restaurant.api.naming.set_sales_invoice_naming",
+		# P8-T2: ingredients for unpaid aggregator orders (no-op unless custom_source_pos_invoice is set)
+		"on_submit": "nds_restaurant.api.aggregators.on_sales_invoice_submit",
+		"before_cancel": "nds_restaurant.api.aggregators.before_sales_invoice_cancel",
+		"on_cancel": "nds_restaurant.api.aggregators.on_sales_invoice_cancel",
 	},
 	"POS Opening Entry": {
 		"validate": "nds_restaurant.api.multi_cashier.validate_pos_opening",
@@ -67,10 +76,17 @@ doc_events = {
 	},
 }
 
+# P5-T2: a draft that was already sent to the kitchen can be deleted (its on_trash sends the
+# Cancelled KOTs first); submitted KOTs keep pointing at the deleted order as history.
+ignore_links_on_delete = ["NDS KOT", "NDS KOT Items"]
+
 scheduler_events = {
-	"hourly": [
-		"nds_restaurant.api.kot.check_kot_delays",
-	],
+	# P5-T8: per-minute delay alerts (the job is a no-op on sites without the P5 fields)
+	"cron": {
+		"* * * * *": [
+			"nds_restaurant.api.kot.check_kot_delays",
+		],
+	},
 }
 
 after_install = "nds_restaurant.install.after_install"

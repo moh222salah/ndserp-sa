@@ -6,7 +6,7 @@ from frappe import _
 from frappe.utils import flt, floor
 
 
-def get_item_availability(item_code, warehouse):
+def get_item_availability(item_code, warehouse, exclude_invoice=None):
 	"""Return portions available based on limiting ingredient stock minus draft reservations."""
 	recipe = frappe.db.get_value("NDS Recipe", {"item": item_code, "enabled": 1}, "name")
 	if not recipe:
@@ -24,14 +24,30 @@ def get_item_availability(item_code, warehouse):
 			)
 			or 0
 		)
-		reserved = _reserved_qty(row.ingredient, warehouse)
+		reserved = _reserved_qty(row.ingredient, warehouse, exclude_invoice=exclude_invoice)
 		available = max(stock - reserved, 0)
 		p = floor(available / flt(row.qty))
 		portions = p if portions is None else min(portions, p)
 	return portions if portions is not None else 0
 
 
-def _reserved_qty(ingredient, warehouse):
+def get_stock_item_availability(item_code, warehouse, exclude_invoice=None):
+	"""Available qty for a stock item minus qty reserved on other draft POS invoices."""
+	if not frappe.db.get_value("Item", item_code, "is_stock_item"):
+		return None
+	actual_qty = flt(
+		frappe.db.get_value(
+			"Bin",
+			{"item_code": item_code, "warehouse": warehouse},
+			"actual_qty",
+		)
+		or 0
+	)
+	reserved = _reserved_stock_item_qty(item_code, warehouse, exclude_invoice=exclude_invoice)
+	return max(actual_qty - reserved, 0)
+
+
+def _reserved_qty(ingredient, warehouse, exclude_invoice=None):
 	"""Sum ingredient demand from draft POS invoices that use recipes."""
 	drafts = frappe.get_all(
 		"POS Invoice",
@@ -40,6 +56,8 @@ def _reserved_qty(ingredient, warehouse):
 	)
 	total = 0
 	for inv in drafts:
+		if exclude_invoice and inv == exclude_invoice:
+			continue
 		items = frappe.get_all(
 			"POS Invoice Item",
 			filters={"parent": inv},
@@ -59,6 +77,30 @@ def _reserved_qty(ingredient, warehouse):
 	return total
 
 
+def _reserved_stock_item_qty(item_code, warehouse, exclude_invoice=None):
+	"""Sum qty of a stock item on draft POS invoices (non-recipe lines)."""
+	if frappe.db.exists("NDS Recipe", {"item": item_code, "enabled": 1}):
+		return 0
+
+	drafts = frappe.get_all(
+		"POS Invoice",
+		filters={"docstatus": 0, "set_warehouse": warehouse},
+		pluck="name",
+	)
+	total = 0
+	for inv in drafts:
+		if exclude_invoice and inv == exclude_invoice:
+			continue
+		rows = frappe.get_all(
+			"POS Invoice Item",
+			filters={"parent": inv, "item_code": item_code},
+			fields=["qty"],
+		)
+		for row in rows:
+			total += flt(row.qty)
+	return total
+
+
 @frappe.whitelist()
 def get_availability_map(items, warehouse):
 	import json
@@ -70,6 +112,11 @@ def get_availability_map(items, warehouse):
 
 def on_pos_invoice_submit(doc, method=None):
 	"""Create Material Issue Stock Entry from recipes."""
+	issue_recipe_stock(doc)
+
+
+def issue_recipe_stock(doc):
+	"""Material Issue of the recipe ingredients for a POS Invoice or an aggregator Sales Invoice (P8-T2)."""
 	if doc.get("custom_recipe_stock_entry"):
 		return
 	warehouse = doc.set_warehouse
@@ -110,11 +157,16 @@ def on_pos_invoice_submit(doc, method=None):
 	)
 	se.insert(ignore_permissions=True)
 	se.submit()
-	frappe.db.set_value("POS Invoice", doc.name, "custom_recipe_stock_entry", se.name)
+	frappe.db.set_value(doc.doctype, doc.name, "custom_recipe_stock_entry", se.name)
+	doc.custom_recipe_stock_entry = se.name
 
 
 def on_pos_invoice_cancel(doc, method=None):
 	"""Cancel linked recipe stock entry."""
+	cancel_recipe_stock(doc)
+
+
+def cancel_recipe_stock(doc):
 	se_name = doc.get("custom_recipe_stock_entry")
 	if not se_name:
 		return

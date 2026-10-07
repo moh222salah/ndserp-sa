@@ -7,64 +7,88 @@ import frappe
 import unittest
 from nds_restaurant.api.kot import kot_execute
 from nds_restaurant.tests.test_helpers import (
+	begin_test_pos_cashier_session,
 	code,
 	cleanup_invoice_and_kots,
-	delete_if_exists,
-	delete_items,
-	ensure_pos_opening_entry,
-	get_pos_profile_with_restaurant,
+	end_test_pos_cashier_session,
+	ensure_test_branch,
+	ensure_test_menu,
+	ensure_test_pos_profile,
+	ensure_test_production_unit,
+	ensure_test_restaurant,
+	ensure_test_room,
+	ensure_test_table,
 	new_test_run_id,
+	register_standard_isolated_fixture_cleanup,
 )
 
 
 class TestKOTDiff(unittest.TestCase):
 	"""Test KOT diff with composite key."""
 
-	_table_snapshot_fields = ("occupied", "current_invoice", "latest_invoice_time")
-
 	@classmethod
 	def setUpClass(cls):
 		cls.run_id = new_test_run_id()
 		cls.item_codes = []
+		cls.menu_name = None
+		cls.restaurant_name = None
+		cls.room_name = None
+		cls.table_name = None
 		cls.production_unit_name = None
+		cls.pos_profile = None
+		register_standard_isolated_fixture_cleanup(cls)
 
-	@classmethod
-	def tearDownClass(cls):
 		frappe.set_user("Administrator")
-		delete_if_exists("NDS Production Unit", cls.production_unit_name)
-		delete_items(cls.item_codes)
+		cls.company = frappe.db.get_value("Company", {}, "name")
+		if not cls.company:
+			raise unittest.SkipTest("No Company in site")
+
+		cls.branch = ensure_test_branch(cls.run_id)
+		cls.item = cls._create_item("item")
+		cls.addon = cls._create_item("addon")
+		cls.menu_name = ensure_test_menu(
+			cls.run_id,
+			cls.branch,
+			[(cls.item.name, 100), (cls.addon.name, 25)],
+			menu_name=code(cls.run_id, "kot-menu"),
+		)
+		cls.restaurant_name = ensure_test_restaurant(
+			cls.run_id,
+			cls.branch,
+			cls.company,
+			active_menu=cls.menu_name,
+		)
+		cls.room_name = ensure_test_room(cls.run_id, cls.branch)
+		cls.table_name = ensure_test_table(
+			cls.run_id, cls.restaurant_name, cls.branch, cls.room_name
+		)
+		cls.pos_profile = ensure_test_pos_profile(cls.run_id, cls.restaurant_name)
+		if not cls.pos_profile:
+			raise unittest.SkipTest("No template POS Profile to clone")
+
+		warehouse = frappe.db.get_value("POS Profile", cls.pos_profile, "warehouse")
+		cls.production_unit_name = ensure_test_production_unit(
+			cls.run_id, cls.pos_profile, warehouse
+		)
 
 	def setUp(self):
 		frappe.set_user("Administrator")
 		self.created_invoices = []
-
-		self.item = self._create_item("item")
-		self.addon = self._create_item("addon")
-
-		self.pos_profile = get_pos_profile_with_restaurant()
 		if not self.pos_profile:
-			self.skipTest("No POS Profile with Restaurant linked")
-
-		self.opening_entry = ensure_pos_opening_entry(self.pos_profile)
-		self.production_unit = self._get_test_production_unit()
-		self.table = self._get_test_table()
-		self._table_snapshot = frappe.db.get_value(
-			"NDS Table",
-			self.table,
-			self._table_snapshot_fields,
-			as_dict=True,
+			self.skipTest("No test POS Profile")
+		self.opening_entry = begin_test_pos_cashier_session(
+			self.pos_profile, register_cleanup=self.addCleanup
 		)
 
 	def tearDown(self):
-		frappe.set_user("Administrator")
+		end_test_pos_cashier_session()
 		for invoice_name in list(self.created_invoices):
 			cleanup_invoice_and_kots(invoice_name)
-		if self.table and self._table_snapshot:
-			frappe.db.set_value("NDS Table", self.table, self._table_snapshot)
 
-	def _create_item(self, suffix):
-		item_code = code(self.run_id, suffix)
-		type(self).item_codes.append(item_code)
+	@classmethod
+	def _create_item(cls, suffix):
+		item_code = code(cls.run_id, suffix)
+		cls.item_codes.append(item_code)
 		if frappe.db.exists("Item", item_code):
 			return frappe.get_doc("Item", item_code)
 
@@ -75,30 +99,9 @@ class TestKOTDiff(unittest.TestCase):
 				"item_name": item_code,
 				"item_group": "Products",
 				"stock_uom": "Nos",
+				"is_stock_item": 0,
 			}
 		).insert(ignore_permissions=True)
-
-	def _get_test_production_unit(self):
-		unit_name = code(self.run_id, "kitchen")
-		if not frappe.db.exists("NDS Production Unit", unit_name):
-			warehouse = frappe.db.get_value("POS Profile", self.pos_profile, "warehouse")
-			frappe.get_doc(
-				{
-					"doctype": "NDS Production Unit",
-					"name": unit_name,
-					"pos_profile": self.pos_profile,
-					"warehouse": warehouse,
-					"item_groups": [{"item_group": "Products"}],
-				}
-			).insert(ignore_permissions=True)
-			type(self).production_unit_name = unit_name
-		return unit_name
-
-	def _get_test_table(self):
-		table_name = frappe.db.get_value("NDS Table", {}, "name")
-		if not table_name:
-			self.skipTest("No test table available")
-		return table_name
 
 	def _create_test_invoice(self, items):
 		"""Helper to create a test POS Invoice."""
@@ -108,7 +111,7 @@ class TestKOTDiff(unittest.TestCase):
 				"pos_profile": self.pos_profile,
 				"company": frappe.db.get_value("POS Profile", self.pos_profile, "company"),
 				"customer": frappe.db.get_value("Customer", {}, "name"),
-				"custom_nds_table": self.table,
+				"custom_nds_table": self.table_name,
 				"items": items,
 			}
 		)

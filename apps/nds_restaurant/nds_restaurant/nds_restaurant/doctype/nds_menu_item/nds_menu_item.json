@@ -10,6 +10,7 @@
   "course",
   "special_dish",
   "disabled",
+  "show_standalone",
   "variants",
   "addons"
  ],
@@ -58,6 +59,13 @@
    "in_list_view": 1
   },
   {
+   "default": "0",
+   "description": "Show this item as its own card even when it is a variant or add-on of another menu item. When set on an item that has variants, the base item can also be sold.",
+   "fieldname": "show_standalone",
+   "fieldtype": "Check",
+   "label": "Show as Standalone Card"
+  },
+  {
    "fieldname": "variants",
    "fieldtype": "Small Text",
    "label": "Variants (deprecated - use Item child tables)",
@@ -85,6 +93,6 @@
  "owner": "Administrator",
  "modified_by": "Administrator",
  "creation": "2026-09-24 00:00:00.000000",
- "modified": "2026-09-24 00:00:00.000000",
+ "modified": "2026-10-06 19:00:00.000000",
  "permissions": []
 }

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-export default function PayView({ total, payments, pay, setView, context }) {
+export default function PayView({ total, payments, pay, setView, context, needsPrint = false, onPrintBill }) {
   const enableDiscount = context?.settings?.enable_discount;
   const [discountType, setDiscountType] = useState("percent"); // 'percent' or 'amount'
   const [discountVal, setDiscountVal] = useState(0);
@@ -69,13 +69,27 @@ export default function PayView({ total, payments, pay, setView, context }) {
           </div>
         )}
 
+        {needsPrint && (
+          <div className="mb-3 rounded-lg border border-amber-500/40 bg-amber-500/10 p-3">
+            <p className="text-amber-300 text-sm mb-2">Please print invoice before making payment.</p>
+            <button
+              type="button"
+              onClick={onPrintBill}
+              className="w-full py-2 rounded bg-blue-600 hover:bg-blue-500 text-white text-sm font-semibold"
+            >
+              Print bill
+            </button>
+          </div>
+        )}
+
         {/* Payment Buttons */}
         <div className="space-y-2">
           {(payments || []).map((p) => (
             <button
               key={p.mode_of_payment}
               onClick={() => handlePay(p.mode_of_payment)}
-              className="w-full py-3 rounded bg-amber-500 text-black font-semibold hover:bg-amber-400 transition"
+              disabled={needsPrint}
+              className="w-full py-3 rounded bg-amber-500 text-black font-semibold hover:bg-amber-400 transition disabled:opacity-40 disabled:cursor-not-allowed"
             >
               Pay {finalTotal.toFixed(2)} SAR with {p.mode_of_payment}
             </button>

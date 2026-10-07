@@ -1,0 +1,23 @@
+{
+ "align_labels_right": 0,
+ "creation": "2026-10-06 21:00:00.000000",
+ "css": "@page { size: 80mm auto; margin: 0; }\n.print-format { width: 72mm; padding: 2mm; font-family: monospace; font-size: 13px; }\n.kot .unit { text-align: center; font-weight: bold; font-size: 15px; text-transform: uppercase; }\n.kot .banner { text-align: center; font-weight: bold; font-size: 16px; margin: 2mm 0; padding: 1mm 0; border-top: 2px solid #000; border-bottom: 2px solid #000; }\n.kot .banner-cancel { background: #000; color: #fff; }\n.kot .order-no { text-align: center; font-size: 22px; font-weight: bold; margin: 1mm 0; }\n.kot table { width: 100%; border-collapse: collapse; }\n.kot .meta td { padding: 0.5mm 0; vertical-align: top; }\n.kot .meta td:first-child { width: 20mm; }\n.kot .meta .big { font-size: 16px; font-weight: bold; }\n.kot .items { margin-top: 2mm; border-top: 1px dashed #000; }\n.kot .items td { padding: 1mm 0; vertical-align: top; border-bottom: 1px dashed #ccc; }\n.kot .items .qty { width: 10mm; font-weight: bold; font-size: 15px; }\n.kot .items .item td { font-size: 14px; }\n.kot .items .addon td { padding-left: 2mm; font-size: 12px; }\n.kot .was { font-size: 11px; }\n.kot .note { font-size: 12px; font-style: italic; }\n.kot .comments { margin-top: 2mm; padding-top: 1mm; border-top: 1px dashed #000; font-size: 12px; }",
+ "custom_format": 1,
+ "disabled": 0,
+ "doc_type": "NDS KOT",
+ "docstatus": 0,
+ "doctype": "Print Format",
+ "html": "{%- macro q(v) -%}{%- set f = frappe.utils.flt(v) -%}{{ f|int if f == f|int else f }}{%- endmacro -%}\n{%- set kot_type = doc.kot_type or \"New Order\" -%}\n{%- set is_cancel = kot_type in (\"Cancelled\", \"Partially Cancelled\") -%}\n{%- set banners = {\n\t\"Cancelled\": \"*** CANCELLED ***\",\n\t\"Partially Cancelled\": \"*** PARTIAL CANCEL ***\",\n\t\"Duplicate\": \"*** DUPLICATE ***\",\n\t\"Transfer\": \"*** TRANSFER ***\",\n\t\"Modified\": \"MODIFIED\",\n} -%}\n<div class=\"kot\">\n\t<div class=\"unit\">{{ doc.production_unit or \"\" }}</div>\n\t{% if banners.get(kot_type) %}\n\t<div class=\"banner {{ 'banner-cancel' if is_cancel else '' }}\">{{ banners.get(kot_type) }}</div>\n\t{% endif %}\n\t{% if doc.daily_order_no %}\n\t<div class=\"order-no\">#{{ doc.daily_order_no }}</div>\n\t{% endif %}\n\t<table class=\"meta\">\n\t\t<tr><td>KOT</td><td>{{ doc.name }}</td></tr>\n\t\t{% if kot_type == \"Duplicate\" and doc.original_kot %}\n\t\t<tr><td>Copy of</td><td>{{ doc.original_kot }}</td></tr>\n\t\t{% endif %}\n\t\t{% if doc.table %}\n\t\t<tr><td>Table</td><td class=\"big\">{{ doc.table }}</td></tr>\n\t\t{% endif %}\n\t\t<tr><td>Type</td><td>{{ doc.order_type or \"Dine In\" }}</td></tr>\n\t\t{% if doc.customer_name %}\n\t\t<tr><td>Customer</td><td>{{ doc.customer_name }}</td></tr>\n\t\t{% endif %}\n\t\t{% if doc.user %}\n\t\t<tr><td>By</td><td>{{ frappe.db.get_value(\"User\", doc.user, \"full_name\") or doc.user }}</td></tr>\n\t\t{% endif %}\n\t\t<tr><td>Time</td><td>{{ frappe.utils.format_datetime(doc.creation, \"dd/MM HH:mm\") }}</td></tr>\n\t</table>\n\t<table class=\"items\">\n\t\t{% for item in doc.items %}\n\t\t{%- set old = item.old_qty or 0 -%}\n\t\t{%- set cancelled = (old - item.qty) if old > item.qty else 0 -%}\n\t\t<tr class=\"{{ 'addon' if item.is_addon else 'item' }}\">\n\t\t\t<td class=\"qty\">\n\t\t\t\t{%- if is_cancel or (old and not item.qty) -%}\n\t\t\t\t\t-{{ q(item.cancelled_qty or cancelled) }}\n\t\t\t\t{%- else -%}\n\t\t\t\t\t{{ q(item.qty) }}\n\t\t\t\t{%- endif -%}\n\t\t\t</td>\n\t\t\t<td>\n\t\t\t\t{{ \"+ \" if item.is_addon else \"\" }}{{ item.item_name or item.item }}\n\t\t\t\t{% if not is_cancel and old and not item.qty %}\n\t\t\t\t<span class=\"was\">(removed)</span>\n\t\t\t\t{% elif not is_cancel and kot_type != \"Duplicate\" and old and old != item.qty %}\n\t\t\t\t<span class=\"was\">(was {{ q(old) }})</span>\n\t\t\t\t{% endif %}\n\t\t\t\t{% if item.comments %}<div class=\"note\">&raquo; {{ item.comments }}</div>{% endif %}\n\t\t\t</td>\n\t\t</tr>\n\t\t{% endfor %}\n\t</table>\n\t{% if doc.comments %}\n\t<div class=\"comments\">{{ doc.comments }}</div>\n\t{% endif %}\n</div>\n",
+ "line_breaks": 0,
+ "modified": "2026-10-06 21:00:00.000000",
+ "module": "NDS Restaurant",
+ "name": "NDS KOT",
+ "owner": "Administrator",
+ "print_format_builder": 0,
+ "print_format_builder_beta": 0,
+ "print_format_type": "Jinja",
+ "raw_commands": 0,
+ "raw_printing": 0,
+ "show_section_headings": 0,
+ "standard": "Yes"
+}

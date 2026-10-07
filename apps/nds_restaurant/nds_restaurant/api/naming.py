@@ -58,8 +58,11 @@ def set_pos_invoice_naming(doc, method=None):
 				)
 				return
 			
-			# Only override if naming_series is empty or the standard default
-			if not doc.naming_series or doc.naming_series.startswith("ACC-PINV-"):
+			# Only override if naming_series is empty or the standard ERPNext POS default
+			standard_pos_series = ("ACC-PINV-", "ACC-PSINV-")
+			if not doc.naming_series or any(
+				doc.naming_series.startswith(prefix) for prefix in standard_pos_series
+			):
 				doc.naming_series = f"{prefix}-.YY.-.#####"
 	
 	except Exception as e:

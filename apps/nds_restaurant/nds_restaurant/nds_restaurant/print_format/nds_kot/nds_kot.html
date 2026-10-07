@@ -1,0 +1,63 @@
+{%- macro q(v) -%}{%- set f = frappe.utils.flt(v) -%}{{ f|int if f == f|int else f }}{%- endmacro -%}
+{%- set kot_type = doc.kot_type or "New Order" -%}
+{%- set is_cancel = kot_type in ("Cancelled", "Partially Cancelled") -%}
+{%- set banners = {
+	"Cancelled": "*** CANCELLED ***",
+	"Partially Cancelled": "*** PARTIAL CANCEL ***",
+	"Duplicate": "*** DUPLICATE ***",
+	"Transfer": "*** TRANSFER ***",
+	"Modified": "MODIFIED",
+} -%}
+<div class="kot">
+	<div class="unit">{{ doc.production_unit or "" }}</div>
+	{% if banners.get(kot_type) %}
+	<div class="banner {{ 'banner-cancel' if is_cancel else '' }}">{{ banners.get(kot_type) }}</div>
+	{% endif %}
+	{% if doc.daily_order_no %}
+	<div class="order-no">#{{ doc.daily_order_no }}</div>
+	{% endif %}
+	<table class="meta">
+		<tr><td>KOT</td><td>{{ doc.name }}</td></tr>
+		{% if kot_type == "Duplicate" and doc.original_kot %}
+		<tr><td>Copy of</td><td>{{ doc.original_kot }}</td></tr>
+		{% endif %}
+		{% if doc.table %}
+		<tr><td>Table</td><td class="big">{{ doc.table }}</td></tr>
+		{% endif %}
+		<tr><td>Type</td><td>{{ doc.order_type or "Dine In" }}</td></tr>
+		{% if doc.customer_name %}
+		<tr><td>Customer</td><td>{{ doc.customer_name }}</td></tr>
+		{% endif %}
+		{% if doc.user %}
+		<tr><td>By</td><td>{{ frappe.db.get_value("User", doc.user, "full_name") or doc.user }}</td></tr>
+		{% endif %}
+		<tr><td>Time</td><td>{{ frappe.utils.format_datetime(doc.creation, "dd/MM HH:mm") }}</td></tr>
+	</table>
+	<table class="items">
+		{% for item in doc.items %}
+		{%- set old = item.old_qty or 0 -%}
+		{%- set cancelled = (old - item.qty) if old > item.qty else 0 -%}
+		<tr class="{{ 'addon' if item.is_addon else 'item' }}">
+			<td class="qty">
+				{%- if is_cancel or (old and not item.qty) -%}
+					-{{ q(item.cancelled_qty or cancelled) }}
+				{%- else -%}
+					{{ q(item.qty) }}
+				{%- endif -%}
+			</td>
+			<td>
+				{{ "+ " if item.is_addon else "" }}{{ item.item_name or item.item }}
+				{% if not is_cancel and old and not item.qty %}
+				<span class="was">(removed)</span>
+				{% elif not is_cancel and kot_type != "Duplicate" and old and old != item.qty %}
+				<span class="was">(was {{ q(old) }})</span>
+				{% endif %}
+				{% if item.comments %}<div class="note">&raquo; {{ item.comments }}</div>{% endif %}
+			</td>
+		</tr>
+		{% endfor %}
+	</table>
+	{% if doc.comments %}
+	<div class="comments">{{ doc.comments }}</div>
+	{% endif %}
+</div>
