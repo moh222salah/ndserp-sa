@@ -4,6 +4,8 @@ set -Eeuo pipefail
 ROOT="/workspaces/ndserp-sa"
 cd "$ROOT"
 
+sudo service mariadb start >/tmp/ndserp-sa-mariadb-start.log 2>&1 || true
+
 if ! ss -ltn 2>/dev/null | grep -q ':6000 '; then
   nohup bench start >/tmp/ndserp-sa-codespace.log 2>&1 &
   echo $! >/tmp/ndserp-sa-codespace.pid
