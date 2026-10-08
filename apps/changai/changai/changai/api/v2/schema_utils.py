@@ -13,8 +13,6 @@ from sqlglot import exp, optimizer
 from sqlglot.errors import ParseError, OptimizeError
 from sqlglot.optimizer.qualify import qualify
 from sqlglot.schema import MappingSchema
-import jellyfish
-from rapidfuzz import fuzz, process
 _VALUE_TO_FIELD = {}
 CHANGAI_GUIDE_LINK="https://app.erpgulf.com/en/articles/chang-ai-quick-start-guide"
 ERPGULF_LINK = "https://app.erpgulf.com/en/products/chang-ai-an-ai-agent"
@@ -50,6 +48,7 @@ def get_report_filter_fields(report_name: str):
     return "|".join(dict.fromkeys(fieldnames))
 
 def match_report_intent(report_intent: str):
+    from rapidfuzz import fuzz, process
     choices = list(REPORT_INTENT_MAP.keys())
     match = process.extractOne(
         report_intent.lower(),
@@ -64,6 +63,7 @@ def match_report_intent(report_intent: str):
 
 def phonetic_bucket():
     global _PHONETIC_BUCKETS, _VALUE_TO_FIELD
+    import jellyfish
     from changai.changai.api.v2.auto_gen_api import _read_filedoctype
     master_data_content = _read_filedoctype("master_data.yaml")
     master_items = master_data_content["data"]
@@ -91,6 +91,7 @@ def phonetic_bucket():
 
 @frappe.whitelist(allow_guest=False)
 def phonetic_match(isreport: bool, word: str, threshold: int = 60):
+    from rapidfuzz import process
     global _PHONETIC_BUCKETS, _VALUE_TO_FIELD
     original_word = word
     candidates = []
