@@ -60,5 +60,12 @@ jobs:
           grep -q 'login?_lang=ar' runtime-refresh.sh
           echo "LOGIN_ARABIC_LABELS_SOURCE=PASS"
 
+      - name: Verify explicit login template language source
+        run: |
+          grep -q 'context["login_language"]' apps/frappe/frappe/www/login.py
+          grep -q 'login_language == "ar"' apps/frappe/frappe/www/login.html
+          grep -q 'login?_lang=ar' runtime-refresh.sh
+          echo "LOGIN_TEMPLATE_LANGUAGE_SOURCE=PASS"
+
       - name: Git whitespace check
         run: git diff --check
