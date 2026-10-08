@@ -74,8 +74,7 @@ function cleanWorkspaceSectionLabel(value) {
   // NDS custom workspaces use a visible "NDS ERP" suffix. It is branding
   // inside the Workspace label, not part of the browser-tab section name.
   return translated
-    .replace(/\\s+NDS ERP\\s*$/i, "")
-    .replace(/\\s+NDSER?P\\s*$/i, "")
+    .replace(/\s+NDS ERP\s*$/i, "")
     .trim();
 }
 
