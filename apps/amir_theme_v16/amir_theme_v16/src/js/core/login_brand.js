@@ -52,8 +52,18 @@ function isLoginPage() {
 // Forgot Password is rendered inside the same public login shell, but it must
 // NOT use the Login split-screen decorator. Its native Frappe card is styled
 // separately by SCSS so auth markup and the existing submit flow stay intact.
+function activeLoginRoute() {
+	const hash = (location.hash || "").replace(/^#/, "");
+	if (!hash) return "login";
+	return hash.replaceAll("-", "_");
+}
+
 function isForgotPasswordPage() {
-	return !!document.querySelector(".for-forgot, .form-forgot");
+	return activeLoginRoute() === "forgot";
+}
+
+function isEmailLoginLinkPage() {
+	return activeLoginRoute() === "login_with_email_link";
 }
 
 function curLang() {
@@ -193,6 +203,21 @@ function buildBrandPanel(s) {
 }
 
 let forgotDecorated = false;
+let emailLoginLinkDecorated = false;
+
+async function decorateEmailLoginLink() {
+	if (emailLoginLinkDecorated) return release();
+
+	const settings = await fetchSettings();
+	if (!settings || !settings.enabled) return release();
+
+	document.documentElement.classList.add("amt-lb-on");
+	if (settings.accent_color) {
+		document.documentElement.style.setProperty("--amt-lb-accent-global", settings.accent_color);
+	}
+	emailLoginLinkDecorated = true;
+	release();
+}
 
 async function decorateForgotPassword() {
 	if (forgotDecorated) return release();
@@ -320,6 +345,10 @@ export const loginBrand = {
 				decorateForgotPassword().catch(release);
 				return;
 			}
+			if (isEmailLoginLinkPage()) {
+				decorateEmailLoginLink().catch(release);
+				return;
+			}
 			decorate().catch(release);
 		};
 		if (document.readyState === "loading") {
@@ -329,5 +358,6 @@ export const loginBrand = {
 		}
 		setTimeout(run, 600);
 		setTimeout(run, 1500);
+		window.addEventListener("hashchange", run);
 	},
 };
