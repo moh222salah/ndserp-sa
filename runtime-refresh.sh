@@ -33,6 +33,14 @@ echo "SOURCE_HEAD_SHORT=$(git rev-parse --short HEAD)"
 bench build --app amir_theme_v16 --production
 bash apps/amir_theme_v16/scripts/harden_assets.sh
 
+ASSET_ROOT="$ROOT/apps/amir_theme_v16/amir_theme_v16/public/dist"
+if grep -RIl --exclude="*.map" "amt-lb-language" "$ASSET_ROOT" >/dev/null 2>&1; then
+  echo "LOGIN_ASSET_CODE=PASS"
+else
+  echo "LOGIN_ASSET_CODE=FAIL"
+  exit 3
+fi
+
 # Cache clear only; no schema migration and no database data mutation.
 bench --site "$SITE" clear-cache
 
