@@ -62,10 +62,22 @@ jobs:
 
       - name: Verify explicit login template language source
         run: |
-          grep -q 'context["login_language"]' apps/frappe/frappe/www/login.py
-          grep -q 'login_language == "ar"' apps/frappe/frappe/www/login.html
+          grep -Fq 'context["login_language"]' apps/frappe/frappe/www/login.py
+          grep -Fq 'login_language == "ar"' apps/frappe/frappe/www/login.html
           grep -q 'login?_lang=ar' runtime-refresh.sh
           echo "LOGIN_TEMPLATE_LANGUAGE_SOURCE=PASS"
+
+
+
+      - name: Verify Forgot Password visual isolation
+        run: |
+          grep -Fq 'function isForgotPasswordPage()' apps/amir_theme_v16/amir_theme_v16/src/js/core/login_brand.js
+          grep -Fq 'if (isForgotPasswordPage())' apps/amir_theme_v16/amir_theme_v16/src/js/core/login_brand.js
+          grep -Fq '.for-forgot {' apps/amir_theme_v16/amir_theme_v16/src/scss/login_brand.bundle.scss
+          grep -Fq 'align-items: center !important;' apps/amir_theme_v16/amir_theme_v16/src/scss/login_brand.bundle.scss
+          grep -Fq 'justify-content: center !important;' apps/amir_theme_v16/amir_theme_v16/src/scss/login_brand.bundle.scss
+          grep -Fq 'max-width: 400px !important;' apps/amir_theme_v16/amir_theme_v16/src/scss/login_brand.bundle.scss
+          echo "FORGOT_PASSWORD_UI_SOURCE=PASS"
 
       - name: Git whitespace check
         run: git diff --check
