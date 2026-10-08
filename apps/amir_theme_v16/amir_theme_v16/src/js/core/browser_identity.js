@@ -84,6 +84,15 @@ function getCurrentModule() {
 
   const route = getCurrentRoute();
 
+  // The main Desk route is the Home section even when Frappe exposes an
+  // empty route array during initial Desk rendering.
+  if (
+    (location.pathname === "/desk" || location.pathname === "/desk/") &&
+    route.length === 0
+  ) {
+    return currentLanguage() === "ar" ? "الرئيسية" : "Home";
+  }
+
   // For NDS custom Workspace routes, the visible Workspace label is the
   // authoritative section name. Their database module is "Ndserp", which is
   // an app namespace and must never leak into the browser tab.
