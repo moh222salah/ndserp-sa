@@ -301,7 +301,7 @@ async function decorateForgotPassword() {
 		{
 			titleAr: "نسيت كلمة المرور؟",
 			titleEn: "Forgot Password?",
-			subAr: "أدخل بريدك الإلكتروني وسنرسل لك رابط إعادة تعيين كلمة المرور.",
+			subAr: "أدخل بريدك الإلكتروني لإعادة تعيين كلمة المرور.",
 			subEn: "Enter your email and we'll send you a password reset link."
 		}
 	);
@@ -312,7 +312,7 @@ async function decorateEmailLoginLink() {
 		".for-login-with-email-link",
 		emailLoginLinkState,
 		{
-			titleAr: "تسجيل الدخول عبر رابط البريد الإلكتروني",
+			titleAr: "تسجيل الدخول عبر البريد الإلكتروني",
 			titleEn: "Sign in with Email Link",
 			subAr: "أدخل بريدك الإلكتروني وسنرسل لك رابط تسجيل الدخول.",
 			subEn: "Enter your email and we'll send you a secure login link."
