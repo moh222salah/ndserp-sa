@@ -44,6 +44,10 @@ def get_context(context):
 	context.for_test = "login.html"
 	context["title"] = "Login"
 	context["hide_login"] = True  # dont show login link on login page again.
+	# The login page must render in the language explicitly requested by the
+	# current URL, independently of any existing/stale session language.
+	requested_lang = (frappe.form_dict.get("_lang") or frappe.local.lang or "en").lower()
+	context["login_language"] = "ar" if requested_lang.startswith("ar") else "en"
 	context["provider_logins"] = []
 	context["disable_signup"] = cint(frappe.get_website_settings("disable_signup"))
 	context["show_footer_on_login"] = cint(frappe.get_website_settings("show_footer_on_login"))
