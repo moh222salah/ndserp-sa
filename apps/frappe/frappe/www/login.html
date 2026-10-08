@@ -18,7 +18,7 @@
 		<span></span>
 	</div>
 	<div class="form-group">
-		<label class="form-label" for="login_email">{{ login_label or login_text("البريد الإلكتروني", "Email") }}</label>
+		<label class="form-label" for="login_email">{{ login_text("البريد الإلكتروني", login_label or "Email") }}</label>
 		<div class="email-field">
 			<input type="text" id="login_email" class="form-control"
 				placeholder="{% if login_name_placeholder %}{{ login_name_placeholder  }}{% else %}{{ _('jane@example.com') }}{% endif %}"
