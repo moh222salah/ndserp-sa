@@ -83,7 +83,7 @@
 
 // Frappe ships "violet" and "purple" as two DISTINCT hue families (not
 // aliases) — both are used across the CARD_ICONS map, so both must be listed.
-$amt-card-hues: blue, teal, violet, purple, orange, pink, green, gray, cyan, amber, red;
+$amt-card-hues: "blue", "teal", "violet", "purple", "orange", "pink", "green", "gray", "cyan", "amber", "red";
 @each $hue in $amt-card-hues {
 	.amt-card-icon[data-hue="#{$hue}"] {
 		color: var(--#{$hue}-600);
