@@ -110,7 +110,8 @@ fi
 if grep -q 'margin-top:0' "$LOGIN_CSS_FILE" &&
    grep -q 'padding-top:0' "$LOGIN_CSS_FILE" &&
    grep -q 'page-content-wrapper' "$LOGIN_CSS_FILE" &&
-   grep -q '100dvh' "$LOGIN_CSS_FILE"; then
+   grep -q '100dvh' "$LOGIN_CSS_FILE" &&
+   grep -q 'body:has(.for-login)' "$LOGIN_CSS_FILE"; then
   echo "TOP_GAP_CSS_SERVED=PASS"
 else
   echo "TOP_GAP_CSS_SERVED=FAIL"
@@ -124,6 +125,14 @@ elif grep -q '/assets/amir_theme_v16/dist/js/login_brand.bundle' "$LOGIN_HTML"; 
 else
   echo "LOGIN_LANGUAGE_MARKUP_REFERENCE=FAIL"
   exit 8
+fi
+
+if grep -q 'border-radius:30px' "$LOGIN_CSS_FILE" &&
+   grep -q 'border-radius:24px' "$LOGIN_CSS_FILE"; then
+  echo "BRAND_IMAGE_FRAME_ROUNDED=PASS"
+else
+  echo "BRAND_IMAGE_FRAME_ROUNDED=FAIL"
+  exit 10
 fi
 
 if curl -fsS -o /dev/null -w "LOGIN_HTTP=%{http_code}\n" "http://127.0.0.1:${PORT}/login"; then
