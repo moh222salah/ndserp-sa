@@ -119,6 +119,9 @@ jobs:
           grep -Fq 'color: #0a2342;' apps/amir_theme_v16/amir_theme_v16/src/scss/components/_modern-header.scss
           grep -Fq 'prefers-reduced-motion: reduce' apps/amir_theme_v16/amir_theme_v16/src/scss/components/_modern-header.scss
           grep -Fq 'MODERN_HEADER_CSS=PASS' codespace-runtime-sync.sh
+          grep -Fq 'required_header_markers = ("body .navbar", "58px", "#0a2342")' codespace-runtime-sync.sh
+          grep -Fq 'required_header_markers = ("body .navbar", "58px", "#0a2342")' codespace-bootstrap.sh
+          grep -Fq "for marker in 'body .navbar' '58px' '#0a2342'; do" codespace-verify-runtime.sh
           grep -Fq 'MODERN_HEADER_CSS=FAIL:MISSING_MARKERS:' codespace-runtime-sync.sh
           grep -Fq 'SERVED_HEADER_CSS=PASS' codespace-verify-runtime.sh
           grep -Fq 'HEADER_RUNTIME_VERIFICATION=PASS' codespace-verify-runtime.sh
