@@ -139,7 +139,7 @@ cfg.update({
     "default_site": "ndserpsa.nds-sa.com",
     "serve_default_site": True,
     "dns_multitenant": True,
-    "webserver_port": 6000,
+    "webserver_port": 8080,
     "socketio_port": 9000,
     "file_watcher_port": 6787,
     "redis_cache": "redis://127.0.0.1:13000",
