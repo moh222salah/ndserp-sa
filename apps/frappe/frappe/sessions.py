@@ -277,6 +277,8 @@ class Session:
 					"session_expiry": get_expiry_period(),
 					"full_name": self.full_name,
 					"user_type": self.user_type,
+					# Persist the language selected on the login page in this session.
+					"lang": str(frappe.local.lang),
 				}
 			)
 
@@ -329,7 +331,9 @@ class Session:
 			self.start_as_guest()
 
 		if self.sid != "Guest":
-			frappe.local.lang = frappe.translate.get_user_lang(self.data.user)
+			# The active session language takes precedence over the user's profile language.
+			# Fall back for legacy sessions that do not have a stored session language.
+			frappe.local.lang = self.data.data.get("lang") or frappe.translate.get_user_lang(self.data.user)
 
 	def get_session_record(self):
 		"""get session record, or return the standard Guest Record"""
