@@ -43,11 +43,23 @@ for key in required:
         raise SystemExit(f"ASSET_VERIFY=FAIL:MISSING_MAPPING:{key}")
     target = root / rel.lstrip("/")
     if not target.is_file():
+        # Frappe's built public assets live under sites/assets, not repository/assets.
+        site_target = root / "sites" / rel.lstrip("/")
+        if site_target.is_file():
+            target = site_target
+    if not target.is_file():
         raise SystemExit(f"ASSET_VERIFY=FAIL:MISSING_FILE:{key}:{target}")
     digest = hashlib.sha256(target.read_bytes()).hexdigest()
     print(f"ASSET_VERIFIED={key}")
     print(f"ASSET_PATH={rel}")
     print(f"ASSET_SHA256={digest}")
+    if key == "amir_theme.bundle.css":
+        css = target.read_text(encoding="utf-8").lower()
+        required_header_markers = (".navbar", "58px", "#0a2342")
+        missing = [marker for marker in required_header_markers if marker not in css]
+        if missing:
+            raise SystemExit("MODERN_HEADER_CSS=FAIL:MISSING_MARKERS:" + ",".join(missing))
+        print("MODERN_HEADER_CSS=PASS")
     if key == "amir_theme.bundle.css":
         css = target.read_text(encoding="utf-8").lower()
         required_header_markers = (".navbar", "58px", "#0a2342")
