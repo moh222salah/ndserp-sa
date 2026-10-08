@@ -795,10 +795,17 @@ html.amt-lb-on .main-section,
 html.amt-lb-on .page-head,
 html.amt-lb-on .page-head-content,
 html.amt-lb-on .login-content,
-html.amt-lb-on .page-card-container {
+html.amt-lb-on .page-card-container,
+html.amt-lb-on body .page-content-wrapper {
 	margin-top: 0 !important;
 	padding-top: 0 !important;
 	top: 0;
+}
+
+html.amt-lb-on body .page-content-wrapper {
+	min-height: 100svh !important;
+	min-height: 100dvh !important;
+	height: auto !important;
 }
 
 .amt-lb-split {
