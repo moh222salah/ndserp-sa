@@ -185,8 +185,7 @@ doc_events = {
 
 # also runs after bench migrate
 on_session_creation = [
-    "changai.changai.api.v2.retrieve.load_on_startup",
-    "changai.changai.api.v2.schema_utils.reload_mapping_schema_cache"
+    "changai.login_safe_session.on_session_creation"
 ]
 
 
