@@ -42,7 +42,7 @@ LOCAL_CSS="$(mktemp)"
 SERVED_CSS="$(mktemp)"
 trap 'rm -f "$LOCAL_CSS" "$SERVED_CSS"' EXIT
 tr '[:upper:]' '[:lower:]' < "$LOCAL_ASSET" > "$LOCAL_CSS"
-for marker in '.navbar' '58px' '#0a2342'; do
+for marker in 'body .navbar' '58px' '#0a2342'; do
   if ! grep -Fq "$marker" "$LOCAL_CSS"; then
     echo "BUILT_HEADER_CSS=FAIL:MISSING_MARKER:$marker"
     exit 13
@@ -66,7 +66,7 @@ if [ "$READY" -ne 1 ]; then
 fi
 
 tr '[:upper:]' '[:lower:]' < "$SERVED_CSS" > "$LOCAL_CSS"
-for marker in '.navbar' '58px' '#0a2342'; do
+for marker in 'body .navbar' '58px' '#0a2342'; do
   if ! grep -Fq "$marker" "$LOCAL_CSS"; then
     echo "SERVED_HEADER_CSS=FAIL:MISSING_MARKER:$marker"
     exit 15
