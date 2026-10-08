@@ -5,7 +5,7 @@
 {% endif %}
 {% endblock %}
 {% macro login_text(ar, en) -%}
-{% if frappe.local.lang and frappe.local.lang.startswith("ar") %}{{ ar }}{% else %}{{ en }}{% endif %}
+{% if (frappe.form_dict._lang and frappe.form_dict._lang.startswith("ar")) or (frappe.local.lang and frappe.local.lang.startswith("ar")) %}{{ ar }}{% else %}{{ en }}{% endif %}
 {%- endmacro %}
 
 {% macro email_login_body() -%}
