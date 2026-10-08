@@ -1335,3 +1335,251 @@ html.amt-lb-on[data-theme="dark"] .for-forgot .form-forgot input.form-control {
 		max-width: 180px !important;
 	}
 }
+
+
+/* ========================================================================
+   EMAIL LOGIN LINK — SAME VISUAL SYSTEM AS FORGOT PASSWORD
+   ------------------------------------------------------------------------
+   UI/CSS only. The native Frappe email-link form, submit handler,
+   resend handler and authentication flow remain untouched.
+   ======================================================================== */
+
+html.amt-lb-on .for-login-with-email-link {
+	width: 100% !important;
+	min-height: 100svh !important;
+	min-height: 100dvh !important;
+	height: 100dvh !important;
+	margin: 0 !important;
+	padding: clamp(20px, 3vw, 48px) !important;
+	display: flex !important;
+	align-items: center !important;
+	justify-content: center !important;
+	box-sizing: border-box;
+	background:
+		radial-gradient(circle at 18% 18%, color-mix(in srgb, var(--amt-lb-accent) 12%, transparent), transparent 34%),
+		radial-gradient(circle at 84% 78%, rgba(37, 99, 235, .10), transparent 36%),
+		#f8fafc;
+}
+
+html.amt-lb-on .for-login-with-email-link .login-content {
+	position: relative;
+	isolation: isolate;
+	box-sizing: border-box;
+	width: min(100%, 400px) !important;
+	max-width: 400px !important;
+	min-height: 0 !important;
+	margin: auto !important;
+	padding: clamp(20px, 2.5vw, 32px) !important;
+	background: var(--amt-lb-card) !important;
+	border: 1px solid var(--amt-lb-border) !important;
+	border-radius: 18px !important;
+	box-shadow: 0 18px 50px rgba(15, 23, 42, .10) !important;
+}
+
+html.amt-lb-on .for-login-with-email-link .login-content::before {
+	display: none !important;
+}
+
+html.amt-lb-on .for-login-with-email-link .page-card-head {
+	display: flex !important;
+	flex-direction: column;
+	align-items: flex-start;
+	justify-content: flex-start;
+	gap: 6px;
+	margin: 0 0 clamp(16px, 2vw, 22px) !important;
+	padding: 0 !important;
+	background: transparent !important;
+	border: 0 !important;
+	box-shadow: none !important;
+	text-align: start;
+}
+
+html.amt-lb-on .for-login-with-email-link .page-card-head .app-logo {
+	display: block !important;
+	width: auto !important;
+	max-width: 190px !important;
+	height: 46px !important;
+	object-fit: contain;
+	margin: 0 !important;
+}
+
+html.amt-lb-on .for-login-with-email-link .page-card-head-text {
+	display: flex;
+	flex-direction: column;
+	align-items: flex-start;
+	gap: 6px;
+	width: 100%;
+}
+
+html.amt-lb-on .for-login-with-email-link .page-card-head-text h4 {
+	margin: 0 !important;
+	color: var(--amt-lb-ink) !important;
+	font-size: clamp(24px, 3vw, 30px) !important;
+	font-weight: 800 !important;
+	line-height: 1.2 !important;
+	letter-spacing: -.02em;
+}
+
+html.amt-lb-on .for-login-with-email-link .page-card-subtitle {
+	max-width: 330px;
+	margin: 0 !important;
+	color: var(--amt-lb-muted) !important;
+	font-size: 13.5px !important;
+	line-height: 1.65 !important;
+}
+
+html.amt-lb-on .for-login-with-email-link .form-login-with-email-link {
+	width: 100% !important;
+	margin: 0 !important;
+}
+
+html.amt-lb-on .for-login-with-email-link .form-login-with-email-link .page-card-body,
+html.amt-lb-on .for-login-with-email-link .form-login-with-email-link .page-card-actions {
+	width: 100% !important;
+	max-width: none !important;
+	margin: 0 !important;
+	padding: 0 !important;
+	background: transparent !important;
+	border: 0 !important;
+	box-shadow: none !important;
+}
+
+html.amt-lb-on .for-login-with-email-link .form-login-with-email-link .page-card-body {
+	padding-top: 2px !important;
+}
+
+html.amt-lb-on .for-login-with-email-link .form-login-with-email-link .form-group {
+	margin-bottom: 12px !important;
+}
+
+html.amt-lb-on .for-login-with-email-link .form-login-with-email-link .form-label {
+	margin-bottom: 6px !important;
+	color: #475569 !important;
+	font-size: 12.5px !important;
+	font-weight: 700 !important;
+}
+
+html.amt-lb-on .for-login-with-email-link .form-login-with-email-link input.form-control {
+	box-sizing: border-box;
+	width: 100% !important;
+	min-height: 44px !important;
+	padding: 10px 13px !important;
+	background: #fff !important;
+	border: 1px solid #dbe3ef !important;
+	border-radius: 12px !important;
+	color: #0f172a !important;
+	font-size: 14.5px !important;
+	box-shadow: none !important;
+	transition: border-color 120ms ease, box-shadow 120ms ease !important;
+}
+
+html.amt-lb-on .for-login-with-email-link .form-login-with-email-link input.form-control:focus {
+	border-color: var(--amt-lb-accent) !important;
+	box-shadow: 0 0 0 4px color-mix(in srgb, var(--amt-lb-accent) 16%, transparent) !important;
+	outline: 0 !important;
+}
+
+html.amt-lb-on .for-login-with-email-link .form-login-with-email-link .btn-login-with-email-link {
+	width: 100% !important;
+	min-height: 48px !important;
+	margin-top: 0 !important;
+	border: 0 !important;
+	border-radius: 12px !important;
+	background: var(--amt-lb-accent) !important;
+	color: #fff !important;
+	font-size: 14.5px !important;
+	font-weight: 800 !important;
+	box-shadow: 0 10px 24px color-mix(in srgb, var(--amt-lb-accent) 28%, transparent) !important;
+	transition: background-color 120ms ease, box-shadow 120ms ease !important;
+}
+
+html.amt-lb-on .for-login-with-email-link .form-login-with-email-link .btn-login-with-email-link:not(:disabled):hover {
+	background: color-mix(in srgb, var(--amt-lb-accent) 88%, #020617) !important;
+	box-shadow: 0 12px 30px color-mix(in srgb, var(--amt-lb-accent) 34%, transparent) !important;
+}
+
+html.amt-lb-on .for-login-with-email-link .form-login-with-email-link .btn-login-with-email-link:disabled {
+	opacity: .48;
+	cursor: not-allowed;
+}
+
+html.amt-lb-on .for-login-with-email-link .login-success-banner {
+	margin-bottom: 12px !important;
+}
+
+html.amt-lb-on .for-login-with-email-link .resend-link {
+	margin: 0 0 10px !important;
+	font-size: 12.5px !important;
+	line-height: 1.5 !important;
+}
+
+html.amt-lb-on .for-login-with-email-link .resend-link a {
+	font-weight: 800;
+	color: var(--amt-lb-accent) !important;
+	text-decoration: none;
+}
+
+html.amt-lb-on .for-login-with-email-link .resend-link a:hover {
+	text-decoration: underline;
+	text-underline-offset: 3px;
+}
+
+html.amt-lb-on .for-login-with-email-link .sign-up-message {
+	margin: 18px 0 0 !important;
+	padding-top: 16px;
+	border-top: 1px solid var(--amt-lb-border);
+	text-align: center !important;
+}
+
+html.amt-lb-on .for-login-with-email-link .sign-up-message a {
+	font-size: 13px;
+	font-weight: 800;
+	color: var(--amt-lb-accent) !important;
+	text-decoration: none;
+}
+
+html.amt-lb-on .for-login-with-email-link .sign-up-message a:hover {
+	text-decoration: underline;
+	text-underline-offset: 3px;
+}
+
+html.amt-lb-on .for-login-with-email-link .field-error {
+	margin-top: 6px !important;
+	font-size: 12px !important;
+}
+
+html.amt-lb-on[data-theme="dark"] .for-login-with-email-link,
+:root[data-theme="dark"] html.amt-lb-on .for-login-with-email-link {
+	background:
+		radial-gradient(circle at 18% 18%, color-mix(in srgb, var(--amt-lb-accent) 16%, transparent), transparent 34%),
+		#020617;
+}
+
+html.amt-lb-on[data-theme="dark"] .for-login-with-email-link .form-login-with-email-link input.form-control {
+	background: #0f172a !important;
+	border-color: #334155 !important;
+	color: #e5e7eb !important;
+}
+
+@media (max-width: 560px) {
+	html.amt-lb-on .for-login-with-email-link {
+		padding: 14px !important;
+	}
+
+	html.amt-lb-on .for-login-with-email-link .login-content {
+		width: 100% !important;
+		max-width: 400px !important;
+		border-radius: 18px !important;
+		padding: 20px !important;
+	}
+
+	html.amt-lb-on .for-login-with-email-link .page-card-head {
+		margin-bottom: 18px !important;
+	}
+
+	html.amt-lb-on .for-login-with-email-link .page-card-head .app-logo {
+		height: 41px !important;
+		max-width: 180px !important;
+	}
+}
+
