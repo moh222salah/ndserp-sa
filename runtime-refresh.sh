@@ -115,6 +115,15 @@ else
   exit 6
 fi
 
+LOGIN_JS_SOURCE="$ROOT/apps/frappe/frappe/templates/includes/login/login.js"
+if grep -q 'args._lang = login.get_active_language()' "$LOGIN_JS_SOURCE" &&
+   grep -q 'login.with_active_language' "$LOGIN_JS_SOURCE"; then
+  echo "LOGIN_LANGUAGE_HANDOFF=PASS"
+else
+  echo "LOGIN_LANGUAGE_HANDOFF=FAIL"
+  exit 13
+fi
+
 if grep -q 'margin-top:0' "$LOGIN_CSS_FILE" &&
    grep -q 'padding-top:0' "$LOGIN_CSS_FILE" &&
    grep -q 'page-content-wrapper' "$LOGIN_CSS_FILE" &&
