@@ -22,29 +22,29 @@ is_dirty() {
 sync_once() {
   git fetch origin main
 
-  local current remote
+  local current remote source_marker needs_build
   current="$(git rev-parse HEAD)"
   remote="$(git rev-parse origin/main)"
 
   echo "CODESPACE_HEAD=$current"
   echo "GITHUB_MAIN=$remote"
 
-  if [ "$current" = "$remote" ]; then
+  if [ "$current" != "$remote" ]; then
+    if is_dirty; then
+      echo "SOURCE_SYNC=BLOCKED_DIRTY_WORKTREE"
+      git status --short
+      return 0
+    fi
+
+    git switch main
+    git pull --ff-only origin main
+
+    current="$(git rev-parse HEAD)"
+    echo "SOURCE_SYNC=PASS"
+    echo "SOURCE_HEAD=$current"
+  else
     echo "SOURCE_SYNC=ALREADY_CURRENT"
-    return 0
   fi
-
-  if is_dirty; then
-    echo "SOURCE_SYNC=BLOCKED_DIRTY_WORKTREE"
-    git status --short
-    return 0
-  fi
-
-  git switch main
-  git pull --ff-only origin main
-
-  echo "SOURCE_SYNC=PASS"
-  echo "SOURCE_HEAD=$(git rev-parse HEAD)"
 
   echo "=== VERIFY AMIR THEME SITE APP ==="
   installed_apps="$(bench --site "$SITE" list-apps 2>/dev/null || true)"
@@ -59,19 +59,35 @@ sync_once() {
     return 22
   fi
 
-  echo "=== BUILD CURRENT AMIR THEME ASSETS ==="
-  bench build --app amir_theme_v16 --production
-  bash apps/amir_theme_v16/scripts/harden_assets.sh
-  bench --site "$SITE" clear-cache >/dev/null 2>&1 || true
+  source_marker=""
+  if [ -f "sites/.nds-runtime-source-head" ]; then
+    source_marker="$(cat sites/.nds-runtime-source-head)"
+  fi
 
-  mkdir -p sites
-  printf '%s\n' "$(git rev-parse HEAD)" > sites/.nds-runtime-source-head
+  needs_build=0
+  if [ "$source_marker" != "$current" ]; then
+    needs_build=1
+  fi
 
-  echo "ASSET_BUILD=PASS"
-  echo "SERVED_SOURCE_HEAD=$(cat sites/.nds-runtime-source-head)"
+  if [ "$needs_build" -eq 1 ]; then
+    echo "=== BUILD CURRENT AMIR THEME ASSETS ==="
+    bench build --app amir_theme_v16 --production
+    bash apps/amir_theme_v16/scripts/harden_assets.sh
+    bench --site "$SITE" clear-cache >/dev/null 2>&1 || true
+
+    mkdir -p sites
+    printf '%s\n' "$current" > sites/.nds-runtime-source-head
+
+    echo "ASSET_BUILD=PASS"
+    echo "SERVED_SOURCE_HEAD=$(cat sites/.nds-runtime-source-head)"
+  else
+    echo "ASSET_BUILD=ALREADY_CURRENT"
+  fi
+
   echo "DB_WRITE=NO"
   echo "MIGRATION=NO"
 }
+
 
 if [ "${1:-}" = "--once" ]; then
   sync_once
