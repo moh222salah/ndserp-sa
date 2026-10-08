@@ -88,6 +88,20 @@ if [ -n "$LOGIN_CSS_PATH" ]; then
     echo "LOGIN_CSS_PATH=$LOGIN_CSS_PATH"
     exit 4
   fi
+
+  if grep -q 'margin-top:0' "$LOGIN_CSS_FILE" &&
+     grep -q 'padding-top:0' "$LOGIN_CSS_FILE"; then
+    echo "TOP_GAP_CSS_SERVED=PASS"
+  else
+    echo "TOP_GAP_CSS_SERVED=FAIL"
+    echo "LOGIN_CSS_PATH=$LOGIN_CSS_PATH"
+    exit 6
+  fi
+  else
+    echo "RESPONSIVE_CSS_SERVED=FAIL"
+    echo "LOGIN_CSS_PATH=$LOGIN_CSS_PATH"
+    exit 4
+  fi
 else
   echo "RESPONSIVE_CSS_SERVED=FAIL"
   echo "LOGIN_CSS_PATH=NOT_FOUND"
