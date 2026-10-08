@@ -100,7 +100,8 @@ jobs:
       - name: Verify Codespace site activation loop
         run: |
           grep -Fq 'bench --site "$SITE" install-app amir_theme_v16' codespace-bootstrap.sh
-          grep -Fq 'bench --site "$SITE" install-app amir_theme_v16' codespace-runtime-sync.sh
+          grep -Fq 'AMIR_THEME_SITE_DB_WRITE=BLOCKED' codespace-runtime-sync.sh
+          grep -Fq 'SAFE_BOUNDARY=STOP_BEFORE_SITE_WRITE' codespace-runtime-sync.sh
           grep -Fq 'BENCH_APPS_REGISTRY=SYNCED' codespace-runtime-sync.sh
           grep -Fq 'ASSET_SERVE_TREE=PASS' codespace-bootstrap.sh
           grep -Fq 'ASSET_SERVE_TREE=PASS' codespace-runtime-sync.sh
