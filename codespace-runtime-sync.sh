@@ -121,6 +121,12 @@ sync_once() {
     current="$(git rev-parse HEAD)"
     echo "SOURCE_SYNC=PASS"
     echo "SOURCE_HEAD=$current"
+
+    # Re-exec the freshly pulled script so the active worker uses the current GitHub source immediately.
+    if [ "${RUNTIME_SYNC_REEXEC:-0}" != "1" ]; then
+      export RUNTIME_SYNC_REEXEC=1
+      exec bash "$ROOT/codespace-runtime-sync.sh"
+    fi
   else
     echo "SOURCE_SYNC=ALREADY_CURRENT"
   fi
