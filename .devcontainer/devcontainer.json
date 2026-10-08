@@ -2,7 +2,7 @@
   "name": "NDS ERP Saudi",
   "image": "mcr.microsoft.com/devcontainers/base:ubuntu-24.04",
   "postCreateCommand": "bash codespace-bootstrap.sh",
-  "postStartCommand": "bash -lc 'bash codespace-runtime-sync.sh --once && (pgrep -af "(^|[ /])bench start([ ]|$)" >/dev/null 2>&1 || (nohup bench start > logs/codespace-bench.log 2>&1 &))'",
+  "postStartCommand": "bash -lc 'bash codespace-runtime-sync.sh --once && (pgrep -af \"(^|[ /])bench start([ ]|$)\" >/dev/null 2>&1 || (nohup bench start > logs/codespace-bench.log 2>&1 &)) && bash codespace-verify-runtime.sh'",
   "forwardPorts": [8080],
   "portsAttributes": {
     "8080": {
