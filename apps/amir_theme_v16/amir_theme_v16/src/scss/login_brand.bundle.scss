@@ -1111,6 +1111,103 @@ html.amt-lb-on .page-card-container {
 
 
 
+
+
+/* ========================================================================
+   BRAND PANEL TEXT — FLUID NO-CROP FIT
+   ------------------------------------------------------------------------
+   Presentation-only. Keep every brand-panel text node inside the visual
+   frame across desktop, tablet and mobile without changing its content.
+   ======================================================================== */
+
+.amt-lb-panel {
+	box-sizing: border-box;
+	min-width: 0;
+	max-width: 100%;
+}
+
+.amt-lb-content {
+	box-sizing: border-box;
+	width: min(100%, 520px);
+	max-width: 100%;
+	min-width: 0;
+	margin-inline: auto;
+	overflow-wrap: anywhere;
+	word-break: normal;
+	hyphens: auto;
+}
+
+.amt-lb-title,
+.amt-lb-tagline,
+.amt-lb-desc,
+.amt-lb-contact {
+	max-width: 100%;
+	overflow-wrap: anywhere;
+	word-break: normal;
+}
+
+.amt-lb-title {
+	font-size: clamp(28px, 4.2vw, 54px);
+	line-height: clamp(1.08, 1.12, 1.18);
+}
+
+.amt-lb-tagline {
+	font-size: clamp(16px, 1.8vw, 22px);
+	line-height: 1.45;
+}
+
+.amt-lb-desc {
+	width: 100%;
+	max-width: 58ch;
+	font-size: clamp(13px, 1.2vw, 14.5px);
+	line-height: 1.75;
+}
+
+@media (max-width: 980px) {
+	.amt-lb-panel {
+		padding-inline: clamp(18px, 4vw, 30px);
+	}
+
+	.amt-lb-content {
+		width: min(100%, 620px);
+	}
+}
+
+@media (max-width: 560px) {
+	.amt-lb-panel {
+		padding-inline: 16px;
+	}
+
+	.amt-lb-content {
+		width: 100%;
+	}
+
+	.amt-lb-title {
+		font-size: clamp(25px, 8vw, 36px);
+		line-height: 1.12;
+	}
+
+	.amt-lb-tagline {
+		font-size: clamp(15px, 4.8vw, 18px);
+		line-height: 1.45;
+	}
+
+	.amt-lb-desc {
+		font-size: 13px;
+		line-height: 1.7;
+	}
+}
+
+@media (max-width: 380px) {
+	.amt-lb-panel {
+		padding-inline: 14px;
+	}
+
+	.amt-lb-title {
+		font-size: clamp(23px, 8vw, 31px);
+	}
+}
+
 /* ========================================================================
    FORGOT PASSWORD — VISUAL PARITY WITH LOGIN
    ------------------------------------------------------------------------
