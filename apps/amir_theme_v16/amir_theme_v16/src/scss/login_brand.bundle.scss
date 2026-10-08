@@ -795,14 +795,19 @@ html.amt-lb-on[data-theme="dark"] body {
    ======================================================================== */
 /* Apply the login shell reset from first paint, before JS mounts the branded UI. */
 body:has(.for-login) .page-content-wrapper,
-body:has(.for-login) .page-content-wrapper .page-breadcrumbs {
+body:has(.for-login) .page-content-wrapper .page-breadcrumbs,
+body:has(.for-forgot) .page-content-wrapper,
+body:has(.for-forgot) .page-content-wrapper .page-breadcrumbs {
 	margin-top: 0 !important;
 	padding-top: 0 !important;
 }
 
 body:has(.for-login) .navbar,
 body:has(.for-login) .page-breadcrumbs,
-body:has(.for-login) .web-footer {
+body:has(.for-login) .web-footer,
+body:has(.for-forgot) .navbar,
+body:has(.for-forgot) .page-breadcrumbs,
+body:has(.for-forgot) .web-footer {
 	display: none !important;
 }
 
