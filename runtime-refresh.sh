@@ -74,7 +74,7 @@ else
 fi
 
 LOGIN_HTML="/tmp/nds_runtime_refresh_login.html"
-if curl -fsS "http://127.0.0.1:${PORT}/login" -o "$LOGIN_HTML"; then
+if curl -fsS "http://127.0.0.1:8080/login" -o "$LOGIN_HTML"; then
   echo "LOGIN_PAGE_FETCH=PASS"
 else
   echo "LOGIN_PAGE_FETCH=FAIL"
@@ -95,7 +95,7 @@ fi
 
 echo "LOGIN_CSS_PATH=$LOGIN_CSS_PATH"
 LOGIN_CSS_FILE="/tmp/nds_runtime_refresh_login.css"
-curl -fsS "http://127.0.0.1:${PORT}\${LOGIN_CSS_PATH}" -o "$LOGIN_CSS_FILE"
+curl -fsS "http://127.0.0.1:8080${LOGIN_CSS_PATH}" -o "$LOGIN_CSS_FILE"
 
 if grep -q 'amt-lb-split' "$LOGIN_CSS_FILE" &&
    grep -q '100svh' "$LOGIN_CSS_FILE" &&
@@ -135,7 +135,7 @@ else
   exit 10
 fi
 
-if curl -fsS -o /dev/null -w "LOGIN_HTTP=%{http_code}\n" "http://127.0.0.1:${PORT}/login"; then
+if curl -fsS -o /dev/null -w "LOGIN_HTTP=%{http_code}\n" "http://127.0.0.1:8080/login"; then
   echo "LOGIN_HTTP=PASS"
 else
   echo "LOGIN_HTTP=FAIL_OR_SERVICE_NOT_RUNNING"
