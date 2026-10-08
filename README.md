@@ -25,7 +25,7 @@ After the container is created, the startup check launches the ERP with:
 
 and verifies:
 
-`http://127.0.0.1:6000/login`
+`http://127.0.0.1:8080/login`
 
 GitHub Codespaces browser access uses the forwarded port URL supplied by Codespaces; `127.0.0.1:8080` is the loopback address inside the Codespace container.
 
