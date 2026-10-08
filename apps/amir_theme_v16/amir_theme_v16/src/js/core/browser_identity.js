@@ -217,6 +217,35 @@ function desiredTitle() {
     : `${moduleLabel} | ${SYSTEM_NAME}`;
 }
 
+function installTitleGuard() {
+  if (window.__ndsBrowserTitleGuardInstalled) return;
+  window.__ndsBrowserTitleGuardInstalled = true;
+
+  const titleDescriptor = Object.getOwnPropertyDescriptor(
+    Document.prototype,
+    "title"
+  );
+
+  if (!titleDescriptor?.get || !titleDescriptor?.set) return;
+
+  Object.defineProperty(document, "title", {
+    configurable: true,
+    enumerable: titleDescriptor.enumerable,
+    get() {
+      return titleDescriptor.get.call(document);
+    },
+    set(value) {
+      const fixedTitle = fixedRouteTitle();
+      if (fixedTitle) {
+        titleDescriptor.set.call(document, fixedTitle);
+        return;
+      }
+
+      titleDescriptor.set.call(document, value);
+    },
+  });
+}
+
 function applyTitle() {
   const nextTitle = desiredTitle();
   if (document.title !== nextTitle) {
@@ -229,6 +258,7 @@ export const browserIdentity = {
   mount() {
     if (window.__ndsBrowserIdentityMounted) return;
     window.__ndsBrowserIdentityMounted = true;
+    installTitleGuard();
 
     const mountNow = () => {
       applyTitle();
