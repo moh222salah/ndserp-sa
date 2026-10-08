@@ -1777,3 +1777,89 @@ html.amt-lb-on[data-theme="dark"] .amt-lb-split--secondary .amt-lb-card .input-w
 		padding: 20px;
 	}
 }
+
+
+/* ========================================================================
+   SECONDARY AUTH ROUTES — LOGIN VISUAL PARITY LOCK
+   ------------------------------------------------------------------------
+   Keep Forgot Password and Email Login Link visually identical to the
+   primary login card. Presentation-only; native Frappe auth markup,
+   handlers, routes and API calls remain untouched.
+   ======================================================================== */
+
+html.amt-lb-on .amt-lb-split--secondary {
+	grid-template-columns: minmax(420px, .9fr) minmax(460px, 1.1fr);
+	background:
+		radial-gradient(circle at 18% 20%, color-mix(in srgb, var(--amt-lb-accent) 12%, transparent), transparent 36%),
+		radial-gradient(circle at 82% 78%, rgba(37, 99, 235, .10), transparent 34%),
+		#f8fafc;
+}
+
+html.amt-lb-on .amt-lb-split--secondary .amt-lb-form-side {
+	padding: clamp(24px, 5vw, 64px);
+}
+
+html.amt-lb-on .amt-lb-split--secondary .amt-lb-card {
+	width: min(100%, 440px);
+	max-width: 440px;
+	padding: clamp(24px, 4vw, 38px);
+	border-radius: 18px;
+}
+
+html.amt-lb-on .amt-lb-split--secondary .amt-lb-secondary-head {
+	margin-bottom: 24px;
+}
+
+html.amt-lb-on .amt-lb-split--secondary .amt-lb-form-title {
+	font-size: clamp(25px, 3vw, 32px);
+	font-weight: 850;
+	line-height: 1.15;
+}
+
+html.amt-lb-on .amt-lb-split--secondary .amt-lb-form-sub {
+	font-size: 14px;
+	line-height: 1.6;
+}
+
+html.amt-lb-on .amt-lb-split--secondary .amt-lb-card input.form-control,
+html.amt-lb-on .amt-lb-split--secondary .amt-lb-card .input-with-feedback {
+	min-height: 46px;
+	padding: 11px 13px;
+	border-radius: 12px;
+	font-size: 14.5px;
+}
+
+html.amt-lb-on .amt-lb-split--secondary .amt-lb-card .btn-primary,
+html.amt-lb-on .amt-lb-split--secondary .amt-lb-card .btn-login,
+html.amt-lb-on .amt-lb-split--secondary .amt-lb-card .btn-forgot {
+	min-height: 48px;
+	border-radius: 12px;
+	font-size: 14.5px;
+	font-weight: 800;
+}
+
+@media (max-width: 980px) {
+	html.amt-lb-on .amt-lb-split--secondary {
+		grid-template-columns: 1fr;
+	}
+
+	html.amt-lb-on .amt-lb-split--secondary .amt-lb-panel {
+		min-height: 34dvh;
+		order: -1;
+		padding: 30px 22px;
+		border-radius: 22px;
+	}
+}
+
+@media (max-width: 560px) {
+	html.amt-lb-on .amt-lb-split--secondary .amt-lb-form-side {
+		padding: 14px;
+	}
+
+	html.amt-lb-on .amt-lb-split--secondary .amt-lb-card {
+		width: 100%;
+		max-width: 440px;
+		padding: 20px;
+		border-radius: 16px;
+	}
+}
