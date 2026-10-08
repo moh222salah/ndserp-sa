@@ -184,7 +184,20 @@ function currentLanguage() {
   return String(lang).toLowerCase().startsWith("ar") ? "ar" : "en";
 }
 
+function fixedRouteTitle() {
+  const path = String(location.pathname || "")
+    .replace(/\\/+$/, "") || "/";
+
+  if (path === "/desk") return `Desktop | ${SYSTEM_NAME}`;
+  if (path === "/login") return `${SYSTEM_NAME} | Login`;
+
+  return "";
+}
+
 function desiredTitle() {
+  const fixedTitle = fixedRouteTitle();
+  if (fixedTitle) return fixedTitle;
+
   const moduleName = getCurrentModule();
   const moduleLabel = translate(moduleName);
 
