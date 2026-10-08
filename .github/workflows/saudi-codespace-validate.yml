@@ -17,7 +17,6 @@ jobs:
           python3 - <<'PY'
           import json
           for path in [
-              ".devcontainer/devcontainer.json",
               "bench/common_site_config.json",
           ]:
               with open(path, encoding="utf-8") as f:
@@ -27,8 +26,9 @@ jobs:
 
       - name: Validate shell scripts
         run: |
-          bash -n .devcontainer/post-create.sh
-          bash -n .devcontainer/post-start.sh
+          bash -n codespace-bootstrap.sh
+          bash -n runtime-refresh.sh
+          bash -n apps/amir_theme_v16/scripts/harden_assets.sh
           echo "BASH_SYNTAX=PASS"
 
       - name: Validate Saudi app source tree
@@ -39,6 +39,16 @@ jobs:
             test -d "apps/$app"
             echo "APP_SOURCE=PASS:$app"
           done < bench/apps.txt
+
+      - name: Verify login language handoff
+        run: |
+          grep -q 'self.user_lang = get_language()' apps/frappe/frappe/auth.py
+          grep -q 'frappe.local.lang = self.user_lang' apps/frappe/frappe/auth.py
+          grep -q '"lang": str(frappe.local.lang)' apps/frappe/frappe/sessions.py
+          grep -q 'self.data.data.get("lang")' apps/frappe/frappe/sessions.py
+          grep -q 'args._lang = login.get_active_language()' apps/frappe/frappe/templates/includes/login/login.js
+          grep -q 'login.with_active_language' apps/frappe/frappe/templates/includes/login/login.js
+          echo "LOGIN_LANGUAGE_HANDOFF=PASS"
 
       - name: Git whitespace check
         run: git diff --check
