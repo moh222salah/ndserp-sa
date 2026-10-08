@@ -186,7 +186,7 @@ function currentLanguage() {
 
 function fixedRouteTitle() {
   const path = String(location.pathname || "")
-    .replace(/\\/+$/, "") || "/";
+    .replace(/\/+$/, "") || "/";
 
   if (path === "/desk") return `Desktop | ${SYSTEM_NAME}`;
   if (path === "/login") return `${SYSTEM_NAME} | Login`;
