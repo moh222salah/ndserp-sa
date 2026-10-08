@@ -44,8 +44,8 @@ FAILSAFE_MS = 2500
 
 
 def update_website_context(context):
-	"""Inline the login branding into `<head>` for the login routes only."""
-	if not _is_login_path():
+	"""Inline login branding into the `<head>` for every Frappe login rendering."""
+	if not _is_login_path(context):
 		return
 
 	try:
@@ -69,11 +69,17 @@ def update_website_context(context):
 	context.base_template_path = "amir_theme_v16/templates/base_login.html"
 
 
-def _is_login_path() -> bool:
+def _is_login_path(context=None) -> bool:
 	request = getattr(frappe.local, "request", None)
 	path = getattr(request, "path", "") or ""
 	# Frappe serves the login routes both with and without a trailing slash.
-	return ("/" + path.strip("/")) in LOGIN_PATHS
+	if ("/" + path.strip("/")) in LOGIN_PATHS:
+		return True
+
+	# The email-link UI is hash-routed from "/", so the URL fragment is not sent
+	# to the server. Detect the actual login template instead of trusting "/"
+	# as a public homepage. This remains limited to the Login template.
+	return bool(context and context.get("for_test") == "login.html")
 
 
 def _head_html(settings: dict) -> str:
@@ -85,7 +91,9 @@ def _head_html(settings: dict) -> str:
 <style id="amt-login-preload">
 html.amt-lb-pending .login-content,
 html.amt-lb-pending .page-card-container,
-html.amt-lb-pending .for-login {{ visibility: hidden !important; }}
+html.amt-lb-pending .for-login,
+html.amt-lb-pending .for-forgot,
+html.amt-lb-pending .for-login-with-email-link {{ visibility: hidden !important; }}
 </style>
 <script id="amt-login-settings">
 window.__amtLoginSettings = {payload};
