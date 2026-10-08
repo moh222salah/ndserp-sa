@@ -16,12 +16,17 @@ The Dev Container prepares the Saudi stack automatically:
 - Redis
 - All 17 Saudi apps listed in `bench/apps.txt`
 - Frappe application on port 8080
+- Persistent Codespace supervisor that restarts `bench start` when port 8080 stops responding
 - Socket.IO on 9000
 - File watcher on 6787
 
-After the container is created, the startup check launches the ERP with:
+After the container is created or resumed, the startup supervisor launches the ERP with:
 
 `bench start`
+
+The supervisor keeps checking `http://127.0.0.1:8080/login` and restarts the Bench process when it exits or the HTTP endpoint goes down. Port 8080 is forwarded automatically by Codespaces.
+
+GitHub Codespaces can still suspend an idle/stopped Codespace according to its account or organization policy; the supervisor resumes automatically when the container starts again.
 
 and verifies:
 
