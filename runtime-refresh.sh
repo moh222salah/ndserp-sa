@@ -120,6 +120,17 @@ fi
 LOGIN_HTML="/tmp/nds_runtime_refresh_login.html"
 if curl -fsS "http://127.0.0.1:8080/login" -o "$LOGIN_HTML"; then
   echo "LOGIN_PAGE_FETCH=PASS"
+
+if grep -q 'هل نسيت كلمة المرور؟' "$LOGIN_HTML" && \
+   grep -q 'البريد الإلكتروني' "$LOGIN_HTML" && \
+   grep -q 'كلمة المرور' "$LOGIN_HTML" && \
+   grep -q 'متابعة' "$LOGIN_HTML"; then
+  echo "LOGIN_ARABIC_LABELS=PASS"
+else
+  echo "LOGIN_ARABIC_LABELS=FAIL"
+  exit 17
+fi
+
 else
   echo "LOGIN_PAGE_FETCH=FAIL"
   exit 4
