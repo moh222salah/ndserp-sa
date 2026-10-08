@@ -116,13 +116,21 @@ sync_once() {
     fi
 
     git switch main
-    git pull --ff-only origin main
+
+    # GitHub main is the sole source of truth for this Saudi Codespace.
+    # A clean ahead/diverged checkout must never survive as a runtime source.
+    if git merge-base --is-ancestor "$current" "$remote"; then
+      git pull --ff-only origin main
+    else
+      echo "SOURCE_SYNC=RESET_TO_GITHUB_MAIN"
+      git reset --hard "$remote"
+    fi
 
     current="$(git rev-parse HEAD)"
     echo "SOURCE_SYNC=PASS"
     echo "SOURCE_HEAD=$current"
 
-    # Re-exec the freshly pulled script so the active worker uses the current GitHub source immediately.
+    # Re-exec the freshly synced script so the active worker uses current GitHub source immediately.
     if [ "${RUNTIME_SYNC_REEXEC:-0}" != "1" ]; then
       export RUNTIME_SYNC_REEXEC=1
       exec bash "$ROOT/codespace-runtime-sync.sh"
