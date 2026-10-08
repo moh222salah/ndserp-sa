@@ -80,22 +80,10 @@ ensure_amir_theme_site_app() {
     return 0
   fi
 
-  echo "AMIR_THEME_SITE_APP=MISSING_INSTALLING"
-  echo "AMIR_THEME_SITE_DB_WRITE=THEME_APP_INSTALL_ONLY"
-  bench --site "$SITE" install-app amir_theme_v16
-
-  if ! installed_apps="$(bench --site "$SITE" list-apps 2>/dev/null)"; then
-    echo "SITE_APP_QUERY=FAIL_AFTER_INSTALL"
-    return 22
-  fi
-
-  if printf '%s\n' "$installed_apps" | grep -q '^Amir Theme'; then
-    echo "AMIR_THEME_SITE_APP=PASS_AFTER_INSTALL"
-    return 0
-  fi
-
-  echo "AMIR_THEME_SITE_APP=FAIL_AFTER_INSTALL"
-  return 23
+  echo "AMIR_THEME_SITE_APP=MISSING"
+  echo "AMIR_THEME_SITE_DB_WRITE=BLOCKED"
+  echo "SAFE_BOUNDARY=STOP_BEFORE_SITE_WRITE"
+  return 24
 }
 
 echo "=== NDS ERP SAUDI — CODESPACE RUNTIME SYNC ==="
