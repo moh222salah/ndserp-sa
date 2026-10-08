@@ -107,5 +107,19 @@ jobs:
           grep -Fq 'MIGRATION=NO' codespace-runtime-sync.sh
           echo "CODESPACE_SITE_ACTIVATION_LOOP=PASS"
 
+      - name: Verify modern Desk header and built-CSS guard
+        run: |
+          test -s apps/amir_theme_v16/amir_theme_v16/src/scss/components/_modern-header.scss
+          grep -Fq '@import "components/modern-header";' apps/amir_theme_v16/amir_theme_v16/src/scss/amir_theme.bundle.scss
+          grep -Fq 'min-height: 58px;' apps/amir_theme_v16/amir_theme_v16/src/scss/components/_modern-header.scss
+          grep -Fq 'background: #ffffff;' apps/amir_theme_v16/amir_theme_v16/src/scss/components/_modern-header.scss
+          grep -Fq 'color: #0a2342;' apps/amir_theme_v16/amir_theme_v16/src/scss/components/_modern-header.scss
+          grep -Fq 'prefers-reduced-motion: reduce' apps/amir_theme_v16/amir_theme_v16/src/scss/components/_modern-header.scss
+          grep -Fq 'MODERN_HEADER_CSS=PASS' codespace-runtime-sync.sh
+          grep -Fq 'MODERN_HEADER_CSS=FAIL:MISSING_MARKERS:' codespace-runtime-sync.sh
+          echo "MODERN_HEADER_SOURCE=PASS"
+          echo "MODERN_HEADER_IMPORT=PASS"
+          echo "MODERN_HEADER_RUNTIME_GUARD=PASS"
+
       - name: Git whitespace check
         run: git diff --check
