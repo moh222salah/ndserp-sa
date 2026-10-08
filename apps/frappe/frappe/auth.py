@@ -144,6 +144,10 @@ class LoginManager:
 				self.set_user_info()
 
 	def login(self):
+		# Capture the language chosen on the login screen while the request is
+		# still unauthenticated, before LoginManager creates the user session.
+		self.user_lang = get_language()
+
 		self.run_trigger("before_login")
 
 		if frappe.get_system_settings("disable_user_pass_login"):
@@ -173,6 +177,12 @@ class LoginManager:
 		validate_ip_address(self.user)
 		self.validate_hour()
 		self.get_user_info()
+
+		# Make the login-screen language the authoritative language of the new
+		# authenticated session. This runs before Session.start() persists lang.
+		if self.user_lang:
+			frappe.local.lang = self.user_lang
+
 		self.make_session(session_end=session_end, audit_user=audit_user)
 		self.setup_boot_cache()
 		self.set_user_info()
