@@ -79,5 +79,17 @@ jobs:
           grep -Fq 'max-width: 400px !important;' apps/amir_theme_v16/amir_theme_v16/src/scss/login_brand.bundle.scss
           echo "FORGOT_PASSWORD_UI_SOURCE=PASS"
 
+      - name: Verify Email Login Link visual isolation
+        run: |
+          grep -Fq 'function isEmailLoginLinkPage()' apps/amir_theme_v16/amir_theme_v16/src/js/core/login_brand.js
+          grep -Fq 'if (isEmailLoginLinkPage())' apps/amir_theme_v16/amir_theme_v16/src/js/core/login_brand.js
+          grep -Fq 'for-login-with-email-link' apps/amir_theme_v16/amir_theme_v16/src/scss/login_brand.bundle.scss
+          grep -Fq 'form-login-with-email-link' apps/amir_theme_v16/amir_theme_v16/src/scss/login_brand.bundle.scss
+          grep -Fq 'max-width: 400px !important;' apps/amir_theme_v16/amir_theme_v16/src/scss/login_brand.bundle.scss
+          grep -Fq 'justify-content: center !important;' apps/amir_theme_v16/amir_theme_v16/src/scss/login_brand.bundle.scss
+          grep -Fq 'for-login-with-email-link {{ visibility: hidden !important; }}' apps/amir_theme_v16/amir_theme_v16/website.py
+          grep -Fq 'context.get("for_test") == "login.html"' apps/amir_theme_v16/amir_theme_v16/website.py
+          echo "EMAIL_LOGIN_LINK_UI_SOURCE=PASS"
+
       - name: Git whitespace check
         run: git diff --check
