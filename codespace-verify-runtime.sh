@@ -30,8 +30,8 @@ case "$ASSET_PATH" in
 esac
 
 LOCAL_ASSET="$ROOT/${ASSET_PATH#/}"
-if [ ! -f "$LOCAL_ASSET" ] && [ -f "$ROOT/sites/${ASSET_PATH#/assets/}" ]; then
-  LOCAL_ASSET="$ROOT/sites/${ASSET_PATH#/assets/}"
+if [ ! -f "$LOCAL_ASSET" ] && [ -f "$ROOT/sites/${ASSET_PATH#/}" ]; then
+  LOCAL_ASSET="$ROOT/sites/${ASSET_PATH#/}"
 fi
 if [ ! -f "$LOCAL_ASSET" ]; then
   echo "BUILT_HEADER_CSS=FAIL:MISSING_FILE:$LOCAL_ASSET"
@@ -74,6 +74,11 @@ for marker in '.navbar' '58px' '#0a2342'; do
 done
 echo "SERVED_HEADER_CSS=PASS"
 echo "SERVED_HEADER_CSS_SHA256=$(sha256sum "$SERVED_CSS" | awk '{print $1}')"
+if [ "$(sha256sum "$LOCAL_ASSET" | awk '{print $1}')" != "$(sha256sum "$SERVED_CSS" | awk '{print $1}')" ]; then
+  echo "SERVED_HEADER_CSS=FAIL:HASH_MISMATCH"
+  exit 16
+fi
+echo "SERVED_HEADER_CSS_MATCH=PASS"
 echo "HEADER_RUNTIME_VERIFICATION=PASS"
 echo "DB_WRITE=NO"
 echo "MIGRATION=NO"
