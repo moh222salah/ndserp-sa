@@ -9,7 +9,7 @@
  * patches are used.
  */
 
-const SYSTEM_NAME = "NDS";
+const SYSTEM_NAME = "NDS ERP";
 const LOGO_PATH = "/files/logo.jpeg";
 
 const DOCTYPE_ROUTES = new Set([
