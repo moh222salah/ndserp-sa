@@ -164,6 +164,7 @@ bench setup socketio
 
 ./env/bin/python -c 'import frappe; print("FRAPPE_IMPORT=PASS"); print("FRAPPE_VERSION=", getattr(frappe, "__version__", "unknown"))'
 
+CREATED_CLEAN_SITE=0
 if [ ! -f "sites/$SITE/site_config.json" ]; then
   echo "=== CREATE CLEAN SAUDI SITE ==="
   bench new-site "$SITE" \
@@ -174,19 +175,44 @@ if [ ! -f "sites/$SITE/site_config.json" ]; then
     --db-root-password "$DB_ROOT_PASSWORD" \
     --admin-password admin \
     --set-default
+  CREATED_CLEAN_SITE=1
+  printf '%s\n' "clean" > "sites/.nds-site-provisioning-mode"
 fi
 
 echo "=== INSTALL ERPNext ==="
 installed_apps="$(bench --site "$SITE" list-apps 2>/dev/null || true)"
 if ! printf '%s\n' "$installed_apps" | grep -q '^ERPNext'; then
-  bench --site "$SITE" install-app erpnext
+  if [ "$CREATED_CLEAN_SITE" -eq 1 ]; then
+    bench --site "$SITE" install-app erpnext
+  else
+    echo "ERPNEXT_SITE_INSTALL=SKIPPED_EXISTING_SITE"
+  fi
+fi
+
+echo "=== VERIFY/INSTALL AMIR THEME ==="
+installed_apps="$(bench --site "$SITE" list-apps 2>/dev/null || true)"
+if printf '%s\n' "$installed_apps" | grep -q '^Amir Theme'; then
+  echo "AMIR_THEME_SITE_APP=PASS"
+elif [ "$CREATED_CLEAN_SITE" -eq 1 ]; then
+  bench --site "$SITE" install-app amir_theme_v16
+  echo "AMIR_THEME_SITE_APP=INSTALLED"
+else
+  echo "AMIR_THEME_SITE_APP=FAIL_EXISTING_SITE_NOT_INSTALLED"
+  echo "SAFE_BOUNDARY=NO_DB_INSTALL_ON_EXISTING_SITE"
+  exit 22
 fi
 
 echo "=== BUILD ASSETS ==="
 bench build --app amir_theme_v16 --production
 bash apps/amir_theme_v16/scripts/harden_assets.sh
 
-bench --site "$SITE" set-config developer_mode 1
+if bench --site "$SITE" list-apps 2>/dev/null | grep -q '^Amir Theme'; then
+  echo "AMIR_THEME_RUNTIME=PASS"
+else
+  echo "AMIR_THEME_RUNTIME=FAIL"
+  exit 23
+fi
+
 bench --site "$SITE" clear-cache
 
 echo "=== START SAUDI ERP ==="
