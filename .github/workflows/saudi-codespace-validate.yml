@@ -28,6 +28,7 @@ jobs:
         run: |
           bash -n codespace-bootstrap.sh
           bash -n codespace-runtime-sync.sh
+          bash -n codespace-keepalive.sh
           bash -n runtime-refresh.sh
           bash -n apps/amir_theme_v16/scripts/harden_assets.sh
           echo "BASH_SYNTAX=PASS"
@@ -93,6 +94,14 @@ jobs:
           echo "EMAIL_LOGIN_LINK_UI_SOURCE=PASS"
 
 
+
+      - name: Verify Codespace persistent runtime startup
+        run: |
+          grep -Fq \"codespace-keepalive.sh\" .devcontainer/devcontainer.json
+          grep -Fq \"\\\"8080\\\"\" .devcontainer/devcontainer.json
+          grep -Fq \"127.0.0.1:\${PORT}/login\" codespace-keepalive.sh
+          grep -Fq \"bench start\" codespace-keepalive.sh
+          echo \"CODESPACE_PERSISTENT_RUNTIME=PASS\"
 
       - name: Verify Codespace site activation loop
         run: |
