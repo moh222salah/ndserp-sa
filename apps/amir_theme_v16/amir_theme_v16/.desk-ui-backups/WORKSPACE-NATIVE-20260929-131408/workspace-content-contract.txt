@@ -1,5 +1,0 @@
-name= الملفات الرئيسية NDS ERP
-label= الملفات الرئيسية NDS ERP
-title= الملفات الرئيسية NDS ERP
-content_sha256= 7d96e5fce1c4ccd34cef25a9835ff12820cbf587e5e6873b31c810a3fa0055bf
-content= [{"id":"6Uq7wCJWVt","type":"header","data":{"text":"<span class=\"h4\">الملفات الرئيسية</span>","col":12}},{"id":"D10QIqvtRW","type":"shortcut","data":{"shortcut_name":"الشركة","col":3}},{"id":"KKfVgHpiYe","type":"shortcut","data":{"shortcut_name":"الفروع","col":3}},{"id":"Tg2JvygbWC","type":"spacer","data":{"col":12}},{"id":"luz5X2F_pd","type":"shortcut","data":{"shortcut_name":"المستخدمين","col":3}},{"id":"yVisOIY5pE","type":"shortcut","data":{"shortcut_name":"الصلاحيات","col":3}},{"id":"Z1y4irI4gr","type":"shortcut","data":{"shortcut_name":"طرق الدفع","col":3}},{"id":"RaiClx4ez5","type":"shortcut","data":{"shortcut_name":"الاعدادات","col":3}}]

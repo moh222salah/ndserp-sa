@@ -1,3 +1,0 @@
-3db01fe70bc61eee2c4ec04489fc41aeaa377652e3a5963e26959bd91933fac3  /home/frappe/frappe/frappe-bench/apps/amir_theme_v16/amir_theme_v16/src/js/core/desk_quick_actions.js
-f4ac54404d080a6e54d4bf99aaff4faac677fc239839d1ac6dc1a0876e143678  /home/frappe/frappe/frappe-bench/apps/amir_theme_v16/amir_theme_v16/src/scss/layouts/_desk-quick-actions.scss
-e28805e63ff8d120ced8fc49ea325116c4914007552f1048a382de67a45111f4  /home/frappe/frappe/frappe-bench/sites/assets/assets.json

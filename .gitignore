@@ -21,6 +21,9 @@ tmp/
 
 # Historical UI backup snapshots
 **/.login-ui-backups/
+**/.desk-ui-backups/
+**/.logo-ui-backups/
+**/.language-session-backups/
 
 # OS / editor
 .DS_Store
