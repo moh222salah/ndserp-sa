@@ -48,6 +48,15 @@ for key in required:
     print(f"ASSET_VERIFIED={key}")
     print(f"ASSET_PATH={rel}")
     print(f"ASSET_SHA256={digest}")
+    if key == "amir_theme.bundle.css":
+        css = target.read_text(encoding="utf-8").lower()
+        required_header_markers = (".navbar", "58px", "#0a2342")
+        missing = [marker for marker in required_header_markers if marker not in css]
+        if missing:
+            raise SystemExit(
+                "MODERN_HEADER_CSS=FAIL:MISSING_MARKERS:" + ",".join(missing)
+            )
+        print("MODERN_HEADER_CSS=PASS")
 
 print("ASSET_SERVE_TREE=PASS")
 PY
