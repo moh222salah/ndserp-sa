@@ -181,6 +181,15 @@ function desiredTitle() {
 
   if (!moduleLabel) return SYSTEM_NAME;
 
+  // The main Desk/Home section keeps the same left-to-right naming order
+  // in Arabic as English: "الرئيسية | NDS ERP".
+  const isHomeSection =
+    moduleName === "Home" ||
+    moduleLabel === "Home" ||
+    moduleLabel === "الرئيسية";
+
+  if (isHomeSection) return `الرئيسية | ${SYSTEM_NAME}`;
+
   return currentLanguage() === "ar"
     ? `${SYSTEM_NAME} | ${moduleLabel}`
     : `${moduleLabel} | ${SYSTEM_NAME}`;
