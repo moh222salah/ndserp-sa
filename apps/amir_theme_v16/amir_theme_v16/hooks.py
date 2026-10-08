@@ -16,5 +16,10 @@ web_include_js = "login_brand.bundle.js"
 extend_bootinfo = "amir_theme_v16.boot.extend_bootinfo"
 update_website_context = "amir_theme_v16.website.update_website_context"
 
+# Exact Desk route: render the final branded tab title before the first paint.
+base_template_map = {
+    r"^desk/?$": "amir_theme_v16/templates/base_desk.html",
+}
+
 after_install = "amir_theme_v16.install.after_install"
 after_migrate = "amir_theme_v16.install.after_migrate"
