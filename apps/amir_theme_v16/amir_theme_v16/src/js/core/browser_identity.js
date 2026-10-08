@@ -247,8 +247,8 @@ function installTitleGuard() {
       }
 
       // Never allow stock Frappe titles to flash during SPA route changes.
-      if (/\\bFrappe\\b/i.test(incomingTitle)) {
-        if (lastAllowedTitle && !/\\bFrappe\\b/i.test(lastAllowedTitle)) {
+      if (incomingTitle.toLowerCase().includes("frappe")) {
+        if (lastAllowedTitle && !lastAllowedTitle.toLowerCase().includes("frappe")) {
           titleDescriptor.set.call(document, lastAllowedTitle);
         }
         return;
