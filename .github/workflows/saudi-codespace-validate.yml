@@ -27,6 +27,7 @@ jobs:
       - name: Validate shell scripts
         run: |
           bash -n codespace-bootstrap.sh
+          bash -n codespace-runtime-sync.sh
           bash -n runtime-refresh.sh
           bash -n apps/amir_theme_v16/scripts/harden_assets.sh
           echo "BASH_SYNTAX=PASS"
@@ -90,6 +91,21 @@ jobs:
           grep -Fq 'for-login-with-email-link {{ visibility: hidden !important; }}' apps/amir_theme_v16/amir_theme_v16/website.py
           grep -Fq 'context.get("for_test") == "login.html"' apps/amir_theme_v16/amir_theme_v16/website.py
           echo "EMAIL_LOGIN_LINK_UI_SOURCE=PASS"
+
+
+
+      - name: Verify Codespace site activation loop
+        run: |
+          grep -Fq 'bench --site "$SITE" install-app amir_theme_v16' codespace-bootstrap.sh
+          grep -Fq 'bench --site "$SITE" install-app amir_theme_v16' codespace-runtime-sync.sh
+          grep -Fq 'BENCH_APPS_REGISTRY=SYNCED' codespace-runtime-sync.sh
+          grep -Fq 'ASSET_SERVE_TREE=PASS' codespace-bootstrap.sh
+          grep -Fq 'ASSET_SERVE_TREE=PASS' codespace-runtime-sync.sh
+          grep -Fq 'CORE_MODIFICATION=NO' codespace-bootstrap.sh
+          grep -Fq 'CORE_MODIFICATION=NO' codespace-runtime-sync.sh
+          grep -Fq 'MIGRATION=NO' codespace-bootstrap.sh
+          grep -Fq 'MIGRATION=NO' codespace-runtime-sync.sh
+          echo "CODESPACE_SITE_ACTIVATION_LOOP=PASS"
 
       - name: Git whitespace check
         run: git diff --check
