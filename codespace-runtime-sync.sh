@@ -184,6 +184,11 @@ sync_once() {
 
     echo "ASSET_BUILD=PASS"
     echo "SERVED_SOURCE_HEAD=$(cat sites/.nds-runtime-source-head)"
+    if curl --connect-timeout 1 --max-time 2 -fsS -o /dev/null "http://127.0.0.1:8080/login"; then
+      bash "$ROOT/codespace-verify-runtime.sh"
+    else
+      echo "HEADER_RUNTIME_VERIFICATION=DEFERRED_SERVER_NOT_READY"
+    fi
   else
     echo "ASSET_BUILD=ALREADY_CURRENT"
     verify_amir_assets
