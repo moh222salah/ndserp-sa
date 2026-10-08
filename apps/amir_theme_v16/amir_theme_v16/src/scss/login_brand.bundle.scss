@@ -779,6 +779,33 @@ html.amt-lb-on[data-theme="dark"] body {
 }
 
 /* ========================================================================
+   TOP GAP RESET
+   ------------------------------------------------------------------------
+   Frappe's page shell can contribute top spacing around public pages.
+   The login surface owns the viewport, so remove that shell spacing only
+   while the login branding is active. Content/data/auth behavior unchanged.
+   ======================================================================== */
+html.amt-lb-on,
+html.amt-lb-on body,
+html.amt-lb-on .page-container,
+html.amt-lb-on .page-content,
+html.amt-lb-on .layout-main-section-wrapper,
+html.amt-lb-on .layout-main-section,
+html.amt-lb-on .main-section,
+html.amt-lb-on .page-head,
+html.amt-lb-on .page-head-content,
+html.amt-lb-on .login-content,
+html.amt-lb-on .page-card-container {
+	margin-top: 0 !important;
+	padding-top: 0 !important;
+	top: 0;
+}
+
+.amt-lb-split {
+	margin-top: 0;
+}
+
+/* ========================================================================
    RESPONSIVE VIEWPORT / NO-CROP GUARANTEE
    ------------------------------------------------------------------------
    Keep the login surface fluid on desktop, laptop, tablet and mobile.
