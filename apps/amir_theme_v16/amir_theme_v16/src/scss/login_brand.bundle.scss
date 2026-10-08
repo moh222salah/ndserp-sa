@@ -858,7 +858,13 @@ html.amt-lb-on .page-card-container {
 	min-height: 100svh;
 	min-height: 100dvh;
 	height: auto;
-	grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+	// Desktop: keep the login form side about 20% narrower and give the
+	// brand/image frame the larger share of the viewport.
+	grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr);
+}
+
+.amt-lb-split--brand-left {
+	grid-template-columns: minmax(0, 1.2fr) minmax(0, 0.8fr);
 }
 
 .amt-lb-form-side {
@@ -872,8 +878,9 @@ html.amt-lb-on .page-card-container {
 
 .amt-lb-card {
 	box-sizing: border-box;
-	width: min(100%, 500px);
-	max-width: 500px;
+	// Reduce the desktop login card width by 20% from the previous 500px cap.
+	width: min(100%, 400px);
+	max-width: 400px;
 	margin-block: auto;
 	padding: clamp(20px, 2.5vw, 32px);
 }
