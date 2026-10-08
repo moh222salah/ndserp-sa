@@ -208,6 +208,12 @@ login.signup = function () {
 login.call = function (args, callback, url="/") {
 	login.set_status({{ _("Verifying...") | tojson }}, 'blue');
 
+	// Send the selected login language explicitly with every authentication
+	// request so the server can persist it into the newly created session.
+	if (args && args.cmd === "login") {
+		args._lang = login.get_active_language();
+	}
+
 	return frappe.call({
 		type: "POST",
 		url: url,
@@ -222,6 +228,25 @@ login.set_status = function (message, color) {
 	$('section:visible .btn-primary').text(message)
 	if (color == "red") {
 		$('section:visible .page-card-body').addClass("invalid");
+	}
+};
+
+// The language selected on the login screen is authoritative for the login
+// request and the first page opened after authentication.
+login.get_active_language = function () {
+	var html = document.documentElement;
+	var lang = (html.getAttribute("lang") || "").toLowerCase();
+	return lang.indexOf("ar") === 0 || html.getAttribute("dir") === "rtl" ? "ar" : "en";
+};
+
+login.with_active_language = function (url) {
+	if (!url) return url;
+	try {
+		var target = new URL(url, window.location.origin);
+		target.searchParams.set("_lang", login.get_active_language());
+		return target.pathname + target.search + target.hash;
+	} catch (e) {
+		return url;
 	}
 }
 
@@ -275,7 +300,8 @@ login.login_handlers = (function () {
 			if (data.message == 'Logged In') {
 				login.set_status({{ _("Success") | tojson }}, 'green');
 				document.body.innerHTML = `{% include "templates/includes/splash_screen.html" %}`;
-				window.location.href = frappe.utils.sanitise_redirect(frappe.utils.get_url_arg("redirect-to")) || data.home_page;
+				var target = frappe.utils.sanitise_redirect(frappe.utils.get_url_arg("redirect-to")) || data.home_page;
+				window.location.href = login.with_active_language(target);
 			} else if (data.message == 'Password Reset') {
 				login.set_status({{ _("Reset link emailed") | tojson }}, 'green');
 			} else if (data.message == "No App") {
@@ -288,13 +314,14 @@ login.login_handlers = (function () {
 				}
 
 				if (data.redirect_to) {
-					window.location.href = frappe.utils.sanitise_redirect(data.redirect_to);
+					window.location.href = login.with_active_language(frappe.utils.sanitise_redirect(data.redirect_to));
+					return;
 				}
 
 				if (last_visited && last_visited != "/login") {
-					window.location.href = last_visited;
+					window.location.href = login.with_active_language(last_visited);
 				} else {
-					window.location.href = data.home_page;
+					window.location.href = login.with_active_language(data.home_page);
 				}
 			} else if (window.location.hash === '#forgot') {
 				// Always show the same message regardless of whether the account
