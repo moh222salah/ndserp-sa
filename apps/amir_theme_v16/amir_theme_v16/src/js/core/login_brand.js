@@ -51,8 +51,50 @@ function isLoginPage() {
 
 function curLang() {
 	const html = document.documentElement;
-	if (html.getAttribute("lang") === "ar" || html.getAttribute("dir") === "rtl") return "ar";
+	const lang = (html.getAttribute("lang") || "").toLowerCase();
+	if (lang.startsWith("ar") || html.getAttribute("dir") === "rtl") return "ar";
 	return "en";
+}
+
+function nextLang() {
+	return curLang() === "ar" ? "en" : "ar";
+}
+
+function setPreferredLanguage(lang) {
+	const code = lang === "en" ? "en" : "ar";
+	document.cookie =
+		`preferred_language=${encodeURIComponent(code)}; Max-Age=2592000; Path=/; SameSite=Lax` +
+		(window.location.protocol === "https:" ? "; Secure" : "");
+
+	const url = new URL(window.location.href);
+	url.searchParams.set("_lang", code);
+	window.location.assign(url.pathname + url.search + url.hash);
+}
+
+function mountLanguageControl(button) {
+	if (!button) return;
+
+	const sync = () => {
+		const target = nextLang();
+		const label = target === "ar" ? "العربية" : "English";
+		const aria = target === "ar" ? "التبديل إلى العربية" : "Switch to English";
+		const title = target === "ar" ? "التبديل إلى العربية" : "Switch to English";
+
+		const labelNode = button.querySelector(".amt-lb-language-label");
+		if (labelNode) labelNode.textContent = label;
+		button.setAttribute("aria-label", aria);
+		button.setAttribute("title", title);
+	};
+
+	sync();
+	button.addEventListener("click", (event) => {
+		event.preventDefault();
+		event.stopPropagation();
+		if (button.disabled) return;
+		button.disabled = true;
+		button.classList.add("amt-lb-language--busy");
+		setPreferredLanguage(nextLang());
+	});
 }
 
 // Pick the language-appropriate text: ar → falls back to English if Arabic empty
@@ -200,18 +242,30 @@ async function decorate() {
 		: `<div class="amt-lb-form-logo-wrap amt-lb-form-logo-wrap--default" role="img" aria-label="ERP"></div>`;
 	const brandLabel = companyDisplay ? esc(companyDisplay) : "";
 	head.innerHTML = `
-		<div class="amt-lb-form-brand">
-			${logoHtml}
-			${brandLabel ? `<span class="amt-lb-form-brand-name">${brandLabel}</span>` : ""}
+		<div class="amt-lb-form-head-top">
+			<div class="amt-lb-form-brand">
+				${logoHtml}
+				${brandLabel ? `<span class="amt-lb-form-brand-name">${brandLabel}</span>` : ""}
+			</div>
+			<button type="button" class="amt-lb-language" aria-label="" title="">
+				<span class="amt-lb-language-icon" aria-hidden="true">${ICONS.globe}</span>
+				<span class="amt-lb-language-label"></span>
+			</button>
 		</div>
 		<h2 class="amt-lb-form-title">${curLang() === "ar" ? welcomeAr : welcomeEn}</h2>
 		<p class="amt-lb-form-sub">${curLang() === "ar" ? subAr : subEn}</p>
 	`;
-	card.appendChild(head);
-
 	// Move ALL of Frappe's login form children into the card (NOT formSide
 	// directly) — guarantees they're inside our white card.
 	while (content.firstChild) card.appendChild(content.firstChild);
+
+	const loginForm = card.querySelector("form.form-login");
+	if (loginForm) {
+		loginForm.insertBefore(head, loginForm.firstChild);
+	} else {
+		card.insertBefore(head, card.firstChild);
+	}
+	mountLanguageControl(head.querySelector(".amt-lb-language"));
 	formSide.appendChild(card);
 
 	const brand = buildBrandPanel(settings);
