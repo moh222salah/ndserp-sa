@@ -64,8 +64,8 @@ if grep -q 'self.user_lang = get_language()' "$ROOT/apps/frappe/frappe/auth.py" 
    grep -q 'frappe.local.lang = self.user_lang' "$ROOT/apps/frappe/frappe/auth.py"; then
   echo "AUTH_LOGIN_LANGUAGE_PRECAPTURE=PASS"
 
-if grep -q 'context["login_language"] = "ar" if requested_lang.startswith("ar") else "en"' "$ROOT/apps/frappe/frappe/www/login.py" && \
-   grep -q '{% if login_language == "ar" %}' "$ROOT/apps/frappe/frappe/www/login.html"; then
+if grep -Fq 'context["login_language"] = "ar" if requested_lang.startswith("ar") else "en"' "$ROOT/apps/frappe/frappe/www/login.py" && \
+   grep -Fq '{% if login_language == "ar" %}' "$ROOT/apps/frappe/frappe/www/login.html"; then
   echo "LOGIN_TEMPLATE_LANGUAGE_SOURCE=PASS"
 else
   echo "LOGIN_TEMPLATE_LANGUAGE_SOURCE=FAIL"
