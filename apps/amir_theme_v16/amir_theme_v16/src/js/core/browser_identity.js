@@ -261,6 +261,33 @@ function installTitleGuard() {
 }
 
 
+function installFrappeTitleGuard() {
+  if (window.__ndsFrappeTitleGuardInstalled) return;
+  window.__ndsFrappeTitleGuardInstalled = true;
+
+  const frappe = window.frappe;
+  const utils = frappe?.utils;
+  if (!utils) {
+    window.__ndsFrappeTitleGuardInstalled = false;
+    return;
+  }
+
+  if (typeof utils.set_title === "function") {
+    const originalSetTitle = utils.set_title.bind(utils);
+    utils.set_title = function () {
+      applyTitle();
+    };
+    window.__ndsOriginalFrappeSetTitle = originalSetTitle;
+  }
+
+  const router = frappe.router;
+  if (router && typeof router.set_title === "function") {
+    router.set_title = function () {
+      applyTitle();
+    };
+  }
+}
+
 function applyTitle() {
   const nextTitle = desiredTitle();
   if (document.title !== nextTitle) {
@@ -274,8 +301,11 @@ export const browserIdentity = {
     if (window.__ndsBrowserIdentityMounted) return;
     window.__ndsBrowserIdentityMounted = true;
     installTitleGuard();
+    installFrappeTitleGuard();
 
     const mountNow = () => {
+      installTitleGuard();
+      installFrappeTitleGuard();
       applyTitle();
 
       const frappe = window.frappe;
