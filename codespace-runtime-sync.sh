@@ -58,13 +58,6 @@ for key in required:
         required_header_markers = ("body .navbar", "58px", "#0a2342")
         missing = [marker for marker in required_header_markers if marker not in css]
         if missing:
-            raise SystemExit("MODERN_HEADER_CSS=FAIL:MISSING_MARKERS:" + ",".join(missing))
-        print("MODERN_HEADER_CSS=PASS")
-    if key == "amir_theme.bundle.css":
-        css = target.read_text(encoding="utf-8").lower()
-        required_header_markers = ("body .navbar", "58px", "#0a2342")
-        missing = [marker for marker in required_header_markers if marker not in css]
-        if missing:
             raise SystemExit(
                 "MODERN_HEADER_CSS=FAIL:MISSING_MARKERS:" + ",".join(missing)
             )
