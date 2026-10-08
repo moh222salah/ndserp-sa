@@ -205,33 +205,119 @@ function buildBrandPanel(s) {
 let forgotDecorated = false;
 let emailLoginLinkDecorated = false;
 
-async function decorateEmailLoginLink() {
-	if (emailLoginLinkDecorated) return release();
+function buildSecondaryFormHeader(settings, titleAr, titleEn, subAr, subEn) {
+	const head = document.createElement("div");
+	head.className = "amt-lb-form-head";
+	const companyDisplay = pick(settings, "company_name_ar", "company_name");
+	const logoHtml = settings.logo
+		? `<div class="amt-lb-form-logo-wrap amt-lb-form-logo-wrap--custom"><img class="amt-lb-form-logo" src="${esc(settings.logo)}" alt=""/></div>`
+		: `<div class="amt-lb-form-logo-wrap amt-lb-form-logo-wrap--default" role="img" aria-label="ERP"></div>`;
+	const brandLabel = companyDisplay ? esc(companyDisplay) : "";
+
+	head.innerHTML = `
+		<div class="amt-lb-form-head-top">
+			<div class="amt-lb-form-brand">
+				${logoHtml}
+				${brandLabel ? `<span class="amt-lb-form-brand-name">${brandLabel}</span>` : ""}
+			</div>
+			<button type="button" class="amt-lb-language" aria-label="" title="">
+				<span class="amt-lb-language-icon" aria-hidden="true">${ICONS.globe}</span>
+				<span class="amt-lb-language-label"></span>
+			</button>
+		</div>
+		<h2 class="amt-lb-form-title">${curLang() === "ar" ? titleAr : titleEn}</h2>
+		<p class="amt-lb-form-sub">${curLang() === "ar" ? subAr : subEn}</p>
+	`;
+
+	return head;
+}
+
+async function decorateSecondaryForm(sectionSelector, decoratedState, titles) {
+	if (decoratedState.value) return release();
 
 	const settings = await fetchSettings();
 	if (!settings || !settings.enabled) return release();
+
+	const section = document.querySelector(sectionSelector);
+	const content = section?.querySelector(".login-content");
+	if (!section || !content) return release();
+
+	if (content.querySelector(".amt-lb-secondary-head")) return release();
+
+	const form = content.querySelector("form");
+	if (!form) return release();
+
+	document.querySelectorAll(`${sectionSelector} .page-card-head`)
+		.forEach((el) => { el.style.display = "none"; });
+
+	const head = buildSecondaryFormHeader(
+		settings,
+		titles.titleAr,
+		titles.titleEn,
+		titles.subAr,
+		titles.subEn
+	);
+	head.classList.add("amt-lb-secondary-head");
+
+	const wrap = document.createElement("div");
+	wrap.className = "amt-lb-split amt-lb-split--secondary";
+
+	const formSide = document.createElement("div");
+	formSide.className = "amt-lb-form-side";
+
+	content.classList.add("amt-lb-card", "amt-lb-secondary-card");
+	form.insertBefore(head, form.firstChild);
+	formSide.appendChild(content);
+
+	const brand = buildBrandPanel(settings);
+	const brandFirst = settings.panel_position === "left" || curLang() === "ar";
+
+	if (brandFirst) {
+		wrap.appendChild(brand);
+		wrap.appendChild(formSide);
+	} else {
+		wrap.appendChild(formSide);
+		wrap.appendChild(brand);
+	}
+
+	section.appendChild(wrap);
 
 	document.documentElement.classList.add("amt-lb-on");
 	if (settings.accent_color) {
 		document.documentElement.style.setProperty("--amt-lb-accent-global", settings.accent_color);
 	}
-	emailLoginLinkDecorated = true;
+
+	decoratedState.value = true;
 	release();
 }
 
+const forgotState = { value: false };
+const emailLoginLinkState = { value: false };
+
 async function decorateForgotPassword() {
-	if (forgotDecorated) return release();
+	return decorateSecondaryForm(
+		".for-forgot",
+		forgotState,
+		{
+			titleAr: "نسيت كلمة المرور؟",
+			titleEn: "Forgot Password?",
+			subAr: "أدخل بريدك الإلكتروني وسنرسل لك رابط إعادة تعيين كلمة المرور.",
+			subEn: "Enter your email and we'll send you a password reset link."
+		}
+	);
+}
 
-	const settings = await fetchSettings();
-	// When branding is disabled, leave the native Frappe forgot page untouched.
-	if (!settings || !settings.enabled) return release();
-
-	document.documentElement.classList.add("amt-lb-on");
-	if (settings.accent_color) {
-		document.documentElement.style.setProperty("--amt-lb-accent-global", settings.accent_color);
-	}
-	forgotDecorated = true;
-	release();
+async function decorateEmailLoginLink() {
+	return decorateSecondaryForm(
+		".for-login-with-email-link",
+		emailLoginLinkState,
+		{
+			titleAr: "تسجيل الدخول عبر رابط البريد الإلكتروني",
+			titleEn: "Sign in with Email Link",
+			subAr: "أدخل بريدك الإلكتروني وسنرسل لك رابط تسجيل الدخول.",
+			subEn: "Enter your email and we'll send you a secure login link."
+		}
+	);
 }
 
 let injected = false;
