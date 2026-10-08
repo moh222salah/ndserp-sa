@@ -179,7 +179,7 @@ html.amt-lb-on {
 	align-items: center;
 	justify-content: flex-start;
 	flex: 0 0 auto;
-	height: 30px;
+	height: 34px;
 	background: none;
 	box-shadow: none;
 	border-radius: 0;
@@ -194,7 +194,7 @@ html.amt-lb-on {
 
 	.amt-lb-form-logo {
 		max-width: 100%;
-		max-height: 30px;
+		max-height: 34px;
 		width: auto;
 		height: auto;
 		object-fit: contain;
@@ -206,8 +206,8 @@ html.amt-lb-on {
 // whatever colour it sits on — dark panel or white card — with no second asset.
 .amt-lb-form-logo-wrap--default {
 	// 138:40 — the mark's own aspect ratio, so `contain` letterboxes nothing.
-	width: 104px;
-	height: 30px;
+	width: 116px;
+	height: 34px;
 	background-color: currentColor;
 	-webkit-mask: url("/assets/amir_theme_v16/images/erp-mark.svg") no-repeat center / contain;
 	mask: url("/assets/amir_theme_v16/images/erp-mark.svg") no-repeat center / contain;
@@ -1027,12 +1027,12 @@ html.amt-lb-on .page-card-container {
 	}
 
 	.amt-lb-form-logo-wrap {
-		height: 28px;
+		height: 32px;
 	}
 
 	.amt-lb-form-logo-wrap--default {
-		width: 96px;
-		height: 28px;
+		width: 108px;
+		height: 32px;
 	}
 
 	.amt-lb-form-brand-name {
