@@ -1960,3 +1960,121 @@ html.amt-lb-on .amt-lb-split--secondary .amt-lb-card .btn-forgot {
 		border-radius: 16px;
 	}
 }
+
+
+/* ========================================================================
+   THREE AUTH ROUTES — GEOMETRY PARITY LOCK
+   ------------------------------------------------------------------------
+   One shared visual shell for:
+     1) Login
+     2) Forgot Password
+     3) Login with Email Link
+
+   UI/CSS only. Native Frappe forms, fields, handlers, routes, APIs,
+   authentication and session behavior are untouched.
+   ======================================================================== */
+
+html.amt-lb-on .amt-lb-split {
+	grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr);
+}
+
+html.amt-lb-on .amt-lb-split--brand-left {
+	grid-template-columns: minmax(0, 1.2fr) minmax(0, 0.8fr);
+}
+
+html.amt-lb-on .amt-lb-form-side {
+	box-sizing: border-box;
+	min-width: 0;
+	padding: clamp(20px, 3vw, 48px);
+}
+
+html.amt-lb-on .amt-lb-card,
+html.amt-lb-on .amt-lb-split--secondary .amt-lb-card {
+	box-sizing: border-box;
+	width: min(100%, 400px);
+	max-width: 400px;
+	margin-block: auto;
+	padding: clamp(20px, 2.5vw, 32px);
+	border-radius: 18px;
+}
+
+html.amt-lb-on .amt-lb-panel {
+	box-sizing: border-box;
+	min-width: 0;
+	min-height: 100%;
+	height: auto;
+}
+
+@media (max-height: 760px) and (min-width: 981px) {
+	html.amt-lb-on .amt-lb-form-side,
+	html.amt-lb-on .amt-lb-split--secondary .amt-lb-form-side {
+		padding-block: 18px;
+	}
+
+	html.amt-lb-on .amt-lb-card,
+	html.amt-lb-on .amt-lb-split--secondary .amt-lb-card {
+		padding-block: 20px;
+	}
+}
+
+@media (max-width: 980px) {
+	html.amt-lb-on .amt-lb-split,
+	html.amt-lb-on .amt-lb-split--brand-left,
+	html.amt-lb-on .amt-lb-split--secondary {
+		grid-template-columns: minmax(0, 1fr);
+		min-height: 100svh;
+		min-height: 100dvh;
+		height: auto;
+	}
+
+	html.amt-lb-on .amt-lb-panel {
+		min-height: auto;
+		height: auto;
+		padding: clamp(24px, 5vw, 34px) clamp(18px, 4vw, 30px);
+		order: -1;
+	}
+
+	html.amt-lb-on .amt-lb-form-side,
+	html.amt-lb-on .amt-lb-split--secondary .amt-lb-form-side {
+		min-height: auto;
+		height: auto;
+		padding: clamp(16px, 4vw, 24px);
+		align-items: flex-start;
+	}
+
+	html.amt-lb-on .amt-lb-card,
+	html.amt-lb-on .amt-lb-split--secondary .amt-lb-card {
+		width: 100%;
+		max-width: 560px;
+		margin-block: 0;
+		padding: clamp(18px, 4vw, 26px);
+		border-radius: 16px;
+	}
+}
+
+@media (max-width: 560px) {
+	html.amt-lb-on .amt-lb-panel {
+		min-height: auto;
+		padding-inline: 16px;
+	}
+
+	html.amt-lb-on .amt-lb-form-side,
+	html.amt-lb-on .amt-lb-split--secondary .amt-lb-form-side {
+		padding: 16px;
+	}
+
+	html.amt-lb-on .amt-lb-card,
+	html.amt-lb-on .amt-lb-split--secondary .amt-lb-card {
+		width: 100%;
+		max-width: 560px;
+		padding: 20px;
+		border-radius: 16px;
+	}
+}
+
+@media (max-width: 380px) {
+	html.amt-lb-on .amt-lb-card,
+	html.amt-lb-on .amt-lb-split--secondary .amt-lb-card {
+		padding: 18px;
+	}
+}
