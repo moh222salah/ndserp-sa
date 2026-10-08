@@ -65,19 +65,40 @@ function getCurrentRoute() {
   }
 }
 
+function cleanWorkspaceSectionLabel(value) {
+  const text = String(value || "").trim();
+  if (!text) return "";
+
+  const translated = translate(text);
+
+  // NDS custom workspaces use a visible "NDS ERP" suffix. It is branding
+  // inside the Workspace label, not part of the browser-tab section name.
+  return translated
+    .replace(/\\s+NDS ERP\\s*$/i, "")
+    .replace(/\\s+NDSER?P\\s*$/i, "")
+    .trim();
+}
+
 function getCurrentModule() {
   const frappe = window.frappe;
   if (!frappe) return "";
 
   const route = getCurrentRoute();
 
-  // Workspace routes expose the authoritative module directly.
+  // For NDS custom Workspace routes, the visible Workspace label is the
+  // authoritative section name. Their database module is "Ndserp", which is
+  // an app namespace and must never leak into the browser tab.
   if (route[0] === "Workspaces" && route[1]) {
     const workspace = findWorkspace(route[1]);
-    if (workspace?.module) return workspace.module;
+    if (workspace) {
+      const workspaceLabel =
+        workspace.label || workspace.title || workspace.name || "";
+      const cleaned = cleanWorkspaceSectionLabel(workspaceLabel);
+      if (cleaned) return cleaned;
+    }
   }
 
-  // DocType routes expose module through loaded DocType metadata.
+  // DocType routes expose the functional module through loaded metadata.
   if (DOCTYPE_ROUTES.has(route[0]) && route[1]) {
     try {
       const meta = frappe.get_meta?.(route[1]);
@@ -98,11 +119,28 @@ function getCurrentModule() {
 
   // The sidebar workspace is the best route-independent fallback.
   const sidebarWorkspace = findWorkspace(frappe.app?.sidebar?.sidebar_title);
-  if (sidebarWorkspace?.module) return sidebarWorkspace.module;
+  if (sidebarWorkspace) {
+    const workspaceLabel =
+      sidebarWorkspace.label ||
+      sidebarWorkspace.title ||
+      sidebarWorkspace.name ||
+      "";
+    const cleaned = cleanWorkspaceSectionLabel(workspaceLabel);
+    if (cleaned) return cleaned;
+    if (sidebarWorkspace.module) return sidebarWorkspace.module;
+  }
 
   const savedWorkspace = localStorage.getItem("current_page");
   const savedPage = findWorkspace(savedWorkspace);
-  return savedPage?.module || "";
+  if (savedPage) {
+    const workspaceLabel =
+      savedPage.label || savedPage.title || savedPage.name || "";
+    const cleaned = cleanWorkspaceSectionLabel(workspaceLabel);
+    if (cleaned) return cleaned;
+    if (savedPage.module) return savedPage.module;
+  }
+
+  return "";
 }
 
 function setFavicon() {
