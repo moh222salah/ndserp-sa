@@ -48,6 +48,11 @@ sync_once() {
 
   echo "=== VERIFY AMIR THEME SITE APP ==="
   installed_apps="$(bench --site "$SITE" list-apps 2>/dev/null || true)"
+
+  if ! printf '%s\n' "$installed_apps" | grep -q '^Amir Theme' &&      ! printf '%s\n' "$installed_apps" | grep -Ev '^(Frappe Framework|ERPNext)([[:space:]]|$)' | grep -q '[^[:space:]]'; then
+    printf '%s\n' "clean" > "sites/.nds-site-provisioning-mode"
+  fi
+
   if printf '%s\n' "$installed_apps" | grep -q '^Amir Theme'; then
     echo "AMIR_THEME_SITE_APP=PASS"
   elif [ -f "sites/.nds-site-provisioning-mode" ] && grep -qx "clean" "sites/.nds-site-provisioning-mode"; then
