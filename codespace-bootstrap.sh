@@ -194,9 +194,17 @@ fi
 
 echo "=== VERIFY/INSTALL AMIR THEME ==="
 installed_apps="$(bench --site "$SITE" list-apps 2>/dev/null || true)"
+
+# A site with only the baseline Framework + ERPNext apps is the clean
+# Codespace development site. Mark it so the existing activation branch can
+# install the UI theme without guessing on a restored/custom Saudi database.
+if ! printf '%s\n' "$installed_apps" | grep -q '^Amir Theme' &&    ! printf '%s\n' "$installed_apps" | grep -Ev '^(Frappe Framework|ERPNext)([[:space:]]|$)' | grep -q '[^[:space:]]'; then
+  printf '%s\n' "clean" > "sites/.nds-site-provisioning-mode"
+fi
+
 if printf '%s\n' "$installed_apps" | grep -q '^Amir Theme'; then
   echo "AMIR_THEME_SITE_APP=PASS"
-elif [ "$CREATED_CLEAN_SITE" -eq 1 ]; then
+elif [ "$CREATED_CLEAN_SITE" -eq 1 ] || { [ -f "sites/.nds-site-provisioning-mode" ] && grep -qx "clean" "sites/.nds-site-provisioning-mode"; }; then
   bench --site "$SITE" install-app amir_theme_v16
   echo "AMIR_THEME_SITE_APP=INSTALLED"
 else
