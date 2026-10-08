@@ -1,7 +1,11 @@
 #!/usr/bin/env bash
 set -Eeuo pipefail
 
-ROOT="/workspaces/ndserp-sa"
+# Resolve the active NDS ERP Saudi checkout instead of hard-coding Codespaces.
+ROOT="$(git rev-parse --show-toplevel 2>/dev/null || true)"
+if [ -z "$ROOT" ]; then
+  ROOT="/home/moh222salah/projects/nds/ndserp-sa"
+fi
 SITE="ndserpsa.nds-sa.com"
 PORT="8080"
 
@@ -13,7 +17,6 @@ echo "SOURCE=GitHub main"
 echo "ROOT=$ROOT"
 echo "SITE=$SITE"
 
-# Never destroy uncommitted developer work.
 if ! git diff --quiet || ! git diff --cached --quiet; then
   echo "RUNTIME_REFRESH=BLOCKED_DIRTY_WORKTREE"
   git status --short
@@ -30,7 +33,7 @@ echo "SOURCE_HEAD_SHORT=$(git rev-parse --short HEAD)"
 bench build --app amir_theme_v16 --production
 bash apps/amir_theme_v16/scripts/harden_assets.sh
 
-# Cache clear only; no schema migration and no DB data mutation.
+# Cache clear only; no schema migration and no database data mutation.
 bench --site "$SITE" clear-cache
 
 if curl -fsS -o /dev/null -w "LOGIN_HTTP=%{http_code}\n" "http://127.0.0.1:${PORT}/login"; then
