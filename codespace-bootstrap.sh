@@ -24,6 +24,7 @@ verify_amir_source() {
   grep -Fq 'app_include_js = "amir_theme.bundle.js"' "$ROOT/apps/amir_theme_v16/amir_theme_v16/hooks.py"
   grep -Fq 'web_include_css = "login_brand.bundle.css"' "$ROOT/apps/amir_theme_v16/amir_theme_v16/hooks.py"
   grep -Fq 'web_include_js = "login_brand.bundle.js"' "$ROOT/apps/amir_theme_v16/amir_theme_v16/hooks.py"
+  "$ROOT/env/bin/python" -c 'import amir_theme_v16; print("AMIR_THEME_PYTHON_IMPORT=PASS")'
   echo "AMIR_THEME_SOURCE=PASS"
 }
 
@@ -224,7 +225,6 @@ if [ ! -f "sites/$SITE/site_config.json" ]; then
     --admin-password admin \
     --set-default
   CREATED_CLEAN_SITE=1
-  printf '%s\n' "clean" > "sites/.nds-site-provisioning-mode"
 fi
 
 echo "=== INSTALL ERPNext ==="
