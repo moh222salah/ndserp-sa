@@ -30,6 +30,7 @@ jobs:
           bash -n codespace-bootstrap.sh
           bash -n codespace-runtime-sync.sh
           bash -n codespace-verify-runtime.sh
+          bash -n codespace-start-server.sh
           bash -n runtime-refresh.sh
           bash -n apps/amir_theme_v16/scripts/harden_assets.sh
           echo "BASH_SYNTAX=PASS"
@@ -121,6 +122,10 @@ jobs:
           grep -Fq 'MODERN_HEADER_CSS=FAIL:MISSING_MARKERS:' codespace-runtime-sync.sh
           grep -Fq 'SERVED_HEADER_CSS=PASS' codespace-verify-runtime.sh
           grep -Fq 'HEADER_RUNTIME_VERIFICATION=PASS' codespace-verify-runtime.sh
+          grep -Fq 'root / "sites" / rel.lstrip("/")' codespace-runtime-sync.sh
+          grep -Fq 'root / "sites" / rel.lstrip("/")' codespace-bootstrap.sh
+          grep -Fq 'BENCH_SERVER=PASS' codespace-start-server.sh
+          grep -Fq 'bash codespace-start-server.sh' .devcontainer/devcontainer.json
           grep -Fq 'bash codespace-verify-runtime.sh' .devcontainer/devcontainer.json
           echo "MODERN_HEADER_RUNTIME_VERIFICATION=PASS"
           echo "MODERN_HEADER_SOURCE=PASS"
