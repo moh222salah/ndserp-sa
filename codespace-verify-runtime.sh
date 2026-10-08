@@ -29,9 +29,12 @@ case "$ASSET_PATH" in
   *) ASSET_URL="http://127.0.0.1:$PORT/$ASSET_PATH" ;;
 esac
 
-LOCAL_ASSET="$ROOT/${ASSET_PATH#/}"
-if [ ! -f "$LOCAL_ASSET" ] && [ -f "$ROOT/sites/${ASSET_PATH#/}" ]; then
-  LOCAL_ASSET="$ROOT/sites/${ASSET_PATH#/}"
+SITE_ASSET="$ROOT/sites/${ASSET_PATH#/}"
+REPO_ASSET="$ROOT/${ASSET_PATH#/}"
+if [ -f "$SITE_ASSET" ]; then
+  LOCAL_ASSET="$SITE_ASSET"
+else
+  LOCAL_ASSET="$REPO_ASSET"
 fi
 if [ ! -f "$LOCAL_ASSET" ]; then
   echo "BUILT_HEADER_CSS=FAIL:MISSING_FILE:$LOCAL_ASSET"
