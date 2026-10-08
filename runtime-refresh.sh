@@ -68,6 +68,34 @@ else
   exit 14
 fi
 
+echo "=== RELOAD LOCAL SAUDI RUNTIME ==="
+
+# Source changes in Python/Frappe are loaded by worker processes, so reload the
+# local development runtime before browser verification. This affects only the
+# Codespace runtime and never touches the Saudi production services.
+if pgrep -af '(^|[ /])bench start([ ]|$)' >/dev/null 2>&1 || pgrep -af 'bench serve --port 8080' >/dev/null 2>&1; then
+  pkill -TERM -f '(^|[ /])bench start([ ]|$)' >/dev/null 2>&1 || true
+  pkill -TERM -f 'bench serve --port 8080|bench socketio|bench watch|bench schedule|bench worker' >/dev/null 2>&1 || true
+  sleep 3
+fi
+
+nohup bench start > "$ROOT/logs/codespace-bench.log" 2>&1 < /dev/null &
+RUNTIME_PID=$!
+echo "RUNTIME_PID=$RUNTIME_PID"
+
+for _ in $(seq 1 30); do
+  if curl -fsS -o /dev/null "http://127.0.0.1:8080/login"; then
+    echo "RUNTIME_RELOAD=PASS"
+    break
+  fi
+  sleep 1
+done
+
+if ! curl -fsS -o /dev/null "http://127.0.0.1:8080/login"; then
+  echo "RUNTIME_RELOAD=FAIL"
+  exit 16
+fi
+
 echo "=== BUILD AMIR THEME ==="
 bench build --app amir_theme_v16 --production
 bash apps/amir_theme_v16/scripts/harden_assets.sh
@@ -188,6 +216,6 @@ echo "UI/CSS=PASS"
 echo "DB_WRITE=NO"
 echo "MIGRATION=NO"
 echo "PRODUCTION_DB_WRITE=NO"
-echo "RESTART=NO"
+echo "RESTART=LOCAL_CODESPACE_RUNTIME"
 echo "EGYPTIAN_ERP=UNTOUCHED"
 echo "SSH/WSL session remains open — no logout / no exit."
