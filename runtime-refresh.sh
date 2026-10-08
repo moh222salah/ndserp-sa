@@ -52,6 +52,14 @@ git pull --ff-only origin main
 echo "SOURCE_HEAD=$(git rev-parse HEAD)"
 echo "SOURCE_HEAD_SHORT=$(git rev-parse --short HEAD)"
 
+if grep -q '"lang": str(frappe.local.lang)' "$ROOT/apps/frappe/frappe/sessions.py" &&
+   grep -q 'self.data.data.get("lang")' "$ROOT/apps/frappe/frappe/sessions.py"; then
+  echo "SESSION_LANGUAGE_CORE=PASS"
+else
+  echo "SESSION_LANGUAGE_CORE=FAIL"
+  exit 12
+fi
+
 echo "=== BUILD AMIR THEME ==="
 bench build --app amir_theme_v16 --production
 bash apps/amir_theme_v16/scripts/harden_assets.sh
