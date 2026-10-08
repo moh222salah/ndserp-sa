@@ -50,5 +50,15 @@ jobs:
           grep -q 'login.with_active_language' apps/frappe/frappe/templates/includes/login/login.js
           echo "LOGIN_LANGUAGE_HANDOFF=PASS"
 
+      - name: Verify Arabic login form labels
+        run: |
+          grep -q 'هل نسيت كلمة المرور؟' apps/frappe/frappe/www/login.html
+          grep -q 'البريد الإلكتروني' apps/frappe/frappe/www/login.html
+          grep -q 'كلمة المرور' apps/frappe/frappe/www/login.html
+          grep -q 'متابعة' apps/frappe/frappe/www/login.html
+          grep -q 'LOGIN_ARABIC_LABELS=PASS' runtime-refresh.sh
+          grep -q 'login?_lang=ar' runtime-refresh.sh
+          echo "LOGIN_ARABIC_LABELS_SOURCE=PASS"
+
       - name: Git whitespace check
         run: git diff --check
