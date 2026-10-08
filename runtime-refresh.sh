@@ -44,6 +44,47 @@ fi
 # Cache clear only; no schema migration and no database data mutation.
 bench --site "$SITE" clear-cache
 
+LOGIN_HTML="/tmp/nds_runtime_refresh_login.html"
+LOGIN_CSS_PATH="$(
+  curl -fsS "http://127.0.0.1:${PORT}/login" -o "$LOGIN_HTML" &&
+  grep -oE '/assets/[^"]*login_brand[^"]*\\.css' "$LOGIN_HTML" |
+  sort -u |
+  head -1
+)"
+
+if [ -n "$LOGIN_CSS_PATH" ]; then
+  LOGIN_CSS_FILE="/tmp/nds_runtime_refresh_login.css"
+  curl -fsS "http://127.0.0.1:${PORT}${LOGIN_CSS_PATH}" -o "$LOGIN_CSS_FILE"
+
+  if grep -q 'amt-lb-split' "$LOGIN_CSS_FILE" &&
+     grep -q '100svh' "$LOGIN_CSS_FILE" &&
+     grep -q '100dvh' "$LOGIN_CSS_FILE" &&
+     grep -q 'max-width:560px' "$LOGIN_CSS_FILE"; then
+    echo "RESPONSIVE_CSS_SERVED=PASS"
+  else
+    echo "RESPONSIVE_CSS_SERVED=FAIL"
+    echo "LOGIN_CSS_PATH=$LOGIN_CSS_PATH"
+    exit 4
+  fi
+else
+  echo "RESPONSIVE_CSS_SERVED=FAIL"
+  echo "LOGIN_CSS_PATH=NOT_FOUND"
+  exit 4
+fi
+
+if grep -q 'amt-lb-language' "$LOGIN_HTML"; then
+  echo "LOGIN_LANGUAGE_MARKUP_REFERENCE=PASS"
+else
+  # The language button is injected by JS at runtime; static HTML is expected
+  # to contain the script reference rather than the final button markup.
+  if grep -q '/assets/amir_theme_v16/dist/js/login_brand.bundle' "$LOGIN_HTML"; then
+    echo "LOGIN_LANGUAGE_MARKUP_REFERENCE=PASS_JS_INJECTION"
+  else
+    echo "LOGIN_LANGUAGE_MARKUP_REFERENCE=FAIL"
+    exit 5
+  fi
+fi
+
 if curl -fsS -o /dev/null -w "LOGIN_HTTP=%{http_code}\n" "http://127.0.0.1:${PORT}/login"; then
   echo "LOGIN_HTTP=PASS"
 else
