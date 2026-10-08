@@ -212,6 +212,17 @@ if grep -q '0.8fr' "$LOGIN_CSS_FILE" &&
    grep -q '1.2fr' "$LOGIN_CSS_FILE" &&
    grep -q 'max-width:400px' "$LOGIN_CSS_FILE"; then
   echo "LOGIN_FORM_IMAGE_WIDTHS=PASS"
+
+if grep -Fq 'FORGOT PASSWORD — VISUAL PARITY WITH LOGIN' "$ROOT/apps/amir_theme_v16/amir_theme_v16/src/scss/login_brand.bundle.scss" && \
+   grep -Fq '.for-forgot .login-content' "$LOGIN_CSS_FILE" && \
+   grep -Fq '.for-forgot .page-card-head' "$LOGIN_CSS_FILE" && \
+   grep -Fq '.for-forgot .form-forgot' "$LOGIN_CSS_FILE"; then
+  echo "FORGOT_PASSWORD_UI_SERVED=PASS"
+else
+  echo "FORGOT_PASSWORD_UI_SERVED=FAIL"
+  exit 19
+fi
+
 else
   echo "LOGIN_FORM_IMAGE_WIDTHS=FAIL"
   exit 15
