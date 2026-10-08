@@ -15,7 +15,7 @@ The Dev Container prepares the Saudi stack automatically:
 - MariaDB 11.8
 - Redis
 - All 17 Saudi apps listed in `bench/apps.txt`
-- Frappe application on port 6000
+- Frappe application on port 8080
 - Socket.IO on 9000
 - File watcher on 6787
 
@@ -27,7 +27,7 @@ and verifies:
 
 `http://127.0.0.1:6000/login`
 
-GitHub Codespaces browser access uses the forwarded port URL supplied by Codespaces; `127.0.0.1:6000` is the loopback address inside the Codespace container.
+GitHub Codespaces browser access uses the forwarded port URL supplied by Codespaces; `127.0.0.1:8080` is the loopback address inside the Codespace container.
 
 ## Exact Saudi data restore
 
