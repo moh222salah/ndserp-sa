@@ -49,6 +49,13 @@ function isLoginPage() {
 	return !!document.querySelector(".for-login, #login-with-email-login, .login-content");
 }
 
+// Forgot Password is rendered inside the same public login shell, but it must
+// NOT use the Login split-screen decorator. Its native Frappe card is styled
+// separately by SCSS so auth markup and the existing submit flow stay intact.
+function isForgotPasswordPage() {
+	return !!document.querySelector(".for-forgot, .form-forgot");
+}
+
 function curLang() {
 	const html = document.documentElement;
 	const lang = (html.getAttribute("lang") || "").toLowerCase();
@@ -185,6 +192,23 @@ function buildBrandPanel(s) {
 	return panel;
 }
 
+let forgotDecorated = false;
+
+async function decorateForgotPassword() {
+	if (forgotDecorated) return release();
+
+	const settings = await fetchSettings();
+	// When branding is disabled, leave the native Frappe forgot page untouched.
+	if (!settings || !settings.enabled) return release();
+
+	document.documentElement.classList.add("amt-lb-on");
+	if (settings.accent_color) {
+		document.documentElement.style.setProperty("--amt-lb-accent-global", settings.accent_color);
+	}
+	forgotDecorated = true;
+	release();
+}
+
 let injected = false;
 async function decorate() {
 	if (injected) return;
@@ -290,8 +314,14 @@ export const loginBrand = {
 	mount() {
 		if (!isLoginPage()) return;
 		// `release()` on failure too: a thrown decoration must never leave the
-		// login form hidden behind the pre-paint guard.
-		const run = () => decorate().catch(release);
+		// login surface hidden behind the pre-paint guard.
+		const run = () => {
+			if (isForgotPasswordPage()) {
+				decorateForgotPassword().catch(release);
+				return;
+			}
+			decorate().catch(release);
+		};
 		if (document.readyState === "loading") {
 			document.addEventListener("DOMContentLoaded", run, { once: true });
 		} else {
