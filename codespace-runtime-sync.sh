@@ -46,9 +46,23 @@ sync_once() {
   echo "SOURCE_SYNC=PASS"
   echo "SOURCE_HEAD=$(git rev-parse HEAD)"
 
+  echo "=== VERIFY AMIR THEME SITE APP ==="
+  installed_apps="$(bench --site "$SITE" list-apps 2>/dev/null || true)"
+  if printf '%s\n' "$installed_apps" | grep -q '^Amir Theme'; then
+    echo "AMIR_THEME_SITE_APP=PASS"
+  elif [ -f "sites/.nds-site-provisioning-mode" ] && grep -qx "clean" "sites/.nds-site-provisioning-mode"; then
+    bench --site "$SITE" install-app amir_theme_v16
+    echo "AMIR_THEME_SITE_APP=INSTALLED"
+  else
+    echo "AMIR_THEME_SITE_APP=FAIL"
+    echo "SAFE_BOUNDARY=REFUSE_DB_CHANGE_ON_EXISTING_SITE"
+    return 22
+  fi
+
   echo "=== BUILD CURRENT AMIR THEME ASSETS ==="
   bench build --app amir_theme_v16 --production
   bash apps/amir_theme_v16/scripts/harden_assets.sh
+  bench --site "$SITE" clear-cache >/dev/null 2>&1 || true
 
   mkdir -p sites
   printf '%s\n' "$(git rev-parse HEAD)" > sites/.nds-runtime-source-head
