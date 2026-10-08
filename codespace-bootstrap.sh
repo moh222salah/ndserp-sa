@@ -100,8 +100,8 @@ while IFS= read -r app; do
     ./env/bin/pip install -e "$app_dir" --no-deps
   elif [ "$app" = "changai" ]; then
     echo "ChangAI source-loaded first; CPU ML dependency installed below."
-    ./env/bin/pip install -e "$app_dir" --no-deps
-    ./env/bin/pip install "jellyfish==1.2.1"
+    ./env/bin/pip install -e "$app_dir"
+
   elif [ -f "$app_dir/pyproject.toml" ] || [ -f "$app_dir/setup.py" ] || [ -f "$app_dir/setup.cfg" ]; then
     ./env/bin/pip install -e "$app_dir"
   fi
