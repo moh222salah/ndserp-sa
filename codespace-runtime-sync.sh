@@ -4,6 +4,7 @@ set -Eeuo pipefail
 ROOT="/workspaces/ndserp-sa"
 SITE="ndserpsa.nds-sa.com"
 INTERVAL="${RUNTIME_SYNC_INTERVAL:-5}"
+SYNC_MODE="${1:-loop}"
 
 cd "$ROOT"
 export PATH="$HOME/.local/bin:$HOME/.cargo/bin:$PATH"
@@ -132,6 +133,9 @@ sync_once() {
     # Re-exec the freshly synced script so the active worker uses current GitHub source immediately.
     if [ "${RUNTIME_SYNC_REEXEC:-0}" != "1" ]; then
       export RUNTIME_SYNC_REEXEC=1
+      if [ "$SYNC_MODE" = "--once" ]; then
+        exec bash "$ROOT/codespace-runtime-sync.sh" --once
+      fi
       exec bash "$ROOT/codespace-runtime-sync.sh"
     fi
   else
