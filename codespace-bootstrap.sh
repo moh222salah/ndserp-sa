@@ -8,6 +8,13 @@ ERPNEXT_VERSION="v16.36.1"
 DB_ROOT_PASSWORD="nds_codespace_root"
 
 cd "$ROOT"
+
+# Always consume the GitHub source-of-truth before installing/building runtime assets.
+git fetch origin main
+git pull --ff-only origin main
+
+echo "SOURCE_OF_TRUTH=$(git rev-parse --short HEAD)"
+
 export PATH="$HOME/.local/bin:$HOME/.cargo/bin:$PATH"
 
 echo "=== NDS ERP SAUDI CODESPACE ==="
@@ -175,11 +182,12 @@ if ! printf '%s\n' "$installed_apps" | grep -q '^ERPNext'; then
 fi
 
 echo "=== BUILD ASSETS ==="
-bench build
+bench build --app amir_theme_v16 --production
+bash apps/amir_theme_v16/scripts/harden_assets.sh
 
 bench --site "$SITE" set-config developer_mode 1
 bench --site "$SITE" clear-cache
 
 echo "=== START SAUDI ERP ==="
 echo "Run: bench start"
-echo "Port: 6000"
+echo "Port: 8080"
