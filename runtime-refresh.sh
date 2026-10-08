@@ -60,6 +60,14 @@ else
   exit 12
 fi
 
+if grep -q 'self.user_lang = get_language()' "$ROOT/apps/frappe/frappe/auth.py" &&
+   grep -q 'frappe.local.lang = self.user_lang' "$ROOT/apps/frappe/frappe/auth.py"; then
+  echo "AUTH_LOGIN_LANGUAGE_PRECAPTURE=PASS"
+else
+  echo "AUTH_LOGIN_LANGUAGE_PRECAPTURE=FAIL"
+  exit 14
+fi
+
 echo "=== BUILD AMIR THEME ==="
 bench build --app amir_theme_v16 --production
 bash apps/amir_theme_v16/scripts/harden_assets.sh
