@@ -108,7 +108,9 @@ else
 fi
 
 if grep -q 'margin-top:0' "$LOGIN_CSS_FILE" &&
-   grep -q 'padding-top:0' "$LOGIN_CSS_FILE"; then
+   grep -q 'padding-top:0' "$LOGIN_CSS_FILE" &&
+   grep -q 'page-content-wrapper' "$LOGIN_CSS_FILE" &&
+   grep -q '100dvh' "$LOGIN_CSS_FILE"; then
   echo "TOP_GAP_CSS_SERVED=PASS"
 else
   echo "TOP_GAP_CSS_SERVED=FAIL"
