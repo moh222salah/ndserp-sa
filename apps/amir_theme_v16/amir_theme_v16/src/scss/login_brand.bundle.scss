@@ -98,6 +98,79 @@ html.amt-lb-on {
 	margin-bottom: 10px;
 }
 
+.amt-lb-form-head-top {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 14px;
+	width: 100%;
+	margin-bottom: 10px;
+}
+
+.amt-lb-form-head-top .amt-lb-form-brand {
+	margin-bottom: 0;
+	min-width: 0;
+}
+
+.amt-lb-language {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	gap: 7px;
+	min-height: 36px;
+	padding: 0 12px;
+	border: 1px solid color-mix(in srgb, var(--amt-lb-accent) 18%, #fff);
+	border-radius: 999px;
+	background: rgba(255, 255, 255, .82);
+	color: var(--amt-lb-accent);
+	font-size: 12.5px;
+	font-weight: 800;
+	line-height: 1;
+	white-space: nowrap;
+	cursor: pointer;
+	box-shadow: 0 7px 20px rgba(15, 23, 42, .07);
+	transition:
+		transform 120ms ease,
+		background-color 120ms ease,
+		border-color 120ms ease,
+		box-shadow 120ms ease,
+		opacity 120ms ease;
+	flex: 0 0 auto;
+
+	svg {
+		width: 16px;
+		height: 16px;
+		flex: 0 0 auto;
+	}
+
+	&:hover {
+		background: #fff;
+		border-color: color-mix(in srgb, var(--amt-lb-accent) 42%, #fff);
+		box-shadow: 0 10px 24px color-mix(in srgb, var(--amt-lb-accent) 14%, transparent);
+		transform: translateY(-1px);
+	}
+
+	&:active {
+		transform: translateY(0);
+	}
+
+	&:focus-visible {
+		outline: 2px solid var(--amt-lb-accent);
+		outline-offset: 2px;
+	}
+
+	&--busy,
+	&:disabled {
+		opacity: .55;
+		pointer-events: none;
+		cursor: wait;
+	}
+}
+
+.amt-lb-language-label {
+	font-variant-numeric: tabular-nums;
+}
+
 // Logo slot. Rectangular and transparent: a logo carries its own shape, and
 // boxing it in a coloured square makes every brand look like the same app icon.
 // The plate and its shadow are gone; the mark stands on the card directly.
@@ -650,6 +723,18 @@ html[dir="rtl"] {
 	background: #0f172a !important;
 	color: #e5e7eb !important;
 	border-color: #334155 !important;
+}
+
+:root[data-theme="dark"] .amt-lb-language {
+	background: rgba(15, 23, 42, .88);
+	border-color: rgba(148, 163, 184, .24);
+	color: #e5e7eb;
+	box-shadow: 0 7px 20px rgba(0, 0, 0, .18);
+}
+
+:root[data-theme="dark"] .amt-lb-language:hover {
+	background: #111c32;
+	border-color: color-mix(in srgb, var(--amt-lb-accent) 44%, #334155);
 }
 
 html.amt-lb-on[data-theme="dark"],
