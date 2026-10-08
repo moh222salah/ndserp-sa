@@ -12,6 +12,10 @@ import { consoleHygiene } from "./core/console_hygiene.js";
 import { quickEntryFix } from "./core/quick_entry_fix.js";
 import { browserIdentity } from "./core/browser_identity.js";
 
+// Install the browser-title guard immediately at bundle evaluation time.
+// This closes the gap before DOM ready where Frappe may write its default title.
+browserIdentity.mount();
+
 // Silence two harmless frappe-charts noise sources (one is an uncaught error)
 // as early as possible, before any chart renders. See the module for details.
 consoleHygiene.install();
