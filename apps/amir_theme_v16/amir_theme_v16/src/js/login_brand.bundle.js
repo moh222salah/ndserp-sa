@@ -7,5 +7,7 @@
 // credential inputs themselves are never touched or re-created.
 
 import { loginBrand } from "./core/login_brand.js";
+import { browserIdentity } from "./core/browser_identity.js";
 
+browserIdentity.mount();
 loginBrand.mount();

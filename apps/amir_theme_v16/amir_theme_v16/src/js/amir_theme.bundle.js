@@ -10,6 +10,7 @@ import { translationToggle } from "./core/translation_toggle.js";
 import { progressBar } from "./core/progress_bar.js";
 import { consoleHygiene } from "./core/console_hygiene.js";
 import { quickEntryFix } from "./core/quick_entry_fix.js";
+import { browserIdentity } from "./core/browser_identity.js";
 
 // Silence two harmless frappe-charts noise sources (one is an uncaught error)
 // as early as possible, before any chart renders. See the module for details.
@@ -1066,6 +1067,7 @@ amir_theme.attachments = {
 $(document).ready(function () {
 	// Subscribes to jQuery's global ajax events only — no polling, no observer,
 	// and nothing in the DOM until a request is actually slow.
+	browserIdentity.mount();
 	progressBar.mount();
 	deskLauncher.mount();
 	deskStatusBar.mount();
