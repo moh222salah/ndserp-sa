@@ -17,6 +17,51 @@ echo "SOURCE_OF_TRUTH=$(git rev-parse --short HEAD)"
 
 export PATH="$HOME/.local/bin:$HOME/.cargo/bin:$PATH"
 
+
+verify_amir_source() {
+  test -s "$ROOT/apps/amir_theme_v16/amir_theme_v16/hooks.py"
+  grep -Fq 'app_include_css = "amir_theme.bundle.css"' "$ROOT/apps/amir_theme_v16/amir_theme_v16/hooks.py"
+  grep -Fq 'app_include_js = "amir_theme.bundle.js"' "$ROOT/apps/amir_theme_v16/amir_theme_v16/hooks.py"
+  grep -Fq 'web_include_css = "login_brand.bundle.css"' "$ROOT/apps/amir_theme_v16/amir_theme_v16/hooks.py"
+  grep -Fq 'web_include_js = "login_brand.bundle.js"' "$ROOT/apps/amir_theme_v16/amir_theme_v16/hooks.py"
+  echo "AMIR_THEME_SOURCE=PASS"
+}
+
+verify_amir_assets() {
+  "$ROOT/env/bin/python" - <<'PY'
+from pathlib import Path
+import hashlib
+import json
+
+root = Path("/workspaces/ndserp-sa")
+assets_path = root / "sites" / "assets" / "assets.json"
+if not assets_path.is_file():
+    raise SystemExit(f"ASSET_VERIFY=FAIL:{assets_path}")
+
+assets = json.loads(assets_path.read_text(encoding="utf-8"))
+required = (
+    "amir_theme.bundle.css",
+    "amir_theme.bundle.js",
+    "login_brand.bundle.css",
+    "login_brand.bundle.js",
+)
+
+for key in required:
+    rel = assets.get(key)
+    if not isinstance(rel, str) or not rel:
+        raise SystemExit(f"ASSET_VERIFY=FAIL:MISSING_MAPPING:{key}")
+    target = root / rel.lstrip("/")
+    if not target.is_file():
+        raise SystemExit(f"ASSET_VERIFY=FAIL:MISSING_FILE:{key}:{target}")
+    digest = hashlib.sha256(target.read_bytes()).hexdigest()
+    print(f"ASSET_VERIFIED={key}")
+    print(f"ASSET_PATH={rel}")
+    print(f"ASSET_SHA256={digest}")
+
+print("ASSET_SERVE_TREE=PASS")
+PY
+}
+
 echo "=== NDS ERP SAUDI CODESPACE ==="
 echo "ROOT=$ROOT"
 echo "SITE=$SITE"
@@ -192,30 +237,37 @@ if ! printf '%s\n' "$installed_apps" | grep -q '^ERPNext'; then
   fi
 fi
 
-echo "=== VERIFY/INSTALL AMIR THEME ==="
-installed_apps="$(bench --site "$SITE" list-apps 2>/dev/null || true)"
+echo "=== VERIFY/INSTALL AMIR THEME ON SITE ==="
+verify_amir_source
 
-# A site with only the baseline Framework + ERPNext apps is the clean
-# Codespace development site. Mark it so the existing activation branch can
-# install the UI theme without guessing on a restored/custom Saudi database.
-if ! printf '%s\n' "$installed_apps" | grep -q '^Amir Theme' &&    ! printf '%s\n' "$installed_apps" | grep -Ev '^(Frappe Framework|ERPNext)([[:space:]]|$)' | grep -q '[^[:space:]]'; then
-  printf '%s\n' "clean" > "sites/.nds-site-provisioning-mode"
+installed_apps=""
+if ! installed_apps="$(bench --site "$SITE" list-apps 2>/dev/null)"; then
+  echo "SITE_APP_QUERY=FAIL"
+  echo "SAFE_BOUNDARY=STOP_BEFORE_SITE_WRITE"
+  exit 21
 fi
 
+THEME_SITE_INSTALL=NO
 if printf '%s\n' "$installed_apps" | grep -q '^Amir Theme'; then
   echo "AMIR_THEME_SITE_APP=PASS"
-elif [ "$CREATED_CLEAN_SITE" -eq 1 ] || { [ -f "sites/.nds-site-provisioning-mode" ] && grep -qx "clean" "sites/.nds-site-provisioning-mode"; }; then
-  bench --site "$SITE" install-app amir_theme_v16
-  echo "AMIR_THEME_SITE_APP=INSTALLED"
 else
-  echo "AMIR_THEME_SITE_APP=FAIL_EXISTING_SITE_NOT_INSTALLED"
-  echo "SAFE_BOUNDARY=NO_DB_INSTALL_ON_EXISTING_SITE"
-  exit 22
+  echo "AMIR_THEME_SITE_APP=MISSING_INSTALLING"
+  echo "AMIR_THEME_SITE_DB_WRITE=THEME_APP_INSTALL_ONLY"
+  bench --site "$SITE" install-app amir_theme_v16
+  THEME_SITE_INSTALL=YES
+  installed_apps="$(bench --site "$SITE" list-apps 2>/dev/null)"
+  if ! printf '%s\n' "$installed_apps" | grep -q '^Amir Theme'; then
+    echo "AMIR_THEME_SITE_APP=FAIL_AFTER_INSTALL"
+    exit 22
+  fi
+  echo "AMIR_THEME_SITE_APP=PASS_AFTER_INSTALL"
 fi
 
+echo "AMIR_THEME_SITE_INSTALL=$THEME_SITE_INSTALL"
 echo "=== BUILD ASSETS ==="
 bench build --app amir_theme_v16 --production
 bash apps/amir_theme_v16/scripts/harden_assets.sh
+verify_amir_assets
 
 if bench --site "$SITE" list-apps 2>/dev/null | grep -q '^Amir Theme'; then
   echo "AMIR_THEME_RUNTIME=PASS"
@@ -225,6 +277,8 @@ else
 fi
 
 bench --site "$SITE" clear-cache
+echo "CORE_MODIFICATION=NO"
+echo "MIGRATION=NO"
 
 echo "=== START SAUDI ERP ==="
 echo "Run: bench start"
