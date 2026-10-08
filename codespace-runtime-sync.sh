@@ -8,6 +8,85 @@ INTERVAL="${RUNTIME_SYNC_INTERVAL:-5}"
 cd "$ROOT"
 export PATH="$HOME/.local/bin:$HOME/.cargo/bin:$PATH"
 
+
+verify_amir_source() {
+  test -s "$ROOT/apps/amir_theme_v16/amir_theme_v16/hooks.py"
+  grep -Fq 'app_include_css = "amir_theme.bundle.css"' "$ROOT/apps/amir_theme_v16/amir_theme_v16/hooks.py"
+  grep -Fq 'app_include_js = "amir_theme.bundle.js"' "$ROOT/apps/amir_theme_v16/amir_theme_v16/hooks.py"
+  grep -Fq 'web_include_css = "login_brand.bundle.css"' "$ROOT/apps/amir_theme_v16/amir_theme_v16/hooks.py"
+  grep -Fq 'web_include_js = "login_brand.bundle.js"' "$ROOT/apps/amir_theme_v16/amir_theme_v16/hooks.py"
+  echo "AMIR_THEME_SOURCE=PASS"
+}
+
+verify_amir_assets() {
+  "$ROOT/env/bin/python" - <<'PY'
+from pathlib import Path
+import hashlib
+import json
+
+root = Path("/workspaces/ndserp-sa")
+assets_path = root / "sites" / "assets" / "assets.json"
+if not assets_path.is_file():
+    raise SystemExit(f"ASSET_VERIFY=FAIL:{assets_path}")
+
+assets = json.loads(assets_path.read_text(encoding="utf-8"))
+required = (
+    "amir_theme.bundle.css",
+    "amir_theme.bundle.js",
+    "login_brand.bundle.css",
+    "login_brand.bundle.js",
+)
+
+for key in required:
+    rel = assets.get(key)
+    if not isinstance(rel, str) or not rel:
+        raise SystemExit(f"ASSET_VERIFY=FAIL:MISSING_MAPPING:{key}")
+    target = root / rel.lstrip("/")
+    if not target.is_file():
+        raise SystemExit(f"ASSET_VERIFY=FAIL:MISSING_FILE:{key}:{target}")
+    digest = hashlib.sha256(target.read_bytes()).hexdigest()
+    print(f"ASSET_VERIFIED={key}")
+    print(f"ASSET_PATH={rel}")
+    print(f"ASSET_SHA256={digest}")
+
+print("ASSET_SERVE_TREE=PASS")
+PY
+}
+
+ensure_amir_theme_site_app() {
+  verify_amir_source
+
+  local installed_apps
+  if ! installed_apps="$(bench --site "$SITE" list-apps 2>/dev/null)"; then
+    echo "SITE_APP_QUERY=FAIL"
+    echo "SAFE_BOUNDARY=STOP_BEFORE_SITE_WRITE"
+    return 21
+  fi
+
+  if printf '%s\n' "$installed_apps" | grep -q '^Amir Theme'; then
+    echo "AMIR_THEME_SITE_APP=PASS"
+    echo "AMIR_THEME_SITE_DB_WRITE=NO"
+    return 0
+  fi
+
+  echo "AMIR_THEME_SITE_APP=MISSING_INSTALLING"
+  echo "AMIR_THEME_SITE_DB_WRITE=THEME_APP_INSTALL_ONLY"
+  bench --site "$SITE" install-app amir_theme_v16
+
+  if ! installed_apps="$(bench --site "$SITE" list-apps 2>/dev/null)"; then
+    echo "SITE_APP_QUERY=FAIL_AFTER_INSTALL"
+    return 22
+  fi
+
+  if printf '%s\n' "$installed_apps" | grep -q '^Amir Theme'; then
+    echo "AMIR_THEME_SITE_APP=PASS_AFTER_INSTALL"
+    return 0
+  fi
+
+  echo "AMIR_THEME_SITE_APP=FAIL_AFTER_INSTALL"
+  return 23
+}
+
 echo "=== NDS ERP SAUDI — CODESPACE RUNTIME SYNC ==="
 echo "ROOT=$ROOT"
 echo "SITE=$SITE"
@@ -46,23 +125,15 @@ sync_once() {
     echo "SOURCE_SYNC=ALREADY_CURRENT"
   fi
 
-  echo "=== VERIFY AMIR THEME SITE APP ==="
-  installed_apps="$(bench --site "$SITE" list-apps 2>/dev/null || true)"
-
-  if ! printf '%s\n' "$installed_apps" | grep -q '^Amir Theme' &&      ! printf '%s\n' "$installed_apps" | grep -Ev '^(Frappe Framework|ERPNext)([[:space:]]|$)' | grep -q '[^[:space:]]'; then
-    printf '%s\n' "clean" > "sites/.nds-site-provisioning-mode"
-  fi
-
-  if printf '%s\n' "$installed_apps" | grep -q '^Amir Theme'; then
-    echo "AMIR_THEME_SITE_APP=PASS"
-  elif [ -f "sites/.nds-site-provisioning-mode" ] && grep -qx "clean" "sites/.nds-site-provisioning-mode"; then
-    bench --site "$SITE" install-app amir_theme_v16
-    echo "AMIR_THEME_SITE_APP=INSTALLED"
-  else
+  echo "=== VERIFY/INSTALL AMIR THEME ON SITE ==="
+  if ! ensure_amir_theme_site_app; then
     echo "AMIR_THEME_SITE_APP=FAIL"
-    echo "SAFE_BOUNDARY=REFUSE_DB_CHANGE_ON_EXISTING_SITE"
-    return 22
+    return 24
   fi
+
+  # Keep the Bench app registry aligned with the GitHub source tree after every source sync.
+  cp bench/apps.txt sites/apps.txt
+  echo "BENCH_APPS_REGISTRY=SYNCED"
 
   source_marker=""
   if [ -f "sites/.nds-runtime-source-head" ]; then
@@ -72,6 +143,10 @@ sync_once() {
   needs_build=0
   if [ "$source_marker" != "$current" ]; then
     needs_build=1
+  elif ! verify_amir_assets >/dev/null 2>&1; then
+    # A stale/missing asset tree forces a rebuild even when the Git SHA is unchanged.
+    needs_build=1
+    echo "ASSET_FRESHNESS=STALE_OR_MISSING"
   fi
 
   if [ "$needs_build" -eq 1 ]; then
@@ -79,6 +154,7 @@ sync_once() {
     bench build --app amir_theme_v16 --production
     bash apps/amir_theme_v16/scripts/harden_assets.sh
     bench --site "$SITE" clear-cache >/dev/null 2>&1 || true
+    verify_amir_assets
 
     mkdir -p sites
     printf '%s\n' "$current" > sites/.nds-runtime-source-head
@@ -87,10 +163,12 @@ sync_once() {
     echo "SERVED_SOURCE_HEAD=$(cat sites/.nds-runtime-source-head)"
   else
     echo "ASSET_BUILD=ALREADY_CURRENT"
+    verify_amir_assets
   fi
 
-  echo "DB_WRITE=NO"
+  echo "CORE_MODIFICATION=NO"
   echo "MIGRATION=NO"
+  echo "DB_WRITE=NO_AFTER_THEME_ACTIVATION"
 }
 
 
