@@ -135,6 +135,14 @@ else
   exit 10
 fi
 
+if grep -q 'width:154px' "$LOGIN_CSS_FILE" &&
+   grep -q 'height:46px' "$LOGIN_CSS_FILE"; then
+  echo "WELCOME_LOGO_SIZE=PASS"
+else
+  echo "WELCOME_LOGO_SIZE=FAIL"
+  exit 11
+fi
+
 if curl -fsS -o /dev/null -w "LOGIN_HTTP=%{http_code}\n" "http://127.0.0.1:8080/login"; then
   echo "LOGIN_HTTP=PASS"
 else
