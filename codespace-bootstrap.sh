@@ -51,12 +51,9 @@ for key in required:
     rel = assets.get(key)
     if not isinstance(rel, str) or not rel:
         raise SystemExit(f"ASSET_VERIFY=FAIL:MISSING_MAPPING:{key}")
-    target = root / rel.lstrip("/")
-    if not target.is_file():
-        # Frappe's built public assets live under sites/assets, not repository/assets.
-        site_target = root / "sites" / rel.lstrip("/")
-        if site_target.is_file():
-            target = site_target
+    # Prefer the exact Frappe public asset tree that serves browser requests.
+    site_target = root / "sites" / rel.lstrip("/")
+    target = site_target if site_target.is_file() else root / rel.lstrip("/")
     if not target.is_file():
         raise SystemExit(f"ASSET_VERIFY=FAIL:MISSING_FILE:{key}:{target}")
     digest = hashlib.sha256(target.read_bytes()).hexdigest()
