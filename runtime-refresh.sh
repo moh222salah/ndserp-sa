@@ -160,6 +160,15 @@ else
   exit 10
 fi
 
+if grep -q '0.8fr' "$LOGIN_CSS_FILE" &&
+   grep -q '1.2fr' "$LOGIN_CSS_FILE" &&
+   grep -q 'max-width:400px' "$LOGIN_CSS_FILE"; then
+  echo "LOGIN_FORM_IMAGE_WIDTHS=PASS"
+else
+  echo "LOGIN_FORM_IMAGE_WIDTHS=FAIL"
+  exit 15
+fi
+
 if grep -q 'width:154px' "$LOGIN_CSS_FILE" &&
    grep -q 'height:46px' "$LOGIN_CSS_FILE"; then
   echo "WELCOME_LOGO_SIZE=PASS"
