@@ -200,6 +200,21 @@ else
   exit 8
 fi
 
+if grep -q 'form-login-with-email-link' "$LOGIN_HTML" &&    grep -q 'for-login-with-email-link' "$LOGIN_HTML"; then
+  echo "EMAIL_LOGIN_LINK_MARKUP_REFERENCE=PASS"
+else
+  echo "EMAIL_LOGIN_LINK_MARKUP_REFERENCE=FAIL"
+  exit 20
+fi
+
+if grep -Fq 'function isEmailLoginLinkPage()' "$ROOT/apps/amir_theme_v16/amir_theme_v16/src/js/core/login_brand.js" &&    grep -Fq '.for-login-with-email-link' "$LOGIN_CSS_FILE" &&    grep -Fq '.form-login-with-email-link' "$LOGIN_CSS_FILE"; then
+  echo "EMAIL_LOGIN_LINK_UI_SERVED_SOURCE=PASS"
+else
+  echo "EMAIL_LOGIN_LINK_UI_SERVED_SOURCE=FAIL"
+  exit 21
+fi
+
+
 if grep -q 'border-radius:30px' "$LOGIN_CSS_FILE" &&
    grep -q 'border-radius:24px' "$LOGIN_CSS_FILE"; then
   echo "BRAND_IMAGE_FRAME_ROUNDED=PASS"
