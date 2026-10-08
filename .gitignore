@@ -3,14 +3,17 @@ env/
 .venv/
 venv/
 sites/
+config/
 node_modules/
 **/node_modules/
+**/node_modules
 
 # Generated Python artifacts
 __pycache__/
 **/__pycache__/
 *.pyc
 *.pyo
+*.cache.pkl
 
 # Runtime logs / temporary data
 *.log
@@ -52,6 +55,7 @@ certs/private/
 *.sql.gz
 *.dump
 *.bak
+*.bak-*
 *.backup
 
 # Compressed backup archives
