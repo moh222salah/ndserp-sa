@@ -128,10 +128,25 @@ function setFavicon() {
   });
 }
 
+function currentLanguage() {
+  const frappe = window.frappe;
+  const lang =
+    frappe?.boot?.lang ||
+    document.documentElement.getAttribute("lang") ||
+    "en";
+
+  return String(lang).toLowerCase().startsWith("ar") ? "ar" : "en";
+}
+
 function desiredTitle() {
   const moduleName = getCurrentModule();
   const moduleLabel = translate(moduleName);
-  return moduleLabel ? `${SYSTEM_NAME} | ${moduleLabel}` : SYSTEM_NAME;
+
+  if (!moduleLabel) return SYSTEM_NAME;
+
+  return currentLanguage() === "ar"
+    ? `${SYSTEM_NAME} | ${moduleLabel}`
+    : `${moduleLabel} | ${SYSTEM_NAME}`;
 }
 
 function applyTitle() {
