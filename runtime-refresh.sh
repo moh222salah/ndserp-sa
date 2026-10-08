@@ -84,14 +84,14 @@ RUNTIME_PID=$!
 echo "RUNTIME_PID=$RUNTIME_PID"
 
 for _ in $(seq 1 30); do
-  if curl -fsS -o /dev/null "http://127.0.0.1:8080/login"; then
+  if curl -fsS -o /dev/null "http://127.0.0.1:8080/login?_lang=ar"; then
     echo "RUNTIME_RELOAD=PASS"
     break
   fi
   sleep 1
 done
 
-if ! curl -fsS -o /dev/null "http://127.0.0.1:8080/login"; then
+if ! curl -fsS -o /dev/null "http://127.0.0.1:8080/login?_lang=ar"; then
   echo "RUNTIME_RELOAD=FAIL"
   exit 16
 fi
