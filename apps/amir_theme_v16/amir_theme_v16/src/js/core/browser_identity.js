@@ -228,6 +228,8 @@ function installTitleGuard() {
 
   if (!titleDescriptor?.get || !titleDescriptor?.set) return;
 
+  let lastAllowedTitle = titleDescriptor.get.call(document);
+
   Object.defineProperty(document, "title", {
     configurable: true,
     enumerable: titleDescriptor.enumerable,
@@ -235,16 +237,29 @@ function installTitleGuard() {
       return titleDescriptor.get.call(document);
     },
     set(value) {
+      const incomingTitle = String(value || "");
       const fixedTitle = fixedRouteTitle();
+
       if (fixedTitle) {
+        lastAllowedTitle = fixedTitle;
         titleDescriptor.set.call(document, fixedTitle);
         return;
       }
 
-      titleDescriptor.set.call(document, value);
+      // Never allow stock Frappe titles to flash during SPA route changes.
+      if (/\\bFrappe\\b/i.test(incomingTitle)) {
+        if (lastAllowedTitle && !/\\bFrappe\\b/i.test(lastAllowedTitle)) {
+          titleDescriptor.set.call(document, lastAllowedTitle);
+        }
+        return;
+      }
+
+      lastAllowedTitle = incomingTitle;
+      titleDescriptor.set.call(document, incomingTitle);
     },
   });
 }
+
 
 function applyTitle() {
   const nextTitle = desiredTitle();
