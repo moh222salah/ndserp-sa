@@ -82,7 +82,7 @@ else
 fi
 
 LOGIN_CSS_PATH="$(
-  grep -oE '/assets/[^"]*login_brand[^"]*\\.css' "$LOGIN_HTML" |
+  grep -oE '/assets/[^"]*login_brand[^"]*\.css' "$LOGIN_HTML" |
   sort -u |
   head -1
 )"
