@@ -1,0 +1,111 @@
+// ===========================================================================
+// NDS ERP Saudi — modern global Desk header
+// UI-only layer: preserves Frappe markup, routes, handlers and permissions.
+// ===========================================================================
+
+body .navbar {
+	min-height: 58px;
+	padding: 0.45rem 1.15rem;
+	background: #ffffff;
+	border-bottom: 1px solid #e5ebf2;
+	box-shadow: 0 3px 14px rgba(10, 35, 66, 0.055);
+	z-index: 1030;
+}
+
+body .navbar .navbar-brand,
+body .navbar .navbar-home {
+	color: #0a2342;
+	font-weight: 700;
+	letter-spacing: -0.015em;
+}
+
+body .navbar .navbar-brand:hover,
+body .navbar .navbar-home:hover {
+	color: #164e8f;
+}
+
+body .navbar .nav-link,
+body .navbar .navbar-nav > li > a,
+body .navbar .navbar-icon {
+	color: #34465d;
+	border-radius: 9px;
+	transition: color 150ms ease, background-color 150ms ease;
+}
+
+body .navbar .nav-link:hover,
+body .navbar .navbar-nav > li > a:hover,
+body .navbar .navbar-icon:hover {
+	color: #0a2342;
+	background: #f1f5fa;
+}
+
+body .navbar .search-bar,
+body .navbar .search-bar input,
+body .navbar .awesomplete input {
+	border-radius: 10px;
+}
+
+body .navbar .search-bar {
+	border: 1px solid #e1e8f0;
+	background: #f7f9fc;
+	box-shadow: none;
+	transition: border-color 150ms ease, background-color 150ms ease, box-shadow 150ms ease;
+}
+
+body .navbar .search-bar:focus-within {
+	border-color: #7ca7d8;
+	background: #ffffff;
+	box-shadow: 0 0 0 3px rgba(22, 78, 143, 0.10);
+}
+
+body .navbar .dropdown-menu {
+	margin-top: 8px;
+	padding: 6px;
+	border: 1px solid #e4eaf1;
+	border-radius: 12px;
+	box-shadow: 0 14px 36px rgba(10, 35, 66, 0.14);
+}
+
+body .navbar .dropdown-menu .dropdown-item,
+body .navbar .dropdown-menu a {
+	border-radius: 7px;
+}
+
+body .navbar .dropdown-menu .dropdown-item:hover,
+body .navbar .dropdown-menu a:hover {
+	background: #f1f5fa;
+	color: #0a2342;
+}
+
+body .navbar .notifications-icon,
+body .navbar .navbar-icon {
+	min-width: 34px;
+	min-height: 34px;
+	align-items: center;
+	justify-content: center;
+}
+
+body .navbar :focus-visible {
+	outline: 2px solid #164e8f;
+	outline-offset: 2px;
+}
+
+@media (max-width: 767px) {
+	body .navbar {
+		min-height: 52px;
+		padding-inline: 0.65rem;
+	}
+
+	body .navbar .search-bar {
+		max-width: min(42vw, 220px);
+	}
+}
+
+@media (prefers-reduced-motion: reduce) {
+	body .navbar *,
+	body .navbar *::before,
+	body .navbar *::after {
+		transition-duration: 0.01ms;
+		animation-duration: 0.01ms;
+	}
+}
