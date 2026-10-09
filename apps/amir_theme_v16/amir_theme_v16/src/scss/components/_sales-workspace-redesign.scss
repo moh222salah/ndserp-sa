@@ -365,3 +365,87 @@ body.nds-purchase-workspace-redesign #page-Workspaces .layout-main-section:not(.
     animation: none;
   }
 }
+
+
+/* Purchase dashboard refinements from the Accounts/Purchases reference screenshots.
+ * Gold/ochre purchase accent; 7:5 chart row; full-width recent-orders table.
+ */
+body.nds-purchase-workspace-redesign #page-Workspaces {
+  --nds-purchase-blue: #C58B3C;
+  --nds-purchase-gold: #D4AF37;
+}
+body.nds-purchase-workspace-redesign #page-Workspaces #editorjs .widget.number-widget-box {
+  border-top-color: var(--nds-purchase-blue);
+}
+
+/* The trend chart occupies the wider (7/12) RTL-side panel, with category
+   distribution beside it (5/12), matching the reference dashboard composition. */
+body.nds-purchase-workspace-redesign #page-Workspaces #editorjs .ce-block:has(.dashboard-widget-box),
+body.nds-purchase-workspace-redesign #page-Workspaces #editorjs .ce-block:has(.chart-widget),
+body.nds-purchase-workspace-redesign #page-Workspaces #editorjs .ce-block:has([chart_name]) {
+  order: 2;
+  grid-column: span 7;
+  min-width: 0;
+}
+body.nds-purchase-workspace-redesign #page-Workspaces #editorjs .ce-block:has(.dashboard-widget-box) ~ .ce-block:has(.dashboard-widget-box),
+body.nds-purchase-workspace-redesign #page-Workspaces #editorjs .ce-block:has(.dashboard-widget-box) ~ .ce-block:has(.chart-widget),
+body.nds-purchase-workspace-redesign #page-Workspaces #editorjs .ce-block:has(.dashboard-widget-box) ~ .ce-block:has([chart_name]),
+body.nds-purchase-workspace-redesign #page-Workspaces #editorjs .ce-block:has(.chart-widget) ~ .ce-block:has(.dashboard-widget-box),
+body.nds-purchase-workspace-redesign #page-Workspaces #editorjs .ce-block:has(.chart-widget) ~ .ce-block:has(.chart-widget),
+body.nds-purchase-workspace-redesign #page-Workspaces #editorjs .ce-block:has(.chart-widget) ~ .ce-block:has([chart_name]),
+body.nds-purchase-workspace-redesign #page-Workspaces #editorjs .ce-block:has([chart_name]) ~ .ce-block:has(.dashboard-widget-box),
+body.nds-purchase-workspace-redesign #page-Workspaces #editorjs .ce-block:has([chart_name]) ~ .ce-block:has(.chart-widget),
+body.nds-purchase-workspace-redesign #page-Workspaces #editorjs .ce-block:has([chart_name]) ~ .ce-block:has([chart_name]) {
+  grid-column: span 5;
+}
+
+/* Recent purchase orders are preserved as rendered data; presentation only. */
+body.nds-purchase-workspace-redesign #page-Workspaces #editorjs .ce-block:has(table),
+body.nds-purchase-workspace-redesign #page-Workspaces #editorjs .ce-block:has(.datatable),
+body.nds-purchase-workspace-redesign #page-Workspaces #editorjs .ce-block:has(.table-widget) {
+  order: 3;
+  grid-column: span 12;
+  min-width: 0;
+}
+body.nds-purchase-workspace-redesign #page-Workspaces #editorjs .ce-block:has(table) .custom-block,
+body.nds-purchase-workspace-redesign #page-Workspaces #editorjs .ce-block:has(table) .widget,
+body.nds-purchase-workspace-redesign #page-Workspaces #editorjs .ce-block:has(.table-widget),
+body.nds-purchase-workspace-redesign #page-Workspaces #editorjs .ce-block:has(.datatable) {
+  overflow: hidden;
+  border: 1px solid var(--nds-purchase-line);
+  border-radius: 12px;
+  background: var(--nds-purchase-surface);
+  box-shadow: 0 3px 12px rgba(10,35,66,.035);
+}
+body.nds-purchase-workspace-redesign #page-Workspaces #editorjs table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  background: var(--nds-purchase-surface);
+}
+body.nds-purchase-workspace-redesign #page-Workspaces #editorjs table th,
+body.nds-purchase-workspace-redesign #page-Workspaces #editorjs table td {
+  padding: 12px 10px;
+  border-bottom: 1px solid var(--nds-purchase-line);
+  text-align: start;
+  vertical-align: middle;
+}
+body.nds-purchase-workspace-redesign #page-Workspaces #editorjs table th {
+  color: var(--nds-purchase-muted);
+  font-size: 12px;
+  font-weight: 650;
+  white-space: nowrap;
+}
+body.nds-purchase-workspace-redesign #page-Workspaces #editorjs table tbody tr:last-child td {
+  border-bottom: 0;
+}
+body.nds-purchase-workspace-redesign #page-Workspaces #editorjs table tbody tr:hover td {
+  background: #f7f9fc;
+}
+@media (max-width: 1100px) {
+  body.nds-purchase-workspace-redesign #page-Workspaces #editorjs .ce-block:has(.dashboard-widget-box),
+  body.nds-purchase-workspace-redesign #page-Workspaces #editorjs .ce-block:has(.chart-widget),
+  body.nds-purchase-workspace-redesign #page-Workspaces #editorjs .ce-block:has([chart_name]) {
+    grid-column: span 12;
+  }
+}

@@ -120,6 +120,10 @@ for key in required:
             "#page-workspaces",
             ".codex-editor__redactor",
             "grid-template-columns:repeat(12,minmax(0,1fr))",
+            "#c58b3c",
+            "grid-column:span7",
+            "grid-column:span5",
+            "border-collapse:separate",
         )
         missing = [marker for marker in required_purchase_workspace_css if marker not in css_compact]
         if missing:

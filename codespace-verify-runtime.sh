@@ -84,7 +84,7 @@ for marker in '.nds-sales-workspace-redesign' '#page-workspaces' '#d4af37'; do
   fi
 done
 echo "BUILT_SALES_WORKSPACE_CSS=PASS"
-for marker in '.nds-purchase-workspace-redesign' '#page-workspaces' '.codex-editor__redactor' 'grid-template-columns:repeat(12,minmax(0,1fr))'; do
+for marker in '.nds-purchase-workspace-redesign' '#page-workspaces' '.codex-editor__redactor' 'grid-template-columns:repeat(12,minmax(0,1fr))' '#c58b3c' 'grid-column:span7' 'grid-column:span5' 'border-collapse:separate'; do
   if ! grep -Fq "$marker" "$LOCAL_CSS"; then
     echo "BUILT_PURCHASE_WORKSPACE_CSS=FAIL:MISSING_MARKER:$marker"
     exit 38
@@ -151,7 +151,7 @@ for marker in '.nds-sales-workspace-redesign' '#page-workspaces' '#d4af37'; do
   fi
 done
 echo "SERVED_SALES_WORKSPACE_CSS=PASS"
-for marker in '.nds-purchase-workspace-redesign' '#page-workspaces' '.codex-editor__redactor' 'grid-template-columns:repeat(12,minmax(0,1fr))'; do
+for marker in '.nds-purchase-workspace-redesign' '#page-workspaces' '.codex-editor__redactor' 'grid-template-columns:repeat(12,minmax(0,1fr))' '#c58b3c' 'grid-column:span7' 'grid-column:span5' 'border-collapse:separate'; do
   if ! grep -Fq "$marker" "$LOCAL_CSS"; then
     echo "SERVED_PURCHASE_WORKSPACE_CSS=FAIL:MISSING_MARKER:$marker"
     exit 39
