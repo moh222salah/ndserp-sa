@@ -47,6 +47,29 @@ jobs:
             echo "APP_SOURCE=PASS:$app"
           done < bench/apps.txt
 
+      - name: Verify warehouse workspace visual isolation and runtime asset guards
+        run: |
+          test -s apps/amir_theme_v16/amir_theme_v16/src/scss/layouts/_warehouse-workspace.scss
+          grep -Fq '@import "layouts/warehouse-workspace";' apps/amir_theme_v16/amir_theme_v16/src/scss/amir_theme.bundle.scss
+          grep -Fq 'function syncWarehouseWorkspaceScope()' apps/amir_theme_v16/amir_theme_v16/src/js/core/workspace_enhance.js
+          grep -Fq 'document.documentElement.classList.toggle("nds-warehouse-workspace", Boolean(active))' apps/amir_theme_v16/amir_theme_v16/src/js/core/workspace_enhance.js
+          grep -Fq 'WAREHOUSE_WORKSPACE_CSS=PASS' codespace-runtime-sync.sh
+          grep -Fq 'WAREHOUSE_WORKSPACE_JS=PASS' codespace-runtime-sync.sh
+          grep -Fq 'SERVED_WAREHOUSE_WORKSPACE_CSS=PASS' codespace-verify-runtime.sh
+          grep -Fq 'SERVED_WAREHOUSE_WORKSPACE_JS=PASS' codespace-verify-runtime.sh
+          python3 - <<'PY'
+          from pathlib import Path
+          css = Path("apps/amir_theme_v16/amir_theme_v16/src/scss/layouts/_warehouse-workspace.scss").read_text(encoding="utf-8")
+          js = Path("apps/amir_theme_v16/amir_theme_v16/src/js/core/workspace_enhance.js").read_text(encoding="utf-8")
+          # Only the named workspace receives these layout rules.
+          assert "html.nds-warehouse-workspace [data-page-route=\\"Workspaces\\"]" in css
+          assert "currentWorkspaceKey() === \\"مخازن NDS ERP\\"" in js
+          assert "number-widget-box" in css and "dashboard-widget-box" in css
+          assert "shortcut-widget-box" in css and "links-widget-box" in css
+          print("WAREHOUSE_WORKSPACE_SOURCE_SCOPE=PASS")
+          PY
+          echo "WAREHOUSE_WORKSPACE_VISUAL_ISOLATION=PASS"
+
       - name: Verify Custom Reports suppression and backup-first cleanup
         run: |
           test -s apps/ndserp/ndserp/setup/custom_report_policy.py
