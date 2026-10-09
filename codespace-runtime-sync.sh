@@ -52,7 +52,7 @@ for key in required:
     print(f"ASSET_VERIFIED={key}")
     print(f"ASSET_PATH={rel}")
     print(f"ASSET_SHA256={digest}")
-    if (key == "amir_theme.bundle.css"):
+    if key == "amir_theme.bundle.css":
         css = target.read_text(encoding="utf-8").lower()
         css_compact = "".join(css.split())
         required_header_markers = ("body .navbar", "58px", "#0a2342")

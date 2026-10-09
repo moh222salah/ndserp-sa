@@ -179,7 +179,7 @@ jobs:
           grep -Fq 'if [ "${NDS_CLEANUP_CUSTOM_REPORTS:-0}" = "1" ]' codespace-runtime-sync.sh
           grep -Fq '@import "components/accounts-workspace";' apps/amir_theme_v16/amir_theme_v16/src/scss/amir_theme.bundle.scss
           grep -Fq 'try { syncAccountsWorkspaceScope(); }' apps/amir_theme_v16/amir_theme_v16/src/js/core/workspace_enhance.js
-          grep -Fq 'if key == "amir_theme.bundle.css":' codespace-runtime-sync.sh
+          grep -Eq 'if \(?key == "amir_theme.bundle.css"\)?:' codespace-runtime-sync.sh
           grep -Fq 'SERVED_ACCOUNTS_WORKSPACE_CSS=PASS' codespace-verify-runtime.sh
           grep -Fq 'SERVED_ACCOUNTS_WORKSPACE_JS=PASS' codespace-verify-runtime.sh
           echo "ACCOUNTS_UI_ACTIVATION_INDEPENDENT_OF_DB_CLEANUP=PASS"
