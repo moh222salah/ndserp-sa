@@ -10,12 +10,14 @@ def _patch_workspace_scope():
 	# every worker on the site.
 	try:
 		from ndserp.setup.workspace_scope import patch_workspace_permission
+		from ndserp.setup.custom_report_policy import patch_custom_report_section
 
 		patch_workspace_permission()
+		patch_custom_report_section()
 	except Exception:
 		# No site/db context is guaranteed at import time, so don't try to
-		# frappe.log_error here - just leave stock Workspace.is_permitted in
-		# place and let the app carry on.
+		# log an error here. The before_request hooks retry both patches if
+		# early import fails.
 		pass
 
 
