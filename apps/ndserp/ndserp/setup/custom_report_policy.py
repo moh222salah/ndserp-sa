@@ -1,0 +1,114 @@
+"""NDS policy for hiding and removing database-only Custom Reports.
+
+Frappe automatically inserts a "Custom Reports" card section into module
+workspaces from non-standard Report documents saved in the site database.
+This policy removes that generated section without modifying Frappe Core,
+rejects new user-created non-standard Report documents, and provides a
+backup-first CLI cleanup target for the Codespace maintenance script.
+"""
+
+from __future__ import annotations
+
+import re
+from collections.abc import Iterable
+
+import frappe
+from frappe import _
+
+CUSTOM_REPORT_SECTION_LABELS = {
+    "custom reports",
+    "تقارير مخصصة",
+    "التقارير المخصصة",
+}
+
+
+def _normalized_label(value: object) -> str:
+    return re.sub(r"\s+", " ", str(value or "")).strip().casefold()
+
+
+def filter_custom_report_sections(sections: Iterable[dict] | None) -> list[dict]:
+    """Remove Frappe's generated Custom Reports section; preserve other sections."""
+    blocked = set(CUSTOM_REPORT_SECTION_LABELS)
+    blocked.add(_normalized_label(_("Custom Reports")))
+    return [
+        section
+        for section in (sections or [])
+        if _normalized_label(section.get("label")) not in blocked
+    ]
+
+
+def patch_custom_report_section() -> None:
+    """Patch the Frappe workspace builder in-process, without editing Frappe Core."""
+    import frappe.desk.desktop as desktop
+
+    if getattr(desktop, "_ndserp_custom_reports_policy", False):
+        return
+
+    original = desktop.get_custom_reports_and_doctypes
+
+    def get_custom_reports_without_report_section(module):
+        sections = original(module)
+        return filter_custom_report_sections(sections)
+
+    desktop.get_custom_reports_and_doctypes = get_custom_reports_without_report_section
+    desktop._ndserp_custom_reports_policy = True
+
+
+def reject_nonstandard_report(doc, method: str | None = None) -> None:
+    """Prevent user-created custom reports from recreating the section."""
+    if frappe.flags.in_migrate or frappe.flags.in_patch:
+        # Standard deployment fixtures/patches still follow Frappe's lifecycle.
+        return
+
+    if (doc.get("is_standard") or "No") != "Yes":
+        frappe.throw(
+            _("Custom Reports are disabled by NDS policy. Use the approved standard reports."),
+            frappe.ValidationError,
+        )
+
+
+def count_nonstandard_reports() -> int:
+    """Count database-stored Report documents that Frappe exposes as Custom Reports."""
+    return int(frappe.db.count("Report", {"is_standard": "No"}) or 0)
+
+
+def purge_nonstandard_reports() -> str:
+    """Delete non-standard Report documents; call only after a verified backup.
+
+    This is a Bench-execute function, not a whitelisted HTTP API. The local
+    cleanup script verifies the database host, creates and checks a full
+    database/files backup, then invokes this function.
+    """
+    names = frappe.get_all(
+        "Report",
+        filters={"is_standard": "No"},
+        pluck="name",
+        order_by="name asc",
+    )
+    if not names:
+        return "NDS_CUSTOM_REPORT_PURGE=PASS deleted=0 remaining=0"
+
+    try:
+        # Remove direct Workspace Link references first to avoid dangling shortcuts.
+        if frappe.db.exists("DocType", "Workspace Link"):
+            frappe.db.delete(
+                "Workspace Link",
+                {"link_type": "Report", "link_to": ["in", names]},
+            )
+
+        for name in names:
+            frappe.delete_doc("Report", name, ignore_permissions=True)
+
+        remaining = count_nonstandard_reports()
+        if remaining:
+            frappe.throw(
+                _("Custom Report cleanup is incomplete: {0} reports remain.").format(remaining),
+                frappe.ValidationError,
+            )
+
+        frappe.db.commit()
+        frappe.clear_cache()
+        return f"NDS_CUSTOM_REPORT_PURGE=PASS deleted={len(names)} remaining=0"
+    except Exception:
+        frappe.db.rollback()
+        raise
