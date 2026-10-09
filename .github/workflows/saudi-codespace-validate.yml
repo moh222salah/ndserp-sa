@@ -200,5 +200,18 @@ jobs:
           echo "MODERN_HEADER_IMPORT=PASS"
           echo "MODERN_HEADER_RUNTIME_GUARD=PASS"
 
+      - name: Verify accounts workspace visual isolation and asset gates
+        run: |
+          test -s apps/amir_theme_v16/amir_theme_v16/src/scss/components/_accounts-workspace.scss
+          grep -Fq '@import "components/accounts-workspace";' apps/amir_theme_v16/amir_theme_v16/src/scss/amir_theme.bundle.scss
+          grep -Fq 'function syncAccountsWorkspaceScope()' apps/amir_theme_v16/amir_theme_v16/src/js/core/workspace_enhance.js
+          grep -Fq 'try { syncAccountsWorkspaceScope(); }' apps/amir_theme_v16/amir_theme_v16/src/js/core/workspace_enhance.js
+          grep -Fq 'grid-template-columns: repeat(12, minmax(0, 1fr));' apps/amir_theme_v16/amir_theme_v16/src/scss/components/_accounts-workspace.scss
+          grep -Fq 'ACCOUNTS_WORKSPACE_CSS=PASS' codespace-runtime-sync.sh
+          grep -Fq 'ACCOUNTS_WORKSPACE_JS=PASS' codespace-runtime-sync.sh
+          grep -Fq 'SERVED_ACCOUNTS_WORKSPACE_CSS=PASS' codespace-verify-runtime.sh
+          grep -Fq 'SERVED_ACCOUNTS_WORKSPACE_JS=PASS' codespace-verify-runtime.sh
+          echo "ACCOUNTS_WORKSPACE_SOURCE=PASS"
+
       - name: Git whitespace check
         run: git diff --check
