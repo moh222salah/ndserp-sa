@@ -75,7 +75,7 @@ ensure_amir_theme_site_app() {
     return 21
   fi
 
-  if printf '%s\n' "$installed_apps" | grep -q '^Amir Theme'; then
+  if printf '%s\n' "$installed_apps" | grep -Eq '^(Amir Theme|amir_theme_v16)([[:space:]]|$)'; then
     echo "AMIR_THEME_SITE_APP=PASS"
     echo "AMIR_THEME_SITE_DB_WRITE=NO"
     return 0
