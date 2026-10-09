@@ -361,6 +361,7 @@ function syncAccountsWorkspaceScope() {
 let scheduled = false;
 function run() {
 	scheduled = false;
+	try { syncAccountsWorkspaceScope(); } catch (e) { console.error("[amir_theme] accounts workspace scope failed:", e); }
 	try { enhanceSidebar(); } catch (e) { /* eslint-disable-next-line no-console */ console.error("[amir_theme] sidebar-new failed:", e); }
 	try { enhanceCards(); } catch (e) { console.error("[amir_theme] card-icons failed:", e); }
 	try { enhanceLinkArrows(); } catch (e) { console.error("[amir_theme] link-arrow chip failed:", e); }
