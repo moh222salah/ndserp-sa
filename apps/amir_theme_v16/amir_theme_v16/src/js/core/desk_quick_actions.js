@@ -89,7 +89,16 @@ function buildSection(actions, arabic) {
 		grid.appendChild(button);
 	}
 
-	section.append(header, grid);
+	if (actions.length) {
+		section.append(header, grid);
+	} else {
+		const empty = document.createElement("p");
+		empty.className = "amt-quick-actions-empty";
+		empty.textContent = arabic
+			? "لا توجد إجراءات إنشاء متاحة لحسابك."
+			: "No create actions are available for your account.";
+		section.append(header, empty);
+	}
 	return section;
 }
 
@@ -106,7 +115,10 @@ function render() {
 
 	const actions = allowedActions();
 	const launcher = host.querySelector(":scope > .icons-container");
-	if (!actions.length || !launcher) return;
+	if (!launcher) {
+		console.warn("[amir_theme] Quick Actions: Desk launcher host not found.");
+		return;
+	}
 
 	const section = buildSection(actions, isArabic());
 	launcher.before(section);
