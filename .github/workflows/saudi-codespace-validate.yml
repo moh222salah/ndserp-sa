@@ -31,6 +31,7 @@ jobs:
           bash -n codespace-runtime-sync.sh
           bash -n codespace-verify-runtime.sh
           bash -n codespace-start-server.sh
+          bash -n codespace-install-theme-safe.sh
           bash -n runtime-refresh.sh
           bash -n apps/amir_theme_v16/scripts/harden_assets.sh
           echo "BASH_SYNTAX=PASS"
@@ -112,6 +113,30 @@ jobs:
           grep -Fq 'MIGRATION=NO' codespace-bootstrap.sh
           grep -Fq 'MIGRATION=NO' codespace-runtime-sync.sh
           echo "CODESPACE_SITE_ACTIVATION_LOOP=PASS"
+
+      - name: Verify backup-first local theme installation flow
+        run: |
+          grep -Fq 'ROOT="/workspaces/ndserp-sa"' codespace-install-theme-safe.sh
+          grep -Fq 'SITE="ndserpsa.nds-sa.com"' codespace-install-theme-safe.sh
+          grep -Fq 'LOCAL_DB_GUARD=PASS' codespace-install-theme-safe.sh
+          grep -Fq 'bench --site "$SITE" backup --with-files --compress --backup-path "$BACKUP_DIR"' codespace-install-theme-safe.sh
+          grep -Fq 'bench --site "$SITE" install-app amir_theme_v16' codespace-install-theme-safe.sh
+          grep -Fq 'bench build --app amir_theme_v16 --production' codespace-install-theme-safe.sh
+          grep -Fq 'bash codespace-verify-runtime.sh' codespace-install-theme-safe.sh
+          grep -Fq 'PRODUCTION_DB_WRITE=NO' codespace-install-theme-safe.sh
+          python3 - <<'PY'
+          from pathlib import Path
+          source = Path("codespace-install-theme-safe.sh").read_text(encoding="utf-8")
+          backup = source.index('backup --with-files --compress --backup-path "$BACKUP_DIR"')
+          install = source.index('install-app amir_theme_v16')
+          build = source.index('bench build --app amir_theme_v16 --production')
+          verify = source.index('bash codespace-verify-runtime.sh')
+          assert backup < install < build < verify
+          print("BACKUP_BEFORE_INSTALL=PASS")
+          print("INSTALL_BEFORE_BUILD=PASS")
+          print("BUILD_BEFORE_RUNTIME_VERIFY=PASS")
+          PY
+          echo "LOCAL_THEME_INSTALL_GUARD=PASS"
 
       - name: Verify modern Desk header and built-CSS guard
         run: |
