@@ -32,6 +32,7 @@ jobs:
           bash -n codespace-verify-runtime.sh
           bash -n codespace-start-server.sh
           bash -n codespace-install-theme-safe.sh
+          bash -n codespace-remove-custom-reports-safe.sh
           bash -n runtime-refresh.sh
           bash -n apps/amir_theme_v16/scripts/harden_assets.sh
           echo "BASH_SYNTAX=PASS"
@@ -44,6 +45,32 @@ jobs:
             test -d "apps/$app"
             echo "APP_SOURCE=PASS:$app"
           done < bench/apps.txt
+
+      - name: Verify Custom Reports suppression and backup-first cleanup
+        run: |
+          test -s apps/ndserp/ndserp/setup/custom_report_policy.py
+          test -s apps/ndserp/ndserp/tests/test_custom_report_policy.py
+          grep -Fq 'def patch_custom_report_section()' apps/ndserp/ndserp/setup/custom_report_policy.py
+          grep -Fq 'def filter_custom_report_sections(' apps/ndserp/ndserp/setup/custom_report_policy.py
+          grep -Fq 'def reject_nonstandard_report(' apps/ndserp/ndserp/setup/custom_report_policy.py
+          grep -Fq 'def purge_nonstandard_reports()' apps/ndserp/ndserp/setup/custom_report_policy.py
+          grep -Fq 'ndserp.setup.custom_report_policy.patch_custom_report_section' apps/ndserp/ndserp/hooks.py
+          grep -Fq 'ndserp.setup.custom_report_policy.reject_nonstandard_report' apps/ndserp/ndserp/hooks.py
+          grep -Fq 'bash codespace-remove-custom-reports-safe.sh' .devcontainer/devcontainer.json
+          grep -Fq 'LOCAL_DB_GUARD=PASS' codespace-remove-custom-reports-safe.sh
+          grep -Fq 'NDS_CUSTOM_REPORT_PURGE=PASS' codespace-remove-custom-reports-safe.sh
+          python3 -m py_compile apps/ndserp/ndserp/setup/custom_report_policy.py apps/ndserp/ndserp/tests/test_custom_report_policy.py
+          python3 - <<'PY'
+          from pathlib import Path
+          source = Path("codespace-remove-custom-reports-safe.sh").read_text(encoding="utf-8")
+          backup = source.index('bench --site "$SITE" backup --with-files --compress --backup-path "$BACKUP_DIR"')
+          purge = source.index('purge_nonstandard_reports')
+          verify = source.index('COUNT_AFTER="$(count_reports)"')
+          assert backup < purge < verify
+          print("CUSTOM_REPORT_BACKUP_BEFORE_DELETE=PASS")
+          print("CUSTOM_REPORT_PURGE_VERIFICATION=PASS")
+          PY
+          echo "CUSTOM_REPORT_POLICY_SOURCE=PASS"
 
       - name: Verify login language handoff
         run: |
