@@ -103,6 +103,18 @@ for key in required:
                 "ACCOUNTS_WORKSPACE_CSS=FAIL:MISSING_MARKERS:" + ",".join(missing)
             )
         print("ACCOUNTS_WORKSPACE_CSS=PASS")
+        required_sales_workspace_css = (
+            ".nds-sales-workspace-redesign",
+            "#page-workspaces",
+            ".page-head",
+            "#d4af37",
+        )
+        missing = [marker for marker in required_sales_workspace_css if marker not in css_compact]
+        if missing:
+            raise SystemExit(
+                "SALES_WORKSPACE_CSS=FAIL:MISSING_MARKERS:" + ",".join(missing)
+            )
+        print("SALES_WORKSPACE_CSS=PASS")
     elif key == "amir_theme.bundle.js":
         js = target.read_text(encoding="utf-8")
         # Use stable ASCII markers: production bundling may Unicode-escape Arabic literals.
@@ -125,6 +137,9 @@ for key in required:
         if "amt-accounts-workspace" not in js:
             raise SystemExit("ACCOUNTS_WORKSPACE_JS=FAIL:MISSING_MARKER:amt-accounts-workspace")
         print("ACCOUNTS_WORKSPACE_JS=PASS")
+        if "nds-sales-workspace-redesign" not in js:
+            raise SystemExit("SALES_WORKSPACE_JS=FAIL:MISSING_MARKER:nds-sales-workspace-redesign")
+        print("SALES_WORKSPACE_JS=PASS")
 
 print("ASSET_SERVE_TREE=PASS")
 PY
@@ -166,7 +181,7 @@ is_dirty() {
 sync_once() {
   git fetch origin main
 
-  local current remote source_marker needs_build
+  local current remote source_marker served_marker needs_build
   current="$(git rev-parse HEAD)"
   remote="$(git rev-parse origin/main)"
 
@@ -221,6 +236,10 @@ sync_once() {
   if [ -f "sites/.nds-runtime-source-head" ]; then
     source_marker="$(cat sites/.nds-runtime-source-head)"
   fi
+  served_marker=""
+  if [ -f "sites/.nds-runtime-served-head" ]; then
+    served_marker="$(cat sites/.nds-runtime-served-head)"
+  fi
 
   needs_build=0
   if [ "$source_marker" != "$current" ]; then
@@ -242,15 +261,29 @@ sync_once() {
     printf '%s\n' "$current" > sites/.nds-runtime-source-head
 
     echo "ASSET_BUILD=PASS"
-    echo "SERVED_SOURCE_HEAD=$(cat sites/.nds-runtime-source-head)"
+    echo "BUILT_SOURCE_HEAD=$(cat sites/.nds-runtime-source-head)"
     if curl --connect-timeout 1 --max-time 2 -fsS -o /dev/null "http://127.0.0.1:8080/login"; then
-      bash "$ROOT/codespace-verify-runtime.sh"
+      if [ "$SYNC_MODE" = "--once" ]; then
+        echo "SERVED_ASSET_REFRESH=DEFERRED_TO_POSTSTART"
+      else
+        NDS_FORCE_BENCH_RESTART=1 bash "$ROOT/codespace-start-server.sh"
+        bash "$ROOT/codespace-verify-runtime.sh"
+        printf '%s\n' "$current" > sites/.nds-runtime-served-head
+        echo "SERVED_ASSET_REFRESH=PASS"
+      fi
     else
-      echo "HEADER_RUNTIME_VERIFICATION=DEFERRED_SERVER_NOT_READY"
+      echo "SERVED_ASSET_REFRESH=DEFERRED_SERVER_NOT_READY"
     fi
   else
     echo "ASSET_BUILD=ALREADY_CURRENT"
     verify_amir_assets
+    if [ "$served_marker" != "$current" ] && [ "$SYNC_MODE" != "--once" ] && curl --connect-timeout 1 --max-time 2 -fsS -o /dev/null "http://127.0.0.1:8080/login"; then
+      echo "SERVED_ASSET_REFRESH=RETRY"
+      NDS_FORCE_BENCH_RESTART=1 bash "$ROOT/codespace-start-server.sh"
+      bash "$ROOT/codespace-verify-runtime.sh"
+      printf '%s\n' "$current" > sites/.nds-runtime-served-head
+      echo "SERVED_ASSET_REFRESH=PASS"
+    fi
   fi
 
   # Database cleanup is deliberately opt-in and runs only after the UI assets
