@@ -72,6 +72,11 @@ def count_nonstandard_reports() -> int:
     return int(frappe.db.count("Report", {"is_standard": "No"}) or 0)
 
 
+def count_nonstandard_reports_for_cli() -> str:
+    """Return a non-empty sentinel so Bench CLI also prints a zero count."""
+    return f"NDS_NONSTANDARD_REPORT_COUNT={count_nonstandard_reports()}"
+
+
 def purge_nonstandard_reports() -> str:
     """Delete non-standard Report documents; call only after a verified backup.
 
