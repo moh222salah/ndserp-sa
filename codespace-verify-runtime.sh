@@ -168,7 +168,7 @@ if [ ! -f "$LOCAL_JS_ASSET" ]; then
   exit 19
 fi
 # Use stable ASCII markers; bundling may encode Arabic literals as Unicode escapes.
-for marker in 'amt-quick-actions-title' 'amt-quick-actions-grid' 'amt-quick-actions-track' 'translate3d(' 'Sales Invoice'; do
+for marker in 'amt-quick-actions-title' 'amt-quick-actions-grid' 'amt-quick-actions-track' 'data-amt-quick-actions-motion' 'translate3d(' 'Sales Invoice'; do
   if ! grep -Fq "$marker" "$LOCAL_JS_ASSET"; then
     echo "BUILT_QUICK_ACTIONS_JS=FAIL:MISSING_MARKER:$marker"
     exit 20
@@ -204,7 +204,7 @@ if [ "$JS_READY" -ne 1 ]; then
   echo "SERVED_QUICK_ACTIONS_JS=FAIL:HTTP_UNAVAILABLE"
   exit 21
 fi
-for marker in 'amt-quick-actions-title' 'amt-quick-actions-grid' 'amt-quick-actions-track' 'translate3d(' 'Sales Invoice'; do
+for marker in 'amt-quick-actions-title' 'amt-quick-actions-grid' 'amt-quick-actions-track' 'data-amt-quick-actions-motion' 'translate3d(' 'Sales Invoice'; do
   if ! grep -Fq "$marker" "$SERVED_JS"; then
     echo "SERVED_QUICK_ACTIONS_JS=FAIL:MISSING_MARKER:$marker"
     exit 22
