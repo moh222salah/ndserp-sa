@@ -7,14 +7,8 @@ app_license = "MIT"
 frappe_version = ">=16.0.0 <17.0.0"
 categories = ["Customization", "UI/UX"]
 
-app_include_css = [
-    "amir_theme.bundle.css",
-    "/assets/amir_theme_v16/css/nds_sales_workspace_redesign.css",
-]
-app_include_js = [
-    "amir_theme.bundle.js",
-    "/assets/amir_theme_v16/js/nds_sales_workspace_redesign.js",
-]
+app_include_css = "amir_theme.bundle.css"
+app_include_js = "amir_theme.bundle.js"
 
 web_include_css = "login_brand.bundle.css"
 web_include_js = "login_brand.bundle.js"
