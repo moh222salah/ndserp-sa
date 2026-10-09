@@ -62,8 +62,8 @@ jobs:
           css = Path("apps/amir_theme_v16/amir_theme_v16/src/scss/layouts/_warehouse-workspace.scss").read_text(encoding="utf-8")
           js = Path("apps/amir_theme_v16/amir_theme_v16/src/js/core/workspace_enhance.js").read_text(encoding="utf-8")
           # Only the named workspace receives these layout rules.
-          assert "html.nds-warehouse-workspace [data-page-route=\\"Workspaces\\"]" in css
-          assert "currentWorkspaceKey() === \\"مخازن NDS ERP\\"" in js
+          assert 'html.nds-warehouse-workspace [data-page-route="Workspaces"]' in css
+          assert 'currentWorkspaceKey() === "مخازن NDS ERP"' in js
           assert "number-widget-box" in css and "dashboard-widget-box" in css
           assert "shortcut-widget-box" in css and "links-widget-box" in css
           print("WAREHOUSE_WORKSPACE_SOURCE_SCOPE=PASS")
