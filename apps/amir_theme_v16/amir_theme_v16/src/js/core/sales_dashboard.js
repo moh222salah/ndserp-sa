@@ -3,7 +3,7 @@
  * Presentation-only: reads permission-filtered ERPNext records and adds a dashboard
  * surface to the Sales Workspace without changing Workspace records or sales logic.
  */
-(() => {
+const salesDashboard = (() => {
 	"use strict";
 
 	const DASHBOARD_ID = "nds-sales-dashboard";
@@ -601,5 +601,7 @@
 		}
 	}
 
-	window.ndsSalesDashboard = { mount: install };
+	return { mount: install };
 })();
+
+export { salesDashboard };
