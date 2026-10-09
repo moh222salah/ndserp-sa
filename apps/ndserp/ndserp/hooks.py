@@ -42,7 +42,10 @@ boot_session = "ndserp.setup.workspace_scope.extend_bootinfo"
 # Ndserp-scoped users - for its entire process lifetime. Re-running it here on
 # every request is a cheap no-op once patched (single attribute check), and
 # makes that failure mode self-heal within one request instead of persisting.
-before_request = ["ndserp.setup.workspace_scope.patch_workspace_permission"]
+before_request = [
+	"ndserp.setup.workspace_scope.patch_workspace_permission",
+	"ndserp.setup.custom_report_policy.patch_custom_report_section",
+]
 
 # ------------------------------------------------------------------------------
 # Fixtures
@@ -165,6 +168,9 @@ if NDSERP_CUSTOM_FIELDS:
 doc_events = {
 	"User": {
 		"validate": "ndserp.setup.user_provisioning.validate_user",
+	},
+	"Report": {
+		"validate": "ndserp.setup.custom_report_policy.reject_nonstandard_report",
 	},
 }
 
