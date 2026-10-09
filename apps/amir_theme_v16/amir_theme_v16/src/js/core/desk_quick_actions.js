@@ -63,61 +63,55 @@ function iconMarkup(name, className) {
 	);
 }
 
-function enableHorizontalMotion(grid) {
-	const motionPreference = window.matchMedia?.("(prefers-reduced-motion: reduce)");
-	if (motionPreference?.matches) return;
-
-	const speed = 22; // pixels per second: steady, moderate horizontal movement
-	const rtl = getComputedStyle(grid).direction === "rtl";
-	let direction = rtl ? -1 : 1;
+function enableHorizontalMotion(viewport, track) {
+	// This component explicitly requires visible motion; scrollLeft is avoided
+	// because its RTL semantics vary by browser. Animation pauses on interaction.
+	const speed = 18; // balanced, continuous movement in pixels per second
+	const rtl = getComputedStyle(viewport).direction === "rtl";
+	let offset = 0;
+	let direction = 1;
 	let previousTime = 0;
-	let pointerInside = false;
 	let focusInside = false;
 	let frameId = 0;
 
+	viewport.dataset.motionState = "running";
+	track.style.willChange = "transform";
+
 	const tick = (time) => {
-		if (!grid.isConnected) {
+		if (!viewport.isConnected || !track.isConnected) {
 			cancelAnimationFrame(frameId);
+			track.style.willChange = "";
 			return;
 		}
 
-		if (!pointerInside && !focusInside && document.visibilityState !== "hidden") {
-			const overflow = Math.max(0, grid.scrollWidth - grid.clientWidth);
-			if (overflow > 2) {
-				const min = rtl ? -overflow : 0;
-				const max = rtl ? 0 : overflow;
-				const elapsed = previousTime ? Math.min((time - previousTime) / 1000, 0.05) : 0;
-				const next = grid.scrollLeft + direction * speed * elapsed;
+		const overflow = Math.max(0, track.scrollWidth - viewport.clientWidth);
+		if (overflow > 1 && !focusInside && document.visibilityState !== "hidden") {
+			const elapsed = previousTime ? Math.min((time - previousTime) / 1000, 0.05) : 0;
+			offset += direction * speed * elapsed;
 
-				if (next >= max) {
-					grid.scrollLeft = max;
-					direction = -1;
-				} else if (next <= min) {
-					grid.scrollLeft = min;
-					direction = 1;
-				} else {
-					grid.scrollLeft = next;
-				}
+			if (offset >= overflow) {
+				offset = overflow;
+				direction = -1;
+			} else if (offset <= 0) {
+				offset = 0;
+				direction = 1;
 			}
+
+			// Transform the content track itself instead of relying on RTL-dependent
+			// scrollLeft semantics, which differ across browser engines.
+			const translateX = rtl ? offset : -offset;
+			track.style.transform = "translate3d(" + translateX.toFixed(2) + "px, 0, 0)";
 		}
 		previousTime = time;
 		frameId = requestAnimationFrame(tick);
 	};
 
-	grid.addEventListener("pointerenter", () => {
-		pointerInside = true;
-		previousTime = 0;
-	});
-	grid.addEventListener("pointerleave", () => {
-		pointerInside = false;
-		previousTime = 0;
-	});
-	grid.addEventListener("focusin", () => {
+	viewport.addEventListener("focusin", () => {
 		focusInside = true;
 		previousTime = 0;
 	});
-	grid.addEventListener("focusout", (event) => {
-		focusInside = grid.contains(event.relatedTarget);
+	viewport.addEventListener("focusout", (event) => {
+		focusInside = viewport.contains(event.relatedTarget);
 		previousTime = 0;
 	});
 
@@ -146,6 +140,9 @@ function buildSection(actions, arabic) {
 	const grid = document.createElement("div");
 	grid.className = "amt-quick-actions-grid";
 
+	const track = document.createElement("div");
+	track.className = "amt-quick-actions-track";
+
 	for (const action of actions) {
 		const button = document.createElement("button");
 		button.type = "button";
@@ -173,12 +170,13 @@ function buildSection(actions, arabic) {
 			if (!Array.isArray(permitted) || !permitted.includes(action.doctype)) return;
 			if (typeof frappe.new_doc === "function") frappe.new_doc(action.doctype);
 		});
-		grid.appendChild(button);
+		track.appendChild(button);
 	}
 
 	if (actions.length) {
+		grid.appendChild(track);
 		section.append(header, grid);
-		enableHorizontalMotion(grid);
+		enableHorizontalMotion(grid, track);
 	} else {
 		const empty = document.createElement("p");
 		empty.className = "amt-quick-actions-empty";

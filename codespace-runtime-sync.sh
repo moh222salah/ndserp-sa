@@ -65,7 +65,11 @@ for key in required:
             ".amt-quick-actions",
             ".amt-quick-actions-grid",
             ".amt-quick-action-arrow",
-            "min-height:132px",
+            ".amt-quick-actions-track",
+            "height:104px",
+            "min-height:104px",
+            "width:36px",
+            "width:20px",
             "margin-top:auto",
             "background:#eef1f4",
             "display:none!important",
@@ -105,6 +109,8 @@ for key in required:
         required_quick_actions_js = (
             "amt-quick-actions-title",
             "amt-quick-actions-grid",
+            "amt-quick-actions-track",
+            "translate3d(",
             "Sales Invoice",
         )
         missing = [marker for marker in required_quick_actions_js if marker not in js]
