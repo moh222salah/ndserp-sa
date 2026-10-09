@@ -4,10 +4,35 @@ set -Eeuo pipefail
 ROOT="/workspaces/ndserp-sa"
 SITE="ndserpsa.nds-sa.com"
 INTERVAL="${RUNTIME_SYNC_INTERVAL:-5}"
-SYNC_MODE="${1:-loop}"
+SYNC_MODE="${NDS_RUNTIME_SYNC_ORIGIN_MODE:-${1:-loop}}"
 
 cd "$ROOT"
 export PATH="$HOME/.local/bin:$HOME/.cargo/bin:$PATH"
+
+# Serialize all sync/build cycles across postStart, a manual --once run, and
+# the background worker. Frappe's bench_build lock remains authoritative.
+if [ "${NDS_RUNTIME_SYNC_LOCK_HELD:-0}" != "1" ]; then
+  mkdir -p "$ROOT/config" "$ROOT/logs"
+  RUNTIME_LOCK="$ROOT/config/nds-runtime-sync.lock"
+  LOCK_WAIT="${NDS_RUNTIME_SYNC_LOCK_WAIT:-900}"
+
+  if [ "${1:-}" = "--once" ]; then
+    exec flock -w "$LOCK_WAIT" -o "$RUNTIME_LOCK" \
+      env NDS_RUNTIME_SYNC_LOCK_HELD=1 \
+          NDS_RUNTIME_SYNC_ORIGIN_MODE="--once" \
+      bash "$ROOT/codespace-runtime-sync.sh" --once
+  fi
+
+  while true; do
+    if ! flock -w "$LOCK_WAIT" -o "$RUNTIME_LOCK" \
+      env NDS_RUNTIME_SYNC_LOCK_HELD=1 \
+          NDS_RUNTIME_SYNC_ORIGIN_MODE="loop" \
+      bash "$ROOT/codespace-runtime-sync.sh" --once; then
+      echo "RUNTIME_SYNC_CYCLE=FAIL"
+    fi
+    sleep "$INTERVAL"
+  done
+fi
 
 
 verify_amir_source() {
@@ -190,7 +215,7 @@ ensure_amir_theme_site_app() {
 
 run_asset_build_with_lock_retry() {
   local attempt=1
-  local max_attempts="${NDS_BUILD_LOCK_RETRIES:-6}"
+  local max_attempts="${NDS_BUILD_LOCK_RETRIES:-30}"
   local delay="${NDS_BUILD_LOCK_RETRY_DELAY:-10}"
   local log_file rc
 
@@ -274,7 +299,8 @@ sync_once() {
     # Re-exec the freshly synced script so the active worker uses current GitHub source immediately.
     if [ "${RUNTIME_SYNC_REEXEC:-0}" != "1" ]; then
       export RUNTIME_SYNC_REEXEC=1
-      if [ "$SYNC_MODE" = "--once" ]; then
+      # A locked worker remains a single cycle after a source refresh.
+      if [ "${NDS_RUNTIME_SYNC_LOCK_HELD:-0}" = "1" ] || [ "$SYNC_MODE" = "--once" ]; then
         exec bash "$ROOT/codespace-runtime-sync.sh" --once
       fi
       exec bash "$ROOT/codespace-runtime-sync.sh"
@@ -325,18 +351,13 @@ sync_once() {
     echo "BUILT_SOURCE_HEAD=$(cat sites/.nds-runtime-source-head)"
     if curl --connect-timeout 1 --max-time 2 -fsS -o /dev/null "http://127.0.0.1:8080/login"; then
       if [ "$SYNC_MODE" = "--once" ]; then
-        # Verify the live HTTP responses without restarting the local Bench server.
-        if bash "$ROOT/codespace-verify-runtime.sh"; then
-          printf '%s\n' "$current" > sites/.nds-runtime-served-head
-          echo "SERVED_ASSET_REFRESH=PASS"
-        else
-          echo "SERVED_ASSET_REFRESH=FAIL_RUNTIME_VERIFICATION"
-          return 43
-        fi
+        # One-shot UI application restarts and verifies the local server in
+        # codespace-apply-quick-actions-ui.sh; skip pre-refresh verification.
+        echo "SERVED_ASSET_REFRESH=DEFERRED_TO_APPLY_SCRIPT"
       else
         NDS_FORCE_BENCH_RESTART=1 bash "$ROOT/codespace-start-server.sh"
         bash "$ROOT/codespace-verify-runtime.sh"
-        printf '%s\n' "$current" > sites/.nds-runtime-served-head
+        printf '%s\\n' "$current" > sites/.nds-runtime-served-head
         echo "SERVED_ASSET_REFRESH=PASS"
       fi
     else
