@@ -78,14 +78,14 @@ grep -Eq '^ndserp([[:space:]]|$)' "$ROOT/logs/custom-reports-installed-apps.log"
 
 count_reports() {
   local output
-  output="$(bench --site "$SITE" execute ndserp.setup.custom_report_policy.count_nonstandard_reports 2>&1)" || {
+  output="$(bench --site "$SITE" execute ndserp.setup.custom_report_policy.count_nonstandard_reports_for_cli 2>&1)" || {
     printf '%s\n' "$output"
     echo "REPORT_COUNT_QUERY=FAIL"
     return 20
   }
   printf '%s\n' "$output" >> "$ROOT/logs/custom-reports-policy.log"
   local count
-  count="$(printf '%s\n' "$output" | grep -E '^[0-9]+$' | tail -n 1 || true)"
+  count="$(printf '%s\n' "$output" | grep -Eo 'NDS_NONSTANDARD_REPORT_COUNT=[0-9]+' | tail -n 1 | cut -d= -f2 || true)"
   [ -n "$count" ] || {
     echo "REPORT_COUNT_PARSE=FAIL"
     printf '%s\n' "$output"
