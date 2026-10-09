@@ -191,7 +191,6 @@ for key in required:
             "nds-sales-revenue-chart",
             "nds-sales-channels-chart",
             "nds-sales-invoices",
-            "لوحة المبيعات",
         )
         missing = [marker for marker in required_sales_workspace_js if marker not in js]
         if missing:

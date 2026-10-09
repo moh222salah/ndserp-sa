@@ -482,7 +482,14 @@ const salesDashboard = (() => {
 			const currentKey = monthKey(today);
 			const previousKey = monthKey(monthStart(today, -1));
 			const current = buckets.find((item) => item.key === currentKey) || { total: 0, count: 0 };
-			const previous = buckets.find((item) => item.key === previousKey) || { total: 0, count: 0 };
+			const previousComparableRows = (daily || []).filter((row) =>
+				monthKey(row.posting_date) === previousKey
+				&& Number(String(row.posting_date).slice(8, 10)) <= Number(String(today).slice(8, 10))
+			);
+			const previous = previousComparableRows.reduce((acc, row) => ({
+				total: acc.total + Number(row.sales_total || 0),
+				count: acc.count + Number(row.invoice_count || 0),
+			}), { total: 0, count: 0 });
 			const average = current.count ? current.total / current.count : 0;
 			const previousAverage = previous.count ? previous.total / previous.count : 0;
 
