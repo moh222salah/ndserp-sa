@@ -83,8 +83,10 @@ def reject_nonstandard_report(doc, method: str | None = None) -> None:
 
 
 def count_nonstandard_reports() -> int:
-    """Count database-stored Report documents that Frappe exposes as Custom Reports."""
-    return int(frappe.db.count("Report", {"is_standard": "No"}) or 0)
+    """Count enabled non-standard reports that Frappe lists in Custom Reports."""
+    return int(
+        frappe.db.count("Report", {"is_standard": "No", "disabled": 0}) or 0
+    )
 
 
 def count_nonstandard_reports_for_cli() -> str:
@@ -99,9 +101,12 @@ def purge_nonstandard_reports() -> str:
     cleanup script verifies the database host, creates and checks a full
     database/files backup, then invokes this function.
     """
+    # Match Frappe's own get_custom_report_list filters exactly. Disabled
+    # historical reports are already absent from the visible section and stay
+    # untouched by this cleanup.
     names = frappe.get_all(
         "Report",
-        filters={"is_standard": "No"},
+        filters={"is_standard": "No", "disabled": 0},
         pluck="name",
         order_by="name asc",
     )
@@ -109,11 +114,18 @@ def purge_nonstandard_reports() -> str:
         return "NDS_CUSTOM_REPORT_PURGE=PASS deleted=0 remaining=0"
 
     try:
-        # Remove direct Workspace Link references first to avoid dangling shortcuts.
+        # Remove stored workspace links and shortcuts before deleting the
+        # reports they reference. This covers saved navigation too, not only
+        # the generated Custom Reports section.
         if frappe.db.exists("DocType", "Workspace Link"):
             frappe.db.delete(
                 "Workspace Link",
                 {"link_type": "Report", "link_to": ["in", names]},
+            )
+        if frappe.db.exists("DocType", "Workspace Shortcut"):
+            frappe.db.delete(
+                "Workspace Shortcut",
+                {"type": "Report", "link_to": ["in", names]},
             )
 
         for name in names:
