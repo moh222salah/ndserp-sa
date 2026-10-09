@@ -75,7 +75,9 @@ function enableHorizontalMotion(viewport, track) {
 	let frameId = 0;
 
 	viewport.dataset.motionState = "running";
+	viewport.setAttribute("data-amt-quick-actions-motion", "running");
 	track.style.willChange = "transform";
+	track.style.marginInline = "auto";
 
 	const tick = (time) => {
 		if (!viewport.isConnected || !track.isConnected) {
@@ -84,13 +86,16 @@ function enableHorizontalMotion(viewport, track) {
 			return;
 		}
 
-		const overflow = Math.max(0, track.scrollWidth - viewport.clientWidth);
-		if (overflow > 1 && !focusInside && document.visibilityState !== "hidden") {
+		const contentOverflow = Math.max(0, track.scrollWidth - viewport.clientWidth);
+		// If the available actions fit, use a small centred sway so motion remains
+		// visible rather than silently becoming static for users with fewer permissions.
+		const travel = contentOverflow > 1 ? contentOverflow : 28;
+		if (!focusInside && document.visibilityState !== "hidden") {
 			const elapsed = previousTime ? Math.min((time - previousTime) / 1000, 0.05) : 0;
 			offset += direction * speed * elapsed;
 
-			if (offset >= overflow) {
-				offset = overflow;
+			if (offset >= travel) {
+				offset = travel;
 				direction = -1;
 			} else if (offset <= 0) {
 				offset = 0;
