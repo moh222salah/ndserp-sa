@@ -53,6 +53,16 @@ for marker in 'body .navbar' '58px' '#0a2342'; do
 done
 echo "BUILT_HEADER_CSS=PASS"
 echo "BUILT_HEADER_CSS_SHA256=$(sha256sum "$LOCAL_ASSET" | awk '{print $1}')"
+
+# Verify the actual new Quick Actions styles before contacting the web server.
+tr '[:upper:]' '[:lower:]' < "$LOCAL_ASSET" | tr -d '[:space:]' > "$LOCAL_CSS"
+for marker in '.amt-quick-actions' '.amt-quick-actions-grid' 'min-height:132px' 'margin-top:auto' 'background:#eef1f4' 'display:none!important'; do
+  if ! grep -Fq "$marker" "$LOCAL_CSS"; then
+    echo "BUILT_QUICK_ACTIONS_CSS=FAIL:MISSING_MARKER:$marker"
+    exit 24
+  fi
+done
+echo "BUILT_QUICK_ACTIONS_CSS=PASS"
 echo "ASSET_URL=$ASSET_URL"
 
 READY=0
@@ -83,9 +93,10 @@ if [ "$(sha256sum "$LOCAL_ASSET" | awk '{print $1}')" != "$(sha256sum "$SERVED_C
 fi
 echo "SERVED_HEADER_CSS_MATCH=PASS"
 
-# Verify Quick Actions are present in the CSS actually served to the browser.
-for marker in '.amt-quick-actions' '.amt-quick-actions-grid' '.amt-quick-action-arrow'; do
-  if ! grep -Fq "$marker" "$SERVED_CSS"; then
+# Verify the target Quick Actions styles in the CSS actually served to the browser.
+tr '[:upper:]' '[:lower:]' < "$SERVED_CSS" | tr -d '[:space:]' > "$LOCAL_CSS"
+for marker in '.amt-quick-actions' '.amt-quick-actions-grid' 'min-height:132px' 'margin-top:auto' 'background:#eef1f4' 'display:none!important'; do
+  if ! grep -Fq "$marker" "$LOCAL_CSS"; then
     echo "SERVED_QUICK_ACTIONS_CSS=FAIL:MISSING_MARKER:$marker"
     exit 17
   fi
