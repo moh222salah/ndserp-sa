@@ -54,7 +54,7 @@ for key in required:
     print(f"ASSET_SHA256={digest}")
     if key == "amir_theme.bundle.css":
         css = target.read_text(encoding="utf-8").lower()
-        css_compact = re.sub(r"\\s+", "", css)
+        css_compact = "".join(css.split())
         required_header_markers = ("body .navbar", "58px", "#0a2342")
         missing = [marker for marker in required_header_markers if marker not in css]
         if missing:
