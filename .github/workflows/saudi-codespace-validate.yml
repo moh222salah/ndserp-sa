@@ -33,6 +33,7 @@ jobs:
           bash -n codespace-start-server.sh
           bash -n codespace-install-theme-safe.sh
           bash -n codespace-remove-custom-reports-safe.sh
+          bash -n codespace-poststart.sh
           bash -n runtime-refresh.sh
           bash -n apps/amir_theme_v16/scripts/harden_assets.sh
           echo "BASH_SYNTAX=PASS"
@@ -51,6 +52,8 @@ jobs:
           test -s apps/ndserp/ndserp/setup/custom_report_policy.py
           test -s apps/ndserp/ndserp/tests/test_custom_report_policy.py
           grep -Fq 'def patch_custom_report_section()' apps/ndserp/ndserp/setup/custom_report_policy.py
+          grep -Fq 'desktop.Workspace.get_links = get_links_without_custom_reports' apps/ndserp/ndserp/setup/custom_report_policy.py
+          grep -Fq 'NDS_FORCE_BENCH_RESTART=1 bash "$ROOT/codespace-start-server.sh"' codespace-poststart.sh
           grep -Fq 'def filter_custom_report_sections(' apps/ndserp/ndserp/setup/custom_report_policy.py
           grep -Fq 'def reject_nonstandard_report(' apps/ndserp/ndserp/setup/custom_report_policy.py
           grep -Fq 'def purge_nonstandard_reports()' apps/ndserp/ndserp/setup/custom_report_policy.py
