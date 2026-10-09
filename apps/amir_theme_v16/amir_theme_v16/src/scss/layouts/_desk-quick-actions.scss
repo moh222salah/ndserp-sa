@@ -77,9 +77,9 @@ button.amt-quick-action {
 	display: flex;
 	flex-direction: column;
 	align-items: center;
-	justify-content: center;
-	gap: 10px;
-	padding: 12px 10px;
+	justify-content: space-between;
+	gap: 8px;
+	padding: 12px 10px 14px;
 	border: 1px solid var(--amt-card-border, var(--border-color));
 	border-radius: 16px;
 	background: var(--amt-card-bg, var(--card-bg, #fff));
@@ -100,6 +100,14 @@ button.amt-quick-action:hover {
 button.amt-quick-action:focus-visible {
 	outline: 2px solid var(--primary);
 	outline-offset: 2px;
+}
+
+// Suppress any legacy arrow decoration on Quick Actions cards.
+button.amt-quick-action::before,
+button.amt-quick-action::after,
+.amt-quick-action-arrow {
+	content: none !important;
+	display: none !important;
 }
 
 .amt-quick-action-icon {
@@ -129,6 +137,7 @@ button.amt-quick-action:focus-visible {
 .amt-quick-action-label {
 	flex: 0 0 auto;
 	max-width: 100%;
+	margin-top: auto;
 	font-size: 12.5px;
 	font-weight: 650;
 	line-height: 1.4;
