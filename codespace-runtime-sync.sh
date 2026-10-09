@@ -187,6 +187,47 @@ ensure_amir_theme_site_app() {
   return 24
 }
 
+
+run_asset_build_with_lock_retry() {
+  local attempt=1
+  local max_attempts="${NDS_BUILD_LOCK_RETRIES:-6}"
+  local delay="${NDS_BUILD_LOCK_RETRY_DELAY:-10}"
+  local log_file rc
+
+  log_file="$(mktemp "${TMPDIR:-/tmp}/nds-bench-build.XXXXXX")"
+  while [ "$attempt" -le "$max_attempts" ]; do
+    echo "ASSET_BUILD_ATTEMPT=$attempt/$max_attempts"
+    if bench build --app amir_theme_v16 --production >"$log_file" 2>&1; then
+      cat "$log_file"
+      rm -f "$log_file"
+      echo "ASSET_BUILD_COMMAND=PASS"
+      return 0
+    else
+      rc=$?
+    fi
+
+    cat "$log_file"
+    if grep -Eqi 'LockTimeoutError|Failed to a[c]?quire lock: bench_build|bench_build\.lock.*could not be acquired' "$log_file"; then
+      if [ "$attempt" -lt "$max_attempts" ]; then
+        echo "ASSET_BUILD_LOCK=BUSY"
+        echo "ASSET_BUILD_RETRY_IN=${delay}s"
+        sleep "$delay"
+        attempt=$((attempt + 1))
+        continue
+      fi
+      echo "ASSET_BUILD_LOCK=TIMEOUT"
+    fi
+
+    rm -f "$log_file"
+    echo "ASSET_BUILD_COMMAND=FAIL"
+    return "$rc"
+  done
+
+  rm -f "$log_file"
+  echo "ASSET_BUILD_COMMAND=FAIL"
+  return 1
+}
+
 echo "=== NDS ERP SAUDI — CODESPACE RUNTIME SYNC ==="
 echo "ROOT=$ROOT"
 echo "SITE=$SITE"
@@ -272,7 +313,7 @@ sync_once() {
 
   if [ "$needs_build" -eq 1 ]; then
     echo "=== BUILD CURRENT AMIR THEME ASSETS ==="
-    bench build --app amir_theme_v16 --production
+    run_asset_build_with_lock_retry
     bash apps/amir_theme_v16/scripts/harden_assets.sh
     bench --site "$SITE" clear-cache >/dev/null 2>&1 || true
     verify_amir_assets
@@ -284,7 +325,14 @@ sync_once() {
     echo "BUILT_SOURCE_HEAD=$(cat sites/.nds-runtime-source-head)"
     if curl --connect-timeout 1 --max-time 2 -fsS -o /dev/null "http://127.0.0.1:8080/login"; then
       if [ "$SYNC_MODE" = "--once" ]; then
-        echo "SERVED_ASSET_REFRESH=DEFERRED_TO_POSTSTART"
+        # Verify the live HTTP responses without restarting the local Bench server.
+        if bash "$ROOT/codespace-verify-runtime.sh"; then
+          printf '%s\n' "$current" > sites/.nds-runtime-served-head
+          echo "SERVED_ASSET_REFRESH=PASS"
+        else
+          echo "SERVED_ASSET_REFRESH=FAIL_RUNTIME_VERIFICATION"
+          return 43
+        fi
       else
         NDS_FORCE_BENCH_RESTART=1 bash "$ROOT/codespace-start-server.sh"
         bash "$ROOT/codespace-verify-runtime.sh"
