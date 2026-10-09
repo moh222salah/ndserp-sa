@@ -64,12 +64,8 @@ function iconMarkup(name, className) {
 }
 
 function enableHorizontalMotion(viewport, track) {
-	const motionPreference = window.matchMedia?.("(prefers-reduced-motion: reduce)");
-	if (motionPreference?.matches) {
-		viewport.dataset.motionState = "reduced";
-		return;
-	}
-
+	// This component explicitly requires visible motion; scrollLeft is avoided
+	// because its RTL semantics vary by browser. Animation pauses on interaction.
 	const speed = 18; // balanced, continuous movement in pixels per second
 	const rtl = getComputedStyle(viewport).direction === "rtl";
 	let offset = 0;
