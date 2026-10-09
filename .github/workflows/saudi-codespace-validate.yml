@@ -121,6 +121,7 @@ jobs:
           grep -Fq 'LOCAL_DB_GUARD=PASS' codespace-install-theme-safe.sh
           grep -Fq 'bench --site "$SITE" backup --with-files --compress --backup-path "$BACKUP_DIR"' codespace-install-theme-safe.sh
           grep -Fq 'bench --site "$SITE" install-app amir_theme_v16' codespace-install-theme-safe.sh
+          grep -Fq "grep -Eq '^(Amir Theme|amir_theme_v16)([[:space:]]|$)'" codespace-install-theme-safe.sh
           grep -Fq 'bench build --app amir_theme_v16 --production' codespace-install-theme-safe.sh
           grep -Fq 'bash codespace-verify-runtime.sh' codespace-install-theme-safe.sh
           grep -Fq 'PRODUCTION_DB_WRITE=NO' codespace-install-theme-safe.sh
