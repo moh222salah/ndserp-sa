@@ -1,0 +1,120 @@
+/* NDS ERP Saudi — Sales Workspace visual layer only.
+ * Scoped to the Sales Workspace; does not alter Workspace data or ERP behavior.
+ */
+body.nds-sales-workspace-redesign #page-Workspaces {
+  --nds-sales-navy: #0A2342;
+  --nds-sales-blue: #164E8F;
+  --nds-sales-gold: #D4AF37;
+  --nds-sales-ink: #172B4D;
+  --nds-sales-muted: #64748b;
+  --nds-sales-line: #e5ebf2;
+  --nds-sales-surface: #ffffff;
+  background: #f4f7fb;
+  color: var(--nds-sales-ink);
+}
+body.nds-sales-workspace-redesign #page-Workspaces .page-head {
+  background: linear-gradient(115deg, #0A2342 0%, #164E8F 72%, #1d5c9f 100%);
+  border: 0;
+  border-radius: 16px;
+  margin: 12px 0 20px;
+  padding: 20px 24px;
+  box-shadow: 0 10px 28px rgba(10,35,66,.14);
+}
+body.nds-sales-workspace-redesign #page-Workspaces .page-head .title-text,
+body.nds-sales-workspace-redesign #page-Workspaces .page-head h3,
+body.nds-sales-workspace-redesign #page-Workspaces .page-head .ellipsis {
+  color: #fff;
+}
+body.nds-sales-workspace-redesign #page-Workspaces .layout-main-section {
+  background: transparent;
+  border: 0;
+  box-shadow: none;
+  padding: 0;
+}
+body.nds-sales-workspace-redesign #page-Workspaces #editorjs {
+  gap: 18px;
+}
+body.nds-sales-workspace-redesign #page-Workspaces .widget,
+body.nds-sales-workspace-redesign #page-Workspaces .shortcut-widget-box,
+body.nds-sales-workspace-redesign #page-Workspaces .links-widget-box,
+body.nds-sales-workspace-redesign #page-Workspaces .number-widget-box,
+body.nds-sales-workspace-redesign #page-Workspaces .chart-widget,
+body.nds-sales-workspace-redesign #page-Workspaces .custom-block {
+  border: 1px solid var(--nds-sales-line);
+  border-radius: 14px;
+  background: var(--nds-sales-surface);
+  box-shadow: 0 3px 12px rgba(15, 35, 65, .045);
+  transition: box-shadow .18s ease, transform .18s ease, border-color .18s ease;
+  overflow: hidden;
+}
+body.nds-sales-workspace-redesign #page-Workspaces .shortcut-widget-box:hover,
+body.nds-sales-workspace-redesign #page-Workspaces .links-widget-box:hover,
+body.nds-sales-workspace-redesign #page-Workspaces .number-widget-box:hover {
+  transform: translateY(-2px);
+  border-color: #c5d5e8;
+  box-shadow: 0 8px 22px rgba(15, 50, 90, .09);
+}
+body.nds-sales-workspace-redesign #page-Workspaces .widget-head,
+body.nds-sales-workspace-redesign #page-Workspaces .widget-title {
+  color: var(--nds-sales-navy);
+  font-weight: 700;
+}
+body.nds-sales-workspace-redesign #page-Workspaces .widget-head {
+  border-bottom: 1px solid #edf1f6;
+  padding-bottom: 10px;
+}
+body.nds-sales-workspace-redesign #page-Workspaces .number-widget-box .number {
+  color: var(--nds-sales-blue);
+  font-weight: 750;
+  letter-spacing: -.025em;
+}
+body.nds-sales-workspace-redesign #page-Workspaces .shortcut-widget-box .widget-title,
+body.nds-sales-workspace-redesign #page-Workspaces .links-widget-box .link-item,
+body.nds-sales-workspace-redesign #page-Workspaces .shortcut-widget-box .ellipsis {
+  color: var(--nds-sales-ink);
+  font-weight: 600;
+}
+body.nds-sales-workspace-redesign #page-Workspaces .shortcut-widget-box .widget-icon,
+body.nds-sales-workspace-redesign #page-Workspaces .shortcut-widget-box svg {
+  color: var(--nds-sales-blue);
+}
+body.nds-sales-workspace-redesign #page-Workspaces .section-head,
+body.nds-sales-workspace-redesign #page-Workspaces .workspace-section .section-head {
+  color: var(--nds-sales-navy);
+  font-weight: 750;
+}
+body.nds-sales-workspace-redesign #page-Workspaces .section-head:after {
+  content: "";
+  display: block;
+  width: 42px;
+  height: 3px;
+  margin-top: 8px;
+  border-radius: 3px;
+  background: var(--nds-sales-gold);
+}
+body.nds-sales-workspace-redesign #page-Workspaces a {
+  transition: color .15s ease;
+}
+body.nds-sales-workspace-redesign #page-Workspaces a:hover {
+  color: var(--nds-sales-blue);
+}
+@media (max-width: 767px) {
+  body.nds-sales-workspace-redesign #page-Workspaces .page-head {
+    margin: 8px 0 14px;
+    padding: 16px;
+    border-radius: 12px;
+  }
+  body.nds-sales-workspace-redesign #page-Workspaces .widget,
+  body.nds-sales-workspace-redesign #page-Workspaces .shortcut-widget-box,
+  body.nds-sales-workspace-redesign #page-Workspaces .links-widget-box,
+  body.nds-sales-workspace-redesign #page-Workspaces .number-widget-box,
+  body.nds-sales-workspace-redesign #page-Workspaces .chart-widget {
+    border-radius: 11px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  body.nds-sales-workspace-redesign #page-Workspaces * {
+    transition: none !important;
+    animation: none !important;
+  }
+}
