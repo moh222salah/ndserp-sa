@@ -73,7 +73,12 @@ for key in required:
         print("QUICK_ACTIONS_CSS=PASS")
     elif key == "amir_theme.bundle.js":
         js = target.read_text(encoding="utf-8")
-        required_quick_actions_js = ("amt-quick-actions-title", "الإجراءات السريعة")
+        # Use stable ASCII markers: production bundling may Unicode-escape Arabic literals.
+        required_quick_actions_js = (
+            "amt-quick-actions-title",
+            "amt-quick-actions-grid",
+            "Sales Invoice",
+        )
         missing = [marker for marker in required_quick_actions_js if marker not in js]
         if missing:
             raise SystemExit(
