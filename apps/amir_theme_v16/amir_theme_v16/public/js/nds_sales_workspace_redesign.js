@@ -5,6 +5,22 @@
   const WORKSPACE_NAME = "المبيعات NDS ERP";
   const BODY_CLASS = "nds-sales-workspace-redesign";
 
+  const PURCHASE_WORKSPACE_NAME = "المشتريات NDS ERP";
+  const PURCHASE_BODY_CLASS = "nds-purchase-workspace-redesign";
+
+  function isPurchaseWorkspace() {
+    try {
+      if (window.frappe && typeof window.frappe.get_route === "function") {
+        const route = window.frappe.get_route() || [];
+        return route[0] === "Workspaces" && route.slice(1).join("/") === PURCHASE_WORKSPACE_NAME;
+      }
+    } catch (_) {
+      // Keep the theme non-blocking if the route API is not ready.
+    }
+    const path = decodeURIComponent(window.location.pathname || "");
+    return path.includes("/desk/Workspaces/" + PURCHASE_WORKSPACE_NAME);
+  }
+
   function isSalesWorkspace() {
     try {
       if (window.frappe && typeof window.frappe.get_route === "function") {
@@ -21,6 +37,7 @@
   function applyScope() {
     if (!document.body) return;
     document.body.classList.toggle(BODY_CLASS, isSalesWorkspace());
+    document.body.classList.toggle(PURCHASE_BODY_CLASS, isPurchaseWorkspace());
   }
 
   if (document.readyState === "loading") {

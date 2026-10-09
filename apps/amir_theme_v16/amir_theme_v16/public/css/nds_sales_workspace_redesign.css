@@ -118,3 +118,250 @@ body.nds-sales-workspace-redesign #page-Workspaces a:hover {
     animation: none !important;
   }
 }
+
+
+/* NDS ERP Saudi — Purchase Workspace visual redesign.
+ * Scoped to this Workspace; preserves existing cards, charts, links, and data sources.
+ */
+body.nds-purchase-workspace-redesign #page-Workspaces {
+  --nds-purchase-navy: #0A2342;
+  --nds-purchase-blue: #164E8F;
+  --nds-purchase-gold: #D4AF37;
+  --nds-purchase-ink: #172B4D;
+  --nds-purchase-muted: #64748b;
+  --nds-purchase-line: #e1e6ee;
+  --nds-purchase-surface: #fff;
+  background: #f4f6fa;
+  color: var(--nds-purchase-ink);
+}
+body.nds-purchase-workspace-redesign #page-Workspaces .layout-main-section {
+  background: #f4f6fa;
+  border: 0;
+  box-shadow: none;
+  padding: 12px 18px 24px;
+}
+body.nds-purchase-workspace-redesign #page-Workspaces .page-head {
+  background: transparent;
+  border: 0;
+  box-shadow: none;
+  margin: 0;
+  padding: 4px 0 12px;
+}
+body.nds-purchase-workspace-redesign #page-Workspaces #editorjs,
+body.nds-purchase-workspace-redesign #page-Workspaces .editor-js-container {
+  width: 100%;
+  max-width: none;
+}
+body.nds-purchase-workspace-redesign #page-Workspaces #editorjs {
+  padding: 4px 6px 26px;
+}
+body.nds-purchase-workspace-redesign #page-Workspaces #editorjs .codex-editor__redactor {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  align-items: stretch;
+  align-content: start;
+  gap: 16px;
+  width: 100%;
+  margin: 0;
+  padding: 4px 0 24px;
+}
+body.nds-purchase-workspace-redesign #page-Workspaces #editorjs .ce-block {
+  box-sizing: border-box;
+  display: block;
+  float: none;
+  width: 100%;
+  max-width: none;
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  grid-column: span 12;
+}
+/* Match the Accounts Workspace header row without rewriting Workspace content. */
+body.nds-purchase-workspace-redesign #page-Workspaces #editorjs .ce-block:has(.ce-header) {
+  order: 0;
+  grid-column: span 9;
+  align-self: center;
+}
+body.nds-purchase-workspace-redesign #page-Workspaces #editorjs .ce-block:has(.ce-header) .ce-header,
+body.nds-purchase-workspace-redesign #page-Workspaces #editorjs .ce-block:has(.ce-header) .ce-header .h4 {
+  margin: 0;
+  color: var(--nds-purchase-navy);
+  font-size: 22px;
+  font-weight: 800;
+  line-height: 1.45;
+}
+body.nds-purchase-workspace-redesign #page-Workspaces #editorjs .ce-block:has(.shortcut-widget-box),
+body.nds-purchase-workspace-redesign #page-Workspaces #editorjs .ce-block:has(.shortcut) {
+  order: 0;
+  grid-column: span 3;
+  align-self: center;
+}
+body.nds-purchase-workspace-redesign #page-Workspaces #editorjs .shortcut-widget-box,
+body.nds-purchase-workspace-redesign #page-Workspaces #editorjs .widget.shortcut-widget-box {
+  min-height: 0;
+  margin: 0;
+  border: 1px solid var(--nds-purchase-line);
+  border-radius: 10px;
+  background: var(--nds-purchase-surface);
+  box-shadow: none;
+}
+/* Four current KPI widgets per desktop row, visually aligned like Accounts. */
+body.nds-purchase-workspace-redesign #page-Workspaces #editorjs .ce-block:has(.number-widget-box),
+body.nds-purchase-workspace-redesign #page-Workspaces #editorjs .ce-block:has([number_card_name]) {
+  order: 1;
+  grid-column: span 3;
+  min-width: 0;
+}
+body.nds-purchase-workspace-redesign #page-Workspaces #editorjs .widget.number-widget-box {
+  box-sizing: border-box;
+  height: 100%;
+  min-height: 118px;
+  padding: 0;
+  overflow: hidden;
+  border: 1px solid var(--nds-purchase-line);
+  border-top: 3px solid var(--nds-purchase-blue);
+  border-radius: 12px;
+  background: var(--nds-purchase-surface);
+  box-shadow: 0 3px 12px rgba(10,35,66,.045);
+  transition: box-shadow 160ms ease, transform 160ms ease;
+}
+body.nds-purchase-workspace-redesign #page-Workspaces #editorjs .widget.number-widget-box:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 22px rgba(10,35,66,.085);
+}
+body.nds-purchase-workspace-redesign #page-Workspaces #editorjs .number-widget-box .widget-head {
+  padding: 12px 16px 4px;
+}
+body.nds-purchase-workspace-redesign #page-Workspaces #editorjs .number-widget-box .widget-title {
+  color: var(--nds-purchase-muted);
+  font-size: 12px;
+  font-weight: 600;
+}
+body.nds-purchase-workspace-redesign #page-Workspaces #editorjs .number-widget-box .widget-body {
+  padding: 8px 16px 14px;
+}
+body.nds-purchase-workspace-redesign #page-Workspaces #editorjs .number-widget-box .number {
+  color: var(--nds-purchase-ink);
+  font-size: clamp(21px,1.7vw,27px);
+  font-weight: 800;
+  line-height: 1.25;
+  overflow-wrap: anywhere;
+  font-variant-numeric: tabular-nums;
+}
+body.nds-purchase-workspace-redesign #page-Workspaces #editorjs .number-widget-box .card-stats {
+  margin-top: 7px;
+  font-size: 11px;
+}
+/* Existing charts stay intact and receive a full-width panel treatment. */
+body.nds-purchase-workspace-redesign #page-Workspaces #editorjs .ce-block:has(.dashboard-widget-box),
+body.nds-purchase-workspace-redesign #page-Workspaces #editorjs .ce-block:has(.chart-widget),
+body.nds-purchase-workspace-redesign #page-Workspaces #editorjs .ce-block:has([chart_name]) {
+  order: 2;
+  grid-column: span 12;
+  min-width: 0;
+}
+body.nds-purchase-workspace-redesign #page-Workspaces #editorjs .widget.dashboard-widget-box,
+body.nds-purchase-workspace-redesign #page-Workspaces #editorjs .chart-widget {
+  box-sizing: border-box;
+  min-height: 280px;
+  overflow: hidden;
+  border: 1px solid var(--nds-purchase-line);
+  border-radius: 12px;
+  background: var(--nds-purchase-surface);
+  box-shadow: 0 3px 12px rgba(10,35,66,.035);
+}
+body.nds-purchase-workspace-redesign #page-Workspaces #editorjs .dashboard-widget-box .widget-head {
+  padding: 17px 20px 8px;
+}
+body.nds-purchase-workspace-redesign #page-Workspaces #editorjs .dashboard-widget-box .widget-title,
+body.nds-purchase-workspace-redesign #page-Workspaces #editorjs .chart-widget .widget-title {
+  color: var(--nds-purchase-ink);
+  font-size: 15px;
+  font-weight: 750;
+}
+/* Two navigation cards per row on desktop; original link destinations remain untouched. */
+body.nds-purchase-workspace-redesign #page-Workspaces #editorjs .ce-block:has(.links-widget-box),
+body.nds-purchase-workspace-redesign #page-Workspaces #editorjs .ce-block:has([card_name]) {
+  order: 4;
+  grid-column: span 6;
+  min-width: 0;
+}
+body.nds-purchase-workspace-redesign #page-Workspaces #editorjs .widget.links-widget-box {
+  height: 100%;
+  overflow: hidden;
+  border: 1px solid var(--nds-purchase-line);
+  border-radius: 12px;
+  background: var(--nds-purchase-surface);
+  box-shadow: 0 3px 12px rgba(10,35,66,.035);
+}
+body.nds-purchase-workspace-redesign #page-Workspaces #editorjs .links-widget-box .widget-head {
+  padding: 16px 18px 8px;
+}
+body.nds-purchase-workspace-redesign #page-Workspaces #editorjs .links-widget-box .widget-title {
+  color: var(--nds-purchase-ink);
+  font-size: 14px;
+  font-weight: 750;
+}
+body.nds-purchase-workspace-redesign #page-Workspaces #editorjs .links-widget-box .widget-body {
+  padding: 0 14px 14px;
+}
+body.nds-purchase-workspace-redesign #page-Workspaces #editorjs .links-widget-box .link-item {
+  min-height: 40px;
+  padding: 10px 8px;
+  border-radius: 7px;
+  transition: background 140ms ease, color 140ms ease;
+}
+body.nds-purchase-workspace-redesign #page-Workspaces #editorjs .links-widget-box .link-item:not(:first-child) {
+  border-top: 1px solid rgba(225,230,238,.72);
+}
+body.nds-purchase-workspace-redesign #page-Workspaces #editorjs .links-widget-box .link-item:hover {
+  background: #f2f6fc;
+  color: var(--nds-purchase-blue);
+}
+body.nds-purchase-workspace-redesign #page-Workspaces .layout-main-section:not(.edit-mode) #editorjs .ce-block:has(.widget.spacer) {
+  display: none;
+}
+@media (max-width: 1100px) {
+  body.nds-purchase-workspace-redesign #page-Workspaces #editorjs .ce-block:has(.ce-header),
+  body.nds-purchase-workspace-redesign #page-Workspaces #editorjs .ce-block:has(.shortcut-widget-box),
+  body.nds-purchase-workspace-redesign #page-Workspaces #editorjs .ce-block:has(.shortcut) {
+    grid-column: span 12;
+  }
+  body.nds-purchase-workspace-redesign #page-Workspaces #editorjs .ce-block:has(.number-widget-box),
+  body.nds-purchase-workspace-redesign #page-Workspaces #editorjs .ce-block:has([number_card_name]) {
+    grid-column: span 6;
+  }
+  body.nds-purchase-workspace-redesign #page-Workspaces #editorjs .ce-block:has(.links-widget-box),
+  body.nds-purchase-workspace-redesign #page-Workspaces #editorjs .ce-block:has([card_name]) {
+    grid-column: span 12;
+  }
+  body.nds-purchase-workspace-redesign #page-Workspaces #editorjs .widget.dashboard-widget-box,
+  body.nds-purchase-workspace-redesign #page-Workspaces #editorjs .chart-widget {
+    min-height: 250px;
+  }
+}
+@media (max-width: 600px) {
+  body.nds-purchase-workspace-redesign #page-Workspaces #editorjs .codex-editor__redactor {
+    gap: 12px;
+  }
+  body.nds-purchase-workspace-redesign #page-Workspaces .layout-main-section {
+    padding: 8px 10px 18px;
+  }
+  body.nds-purchase-workspace-redesign #page-Workspaces #editorjs .ce-block:has(.number-widget-box),
+  body.nds-purchase-workspace-redesign #page-Workspaces #editorjs .ce-block:has([number_card_name]) {
+    grid-column: span 12;
+  }
+  body.nds-purchase-workspace-redesign #page-Workspaces #editorjs .ce-block:has(.ce-header) .ce-header,
+  body.nds-purchase-workspace-redesign #page-Workspaces #editorjs .ce-block:has(.ce-header) .ce-header .h4 {
+    font-size: 20px;
+  }
+  body.nds-purchase-workspace-redesign #page-Workspaces #editorjs .number-widget-box .number {
+    font-size: 24px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  body.nds-purchase-workspace-redesign #page-Workspaces * {
+    transition: none;
+    animation: none;
+  }
+}
