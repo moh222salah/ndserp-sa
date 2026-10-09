@@ -16,6 +16,23 @@ sudo service mariadb start
 # First sync source, clean database-only custom reports backup-first, and build assets.
 bash "$ROOT/codespace-runtime-sync.sh" --once
 
+# Never restart or validate an outdated/dirty checkout as if it were current.
+git fetch origin main
+SOURCE_HEAD="$(git rev-parse HEAD)"
+GITHUB_MAIN="$(git rev-parse origin/main)"
+echo "CODESPACE_HEAD=$SOURCE_HEAD"
+echo "GITHUB_MAIN=$GITHUB_MAIN"
+if [ "$SOURCE_HEAD" != "$GITHUB_MAIN" ]; then
+  echo "SOURCE_SYNC=FAIL_HEAD_MISMATCH"
+  git status --short
+  echo "BENCH_RESTART=BLOCKED_STALE_SOURCE"
+  exit 31
+fi
+if [ ! -s "$ROOT/sites/.nds-custom-report-cleanup-v1" ]; then
+  echo "CUSTOM_REPORT_CLEANUP=FAIL_MARKER_MISSING"
+  exit 32
+fi
+
 # Restart the local Bench process so Python Hooks/modules are imported from current HEAD.
 NDS_FORCE_BENCH_RESTART=1 bash "$ROOT/codespace-start-server.sh"
 
