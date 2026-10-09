@@ -257,7 +257,7 @@ if ! installed_apps="$(bench --site "$SITE" list-apps 2>/dev/null)"; then
 fi
 
 THEME_SITE_INSTALL=NO
-if printf '%s\n' "$installed_apps" | grep -q '^Amir Theme'; then
+if printf '%s\n' "$installed_apps" | grep -Eq '^(Amir Theme|amir_theme_v16)([[:space:]]|$)'; then
   echo "AMIR_THEME_SITE_APP=PASS"
 else
   echo "AMIR_THEME_SITE_APP=MISSING_INSTALLING"
@@ -265,7 +265,7 @@ else
   bench --site "$SITE" install-app amir_theme_v16
   THEME_SITE_INSTALL=YES
   installed_apps="$(bench --site "$SITE" list-apps 2>/dev/null)"
-  if ! printf '%s\n' "$installed_apps" | grep -q '^Amir Theme'; then
+  if ! printf '%s\n' "$installed_apps" | grep -Eq '^(Amir Theme|amir_theme_v16)([[:space:]]|$)'; then
     echo "AMIR_THEME_SITE_APP=FAIL_AFTER_INSTALL"
     exit 22
   fi
@@ -278,7 +278,7 @@ bench build --app amir_theme_v16 --production
 bash apps/amir_theme_v16/scripts/harden_assets.sh
 verify_amir_assets
 
-if bench --site "$SITE" list-apps 2>/dev/null | grep -q '^Amir Theme'; then
+if bench --site "$SITE" list-apps 2>/dev/null | grep -Eq '^(Amir Theme|amir_theme_v16)([[:space:]]|$)'; then
   echo "AMIR_THEME_RUNTIME=PASS"
 else
   echo "AMIR_THEME_RUNTIME=FAIL"
