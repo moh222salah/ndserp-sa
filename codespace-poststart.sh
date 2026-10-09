@@ -38,6 +38,8 @@ NDS_FORCE_BENCH_RESTART=1 bash "$ROOT/codespace-start-server.sh"
 
 # Verify the assets actually served after the new Frappe process is ready.
 bash "$ROOT/codespace-verify-runtime.sh"
+printf '%s\n' "$(git rev-parse HEAD)" > "$ROOT/sites/.nds-runtime-served-head"
+echo "SERVED_RUNTIME_HEAD=$(cat "$ROOT/sites/.nds-runtime-served-head")"
 
 # Keep GitHub main synchronized while the Codespace remains open. The sync worker
 # restarts Bench after source/asset updates and writes a single auditable log.
