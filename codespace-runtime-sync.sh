@@ -13,7 +13,7 @@ export PATH="$HOME/.local/bin:$HOME/.cargo/bin:$PATH"
 # the background worker. Frappe's bench_build lock remains authoritative.
 if [ "${NDS_RUNTIME_SYNC_LOCK_HELD:-0}" != "1" ]; then
   mkdir -p "$ROOT/config" "$ROOT/logs"
-  RUNTIME_LOCK="$ROOT/config/nds-runtime-sync.lock"
+  RUNTIME_LOCK="/tmp/ndserp-sa-runtime-sync.lock"
   LOCK_WAIT="${NDS_RUNTIME_SYNC_LOCK_WAIT:-900}"
 
   if [ "${1:-}" = "--once" ]; then
