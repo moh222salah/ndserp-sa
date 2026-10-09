@@ -359,9 +359,22 @@ function syncAccountsWorkspaceScope() {
 }
 
 let scheduled = false;
+/**
+ * Apply a visual-only CSS scope on the warehouse Workspace route.
+ * This never changes Workspace data, metrics, links, permissions or business logic.
+ */
+function syncWarehouseWorkspaceScope() {
+	const route = window.frappe && typeof frappe.get_route === "function" ? frappe.get_route() : [];
+	const active = Array.isArray(route)
+		&& route[0] === "Workspaces"
+		&& currentWorkspaceKey() === "مخازن NDS ERP";
+	document.documentElement.classList.toggle("nds-warehouse-workspace", Boolean(active));
+}
+
 function run() {
 	scheduled = false;
 	try { syncAccountsWorkspaceScope(); } catch (e) { console.error("[amir_theme] accounts workspace scope failed:", e); }
+	try { syncWarehouseWorkspaceScope(); } catch (e) { console.error("[amir_theme] warehouse scope failed:", e); }
 	try { enhanceSidebar(); } catch (e) { /* eslint-disable-next-line no-console */ console.error("[amir_theme] sidebar-new failed:", e); }
 	try { enhanceCards(); } catch (e) { console.error("[amir_theme] card-icons failed:", e); }
 	try { enhanceLinkArrows(); } catch (e) { console.error("[amir_theme] link-arrow chip failed:", e); }

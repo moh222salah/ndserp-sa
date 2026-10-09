@@ -77,6 +77,16 @@ for key in required:
             )
         print("MODERN_HEADER_CSS=PASS")
         print("QUICK_ACTIONS_CSS=PASS")
+        required_warehouse_css = (
+            ".nds-warehouse-workspace",
+            "border-block-start:3pxsolid#0a2342",
+        )
+        missing = [marker for marker in required_warehouse_css if marker not in css_compact]
+        if missing:
+            raise SystemExit(
+                "WAREHOUSE_WORKSPACE_CSS=FAIL:MISSING_MARKERS:" + ",".join(missing)
+            )
+        print("WAREHOUSE_WORKSPACE_CSS=PASS")
     elif key == "amir_theme.bundle.js":
         js = target.read_text(encoding="utf-8")
         # Use stable ASCII markers: production bundling may Unicode-escape Arabic literals.
@@ -91,6 +101,9 @@ for key in required:
                 "QUICK_ACTIONS_JS=FAIL:MISSING_MARKERS:" + ",".join(missing)
             )
         print("QUICK_ACTIONS_JS=PASS")
+        if "nds-warehouse-workspace" not in js:
+            raise SystemExit("WAREHOUSE_WORKSPACE_JS=FAIL:MISSING_MARKER:nds-warehouse-workspace")
+        print("WAREHOUSE_WORKSPACE_JS=PASS")
 
 print("ASSET_SERVE_TREE=PASS")
 PY

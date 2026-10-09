@@ -63,6 +63,13 @@ for marker in '.amt-quick-actions' '.amt-quick-actions-grid' 'min-height:132px' 
   fi
 done
 echo "BUILT_QUICK_ACTIONS_CSS=PASS"
+for marker in '.nds-warehouse-workspace' 'border-block-start:3pxsolid#0a2342'; do
+  if ! grep -Fq "$marker" "$LOCAL_CSS"; then
+    echo "BUILT_WAREHOUSE_WORKSPACE_CSS=FAIL:MISSING_MARKER:$marker"
+    exit 26
+  fi
+done
+echo "BUILT_WAREHOUSE_WORKSPACE_CSS=PASS"
 echo "ASSET_URL=$ASSET_URL"
 
 READY=0
@@ -102,6 +109,13 @@ for marker in '.amt-quick-actions' '.amt-quick-actions-grid' 'min-height:132px' 
   fi
 done
 echo "SERVED_QUICK_ACTIONS_CSS=PASS"
+for marker in '.nds-warehouse-workspace' 'border-block-start:3pxsolid#0a2342'; do
+  if ! grep -Fq "$marker" "$LOCAL_CSS"; then
+    echo "SERVED_WAREHOUSE_WORKSPACE_CSS=FAIL:MISSING_MARKER:$marker"
+    exit 27
+  fi
+done
+echo "SERVED_WAREHOUSE_WORKSPACE_CSS=PASS"
 
 JS_ASSET_PATH="$("$ROOT/env/bin/python" - <<'PY'
 import json
@@ -132,6 +146,11 @@ for marker in 'amt-quick-actions-title' 'amt-quick-actions-grid' 'Sales Invoice'
     exit 20
   fi
 done
+if ! grep -Fq 'nds-warehouse-workspace' "$LOCAL_JS_ASSET"; then
+  echo "BUILT_WAREHOUSE_WORKSPACE_JS=FAIL:MISSING_MARKER:nds-warehouse-workspace"
+  exit 28
+fi
+echo "BUILT_WAREHOUSE_WORKSPACE_JS=PASS"
 SERVED_JS="$(mktemp)"
 trap 'rm -f "$LOCAL_CSS" "$SERVED_CSS" "$SERVED_JS"' EXIT
 JS_READY=0
@@ -152,6 +171,11 @@ for marker in 'amt-quick-actions-title' 'amt-quick-actions-grid' 'Sales Invoice'
     exit 22
   fi
 done
+if ! grep -Fq 'nds-warehouse-workspace' "$SERVED_JS"; then
+  echo "SERVED_WAREHOUSE_WORKSPACE_JS=FAIL:MISSING_MARKER:nds-warehouse-workspace"
+  exit 29
+fi
+echo "SERVED_WAREHOUSE_WORKSPACE_JS=PASS"
 if [ "$(sha256sum "$LOCAL_JS_ASSET" | awk '{print $1}')" != "$(sha256sum "$SERVED_JS" | awk '{print $1}')" ]; then
   echo "SERVED_QUICK_ACTIONS_JS=FAIL:HASH_MISMATCH"
   exit 23
@@ -161,6 +185,7 @@ echo "SERVED_QUICK_ACTIONS_JS=PASS"
 echo "SERVED_QUICK_ACTIONS_JS_MATCH=PASS"
 echo "HEADER_RUNTIME_VERIFICATION=PASS"
 echo "QUICK_ACTIONS_RUNTIME_ASSETS=PASS"
+echo "WAREHOUSE_WORKSPACE_RUNTIME_ASSETS=PASS"
 echo "DB_WRITE=NO"
 echo "MIGRATION=NO"
 echo "CORE_MODIFICATION=NO"

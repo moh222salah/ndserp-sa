@@ -1,0 +1,200 @@
+// NDS ERP Saudi — warehouse workspace visual redesign.
+// This stylesheet is scoped to the named Workspace; it adds no data or behavior.
+html.nds-warehouse-workspace [data-page-route="Workspaces"] {
+  --nds-warehouse-accent: #0a2342;
+  --nds-warehouse-blue: #164e8f;
+  --nds-warehouse-gold: #d4af37;
+}
+
+html.nds-warehouse-workspace [data-page-route="Workspaces"] .layout-main-section {
+  background: var(--bg-color);
+  padding: 18px 20px 22px;
+}
+
+html.nds-warehouse-workspace [data-page-route="Workspaces"] .editor-js-container,
+html.nds-warehouse-workspace [data-page-route="Workspaces"] #editorjs {
+  width: 100%;
+  max-width: 100%;
+}
+
+html.nds-warehouse-workspace [data-page-route="Workspaces"] .codex-editor {
+  min-height: 0;
+}
+
+html.nds-warehouse-workspace [data-page-route="Workspaces"] .codex-editor__redactor {
+  align-items: stretch;
+  row-gap: 2px;
+  padding-block-end: 18px;
+}
+
+/* Put the existing widgets in a dashboard reading order without changing data. */
+html.nds-warehouse-workspace [data-page-route="Workspaces"] #editorjs .codex-editor__redactor > .ce-block {
+  order: 50;
+  min-width: 0;
+}
+html.nds-warehouse-workspace [data-page-route="Workspaces"] #editorjs .codex-editor__redactor > .ce-block:has(.ce-header) {
+  order: 1;
+  flex-basis: 100%;
+}
+html.nds-warehouse-workspace [data-page-route="Workspaces"] #editorjs .codex-editor__redactor > .ce-block:has(.number_card),
+html.nds-warehouse-workspace [data-page-route="Workspaces"] #editorjs .codex-editor__redactor > .ce-block:has(.number-widget-box) {
+  order: 10;
+}
+html.nds-warehouse-workspace [data-page-route="Workspaces"] #editorjs .codex-editor__redactor > .ce-block:has(.chart) {
+  order: 20;
+}
+html.nds-warehouse-workspace [data-page-route="Workspaces"] #editorjs .codex-editor__redactor > .ce-block:has(.shortcut) {
+  order: 30;
+}
+html.nds-warehouse-workspace [data-page-route="Workspaces"] #editorjs .codex-editor__redactor > .ce-block:has(.links-widget-box) {
+  order: 40;
+}
+html.nds-warehouse-workspace [data-page-route="Workspaces"] #editorjs .codex-editor__redactor > .ce-block:has(.spacer) {
+  display: none;
+}
+
+/* Clear, compact page title. */
+html.nds-warehouse-workspace [data-page-route="Workspaces"] #editorjs .ce-block:has(.ce-header) .ce-block__content {
+  padding: 2px 8px 8px;
+}
+html.nds-warehouse-workspace [data-page-route="Workspaces"] #editorjs .ce-header {
+  margin: 0;
+  color: var(--heading-color);
+  font-size: 24px;
+  font-weight: 750;
+  line-height: 1.5;
+  text-align: start;
+}
+
+/* Number cards: matching top accent, crisp values, and soft elevation. */
+html.nds-warehouse-workspace [data-page-route="Workspaces"] #editorjs .widget.number-widget-box {
+  min-height: 112px;
+  padding: 14px 15px;
+  border: 1px solid var(--border-color);
+  border-block-start: 3px solid #0a2342;
+  border-radius: 10px;
+  background: var(--fg-color);
+  box-shadow: 0 2px 10px color-mix(in srgb, #0a2342 6%, transparent);
+  text-align: start;
+  transition: box-shadow 160ms ease, transform 160ms ease;
+}
+html.nds-warehouse-workspace [data-page-route="Workspaces"] #editorjs .widget.number-widget-box:hover {
+  box-shadow: 0 7px 18px color-mix(in srgb, #0a2342 11%, transparent);
+  transform: translateY(-1px);
+}
+html.nds-warehouse-workspace [data-page-route="Workspaces"] #editorjs .number-widget-box .widget-head {
+  padding: 0 2px;
+}
+html.nds-warehouse-workspace [data-page-route="Workspaces"] #editorjs .number-widget-box .widget-title {
+  color: var(--text-muted);
+  font-size: 13px;
+  font-weight: 600;
+}
+html.nds-warehouse-workspace [data-page-route="Workspaces"] #editorjs .number-widget-box .widget-content {
+  padding-block-start: 10px;
+}
+html.nds-warehouse-workspace [data-page-route="Workspaces"] #editorjs .number-widget-box .number {
+  color: var(--heading-color);
+  font-size: clamp(21px, 1.55vw, 28px);
+  font-weight: 750;
+  line-height: 1.35;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Existing stock-value chart stays full width and keeps its original data source. */
+html.nds-warehouse-workspace [data-page-route="Workspaces"] #editorjs .ce-block:has(.chart) .dashboard-widget-box {
+  min-height: 280px;
+  padding: 14px 15px;
+  border: 1px solid var(--border-color);
+  border-block-start: 3px solid #164e8f;
+  border-radius: 10px;
+  background: var(--fg-color);
+  box-shadow: 0 2px 10px color-mix(in srgb, #0a2342 5%, transparent);
+}
+html.nds-warehouse-workspace [data-page-route="Workspaces"] #editorjs .ce-block:has(.chart) .dashboard-widget-box .widget-title {
+  color: var(--heading-color);
+  font-size: 15px;
+  font-weight: 700;
+}
+
+/* Existing quick links remain clickable; only their surface and hover style change. */
+html.nds-warehouse-workspace [data-page-route="Workspaces"] #editorjs .widget.shortcut-widget-box {
+  min-height: 66px;
+  padding: 12px 13px;
+  border: 1px solid var(--border-color);
+  border-radius: 9px;
+  background: var(--fg-color);
+  box-shadow: 0 1px 4px color-mix(in srgb, #0a2342 4%, transparent);
+  transition: border-color 160ms ease, box-shadow 160ms ease, background 160ms ease;
+}
+html.nds-warehouse-workspace [data-page-route="Workspaces"] #editorjs .widget.shortcut-widget-box:hover {
+  border-color: #164e8f;
+  background: color-mix(in srgb, #164e8f 5%, var(--fg-color));
+  box-shadow: 0 4px 12px color-mix(in srgb, #164e8f 10%, transparent);
+}
+html.nds-warehouse-workspace [data-page-route="Workspaces"] #editorjs .shortcut-widget-box .widget-title {
+  color: var(--heading-color);
+  font-size: 14px;
+  font-weight: 650;
+}
+html.nds-warehouse-workspace [data-page-route="Workspaces"] #editorjs .shortcut-widget-box:hover .widget-title {
+  color: var(--nds-warehouse-blue);
+}
+html.nds-warehouse-workspace [data-page-route="Workspaces"] #editorjs .widget.shortcut-widget-box:focus-visible {
+  outline: 2px solid #164e8f;
+  outline-offset: 2px;
+}
+
+/* Three existing navigation groups, accented with the NDS gold. */
+html.nds-warehouse-workspace [data-page-route="Workspaces"] #editorjs .widget.links-widget-box {
+  min-height: 190px;
+  padding: 14px 15px;
+  border: 1px solid var(--border-color);
+  border-block-start: 3px solid #d4af37;
+  border-radius: 10px;
+  background: var(--fg-color);
+  box-shadow: 0 2px 10px color-mix(in srgb, #0a2342 5%, transparent);
+}
+html.nds-warehouse-workspace [data-page-route="Workspaces"] #editorjs .widget.links-widget-box .widget-head {
+  padding: 0 2px 9px;
+  border-block-end: 1px solid color-mix(in srgb, var(--border-color) 75%, transparent);
+}
+html.nds-warehouse-workspace [data-page-route="Workspaces"] #editorjs .widget.links-widget-box .widget-title {
+  color: var(--heading-color);
+  font-size: 15px;
+  font-weight: 700;
+}
+html.nds-warehouse-workspace [data-page-route="Workspaces"] #editorjs .widget.links-widget-box .widget-body > a.link-item {
+  padding: 7px 8px;
+  border-radius: 6px;
+  transition: background 140ms ease, color 140ms ease;
+}
+html.nds-warehouse-workspace [data-page-route="Workspaces"] #editorjs .widget.links-widget-box .widget-body > a.link-item:hover {
+  background: color-mix(in srgb, #164e8f 7%, var(--fg-color));
+  color: var(--nds-warehouse-blue);
+}
+html.nds-warehouse-workspace [data-page-route="Workspaces"] #editorjs .widget.links-widget-box .widget-body > a.link-item .link-content:hover {
+  color: var(--nds-warehouse-blue);
+}
+
+@media (max-width: 767px) {
+  html.nds-warehouse-workspace [data-page-route="Workspaces"] .layout-main-section {
+    padding: 10px 7px 16px;
+  }
+  html.nds-warehouse-workspace [data-page-route="Workspaces"] #editorjs .ce-block__content {
+    padding: 5px;
+  }
+  html.nds-warehouse-workspace [data-page-route="Workspaces"] #editorjs .widget.number-widget-box {
+    min-height: 100px;
+    padding: 11px 12px;
+  }
+  html.nds-warehouse-workspace [data-page-route="Workspaces"] #editorjs .ce-block:has(.chart) .dashboard-widget-box {
+    min-height: 230px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  html.nds-warehouse-workspace [data-page-route="Workspaces"] #editorjs .widget.number-widget-box,
+  html.nds-warehouse-workspace [data-page-route="Workspaces"] #editorjs .widget.shortcut-widget-box {
+    transition: none;
+  }
+}
