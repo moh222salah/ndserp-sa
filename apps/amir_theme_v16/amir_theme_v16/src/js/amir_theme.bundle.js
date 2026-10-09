@@ -1,4 +1,5 @@
 import { deskLauncher } from "./core/desk_launcher.js";
+import { quickActions } from "./core/desk_quick_actions.js";
 import { deskStatusBar } from "./core/desk_statusbar.js";
 import { refreshDeskHost } from "./core/desk_host.js";
 import { hijriDate } from "./core/hijri_date.js";
@@ -1074,6 +1075,7 @@ $(document).ready(function () {
 	browserIdentity.mount();
 	progressBar.mount();
 	deskLauncher.mount();
+	quickActions.mount();
 	deskStatusBar.mount();
 	// Patches ControlDate.prototype once; must run before any date field is
 	// built, so it is mounted here rather than behind after_ajax. Skipping the
