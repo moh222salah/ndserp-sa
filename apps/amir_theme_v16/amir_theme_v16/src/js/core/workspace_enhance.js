@@ -322,6 +322,42 @@ function enhanceModuleBadge() {
 }
 
 // --- driver -----------------------------------------------------------------
+// --- accounts workspace visual scope ---------------------------------------
+// Marks only the NDS Accounts workspace so its stylesheet cannot affect other
+// Workspaces, forms, reports, or the rest of Desk.
+const ACCOUNTS_WORKSPACE_NAME = "حسابات NDS ERP";
+
+function syncAccountsWorkspaceScope() {
+	let route = [];
+	try {
+		route = typeof frappe.get_route === "function" ? frappe.get_route() : [];
+	} catch (e) {
+		route = [];
+	}
+
+	const routeKind = String(route[0] || "").trim().toLowerCase();
+	const routeName = String(route[1] || "").trim();
+	let expectedSlug = ACCOUNTS_WORKSPACE_NAME;
+	try {
+		if (frappe.router && typeof frappe.router.slug === "function") {
+			expectedSlug = frappe.router.slug(ACCOUNTS_WORKSPACE_NAME);
+		}
+	} catch (e) {
+		// The raw workspace name remains a valid fallback.
+	}
+
+	const activeTitle = document.querySelector(".workspace-title")?.textContent?.trim() || "";
+	const nameMatches =
+		routeName.toLowerCase() === ACCOUNTS_WORKSPACE_NAME.toLowerCase() ||
+		routeName.toLowerCase() === String(expectedSlug).toLowerCase() ||
+		activeTitle.toLowerCase() === ACCOUNTS_WORKSPACE_NAME.toLowerCase();
+
+	document.body.classList.toggle(
+		"amt-accounts-workspace",
+		routeKind === "workspaces" && nameMatches
+	);
+}
+
 let scheduled = false;
 function run() {
 	scheduled = false;
