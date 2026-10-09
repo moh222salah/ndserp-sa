@@ -38,6 +38,67 @@ function iconMarkup(name, className) {
 	);
 }
 
+function enableHorizontalMotion(grid) {
+	const motionPreference = window.matchMedia?.("(prefers-reduced-motion: reduce)");
+	if (motionPreference?.matches) return;
+
+	const speed = 22; // pixels per second: steady, moderate horizontal movement
+	const rtl = getComputedStyle(grid).direction === "rtl";
+	let direction = rtl ? -1 : 1;
+	let previousTime = 0;
+	let pointerInside = false;
+	let focusInside = false;
+	let frameId = 0;
+
+	const tick = (time) => {
+		if (!grid.isConnected) {
+			cancelAnimationFrame(frameId);
+			return;
+		}
+
+		if (!pointerInside && !focusInside && document.visibilityState !== "hidden") {
+			const overflow = Math.max(0, grid.scrollWidth - grid.clientWidth);
+			if (overflow > 2) {
+				const min = rtl ? -overflow : 0;
+				const max = rtl ? 0 : overflow;
+				const elapsed = previousTime ? Math.min((time - previousTime) / 1000, 0.05) : 0;
+				const next = grid.scrollLeft + direction * speed * elapsed;
+
+				if (next >= max) {
+					grid.scrollLeft = max;
+					direction = -1;
+				} else if (next <= min) {
+					grid.scrollLeft = min;
+					direction = 1;
+				} else {
+					grid.scrollLeft = next;
+				}
+			}
+		}
+		previousTime = time;
+		frameId = requestAnimationFrame(tick);
+	};
+
+	grid.addEventListener("pointerenter", () => {
+		pointerInside = true;
+		previousTime = 0;
+	});
+	grid.addEventListener("pointerleave", () => {
+		pointerInside = false;
+		previousTime = 0;
+	});
+	grid.addEventListener("focusin", () => {
+		focusInside = true;
+		previousTime = 0;
+	});
+	grid.addEventListener("focusout", (event) => {
+		focusInside = grid.contains(event.relatedTarget);
+		previousTime = 0;
+	});
+
+	frameId = requestAnimationFrame(tick);
+}
+
 function buildSection(actions, arabic) {
 	const section = document.createElement("section");
 	section.className = "amt-quick-actions";
