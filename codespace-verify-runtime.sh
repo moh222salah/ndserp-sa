@@ -77,6 +77,13 @@ for marker in '.amt-accounts-workspace' '.codex-editor__redactor' 'grid-template
   fi
 done
 echo "BUILT_ACCOUNTS_WORKSPACE_CSS=PASS"
+for marker in '.nds-sales-workspace-redesign' '#page-workspaces' '#d4af37'; do
+  if ! grep -Fq "$marker" "$LOCAL_CSS"; then
+    echo "BUILT_SALES_WORKSPACE_CSS=FAIL:MISSING_MARKER:$marker"
+    exit 34
+  fi
+done
+echo "BUILT_SALES_WORKSPACE_CSS=PASS"
 echo "ASSET_URL=$ASSET_URL"
 
 READY=0
@@ -130,6 +137,13 @@ for marker in '.amt-accounts-workspace' '.codex-editor__redactor' 'grid-template
   fi
 done
 echo "SERVED_ACCOUNTS_WORKSPACE_CSS=PASS"
+for marker in '.nds-sales-workspace-redesign' '#page-workspaces' '#d4af37'; do
+  if ! grep -Fq "$marker" "$LOCAL_CSS"; then
+    echo "SERVED_SALES_WORKSPACE_CSS=FAIL:MISSING_MARKER:$marker"
+    exit 35
+  fi
+done
+echo "SERVED_SALES_WORKSPACE_CSS=PASS"
 
 JS_ASSET_PATH="$("$ROOT/env/bin/python" - <<'PY'
 import json
@@ -171,6 +185,11 @@ if ! grep -Fq 'amt-accounts-workspace' "$LOCAL_JS_ASSET"; then
   exit 32
 fi
 echo "BUILT_ACCOUNTS_WORKSPACE_JS=PASS"
+if ! grep -Fq 'nds-sales-workspace-redesign' "$LOCAL_JS_ASSET"; then
+  echo "BUILT_SALES_WORKSPACE_JS=FAIL:MISSING_MARKER:nds-sales-workspace-redesign"
+  exit 36
+fi
+echo "BUILT_SALES_WORKSPACE_JS=PASS"
 SERVED_JS="$(mktemp)"
 trap 'rm -f "$LOCAL_CSS" "$SERVED_CSS" "$SERVED_JS"' EXIT
 JS_READY=0
@@ -202,6 +221,11 @@ if ! grep -Fq 'amt-accounts-workspace' "$SERVED_JS"; then
   exit 33
 fi
 echo "SERVED_ACCOUNTS_WORKSPACE_JS=PASS"
+if ! grep -Fq 'nds-sales-workspace-redesign' "$SERVED_JS"; then
+  echo "SERVED_SALES_WORKSPACE_JS=FAIL:MISSING_MARKER:nds-sales-workspace-redesign"
+  exit 37
+fi
+echo "SERVED_SALES_WORKSPACE_JS=PASS"
 if [ "$(sha256sum "$LOCAL_JS_ASSET" | awk '{print $1}')" != "$(sha256sum "$SERVED_JS" | awk '{print $1}')" ]; then
   echo "SERVED_QUICK_ACTIONS_JS=FAIL:HASH_MISMATCH"
   exit 23
