@@ -191,9 +191,9 @@ jobs:
           grep -Fq 'root / "sites" / rel.lstrip("/")' codespace-runtime-sync.sh
           grep -Fq 'root / "sites" / rel.lstrip("/")' codespace-bootstrap.sh
           grep -Fq 'BENCH_SERVER=PASS' codespace-start-server.sh
-          grep -Fq 'bash codespace-start-server.sh' .devcontainer/devcontainer.json
-          grep -Fq 'sudo service mariadb start' .devcontainer/devcontainer.json
-          grep -Fq 'bash codespace-verify-runtime.sh' .devcontainer/devcontainer.json
+          grep -Fq 'bash "$ROOT/codespace-start-server.sh"' codespace-poststart.sh
+          grep -Fq 'sudo service mariadb start' codespace-poststart.sh
+          grep -Fq 'bash "$ROOT/codespace-verify-runtime.sh"' codespace-poststart.sh
           echo "MODERN_HEADER_RUNTIME_VERIFICATION=PASS"
           echo "MODERN_HEADER_SOURCE=PASS"
           echo "MODERN_HEADER_IMPORT=PASS"
