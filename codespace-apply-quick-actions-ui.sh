@@ -3,7 +3,7 @@ set -Eeuo pipefail
 
 ROOT="/workspaces/ndserp-sa"
 SITE="ndserpsa.nds-sa.com"
-APPLY_LOCK="$ROOT/config/nds-ui-apply.lock"
+APPLY_LOCK="/tmp/ndserp-sa-ui-apply.lock"
 PID_FILE="$ROOT/logs/codespace-runtime-sync.pid"
 SYNC_LOG="$ROOT/logs/codespace-runtime-sync.log"
 
