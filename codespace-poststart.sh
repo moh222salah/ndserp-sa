@@ -11,7 +11,7 @@ mkdir -p logs config
 # Serialize Codespace postStart with manual UI application so they cannot
 # build assets or restart the local Bench server at the same time.
 if [ "${NDS_UI_APPLY_LOCKED:-0}" != "1" ]; then
-  exec flock -w "${NDS_UI_APPLY_LOCK_WAIT:-1200}" -o "$ROOT/config/nds-ui-apply.lock" \
+  exec flock -w "${NDS_UI_APPLY_LOCK_WAIT:-1200}" -o "/tmp/ndserp-sa-ui-apply.lock" \
     env NDS_UI_APPLY_LOCKED=1 bash "$ROOT/codespace-poststart.sh"
 fi
 
