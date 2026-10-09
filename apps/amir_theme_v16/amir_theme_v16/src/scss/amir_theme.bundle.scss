@@ -61,3 +61,6 @@
 @import "layouts/tree";
 @import "layouts/report";
 @import "layouts/warehouse-workspace";
+
+// Sales Workspace — presentation-only, route-scoped layer.
+@import "components/sales-workspace-redesign";
