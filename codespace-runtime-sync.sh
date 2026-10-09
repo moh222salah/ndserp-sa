@@ -177,6 +177,14 @@ sync_once() {
   cp bench/apps.txt sites/apps.txt
   echo "BENCH_APPS_REGISTRY=SYNCED"
 
+  # Remove database-stored custom reports once, only after a verified local backup.
+  # The marker prevents repeated DB queries/writes during the sync loop.
+  if [ ! -s "$ROOT/sites/.nds-custom-report-cleanup-v1" ]; then
+    bash "$ROOT/codespace-remove-custom-reports-safe.sh"
+  else
+    echo "CUSTOM_REPORT_POLICY=ALREADY_APPLIED"
+  fi
+
   source_marker=""
   if [ -f "sites/.nds-runtime-source-head" ]; then
     source_marker="$(cat sites/.nds-runtime-source-head)"
@@ -215,7 +223,8 @@ sync_once() {
 
   echo "CORE_MODIFICATION=NO"
   echo "MIGRATION=NO"
-  echo "DB_WRITE=NO_AFTER_THEME_ACTIVATION"
+  echo "DB_WRITE_POLICY=BACKUP_FIRST_LOCAL_ONLY"
+  echo "PRODUCTION_DB_WRITE=NO"
 }
 
 
