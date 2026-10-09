@@ -87,6 +87,18 @@ for key in required:
                 "WAREHOUSE_WORKSPACE_CSS=FAIL:MISSING_MARKERS:" + ",".join(missing)
             )
         print("WAREHOUSE_WORKSPACE_CSS=PASS")
+        required_accounts_css = (
+            ".amt-accounts-workspace",
+            ".codex-editor__redactor",
+            "grid-template-columns:repeat(12,minmax(0,1fr))",
+            "#bd5548",
+        )
+        missing = [marker for marker in required_accounts_css if marker not in css_compact]
+        if missing:
+            raise SystemExit(
+                "ACCOUNTS_WORKSPACE_CSS=FAIL:MISSING_MARKERS:" + ",".join(missing)
+            )
+        print("ACCOUNTS_WORKSPACE_CSS=PASS")
     elif key == "amir_theme.bundle.js":
         js = target.read_text(encoding="utf-8")
         # Use stable ASCII markers: production bundling may Unicode-escape Arabic literals.
@@ -104,6 +116,9 @@ for key in required:
         if "nds-warehouse-workspace" not in js:
             raise SystemExit("WAREHOUSE_WORKSPACE_JS=FAIL:MISSING_MARKER:nds-warehouse-workspace")
         print("WAREHOUSE_WORKSPACE_JS=PASS")
+        if "amt-accounts-workspace" not in js:
+            raise SystemExit("ACCOUNTS_WORKSPACE_JS=FAIL:MISSING_MARKER:amt-accounts-workspace")
+        print("ACCOUNTS_WORKSPACE_JS=PASS")
 
 print("ASSET_SERVE_TREE=PASS")
 PY
