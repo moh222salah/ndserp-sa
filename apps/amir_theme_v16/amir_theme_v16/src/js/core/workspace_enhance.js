@@ -395,6 +395,43 @@ function syncPurchaseWorkspaceScope() {
 	);
 }
 
+// Mark only the NDS Sales Workspace so its layout styles cannot affect other Desk pages.
+const SALES_WORKSPACE_NAME = "المبيعات NDS ERP";
+
+function syncSalesWorkspaceScope() {
+	let route = [];
+	try {
+		route = typeof frappe.get_route === "function" ? frappe.get_route() : [];
+	} catch (e) {
+		route = [];
+	}
+
+	const routeKind = String(route[0] || "").trim().toLowerCase();
+	const routeName = String(route[1] || "").trim();
+	let expectedSlug = SALES_WORKSPACE_NAME;
+	try {
+		if (frappe.router && typeof frappe.router.slug === "function") {
+			expectedSlug = frappe.router.slug(SALES_WORKSPACE_NAME);
+		}
+	} catch (e) {
+		// The raw workspace name remains a valid fallback.
+	}
+
+	const activeTitle = document.querySelector(".workspace-title")?.textContent?.trim() || "";
+	const activeKey = currentWorkspaceKey() || "";
+	const expectedNames = [
+		SALES_WORKSPACE_NAME.toLowerCase(),
+		String(expectedSlug).toLowerCase(),
+	];
+	const nameMatches = [routeName, activeTitle, activeKey]
+		.some((value) => expectedNames.includes(String(value).trim().toLowerCase()));
+
+	document.body.classList.toggle(
+		"nds-sales-workspace-redesign",
+		routeKind === "workspaces" && nameMatches
+	);
+}
+
 let scheduled = false;
 /**
  * Apply a visual-only CSS scope on the warehouse Workspace route.
@@ -413,6 +450,7 @@ function run() {
 	try { syncAccountsWorkspaceScope(); } catch (e) { console.error("[amir_theme] accounts workspace scope failed:", e); }
 	try { syncPurchaseWorkspaceScope(); } catch (e) { console.error("[amir_theme] purchase workspace scope failed:", e); }
 	try { syncWarehouseWorkspaceScope(); } catch (e) { console.error("[amir_theme] warehouse scope failed:", e); }
+	try { syncSalesWorkspaceScope(); } catch (e) { console.error("[amir_theme] sales workspace scope failed:", e); }
 	try { enhanceSidebar(); } catch (e) { /* eslint-disable-next-line no-console */ console.error("[amir_theme] sidebar-new failed:", e); }
 	try { enhanceCards(); } catch (e) { console.error("[amir_theme] card-icons failed:", e); }
 	try { enhanceLinkArrows(); } catch (e) { console.error("[amir_theme] link-arrow chip failed:", e); }
