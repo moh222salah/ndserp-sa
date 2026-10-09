@@ -58,13 +58,14 @@ jobs:
           grep -Fq 'def reject_nonstandard_report(' apps/ndserp/ndserp/setup/custom_report_policy.py
           grep -Fq 'def purge_nonstandard_reports()' apps/ndserp/ndserp/setup/custom_report_policy.py
           grep -Fq 'ndserp.setup.custom_report_policy.patch_custom_report_section' apps/ndserp/ndserp/hooks.py
+          grep -Fq 'patch_custom_report_section()' apps/ndserp/ndserp/__init__.py
           grep -Fq 'ndserp.setup.custom_report_policy.reject_nonstandard_report' apps/ndserp/ndserp/hooks.py
           grep -Fq 'bash codespace-poststart.sh' .devcontainer/devcontainer.json
           grep -Fq 'bash "$ROOT/codespace-runtime-sync.sh" --once' codespace-poststart.sh
           grep -Fq 'bash "$ROOT/codespace-remove-custom-reports-safe.sh"' codespace-runtime-sync.sh
           grep -Fq 'LOCAL_DB_GUARD=PASS' codespace-remove-custom-reports-safe.sh
           grep -Fq 'NDS_CUSTOM_REPORT_PURGE=PASS' codespace-remove-custom-reports-safe.sh
-          python3 -m py_compile apps/ndserp/ndserp/setup/custom_report_policy.py apps/ndserp/ndserp/tests/test_custom_report_policy.py
+          python3 -m py_compile apps/ndserp/ndserp/__init__.py apps/ndserp/ndserp/setup/custom_report_policy.py apps/ndserp/ndserp/tests/test_custom_report_policy.py
           python3 - <<'PY'
           from pathlib import Path
           source = Path("codespace-remove-custom-reports-safe.sh").read_text(encoding="utf-8")
