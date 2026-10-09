@@ -6,7 +6,6 @@ import { hijriDate } from "./core/hijri_date.js";
 import { reportAutofit } from "./core/report_autofit.js";
 import { colorScheme } from "./core/color_scheme.js";
 import { workspaceEnhance } from "./core/workspace_enhance.js";
-import "./core/sales_workspace_redesign.js";
 import { smartSubmitActions } from "./core/smart_submit_actions.js";
 import { translationToggle } from "./core/translation_toggle.js";
 import { progressBar } from "./core/progress_bar.js";
