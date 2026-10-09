@@ -84,6 +84,13 @@ for marker in '.nds-sales-workspace-redesign' '#page-workspaces' '#d4af37'; do
   fi
 done
 echo "BUILT_SALES_WORKSPACE_CSS=PASS"
+for marker in '.nds-sales-dashboard' '.nds-sales-kpi-grid' '.nds-sales-revenue-chart' '.nds-sales-channels-chart' '.nds-sales-invoices' 'grid-template-columns:repeat(4,minmax(0,1fr))'; do
+  if ! grep -Fq "$marker" "$LOCAL_CSS"; then
+    echo "BUILT_SALES_DASHBOARD_CSS=FAIL:MISSING_MARKER:$marker"
+    exit 42
+  fi
+done
+echo "BUILT_SALES_DASHBOARD_CSS=PASS"
 for marker in '.nds-purchase-workspace-redesign' '#page-workspaces' '.codex-editor__redactor' 'grid-template-columns:repeat(12,minmax(0,1fr))' '#c58b3c' 'grid-column:span7' 'grid-column:span5' 'border-collapse:separate'; do
   if ! grep -Fq "$marker" "$LOCAL_CSS"; then
     echo "BUILT_PURCHASE_WORKSPACE_CSS=FAIL:MISSING_MARKER:$marker"
@@ -151,6 +158,13 @@ for marker in '.nds-sales-workspace-redesign' '#page-workspaces' '#d4af37'; do
   fi
 done
 echo "SERVED_SALES_WORKSPACE_CSS=PASS"
+for marker in '.nds-sales-dashboard' '.nds-sales-kpi-grid' '.nds-sales-revenue-chart' '.nds-sales-channels-chart' '.nds-sales-invoices' 'grid-template-columns:repeat(4,minmax(0,1fr))'; do
+  if ! grep -Fq "$marker" "$LOCAL_CSS"; then
+    echo "SERVED_SALES_DASHBOARD_CSS=FAIL:MISSING_MARKER:$marker"
+    exit 43
+  fi
+done
+echo "SERVED_SALES_DASHBOARD_CSS=PASS"
 for marker in '.nds-purchase-workspace-redesign' '#page-workspaces' '.codex-editor__redactor' 'grid-template-columns:repeat(12,minmax(0,1fr))' '#c58b3c' 'grid-column:span7' 'grid-column:span5' 'border-collapse:separate'; do
   if ! grep -Fq "$marker" "$LOCAL_CSS"; then
     echo "SERVED_PURCHASE_WORKSPACE_CSS=FAIL:MISSING_MARKER:$marker"
@@ -204,6 +218,13 @@ if ! grep -Fq 'nds-sales-workspace-redesign' "$LOCAL_JS_ASSET"; then
   exit 36
 fi
 echo "BUILT_SALES_WORKSPACE_JS=PASS"
+for marker in 'nds-sales-dashboard' 'nds-sales-revenue-chart' 'nds-sales-channels-chart' 'nds-sales-invoices'; do
+  if ! grep -Fq "$marker" "$LOCAL_JS_ASSET"; then
+    echo "BUILT_SALES_DASHBOARD_JS=FAIL:MISSING_MARKER:$marker"
+    exit 44
+  fi
+done
+echo "BUILT_SALES_DASHBOARD_JS=PASS"
 if ! grep -Fq 'nds-purchase-workspace-redesign' "$LOCAL_JS_ASSET"; then
   echo "BUILT_PURCHASE_WORKSPACE_JS=FAIL:MISSING_MARKER:nds-purchase-workspace-redesign"
   exit 40
@@ -245,6 +266,13 @@ if ! grep -Fq 'nds-sales-workspace-redesign' "$SERVED_JS"; then
   exit 37
 fi
 echo "SERVED_SALES_WORKSPACE_JS=PASS"
+for marker in 'nds-sales-dashboard' 'nds-sales-revenue-chart' 'nds-sales-channels-chart' 'nds-sales-invoices'; do
+  if ! grep -Fq "$marker" "$SERVED_JS"; then
+    echo "SERVED_SALES_DASHBOARD_JS=FAIL:MISSING_MARKER:$marker"
+    exit 45
+  fi
+done
+echo "SERVED_SALES_DASHBOARD_JS=PASS"
 if ! grep -Fq 'nds-purchase-workspace-redesign' "$SERVED_JS"; then
   echo "SERVED_PURCHASE_WORKSPACE_JS=FAIL:MISSING_MARKER:nds-purchase-workspace-redesign"
   exit 41

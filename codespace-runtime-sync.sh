@@ -133,6 +133,12 @@ for key in required:
             "#page-workspaces",
             ".page-head",
             "#d4af37",
+            ".nds-sales-dashboard",
+            ".nds-sales-kpi-grid",
+            ".nds-sales-revenue-chart",
+            ".nds-sales-channels-chart",
+            ".nds-sales-invoices",
+            "grid-template-columns:repeat(4,minmax(0,1fr))",
         )
         missing = [marker for marker in required_sales_workspace_css if marker not in css_compact]
         if missing:
@@ -179,8 +185,19 @@ for key in required:
         if "amt-accounts-workspace" not in js:
             raise SystemExit("ACCOUNTS_WORKSPACE_JS=FAIL:MISSING_MARKER:amt-accounts-workspace")
         print("ACCOUNTS_WORKSPACE_JS=PASS")
-        if "nds-sales-workspace-redesign" not in js:
-            raise SystemExit("SALES_WORKSPACE_JS=FAIL:MISSING_MARKER:nds-sales-workspace-redesign")
+        required_sales_workspace_js = (
+            "nds-sales-workspace-redesign",
+            "nds-sales-dashboard",
+            "nds-sales-revenue-chart",
+            "nds-sales-channels-chart",
+            "nds-sales-invoices",
+            "لوحة المبيعات",
+        )
+        missing = [marker for marker in required_sales_workspace_js if marker not in js]
+        if missing:
+            raise SystemExit(
+                "SALES_WORKSPACE_JS=FAIL:MISSING_MARKERS:" + ",".join(missing)
+            )
         print("SALES_WORKSPACE_JS=PASS")
         if "nds-purchase-workspace-redesign" not in js:
             raise SystemExit("PURCHASE_WORKSPACE_JS=FAIL:MISSING_MARKER:nds-purchase-workspace-redesign")

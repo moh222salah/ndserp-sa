@@ -449,3 +449,471 @@ body.nds-purchase-workspace-redesign #page-Workspaces #editorjs table tbody tr:h
     grid-column: span 12;
   }
 }
+
+/* Reference-led Sales Dashboard: live KPI row, two charts, latest invoices table. */
+body.nds-sales-workspace-redesign.nds-sales-dashboard-ready #page-Workspaces .page-head {
+  display: none !important;
+}
+body.nds-sales-workspace-redesign.nds-sales-dashboard-ready #page-Workspaces .layout-main-section {
+  box-sizing: border-box;
+  padding: 8px clamp(10px, 1.1vw, 18px) 24px;
+  background: #f5f6f8;
+  border: 0;
+  box-shadow: none;
+}
+body.nds-sales-workspace-redesign.nds-sales-dashboard-ready #page-Workspaces #editorjs {
+  display: none !important;
+}
+body.nds-sales-workspace-redesign.nds-sales-dashboard-ready #page-Workspaces .nds-sales-dashboard {
+  width: 100%;
+  min-width: 0;
+  color: #27323c;
+  direction: rtl;
+  font-family: inherit;
+  line-height: 1.5;
+  padding: 4px 0 12px;
+}
+body.nds-sales-workspace-redesign.nds-sales-dashboard-ready #page-Workspaces .nds-sales-dashboard *,
+body.nds-sales-workspace-redesign.nds-sales-dashboard-ready #page-Workspaces .nds-sales-dashboard *::before,
+body.nds-sales-workspace-redesign.nds-sales-dashboard-ready #page-Workspaces .nds-sales-dashboard *::after {
+  box-sizing: border-box;
+}
+body.nds-sales-workspace-redesign.nds-sales-dashboard-ready #page-Workspaces .nds-sales-dashboard-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+  margin: 0 0 17px;
+  min-height: 58px;
+}
+body.nds-sales-workspace-redesign.nds-sales-dashboard-ready #page-Workspaces .nds-sales-dashboard-heading h1 {
+  margin: 0;
+  color: #202b35;
+  font-size: clamp(20px, 1.45vw, 24px);
+  line-height: 1.35;
+  font-weight: 800;
+}
+body.nds-sales-workspace-redesign.nds-sales-dashboard-ready #page-Workspaces .nds-sales-dashboard-breadcrumb {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  margin-top: 5px;
+  color: #80909a;
+  font-size: 11px;
+  font-weight: 500;
+}
+body.nds-sales-workspace-redesign.nds-sales-dashboard-ready #page-Workspaces .nds-sales-dashboard-breadcrumb span:first-child {
+  color: #438e82;
+}
+body.nds-sales-workspace-redesign.nds-sales-dashboard-ready #page-Workspaces .nds-sales-dashboard-period {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  flex: 0 0 auto;
+  padding: 8px 11px;
+  border: 1px solid #e1e6e9;
+  border-radius: 8px;
+  background: #fff;
+  color: #77858d;
+  font-size: 12px;
+  box-shadow: 0 1px 2px rgba(26, 42, 52, .02);
+}
+body.nds-sales-workspace-redesign.nds-sales-dashboard-ready #page-Workspaces .nds-sales-dashboard-period-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 23px;
+  height: 23px;
+  border-radius: 50%;
+  background: #e6f2ef;
+  color: #388d7e;
+  font-size: 16px;
+}
+body.nds-sales-workspace-redesign.nds-sales-dashboard-ready #page-Workspaces .nds-sales-kpi-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  align-items: stretch;
+  gap: 14px;
+  margin-bottom: 16px;
+}
+body.nds-sales-workspace-redesign.nds-sales-dashboard-ready #page-Workspaces .nds-sales-kpi-card {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  min-height: 118px;
+  padding: 15px 16px 13px;
+  border: 1px solid #e1e5e8;
+  border-top: 3px solid #439789;
+  border-radius: 8px;
+  background: #fff;
+  box-shadow: 0 1px 3px rgba(24, 42, 52, .025);
+  overflow: hidden;
+}
+body.nds-sales-workspace-redesign.nds-sales-dashboard-ready #page-Workspaces .nds-sales-kpi-label {
+  color: #78848c;
+  font-size: 12px;
+  font-weight: 550;
+  min-height: 20px;
+}
+body.nds-sales-workspace-redesign.nds-sales-dashboard-ready #page-Workspaces .nds-sales-kpi-value {
+  color: #26313a;
+  font-size: clamp(21px, 1.6vw, 27px);
+  line-height: 1.32;
+  letter-spacing: -.02em;
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+  overflow-wrap: anywhere;
+  margin: 5px 0 6px;
+}
+body.nds-sales-workspace-redesign.nds-sales-dashboard-ready #page-Workspaces .nds-sales-kpi-trend {
+  margin-top: auto;
+  color: #839098;
+  font-size: 10.5px;
+  line-height: 1.45;
+  font-weight: 550;
+}
+body.nds-sales-workspace-redesign.nds-sales-dashboard-ready #page-Workspaces .nds-sales-kpi-trend.positive {
+  color: #438f82;
+}
+body.nds-sales-workspace-redesign.nds-sales-dashboard-ready #page-Workspaces .nds-sales-kpi-trend.negative {
+  color: #b46c62;
+}
+body.nds-sales-workspace-redesign.nds-sales-dashboard-ready #page-Workspaces .nds-sales-kpi-trend.neutral {
+  color: #859098;
+}
+body.nds-sales-workspace-redesign.nds-sales-dashboard-ready #page-Workspaces .nds-sales-charts-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 2fr) minmax(280px, 1fr);
+  align-items: stretch;
+  gap: 14px;
+  margin-bottom: 16px;
+}
+body.nds-sales-workspace-redesign.nds-sales-dashboard-ready #page-Workspaces .nds-sales-panel {
+  min-width: 0;
+  overflow: hidden;
+  border: 1px solid #e0e4e7;
+  border-radius: 8px;
+  background: #fff;
+  box-shadow: 0 1px 3px rgba(24, 42, 52, .025);
+}
+body.nds-sales-workspace-redesign.nds-sales-dashboard-ready #page-Workspaces .nds-sales-panel-heading {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 17px 18px 0;
+}
+body.nds-sales-workspace-redesign.nds-sales-dashboard-ready #page-Workspaces .nds-sales-panel-heading h2 {
+  margin: 0;
+  color: #28343e;
+  font-size: 14px;
+  line-height: 1.45;
+  font-weight: 800;
+}
+body.nds-sales-workspace-redesign.nds-sales-dashboard-ready #page-Workspaces .nds-sales-panel-heading p {
+  margin: 4px 0 0;
+  color: #87939a;
+  font-size: 10.5px;
+  line-height: 1.4;
+}
+body.nds-sales-workspace-redesign.nds-sales-dashboard-ready #page-Workspaces .nds-sales-revenue-chart {
+  min-height: 244px;
+}
+body.nds-sales-workspace-redesign.nds-sales-dashboard-ready #page-Workspaces .nds-sales-revenue-chart-body {
+  min-height: 190px;
+  padding: 10px 16px 13px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+}
+body.nds-sales-workspace-redesign.nds-sales-dashboard-ready #page-Workspaces .nds-sales-revenue-columns {
+  display: flex;
+  align-items: stretch;
+  justify-content: space-around;
+  gap: clamp(6px, 1.5vw, 22px);
+  width: 100%;
+  min-height: 170px;
+  direction: rtl;
+}
+body.nds-sales-workspace-redesign.nds-sales-dashboard-ready #page-Workspaces .nds-sales-revenue-column {
+  display: flex;
+  flex: 1 1 0;
+  min-width: 0;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 5px;
+  text-align: center;
+}
+body.nds-sales-workspace-redesign.nds-sales-dashboard-ready #page-Workspaces .nds-sales-revenue-value {
+  color: #87939a;
+  font-size: 9px;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+body.nds-sales-workspace-redesign.nds-sales-dashboard-ready #page-Workspaces .nds-sales-revenue-bar-area {
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  width: 100%;
+  height: 118px;
+  border-bottom: 1px solid #e6e9eb;
+}
+body.nds-sales-workspace-redesign.nds-sales-dashboard-ready #page-Workspaces .nds-sales-revenue-bar {
+  width: min(38px, 65%);
+  min-height: 0;
+  border-radius: 3px 3px 0 0;
+  background: #4c9b8d;
+  box-shadow: 0 1px 0 rgba(255, 255, 255, .3) inset;
+  transition: height .2s ease, opacity .2s ease;
+}
+body.nds-sales-workspace-redesign.nds-sales-dashboard-ready #page-Workspaces .nds-sales-revenue-month {
+  min-height: 18px;
+  color: #78858d;
+  font-size: 10px;
+  white-space: nowrap;
+}
+body.nds-sales-workspace-redesign.nds-sales-dashboard-ready #page-Workspaces .nds-sales-channels-chart {
+  min-height: 244px;
+}
+body.nds-sales-workspace-redesign.nds-sales-dashboard-ready #page-Workspaces .nds-sales-channel-list {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding: 19px 17px 18px;
+}
+body.nds-sales-workspace-redesign.nds-sales-dashboard-ready #page-Workspaces .nds-sales-channel-row {
+  min-width: 0;
+}
+body.nds-sales-workspace-redesign.nds-sales-dashboard-ready #page-Workspaces .nds-sales-channel-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 6px;
+}
+body.nds-sales-workspace-redesign.nds-sales-dashboard-ready #page-Workspaces .nds-sales-channel-label-group {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  min-width: 0;
+}
+body.nds-sales-workspace-redesign.nds-sales-dashboard-ready #page-Workspaces .nds-sales-channel-dot {
+  flex: 0 0 8px;
+  width: 8px;
+  height: 8px;
+  border-radius: 2px;
+  background: #4b9b8c;
+}
+body.nds-sales-workspace-redesign.nds-sales-dashboard-ready #page-Workspaces .nds-sales-channel-dot.tone-2 {
+  background: #c88f43;
+}
+body.nds-sales-workspace-redesign.nds-sales-dashboard-ready #page-Workspaces .nds-sales-channel-dot.tone-3 {
+  background: #4b5a73;
+}
+body.nds-sales-workspace-redesign.nds-sales-dashboard-ready #page-Workspaces .nds-sales-channel-dot.tone-4 {
+  background: #8ba3b7;
+}
+body.nds-sales-workspace-redesign.nds-sales-dashboard-ready #page-Workspaces .nds-sales-channel-label {
+  color: #586771;
+  font-size: 11px;
+  font-weight: 600;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+body.nds-sales-workspace-redesign.nds-sales-dashboard-ready #page-Workspaces .nds-sales-channel-percent {
+  flex: 0 0 auto;
+  color: #65737c;
+  font-size: 10.5px;
+  font-variant-numeric: tabular-nums;
+}
+body.nds-sales-workspace-redesign.nds-sales-dashboard-ready #page-Workspaces .nds-sales-channel-track {
+  height: 5px;
+  width: 100%;
+  border-radius: 5px;
+  background: #edf0f2;
+  overflow: hidden;
+}
+body.nds-sales-workspace-redesign.nds-sales-dashboard-ready #page-Workspaces .nds-sales-channel-fill {
+  height: 100%;
+  margin-right: auto;
+  border-radius: 5px 0 0 5px;
+  background: #4b9b8c;
+  transition: width .2s ease;
+}
+body.nds-sales-workspace-redesign.nds-sales-dashboard-ready #page-Workspaces .nds-sales-channel-fill.tone-2 {
+  background: #c88f43;
+}
+body.nds-sales-workspace-redesign.nds-sales-dashboard-ready #page-Workspaces .nds-sales-channel-fill.tone-3 {
+  background: #4b5a73;
+}
+body.nds-sales-workspace-redesign.nds-sales-dashboard-ready #page-Workspaces .nds-sales-channel-fill.tone-4 {
+  background: #8ba3b7;
+}
+body.nds-sales-workspace-redesign.nds-sales-dashboard-ready #page-Workspaces .nds-sales-invoices {
+  margin-bottom: 4px;
+}
+body.nds-sales-workspace-redesign.nds-sales-dashboard-ready #page-Workspaces .nds-sales-invoices-heading {
+  align-items: center;
+  padding-bottom: 12px;
+}
+body.nds-sales-workspace-redesign.nds-sales-dashboard-ready #page-Workspaces .nds-sales-view-all {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 5px 0 5px 4px;
+  border: 0;
+  background: transparent;
+  color: #448f82;
+  font: inherit;
+  font-size: 10.5px;
+  font-weight: 700;
+  cursor: pointer;
+  white-space: nowrap;
+}
+body.nds-sales-workspace-redesign.nds-sales-dashboard-ready #page-Workspaces .nds-sales-view-all:hover {
+  color: #286e63;
+}
+body.nds-sales-workspace-redesign.nds-sales-dashboard-ready #page-Workspaces .nds-sales-table-wrap {
+  width: 100%;
+  overflow-x: auto;
+}
+body.nds-sales-workspace-redesign.nds-sales-dashboard-ready #page-Workspaces .nds-sales-invoice-table {
+  width: 100%;
+  min-width: 650px;
+  border-collapse: collapse;
+  border-spacing: 0;
+  text-align: right;
+}
+body.nds-sales-workspace-redesign.nds-sales-dashboard-ready #page-Workspaces .nds-sales-invoice-table th {
+  padding: 10px 18px;
+  border-top: 1px solid #f0f2f3;
+  color: #89949b;
+  font-size: 10.5px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+body.nds-sales-workspace-redesign.nds-sales-dashboard-ready #page-Workspaces .nds-sales-invoice-table td {
+  padding: 11px 18px;
+  border-top: 1px solid #e9edef;
+  color: #53616a;
+  font-size: 11px;
+  vertical-align: middle;
+  white-space: nowrap;
+}
+body.nds-sales-workspace-redesign.nds-sales-dashboard-ready #page-Workspaces .nds-sales-invoice-table tbody tr:hover {
+  background: #f8fafb;
+}
+body.nds-sales-workspace-redesign.nds-sales-dashboard-ready #page-Workspaces .nds-sales-invoice-link {
+  color: #283b4a;
+  font-weight: 700;
+  text-decoration: none;
+}
+body.nds-sales-workspace-redesign.nds-sales-dashboard-ready #page-Workspaces .nds-sales-invoice-link:hover {
+  color: #428e81;
+}
+body.nds-sales-workspace-redesign.nds-sales-dashboard-ready #page-Workspaces .nds-sales-invoice-amount {
+  color: #273640;
+  font-weight: 750;
+  font-variant-numeric: tabular-nums;
+}
+body.nds-sales-workspace-redesign.nds-sales-dashboard-ready #page-Workspaces .nds-sales-status {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4px 9px;
+  border-radius: 5px;
+  background: #edf1f1;
+  color: #718087;
+  font-size: 10px;
+  font-weight: 650;
+}
+body.nds-sales-workspace-redesign.nds-sales-dashboard-ready #page-Workspaces .nds-sales-status.is-paid {
+  background: #e6f3ef;
+  color: #4a8e81;
+}
+body.nds-sales-workspace-redesign.nds-sales-dashboard-ready #page-Workspaces .nds-sales-status.is-pending {
+  background: #fbf1df;
+  color: #b18143;
+}
+body.nds-sales-workspace-redesign.nds-sales-dashboard-ready #page-Workspaces .nds-sales-status.is-overdue {
+  background: #fae8e5;
+  color: #b95f54;
+}
+body.nds-sales-workspace-redesign.nds-sales-dashboard-ready #page-Workspaces .nds-sales-loading,
+body.nds-sales-workspace-redesign.nds-sales-dashboard-ready #page-Workspaces .nds-sales-chart-empty,
+body.nds-sales-workspace-redesign.nds-sales-dashboard-ready #page-Workspaces .nds-sales-table-empty {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 125px;
+  padding: 20px;
+  color: #87939a;
+  font-size: 11px;
+  text-align: center;
+}
+body.nds-sales-workspace-redesign.nds-sales-dashboard-ready #page-Workspaces .nds-sales-table-empty {
+  display: table-cell;
+}
+@media (max-width: 1050px) {
+  body.nds-sales-workspace-redesign.nds-sales-dashboard-ready #page-Workspaces .nds-sales-kpi-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  body.nds-sales-workspace-redesign.nds-sales-dashboard-ready #page-Workspaces .nds-sales-charts-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  body.nds-sales-workspace-redesign.nds-sales-dashboard-ready #page-Workspaces .nds-sales-channels-chart,
+  body.nds-sales-workspace-redesign.nds-sales-dashboard-ready #page-Workspaces .nds-sales-revenue-chart {
+    min-height: 220px;
+  }
+}
+@media (max-width: 580px) {
+  body.nds-sales-workspace-redesign.nds-sales-dashboard-ready #page-Workspaces .layout-main-section {
+    padding: 8px 8px 18px;
+  }
+  body.nds-sales-workspace-redesign.nds-sales-dashboard-ready #page-Workspaces .nds-sales-dashboard-header {
+    align-items: flex-start;
+  }
+  body.nds-sales-workspace-redesign.nds-sales-dashboard-ready #page-Workspaces .nds-sales-dashboard-heading h1 {
+    font-size: 20px;
+  }
+  body.nds-sales-workspace-redesign.nds-sales-dashboard-ready #page-Workspaces .nds-sales-dashboard-period {
+    gap: 5px;
+    padding: 6px 7px;
+    font-size: 10px;
+  }
+  body.nds-sales-workspace-redesign.nds-sales-dashboard-ready #page-Workspaces .nds-sales-kpi-grid {
+    gap: 9px;
+  }
+  body.nds-sales-workspace-redesign.nds-sales-dashboard-ready #page-Workspaces .nds-sales-kpi-card {
+    min-height: 113px;
+    padding: 12px;
+  }
+  body.nds-sales-workspace-redesign.nds-sales-dashboard-ready #page-Workspaces .nds-sales-kpi-label {
+    font-size: 11px;
+  }
+  body.nds-sales-workspace-redesign.nds-sales-dashboard-ready #page-Workspaces .nds-sales-kpi-value {
+    font-size: 20px;
+  }
+  body.nds-sales-workspace-redesign.nds-sales-dashboard-ready #page-Workspaces .nds-sales-panel-heading {
+    padding-right: 13px;
+    padding-left: 13px;
+  }
+  body.nds-sales-workspace-redesign.nds-sales-dashboard-ready #page-Workspaces .nds-sales-revenue-chart-body {
+    padding-right: 7px;
+    padding-left: 7px;
+  }
+  body.nds-sales-workspace-redesign.nds-sales-dashboard-ready #page-Workspaces .nds-sales-revenue-value {
+    font-size: 8px;
+  }
+  body.nds-sales-workspace-redesign.nds-sales-dashboard-ready #page-Workspaces .nds-sales-revenue-month {
+    font-size: 9px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  body.nds-sales-workspace-redesign.nds-sales-dashboard-ready #page-Workspaces .nds-sales-dashboard * {
+    transition: none !important;
+    animation: none !important;
+  }
+}
