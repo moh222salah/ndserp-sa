@@ -152,6 +152,7 @@ function buildSection(actions, arabic) {
 
 	if (actions.length) {
 		section.append(header, grid);
+		enableHorizontalMotion(grid);
 	} else {
 		const empty = document.createElement("p");
 		empty.className = "amt-quick-actions-empty";
