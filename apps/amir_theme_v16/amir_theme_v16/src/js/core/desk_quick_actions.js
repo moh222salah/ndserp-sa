@@ -8,14 +8,13 @@
 import { onDeskReady } from "./desk_host.js";
 
 const ACTIONS = [
-	{ doctype: "Sales Invoice", ar: "فاتورة مبيعات جديدة", en: "New Sales Invoice", icon: "file-text" },
-	{ doctype: "Sales Order", ar: "أمر بيع جديد", en: "New Sales Order", icon: "clipboard-list" },
-	{ doctype: "Customer", ar: "عميل جديد", en: "New Customer", icon: "users" },
-	{ doctype: "Payment Entry", ar: "تسجيل دفعة", en: "New Payment Entry", icon: "credit-card" },
-	{ doctype: "Purchase Invoice", ar: "فاتورة مشتريات جديدة", en: "New Purchase Invoice", icon: "receipt" },
-	{ doctype: "Purchase Order", ar: "أمر شراء جديد", en: "New Purchase Order", icon: "shopping-cart" },
-	{ doctype: "Supplier", ar: "مورد جديد", en: "New Supplier", icon: "truck" },
-	{ doctype: "Item", ar: "صنف جديد", en: "New Item", icon: "package" },
+	{ doctype: "Sales Invoice", ar: "فاتورة مبيعات", en: "Sales Invoice", icon: "invoice" },
+	{ doctype: "Purchase Invoice", ar: "فاتورة مشتريات", en: "Purchase Invoice", icon: "briefcase" },
+	{ doctype: "Payment Entry", ar: "سند قبض", en: "Payment Receipt", icon: "credit-card" },
+	{ doctype: "Customer", ar: "عميل جديد", en: "New Customer", icon: "user" },
+	{ doctype: "Stock Entry", ar: "حركة مخزون", en: "Stock Entry", icon: "package" },
+	{ doctype: "Journal Entry", ar: "قيد يومية", en: "Journal Entry", icon: "ledger" },
+	{ route: ["List", "Report"], ar: "التقارير", en: "Reports", icon: "chart" },
 ];
 
 function isArabic() {
@@ -25,78 +24,43 @@ function isArabic() {
 
 function allowedActions() {
 	const permitted = frappe.boot?.user?.can_create;
-	if (!Array.isArray(permitted)) return [];
-	const canCreate = new Set(permitted);
-	return ACTIONS.filter(({ doctype }) => canCreate.has(doctype));
+	const canCreate = new Set(Array.isArray(permitted) ? permitted : []);
+	// Reports is a navigation shortcut, not a document-creation action.
+	return ACTIONS.filter(({ doctype, route }) => route || (doctype && canCreate.has(doctype)));
 }
+
+const ICONS = {
+	invoice:
+		'<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>' +
+		'<path d="M14 2v6h6"/><path d="M8 13h8"/><path d="M8 17h8"/><path d="M8 9h2"/>',
+	briefcase:
+		'<rect x="3" y="7" width="18" height="14" rx="2"/>' +
+		'<path d="M8 7V5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>' +
+		'<path d="M3 12h18"/><path d="M10 12v2h4v-2"/>',
+	"credit-card":
+		'<rect x="2" y="5" width="20" height="14" rx="2"/>' +
+		'<path d="M2 10h20"/><path d="M6 15h4"/>',
+	user:
+		'<circle cx="12" cy="8" r="4"/>' +
+		'<path d="M5 21v-2a7 7 0 0 1 14 0v2"/>',
+	package:
+		'<path d="m12 3 9 5-9 5-9-5 9-5Z"/>' +
+		'<path d="M3 8v8l9 5 9-5V8"/><path d="M12 13v8"/><path d="m7.5 5.5 9 5"/>',
+	ledger:
+		'<path d="M6 3h13a2 2 0 0 1 2 2v16H6a3 3 0 0 1-3-3V6a3 3 0 0 1 3-3Z"/>' +
+		'<path d="M6 3v18"/><path d="M10 8h7"/><path d="M10 12h7"/><path d="M10 16h5"/>',
+	chart:
+		'<path d="M3 3v18h18"/><rect x="7" y="12" width="3" height="6" rx=".5"/>' +
+		'<rect x="13" y="8" width="3" height="10" rx=".5"/><rect x="19" y="5" width="2" height="13" rx=".5"/>',
+};
 
 function iconMarkup(name, className) {
-	const symbol = document.getElementById(`icon-${name}`) ? name : "layout-grid";
+	const drawing = ICONS[name] || ICONS.invoice;
 	return (
-		`<svg class="${className}" viewBox="0 0 24 24" aria-hidden="true" focusable="false">` +
-		`<use href="#icon-${symbol}"></use></svg>`
+		'<svg class="' + className + '" viewBox="0 0 24 24" aria-hidden="true" focusable="false">' +
+		drawing +
+		'</svg>'
 	);
-}
-
-function enableHorizontalMotion(grid) {
-	const motionPreference = window.matchMedia?.("(prefers-reduced-motion: reduce)");
-	if (motionPreference?.matches) return;
-
-	const speed = 22; // pixels per second: steady, moderate horizontal movement
-	const rtl = getComputedStyle(grid).direction === "rtl";
-	let direction = rtl ? -1 : 1;
-	let previousTime = 0;
-	let pointerInside = false;
-	let focusInside = false;
-	let frameId = 0;
-
-	const tick = (time) => {
-		if (!grid.isConnected) {
-			cancelAnimationFrame(frameId);
-			return;
-		}
-
-		if (!pointerInside && !focusInside && document.visibilityState !== "hidden") {
-			const overflow = Math.max(0, grid.scrollWidth - grid.clientWidth);
-			if (overflow > 2) {
-				const min = rtl ? -overflow : 0;
-				const max = rtl ? 0 : overflow;
-				const elapsed = previousTime ? Math.min((time - previousTime) / 1000, 0.05) : 0;
-				const next = grid.scrollLeft + direction * speed * elapsed;
-
-				if (next >= max) {
-					grid.scrollLeft = max;
-					direction = -1;
-				} else if (next <= min) {
-					grid.scrollLeft = min;
-					direction = 1;
-				} else {
-					grid.scrollLeft = next;
-				}
-			}
-		}
-		previousTime = time;
-		frameId = requestAnimationFrame(tick);
-	};
-
-	grid.addEventListener("pointerenter", () => {
-		pointerInside = true;
-		previousTime = 0;
-	});
-	grid.addEventListener("pointerleave", () => {
-		pointerInside = false;
-		previousTime = 0;
-	});
-	grid.addEventListener("focusin", () => {
-		focusInside = true;
-		previousTime = 0;
-	});
-	grid.addEventListener("focusout", (event) => {
-		focusInside = grid.contains(event.relatedTarget);
-		previousTime = 0;
-	});
-
-	frameId = requestAnimationFrame(tick);
 }
 
 function buildSection(actions, arabic) {
@@ -136,12 +100,13 @@ function buildSection(actions, arabic) {
 		label.className = "amt-quick-action-label";
 		label.textContent = action[arabic ? "ar" : "en"];
 
-		const arrow = document.createElement("span");
-		arrow.className = "amt-quick-action-arrow";
-		arrow.innerHTML = iconMarkup(arabic ? "arrow-left" : "arrow-right", "amt-quick-action-arrow-glyph");
-
-		button.append(icon, label, arrow);
+		button.append(icon, label);
 		button.addEventListener("click", () => {
+			if (action.route) {
+				if (typeof frappe.set_route === "function") frappe.set_route(action.route);
+				return;
+			}
+
 			// Re-check the boot permission before opening the native form flow.
 			const permitted = frappe.boot?.user?.can_create;
 			if (!Array.isArray(permitted) || !permitted.includes(action.doctype)) return;
