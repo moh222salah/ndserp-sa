@@ -71,7 +71,6 @@ function enableHorizontalMotion(viewport, track) {
 	let offset = 0;
 	let direction = 1;
 	let previousTime = 0;
-	let pointerInside = false;
 	let focusInside = false;
 	let frameId = 0;
 
@@ -86,7 +85,7 @@ function enableHorizontalMotion(viewport, track) {
 		}
 
 		const overflow = Math.max(0, track.scrollWidth - viewport.clientWidth);
-		if (overflow > 1 && !pointerInside && !focusInside && document.visibilityState !== "hidden") {
+		if (overflow > 1 && !focusInside && document.visibilityState !== "hidden") {
 			const elapsed = previousTime ? Math.min((time - previousTime) / 1000, 0.05) : 0;
 			offset += direction * speed * elapsed;
 
@@ -107,14 +106,6 @@ function enableHorizontalMotion(viewport, track) {
 		frameId = requestAnimationFrame(tick);
 	};
 
-	viewport.addEventListener("pointerenter", () => {
-		pointerInside = true;
-		previousTime = 0;
-	});
-	viewport.addEventListener("pointerleave", () => {
-		pointerInside = false;
-		previousTime = 0;
-	});
 	viewport.addEventListener("focusin", () => {
 		focusInside = true;
 		previousTime = 0;
