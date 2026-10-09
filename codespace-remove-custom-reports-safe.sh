@@ -4,6 +4,7 @@ set -Eeuo pipefail
 ROOT="/workspaces/ndserp-sa"
 SITE="ndserpsa.nds-sa.com"
 SITE_DIR="$ROOT/sites/$SITE"
+POLICY_MARKER="$ROOT/sites/.nds-custom-report-cleanup-v1"
 BACKUP_ROOT="$HOME/nds-sa-local-backups"
 STAMP="$(date -u +%Y%m%d_%H%M%S)"
 BACKUP_DIR="$BACKUP_ROOT/custom-reports-$STAMP"
@@ -60,6 +61,15 @@ print("LOCAL_DB_GUARD=PASS")
 print(f"LOCAL_DB_HOST={host or 'localhost (default)'}")
 PY
 
+if [ -s "$POLICY_MARKER" ]; then
+  echo "CUSTOM_REPORT_POLICY=ALREADY_APPLIED"
+  echo "DB_WRITE=NO"
+  echo "PRODUCTION_DB_WRITE=NO"
+  echo "CORE_MODIFICATION=NO"
+  echo "MIGRATION=NO"
+  exit 0
+fi
+
 bench --site "$SITE" list-apps | tee "$ROOT/logs/custom-reports-installed-apps.log"
 grep -Eq '^ndserp([[:space:]]|$)' "$ROOT/logs/custom-reports-installed-apps.log" || {
   echo "NDSERP_SITE_APP=FAIL"
@@ -88,7 +98,9 @@ COUNT_BEFORE="$(count_reports)"
 echo "NONSTANDARD_REPORTS_BEFORE=$COUNT_BEFORE"
 
 if [ "$COUNT_BEFORE" -eq 0 ]; then
+  printf '%s\n' "$(git rev-parse HEAD)" > "$POLICY_MARKER"
   echo "NDS_CUSTOM_REPORT_PURGE=PASS deleted=0 remaining=0"
+  echo "CUSTOM_REPORT_POLICY=MARKED"
   echo "BACKUP_REQUIRED=NO_NO_RECORDS_TO_DELETE"
   echo "DB_WRITE=NO"
   echo "PRODUCTION_DB_WRITE=NO"
@@ -137,6 +149,9 @@ MUTATION_STARTED=1
 PURGE_OUTPUT="$(bench --site "$SITE" execute ndserp.setup.custom_report_policy.purge_nonstandard_reports 2>&1)" || {
   printf '%s\n' "$PURGE_OUTPUT"
   echo "REPORT_PURGE=FAIL"
+  echo "ROLLBACK_REQUIRED=YES"
+  echo "BACKUP_PRESERVED=YES"
+  echo "BACKUP_DIR=$BACKUP_DIR"
   exit 23
 }
 printf '%s\n' "$PURGE_OUTPUT" | tee "$BACKUP_DIR/purge-output.log"
@@ -152,8 +167,10 @@ printf '%s\n' "$COUNT_AFTER" > "$BACKUP_DIR/nonstandard-reports-count.after.txt"
   sha256sum -c cleanup-counts.SHA256SUMS
 )
 
+printf '%s\n' "$(git rev-parse HEAD)" > "$POLICY_MARKER"
 COMPLETED=1
 echo "NDS_CUSTOM_REPORT_PURGE=PASS"
+echo "CUSTOM_REPORT_POLICY=MARKED"
 echo "REPORTS_DELETED=$COUNT_BEFORE"
 echo "REPORTS_REMAINING=0"
 echo "BACKUP_STATUS=CONFIRMED"
