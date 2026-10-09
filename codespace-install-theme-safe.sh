@@ -115,7 +115,7 @@ echo "BACKUP_STATUS=CONFIRMED"
 
 echo "=== CHECK APP INSTALLATION STATUS ==="
 APPS_BEFORE="$(cat "$BACKUP_DIR/installed-apps.before.txt")"
-if printf '%s\n' "$APPS_BEFORE" | grep -q '^Amir Theme'; then
+if printf '%s\n' "$APPS_BEFORE" | grep -Eq '^(Amir Theme|amir_theme_v16)([[:space:]]|$)'; then
   echo "AMIR_THEME_SITE_APP=ALREADY_INSTALLED"
 else
   echo "=== INSTALL AMIR THEME ON THIS LOCAL SITE ONLY ==="
@@ -123,7 +123,7 @@ else
   bench --site "$SITE" install-app amir_theme_v16 \
     2>&1 | tee "$BACKUP_DIR/install-app.log"
   bench --site "$SITE" list-apps | tee "$BACKUP_DIR/installed-apps.after.txt"
-  grep -q '^Amir Theme' "$BACKUP_DIR/installed-apps.after.txt"
+  grep -Eq '^(Amir Theme|amir_theme_v16)([[:space:]]|$)' "$BACKUP_DIR/installed-apps.after.txt"
   echo "AMIR_THEME_SITE_APP=PASS"
 fi
 
