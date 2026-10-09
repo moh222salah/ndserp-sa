@@ -6,12 +6,23 @@ PID_FILE="$ROOT/logs/codespace-runtime-sync.pid"
 SYNC_LOG="$ROOT/logs/codespace-runtime-sync.log"
 
 cd "$ROOT"
-mkdir -p logs
+mkdir -p logs config
+
+# Serialize Codespace postStart with manual UI application so they cannot
+# build assets or restart the local Bench server at the same time.
+if [ "${NDS_UI_APPLY_LOCKED:-0}" != "1" ]; then
+  exec flock -w "${NDS_UI_APPLY_LOCK_WAIT:-1200}" -o "$ROOT/config/nds-ui-apply.lock" \
+    env NDS_UI_APPLY_LOCKED=1 bash "$ROOT/codespace-poststart.sh"
+fi
 
 echo "=== NDS ERP SAUDI — POST-START RUNTIME ACTIVATION ==="
 echo "ROOT=$ROOT"
 
 sudo service mariadb start
+
+# Stop a previous worker before the startup build; wait for any child build to
+# release Frappe's real lock naturally. Never delete bench_build.lock.
+bash "$ROOT/codespace-quiesce-runtime-sync.sh"
 
 # UI source synchronization and asset compilation must not depend on optional
 # database cleanup. Custom Reports cleanup is a separate backup-first task.
