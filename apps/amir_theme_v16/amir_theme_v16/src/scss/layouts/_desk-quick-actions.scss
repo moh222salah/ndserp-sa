@@ -1,0 +1,161 @@
+// ---------------------------------------------------------------------------
+// Desktop quick actions — scoped to the Desk landing page only.
+// Uses logical alignment so labels and card order follow the active RTL/LTR dir.
+// ---------------------------------------------------------------------------
+
+.desktop-container.amt-has-quick-actions {
+	flex-direction: column !important;
+	align-items: center !important;
+	padding-top: clamp(24px, 4vh, 44px) !important;
+}
+
+.desktop-container > .amt-quick-actions {
+	box-sizing: border-box;
+	width: min(1160px, calc(100vw - 32px));
+	max-width: 1160px;
+	flex: 0 0 auto;
+	margin: 0 auto 26px;
+	color: var(--text-color);
+}
+
+.amt-quick-actions-header {
+	display: flex;
+	align-items: center;
+	gap: 16px;
+	margin: 0 0 14px;
+}
+
+.amt-quick-actions-title {
+	flex: 0 0 auto;
+	margin: 0;
+	color: var(--heading-color, var(--text-color));
+	font-size: 18px;
+	font-weight: 700;
+	line-height: 1.45;
+	text-align: start;
+}
+
+.amt-quick-actions-rule {
+	flex: 1 1 auto;
+	min-width: 16px;
+	height: 1px;
+	background: var(--border-color);
+	opacity: 0.8;
+}
+
+.amt-quick-actions-grid {
+	display: grid;
+	grid-template-columns: repeat(4, minmax(0, 1fr));
+	gap: 12px;
+}
+
+button.amt-quick-action {
+	box-sizing: border-box;
+	width: 100%;
+	min-width: 0;
+	min-height: 72px;
+	display: flex;
+	align-items: center;
+	gap: 12px;
+	padding: 12px 14px;
+	border: 1px solid var(--amt-card-border, var(--border-color));
+	border-radius: 14px;
+	background: var(--amt-card-bg, var(--card-bg, #fff));
+	color: var(--amt-card-ink, var(--text-color));
+	box-shadow: 0 2px 8px rgba(10, 35, 66, 0.045);
+	font: inherit;
+	text-align: start;
+	cursor: pointer;
+	transition: border-color 150ms ease, box-shadow 150ms ease, transform 150ms ease;
+}
+
+button.amt-quick-action:hover {
+	border-color: color-mix(in srgb, var(--primary) 42%, var(--border-color));
+	box-shadow: 0 5px 16px rgba(10, 35, 66, 0.09);
+	transform: translateY(-1px);
+}
+
+button.amt-quick-action:focus-visible {
+	outline: 2px solid var(--primary);
+	outline-offset: 2px;
+}
+
+.amt-quick-action-icon {
+	flex: 0 0 38px;
+	width: 38px;
+	height: 38px;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	border-radius: 11px;
+	background: color-mix(in srgb, var(--primary) 9%, transparent);
+	color: var(--primary);
+}
+
+.amt-quick-action-glyph {
+	width: 20px;
+	height: 20px;
+	fill: none;
+	stroke: currentColor;
+	stroke-width: 1.8;
+	stroke-linecap: round;
+	stroke-linejoin: round;
+}
+
+.amt-quick-action-label {
+	flex: 1 1 auto;
+	min-width: 0;
+	font-size: 13.5px;
+	font-weight: 600;
+	line-height: 1.5;
+	text-align: start;
+	overflow-wrap: anywhere;
+}
+
+.amt-quick-action-arrow {
+	flex: 0 0 18px;
+	width: 18px;
+	height: 18px;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	color: var(--text-muted);
+	opacity: 0.7;
+}
+
+.amt-quick-action-arrow-glyph {
+	width: 16px;
+	height: 16px;
+	fill: none;
+	stroke: currentColor;
+	stroke-width: 1.8;
+	stroke-linecap: round;
+	stroke-linejoin: round;
+}
+
+button.amt-quick-action:hover .amt-quick-action-arrow {
+	color: var(--primary);
+	opacity: 1;
+}
+
+@media (max-width: 1023px) {
+	.amt-quick-actions-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+}
+
+@media (max-width: 819px) {
+	.amt-quick-actions-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+	.desktop-container > .amt-quick-actions { margin-bottom: 22px; }
+}
+
+@media (max-width: 479px) {
+	.amt-quick-actions-grid { grid-template-columns: minmax(0, 1fr); }
+	button.amt-quick-action { min-height: 64px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+	button.amt-quick-action,
+	button.amt-quick-action:hover {
+		transform: none;
+		transition: none;
+	}
+}
