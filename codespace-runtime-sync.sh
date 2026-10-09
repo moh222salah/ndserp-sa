@@ -122,6 +122,7 @@ for key in required:
             "amt-quick-actions-title",
             "amt-quick-actions-grid",
             "amt-quick-actions-track",
+            "data-amt-quick-actions-motion",
             "translate3d(",
             "Sales Invoice",
         )
