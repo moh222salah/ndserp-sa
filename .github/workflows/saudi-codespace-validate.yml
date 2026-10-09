@@ -248,5 +248,17 @@ jobs:
           grep -Fq 'SERVED_ACCOUNTS_WORKSPACE_JS=PASS' codespace-verify-runtime.sh
           echo "ACCOUNTS_WORKSPACE_SOURCE=PASS"
 
+      - name: Verify purchase workspace source and served-asset gates
+        run: |
+          grep -Fq 'body.nds-purchase-workspace-redesign #page-Workspaces' apps/amir_theme_v16/amir_theme_v16/src/scss/components/_sales-workspace-redesign.scss
+          grep -Fq '@import "components/sales-workspace-redesign";' apps/amir_theme_v16/amir_theme_v16/src/scss/amir_theme.bundle.scss
+          grep -Fq 'function syncPurchaseWorkspaceScope()' apps/amir_theme_v16/amir_theme_v16/src/js/core/workspace_enhance.js
+          grep -Fq 'try { syncPurchaseWorkspaceScope(); }' apps/amir_theme_v16/amir_theme_v16/src/js/core/workspace_enhance.js
+          grep -Fq 'PURCHASE_WORKSPACE_CSS=PASS' codespace-runtime-sync.sh
+          grep -Fq 'PURCHASE_WORKSPACE_JS=PASS' codespace-runtime-sync.sh
+          grep -Fq 'SERVED_PURCHASE_WORKSPACE_CSS=PASS' codespace-verify-runtime.sh
+          grep -Fq 'SERVED_PURCHASE_WORKSPACE_JS=PASS' codespace-verify-runtime.sh
+          echo "PURCHASE_WORKSPACE_SOURCE_AND_ASSET_GATES=PASS"
+
       - name: Git whitespace check
         run: git diff --check

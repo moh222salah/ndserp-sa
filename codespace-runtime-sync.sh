@@ -115,6 +115,18 @@ for key in required:
                 "SALES_WORKSPACE_CSS=FAIL:MISSING_MARKERS:" + ",".join(missing)
             )
         print("SALES_WORKSPACE_CSS=PASS")
+        required_purchase_workspace_css = (
+            ".nds-purchase-workspace-redesign",
+            "#page-workspaces",
+            ".codex-editor__redactor",
+            "grid-template-columns:repeat(12,minmax(0,1fr))",
+        )
+        missing = [marker for marker in required_purchase_workspace_css if marker not in css_compact]
+        if missing:
+            raise SystemExit(
+                "PURCHASE_WORKSPACE_CSS=FAIL:MISSING_MARKERS:" + ",".join(missing)
+            )
+        print("PURCHASE_WORKSPACE_CSS=PASS")
     elif key == "amir_theme.bundle.js":
         js = target.read_text(encoding="utf-8")
         # Use stable ASCII markers: production bundling may Unicode-escape Arabic literals.
@@ -141,6 +153,9 @@ for key in required:
         if "nds-sales-workspace-redesign" not in js:
             raise SystemExit("SALES_WORKSPACE_JS=FAIL:MISSING_MARKER:nds-sales-workspace-redesign")
         print("SALES_WORKSPACE_JS=PASS")
+        if "nds-purchase-workspace-redesign" not in js:
+            raise SystemExit("PURCHASE_WORKSPACE_JS=FAIL:MISSING_MARKER:nds-purchase-workspace-redesign")
+        print("PURCHASE_WORKSPACE_JS=PASS")
 
 print("ASSET_SERVE_TREE=PASS")
 PY

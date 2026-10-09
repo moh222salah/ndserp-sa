@@ -84,6 +84,13 @@ for marker in '.nds-sales-workspace-redesign' '#page-workspaces' '#d4af37'; do
   fi
 done
 echo "BUILT_SALES_WORKSPACE_CSS=PASS"
+for marker in '.nds-purchase-workspace-redesign' '#page-workspaces' '.codex-editor__redactor' 'grid-template-columns:repeat(12,minmax(0,1fr))'; do
+  if ! grep -Fq "$marker" "$LOCAL_CSS"; then
+    echo "BUILT_PURCHASE_WORKSPACE_CSS=FAIL:MISSING_MARKER:$marker"
+    exit 38
+  fi
+done
+echo "BUILT_PURCHASE_WORKSPACE_CSS=PASS"
 echo "ASSET_URL=$ASSET_URL"
 
 READY=0
@@ -144,6 +151,13 @@ for marker in '.nds-sales-workspace-redesign' '#page-workspaces' '#d4af37'; do
   fi
 done
 echo "SERVED_SALES_WORKSPACE_CSS=PASS"
+for marker in '.nds-purchase-workspace-redesign' '#page-workspaces' '.codex-editor__redactor' 'grid-template-columns:repeat(12,minmax(0,1fr))'; do
+  if ! grep -Fq "$marker" "$LOCAL_CSS"; then
+    echo "SERVED_PURCHASE_WORKSPACE_CSS=FAIL:MISSING_MARKER:$marker"
+    exit 39
+  fi
+done
+echo "SERVED_PURCHASE_WORKSPACE_CSS=PASS"
 
 JS_ASSET_PATH="$("$ROOT/env/bin/python" - <<'PY'
 import json
@@ -190,6 +204,11 @@ if ! grep -Fq 'nds-sales-workspace-redesign' "$LOCAL_JS_ASSET"; then
   exit 36
 fi
 echo "BUILT_SALES_WORKSPACE_JS=PASS"
+if ! grep -Fq 'nds-purchase-workspace-redesign' "$LOCAL_JS_ASSET"; then
+  echo "BUILT_PURCHASE_WORKSPACE_JS=FAIL:MISSING_MARKER:nds-purchase-workspace-redesign"
+  exit 40
+fi
+echo "BUILT_PURCHASE_WORKSPACE_JS=PASS"
 SERVED_JS="$(mktemp)"
 trap 'rm -f "$LOCAL_CSS" "$SERVED_CSS" "$SERVED_JS"' EXIT
 JS_READY=0
@@ -226,6 +245,11 @@ if ! grep -Fq 'nds-sales-workspace-redesign' "$SERVED_JS"; then
   exit 37
 fi
 echo "SERVED_SALES_WORKSPACE_JS=PASS"
+if ! grep -Fq 'nds-purchase-workspace-redesign' "$SERVED_JS"; then
+  echo "SERVED_PURCHASE_WORKSPACE_JS=FAIL:MISSING_MARKER:nds-purchase-workspace-redesign"
+  exit 41
+fi
+echo "SERVED_PURCHASE_WORKSPACE_JS=PASS"
 if [ "$(sha256sum "$LOCAL_JS_ASSET" | awk '{print $1}')" != "$(sha256sum "$SERVED_JS" | awk '{print $1}')" ]; then
   echo "SERVED_QUICK_ACTIONS_JS=FAIL:HASH_MISMATCH"
   exit 23
