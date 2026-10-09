@@ -56,7 +56,7 @@ echo "BUILT_HEADER_CSS_SHA256=$(sha256sum "$LOCAL_ASSET" | awk '{print $1}')"
 
 # Verify the actual new Quick Actions styles before contacting the web server.
 tr '[:upper:]' '[:lower:]' < "$LOCAL_ASSET" | tr -d '[:space:]' > "$LOCAL_CSS"
-for marker in '.amt-quick-actions' '.amt-quick-actions-grid' 'min-height:132px' 'margin-top:auto' 'background:#eef1f4' 'display:none!important'; do
+for marker in '.amt-quick-actions' '.amt-quick-actions-grid' '.amt-quick-actions-track' 'height:104px' 'min-height:104px' 'width:36px' 'width:20px' 'margin-top:auto' 'background:#eef1f4' 'display:none!important'; do
   if ! grep -Fq "$marker" "$LOCAL_CSS"; then
     echo "BUILT_QUICK_ACTIONS_CSS=FAIL:MISSING_MARKER:$marker"
     exit 24
@@ -109,7 +109,7 @@ echo "SERVED_HEADER_CSS_MATCH=PASS"
 
 # Verify the target Quick Actions styles in the CSS actually served to the browser.
 tr '[:upper:]' '[:lower:]' < "$SERVED_CSS" | tr -d '[:space:]' > "$LOCAL_CSS"
-for marker in '.amt-quick-actions' '.amt-quick-actions-grid' 'min-height:132px' 'margin-top:auto' 'background:#eef1f4' 'display:none!important'; do
+for marker in '.amt-quick-actions' '.amt-quick-actions-grid' '.amt-quick-actions-track' 'height:104px' 'min-height:104px' 'width:36px' 'width:20px' 'margin-top:auto' 'background:#eef1f4' 'display:none!important'; do
   if ! grep -Fq "$marker" "$LOCAL_CSS"; then
     echo "SERVED_QUICK_ACTIONS_CSS=FAIL:MISSING_MARKER:$marker"
     exit 17
@@ -154,12 +154,13 @@ if [ ! -f "$LOCAL_JS_ASSET" ]; then
   exit 19
 fi
 # Use stable ASCII markers; bundling may encode Arabic literals as Unicode escapes.
-for marker in 'amt-quick-actions-title' 'amt-quick-actions-grid' 'Sales Invoice'; do
+for marker in 'amt-quick-actions-title' 'amt-quick-actions-grid' 'amt-quick-actions-track' 'translate3d(' 'Sales Invoice'; do
   if ! grep -Fq "$marker" "$LOCAL_JS_ASSET"; then
     echo "BUILT_QUICK_ACTIONS_JS=FAIL:MISSING_MARKER:$marker"
     exit 20
   fi
 done
+echo "BUILT_QUICK_ACTIONS_MOTION=PASS"
 if ! grep -Fq 'nds-warehouse-workspace' "$LOCAL_JS_ASSET"; then
   echo "BUILT_WAREHOUSE_WORKSPACE_JS=FAIL:MISSING_MARKER:nds-warehouse-workspace"
   exit 28
@@ -184,12 +185,13 @@ if [ "$JS_READY" -ne 1 ]; then
   echo "SERVED_QUICK_ACTIONS_JS=FAIL:HTTP_UNAVAILABLE"
   exit 21
 fi
-for marker in 'amt-quick-actions-title' 'amt-quick-actions-grid' 'Sales Invoice'; do
+for marker in 'amt-quick-actions-title' 'amt-quick-actions-grid' 'amt-quick-actions-track' 'translate3d(' 'Sales Invoice'; do
   if ! grep -Fq "$marker" "$SERVED_JS"; then
     echo "SERVED_QUICK_ACTIONS_JS=FAIL:MISSING_MARKER:$marker"
     exit 22
   fi
 done
+echo "SERVED_QUICK_ACTIONS_MOTION=PASS"
 if ! grep -Fq 'nds-warehouse-workspace' "$SERVED_JS"; then
   echo "SERVED_WAREHOUSE_WORKSPACE_JS=FAIL:MISSING_MARKER:nds-warehouse-workspace"
   exit 29
