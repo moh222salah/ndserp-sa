@@ -24,6 +24,7 @@ verify_amir_assets() {
 from pathlib import Path
 import hashlib
 import json
+import re
 
 root = Path("/workspaces/ndserp-sa")
 assets_path = root / "sites" / "assets" / "assets.json"
@@ -53,6 +54,7 @@ for key in required:
     print(f"ASSET_SHA256={digest}")
     if key == "amir_theme.bundle.css":
         css = target.read_text(encoding="utf-8").lower()
+        css_compact = re.sub(r"\\s+", "", css)
         required_header_markers = ("body .navbar", "58px", "#0a2342")
         missing = [marker for marker in required_header_markers if marker not in css]
         if missing:
@@ -63,8 +65,12 @@ for key in required:
             ".amt-quick-actions",
             ".amt-quick-actions-grid",
             ".amt-quick-action-arrow",
+            "min-height:132px",
+            "margin-top:auto",
+            "background:#eef1f4",
+            "display:none!important",
         )
-        missing = [marker for marker in required_quick_actions_css if marker not in css]
+        missing = [marker for marker in required_quick_actions_css if marker not in css_compact]
         if missing:
             raise SystemExit(
                 "QUICK_ACTIONS_CSS=FAIL:MISSING_MARKERS:" + ",".join(missing)
@@ -177,14 +183,6 @@ sync_once() {
   cp bench/apps.txt sites/apps.txt
   echo "BENCH_APPS_REGISTRY=SYNCED"
 
-  # Remove database-stored custom reports once, only after a verified local backup.
-  # The marker prevents repeated DB queries/writes during the sync loop.
-  if [ ! -s "$ROOT/sites/.nds-custom-report-cleanup-v1" ]; then
-    bash "$ROOT/codespace-remove-custom-reports-safe.sh"
-  else
-    echo "CUSTOM_REPORT_POLICY=ALREADY_APPLIED"
-  fi
-
   source_marker=""
   if [ -f "sites/.nds-runtime-source-head" ]; then
     source_marker="$(cat sites/.nds-runtime-source-head)"
@@ -219,6 +217,21 @@ sync_once() {
   else
     echo "ASSET_BUILD=ALREADY_CURRENT"
     verify_amir_assets
+  fi
+
+  # Database cleanup is deliberately opt-in and runs only after the UI assets
+  # have been built and served-asset verification has completed. A linked Report
+  # must never block unrelated CSS/JS deployment or trigger backups on every sync.
+  if [ "${NDS_CLEANUP_CUSTOM_REPORTS:-0}" = "1" ]; then
+    if [ -s "$ROOT/sites/.nds-custom-report-cleanup-v1" ]; then
+      echo "CUSTOM_REPORT_POLICY=ALREADY_APPLIED"
+    elif bash "$ROOT/codespace-remove-custom-reports-safe.sh"; then
+      echo "CUSTOM_REPORT_CLEANUP=PASS"
+    else
+      echo "CUSTOM_REPORT_CLEANUP=FAIL_NONBLOCKING_UI_BUILD"
+    fi
+  else
+    echo "CUSTOM_REPORT_CLEANUP=SKIPPED_UI_SYNC_ONLY"
   fi
 
   echo "CORE_MODIFICATION=NO"
