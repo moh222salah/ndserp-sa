@@ -1,0 +1,249 @@
+// ===========================================================================
+// NDS ERP Saudi — Accounts Workspace visual redesign.
+// Strictly presentation-only and scoped to the "حسابات NDS ERP" workspace.
+// No Workspace JSON, records, APIs, permissions, or accounting logic changed.
+// ===========================================================================
+
+body.amt-accounts-workspace .layout-main-section {
+  background: #f4f6fa;
+}
+
+body.amt-accounts-workspace #editorjs {
+  width: 100%;
+  max-width: none;
+  padding: 4px clamp(12px, 1.35vw, 24px) 26px;
+}
+
+body.amt-accounts-workspace #editorjs .codex-editor__redactor {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  align-items: stretch;
+  align-content: start;
+  gap: 16px;
+  width: 100%;
+  margin: 0;
+  padding: 4px 0 24px;
+}
+
+body.amt-accounts-workspace #editorjs .ce-block {
+  box-sizing: border-box;
+  display: block;
+  float: none;
+  width: 100%;
+  max-width: none;
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  grid-column: span 12;
+}
+
+// Header and the existing user shortcut share one clean title row.
+body.amt-accounts-workspace #editorjs .ce-block:has(.ce-header) {
+  order: 0;
+  grid-column: span 9;
+  align-self: center;
+}
+
+body.amt-accounts-workspace #editorjs .ce-block:has(.ce-header) .ce-header,
+body.amt-accounts-workspace #editorjs .ce-block:has(.ce-header) .ce-header .h4 {
+  margin: 0;
+  color: var(--heading-color, #0a2342);
+  font-size: 22px;
+  font-weight: 800;
+  line-height: 1.45;
+}
+
+body.amt-accounts-workspace #editorjs .ce-block:has(.shortcut-widget-box),
+body.amt-accounts-workspace #editorjs .ce-block:has([shortcut_name]) {
+  order: 0;
+  grid-column: span 3;
+  align-self: center;
+}
+
+body.amt-accounts-workspace #editorjs .ce-block:has(.shortcut-widget-box) .widget,
+body.amt-accounts-workspace #editorjs .ce-block:has([shortcut_name]) .widget {
+  min-height: 0;
+  margin: 0;
+  border: 1px solid #e1e6ee;
+  border-radius: 10px;
+  background: #fff;
+  box-shadow: none;
+}
+
+// Four compact KPI cards across the desktop canvas, matching the reference.
+body.amt-accounts-workspace #editorjs .ce-block:has(.number-widget-box),
+body.amt-accounts-workspace #editorjs .ce-block:has([number_card_name]) {
+  order: 1;
+  grid-column: span 3;
+  min-width: 0;
+}
+
+body.amt-accounts-workspace #editorjs .widget.number-widget-box {
+  box-sizing: border-box;
+  height: 100%;
+  min-height: 118px;
+  padding: 0;
+  overflow: hidden;
+  border: 1px solid #e1e6ee;
+  border-top: 3px solid #bd5548;
+  border-radius: 12px;
+  background: #fff;
+  box-shadow: 0 3px 12px rgba(10, 35, 66, 0.045);
+  transition: box-shadow 160ms ease, transform 160ms ease;
+}
+
+body.amt-accounts-workspace #editorjs .widget.number-widget-box:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 22px rgba(10, 35, 66, 0.085);
+}
+
+body.amt-accounts-workspace #editorjs .widget.number-widget-box .widget-head {
+  padding: 12px 16px 4px;
+}
+
+body.amt-accounts-workspace #editorjs .widget.number-widget-box .widget-title {
+  color: #6b7280;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+body.amt-accounts-workspace #editorjs .widget.number-widget-box .widget-body {
+  padding: 8px 16px 14px;
+}
+
+body.amt-accounts-workspace #editorjs .widget.number-widget-box .number {
+  color: #172b4d;
+  font-size: clamp(21px, 1.7vw, 27px);
+  font-weight: 800;
+  line-height: 1.25;
+  overflow-wrap: anywhere;
+}
+
+body.amt-accounts-workspace #editorjs .widget.number-widget-box .card-stats {
+  margin-top: 7px;
+  font-size: 11px;
+}
+
+// The existing Profit & Loss chart stays one full-width panel; its data and
+// chart configuration are untouched.
+body.amt-accounts-workspace #editorjs .ce-block:has(.dashboard-widget-box),
+body.amt-accounts-workspace #editorjs .ce-block:has([chart_name]) {
+  order: 2;
+  grid-column: span 12;
+  min-width: 0;
+}
+
+body.amt-accounts-workspace #editorjs .widget.dashboard-widget-box {
+  box-sizing: border-box;
+  min-height: 300px;
+  overflow: hidden;
+  border: 1px solid #e1e6ee;
+  border-radius: 12px;
+  background: #fff;
+  box-shadow: 0 3px 12px rgba(10, 35, 66, 0.035);
+}
+
+body.amt-accounts-workspace #editorjs .widget.dashboard-widget-box .widget-head {
+  padding: 17px 20px 8px;
+}
+
+body.amt-accounts-workspace #editorjs .widget.dashboard-widget-box .widget-title {
+  color: #172b4d;
+  font-size: 15px;
+  font-weight: 750;
+}
+
+// Spacer blocks are layout-only; remove their blank gap in view mode while
+// preserving them in workspace edit mode.
+body.amt-accounts-workspace .layout-main-section:not(.edit-mode) #editorjs .ce-block:has(.widget.spacer) {
+  display: none;
+}
+
+// Preserve all existing navigation cards and arrange two per row on desktop.
+body.amt-accounts-workspace #editorjs .ce-block:has(.links-widget-box),
+body.amt-accounts-workspace #editorjs .ce-block:has([card_name]) {
+  order: 4;
+  grid-column: span 6;
+  min-width: 0;
+}
+
+body.amt-accounts-workspace #editorjs .widget.links-widget-box {
+  height: 100%;
+  overflow: hidden;
+  border: 1px solid #e1e6ee;
+  border-radius: 12px;
+  background: #fff;
+  box-shadow: 0 3px 12px rgba(10, 35, 66, 0.035);
+}
+
+body.amt-accounts-workspace #editorjs .widget.links-widget-box .widget-head {
+  padding: 16px 18px 8px;
+}
+
+body.amt-accounts-workspace #editorjs .widget.links-widget-box .widget-title {
+  color: #172b4d;
+  font-size: 14px;
+  font-weight: 750;
+}
+
+body.amt-accounts-workspace #editorjs .widget.links-widget-box .widget-body {
+  padding: 0 14px 14px;
+}
+
+body.amt-accounts-workspace #editorjs .widget.links-widget-box .link-item {
+  min-height: 40px;
+  padding: 10px 8px;
+  border-radius: 7px;
+  transition: background 140ms ease, color 140ms ease;
+}
+
+body.amt-accounts-workspace #editorjs .widget.links-widget-box .link-item:hover {
+  background: #f2f6fc;
+  color: #164e8f;
+}
+
+// Workspace-native columns are intentionally overridden only on this page.
+@media (max-width: 1100px) {
+  body.amt-accounts-workspace #editorjs .ce-block:has(.ce-header) {
+    grid-column: span 12;
+  }
+
+  body.amt-accounts-workspace #editorjs .ce-block:has(.shortcut-widget-box),
+  body.amt-accounts-workspace #editorjs .ce-block:has([shortcut_name]) {
+    grid-column: span 12;
+  }
+
+  body.amt-accounts-workspace #editorjs .ce-block:has(.number-widget-box),
+  body.amt-accounts-workspace #editorjs .ce-block:has([number_card_name]) {
+    grid-column: span 6;
+  }
+
+  body.amt-accounts-workspace #editorjs .ce-block:has(.links-widget-box),
+  body.amt-accounts-workspace #editorjs .ce-block:has([card_name]) {
+    grid-column: span 12;
+  }
+
+  body.amt-accounts-workspace #editorjs .widget.dashboard-widget-box {
+    min-height: 260px;
+  }
+}
+
+@media (max-width: 600px) {
+  body.amt-accounts-workspace #editorjs .codex-editor__redactor {
+    gap: 12px;
+  }
+
+  body.amt-accounts-workspace #editorjs .ce-block:has(.number-widget-box),
+  body.amt-accounts-workspace #editorjs .ce-block:has([number_card_name]) {
+    grid-column: span 12;
+  }
+
+  body.amt-accounts-workspace #editorjs .ce-block:has(.ce-header) .ce-header,
+  body.amt-accounts-workspace #editorjs .ce-block:has(.ce-header) .ce-header .h4 {
+    font-size: 20px;
+  }
+
+  body.amt-accounts-workspace #editorjs .widget.number-widget-box .number {
+    font-size: 24px;
+  }
+}
