@@ -121,7 +121,8 @@ function render() {
 	}
 
 	const section = buildSection(actions, isArabic());
-	launcher.before(section);
+	// Keep the existing app icons first; quick actions follow the main launcher.
+	launcher.after(section);
 	host.classList.add("amt-has-quick-actions");
 }
 
