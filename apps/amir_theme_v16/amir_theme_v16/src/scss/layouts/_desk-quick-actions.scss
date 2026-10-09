@@ -4,6 +4,7 @@
 // ---------------------------------------------------------------------------
 
 .desktop-container.amt-has-quick-actions {
+	display: flex !important;
 	flex-direction: column !important;
 	align-items: center !important;
 	padding-top: clamp(24px, 4vh, 44px) !important;
@@ -41,6 +42,16 @@
 	height: 1px;
 	background: var(--border-color);
 	opacity: 0.8;
+}
+
+.amt-quick-actions-empty {
+	margin: 0;
+	padding: 14px 16px;
+	border: 1px dashed var(--border-color);
+	border-radius: 12px;
+	color: var(--text-muted);
+	font-size: 13px;
+	text-align: start;
 }
 
 .amt-quick-actions-grid {

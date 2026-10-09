@@ -59,7 +59,27 @@ for key in required:
             raise SystemExit(
                 "MODERN_HEADER_CSS=FAIL:MISSING_MARKERS:" + ",".join(missing)
             )
+        required_quick_actions_css = (
+            ".amt-quick-actions",
+            ".amt-quick-actions-grid",
+            ".amt-quick-action-arrow",
+        )
+        missing = [marker for marker in required_quick_actions_css if marker not in css]
+        if missing:
+            raise SystemExit(
+                "QUICK_ACTIONS_CSS=FAIL:MISSING_MARKERS:" + ",".join(missing)
+            )
         print("MODERN_HEADER_CSS=PASS")
+        print("QUICK_ACTIONS_CSS=PASS")
+    elif key == "amir_theme.bundle.js":
+        js = target.read_text(encoding="utf-8")
+        required_quick_actions_js = ("amt-quick-actions-title", "الإجراءات السريعة")
+        missing = [marker for marker in required_quick_actions_js if marker not in js]
+        if missing:
+            raise SystemExit(
+                "QUICK_ACTIONS_JS=FAIL:MISSING_MARKERS:" + ",".join(missing)
+            )
+        print("QUICK_ACTIONS_JS=PASS")
 
 print("ASSET_SERVE_TREE=PASS")
 PY

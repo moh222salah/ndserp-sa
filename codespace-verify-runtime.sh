@@ -82,7 +82,73 @@ if [ "$(sha256sum "$LOCAL_ASSET" | awk '{print $1}')" != "$(sha256sum "$SERVED_C
   exit 16
 fi
 echo "SERVED_HEADER_CSS_MATCH=PASS"
+
+# Verify Quick Actions are present in the CSS actually served to the browser.
+for marker in '.amt-quick-actions' '.amt-quick-actions-grid' '.amt-quick-action-arrow'; do
+  if ! grep -Fq "$marker" "$SERVED_CSS"; then
+    echo "SERVED_QUICK_ACTIONS_CSS=FAIL:MISSING_MARKER:$marker"
+    exit 17
+  fi
+done
+echo "SERVED_QUICK_ACTIONS_CSS=PASS"
+
+JS_ASSET_PATH="$("$ROOT/env/bin/python" - <<'PY'
+import json
+from pathlib import Path
+manifest = json.loads(Path("sites/assets/assets.json").read_text(encoding="utf-8"))
+path = manifest.get("amir_theme.bundle.js")
+if not isinstance(path, str) or not path:
+    raise SystemExit("MISSING_AMIR_THEME_JS_MAPPING")
+print(path)
+PY
+)" || { echo "JS_ASSET_MAPPING=FAIL"; exit 18; }
+case "$JS_ASSET_PATH" in
+  http://*|https://*) JS_ASSET_URL="$JS_ASSET_PATH" ;;
+  /*) JS_ASSET_URL="http://127.0.0.1:$PORT$JS_ASSET_PATH" ;;
+  *) JS_ASSET_URL="http://127.0.0.1:$PORT/$JS_ASSET_PATH" ;;
+esac
+SITE_JS_ASSET="$ROOT/sites/${JS_ASSET_PATH#/}"
+REPO_JS_ASSET="$ROOT/${JS_ASSET_PATH#/}"
+if [ -f "$SITE_JS_ASSET" ]; then LOCAL_JS_ASSET="$SITE_JS_ASSET"; else LOCAL_JS_ASSET="$REPO_JS_ASSET"; fi
+if [ ! -f "$LOCAL_JS_ASSET" ]; then
+  echo "BUILT_QUICK_ACTIONS_JS=FAIL:MISSING_FILE:$LOCAL_JS_ASSET"
+  exit 19
+fi
+for marker in 'amt-quick-actions-title' 'الإجراءات السريعة'; do
+  if ! grep -Fq "$marker" "$LOCAL_JS_ASSET"; then
+    echo "BUILT_QUICK_ACTIONS_JS=FAIL:MISSING_MARKER:$marker"
+    exit 20
+  fi
+done
+SERVED_JS="$(mktemp)"
+trap 'rm -f "$LOCAL_CSS" "$SERVED_CSS" "$SERVED_JS"' EXIT
+JS_READY=0
+for _ in $(seq 1 90); do
+  if curl --connect-timeout 2 --max-time 5 -fsS "$JS_ASSET_URL" -o "$SERVED_JS"; then
+    JS_READY=1
+    break
+  fi
+  sleep 1
+done
+if [ "$JS_READY" -ne 1 ]; then
+  echo "SERVED_QUICK_ACTIONS_JS=FAIL:HTTP_UNAVAILABLE"
+  exit 21
+fi
+for marker in 'amt-quick-actions-title' 'الإجراءات السريعة'; do
+  if ! grep -Fq "$marker" "$SERVED_JS"; then
+    echo "SERVED_QUICK_ACTIONS_JS=FAIL:MISSING_MARKER:$marker"
+    exit 22
+  fi
+done
+if [ "$(sha256sum "$LOCAL_JS_ASSET" | awk '{print $1}')" != "$(sha256sum "$SERVED_JS" | awk '{print $1}')" ]; then
+  echo "SERVED_QUICK_ACTIONS_JS=FAIL:HASH_MISMATCH"
+  exit 23
+fi
+echo "BUILT_QUICK_ACTIONS_JS=PASS"
+echo "SERVED_QUICK_ACTIONS_JS=PASS"
+echo "SERVED_QUICK_ACTIONS_JS_MATCH=PASS"
 echo "HEADER_RUNTIME_VERIFICATION=PASS"
+echo "QUICK_ACTIONS_RUNTIME_ASSETS=PASS"
 echo "DB_WRITE=NO"
 echo "MIGRATION=NO"
 echo "CORE_MODIFICATION=NO"
