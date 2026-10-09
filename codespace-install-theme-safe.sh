@@ -41,13 +41,16 @@ echo "BACKUP_DIR=$BACKUP_DIR"
 [ -x "$ROOT/env/bin/python" ] || { echo "PYTHON_ENV=FAIL"; exit 13; }
 
 # Guard against accidentally using a remote/production database.
-"$ROOT/env/bin/python" - "$SITE_DIR/site_config.json" <<'PY'
+"$ROOT/env/bin/python" - "$SITE_DIR/site_config.json" "$ROOT/sites/common_site_config.json" <<'PY'
 import json
 import sys
 from pathlib import Path
 
-p = Path(sys.argv[1])
-cfg = json.loads(p.read_text(encoding="utf-8"))
+site_path = Path(sys.argv[1])
+common_path = Path(sys.argv[2])
+site_cfg = json.loads(site_path.read_text(encoding="utf-8"))
+common_cfg = json.loads(common_path.read_text(encoding="utf-8")) if common_path.is_file() else {}
+cfg = {**common_cfg, **site_cfg}
 host = str(cfg.get("db_host") or "localhost").strip().lower()
 allowed = {"", "localhost", "127.0.0.1", "::1"}
 if host not in allowed:
