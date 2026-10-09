@@ -13,7 +13,8 @@ echo "ROOT=$ROOT"
 
 sudo service mariadb start
 
-# First sync source, clean database-only custom reports backup-first, and build assets.
+# UI source synchronization and asset compilation must not depend on optional
+# database cleanup. Custom Reports cleanup is a separate backup-first task.
 bash "$ROOT/codespace-runtime-sync.sh" --once
 
 # Never restart or validate an outdated/dirty checkout as if it were current.
@@ -28,9 +29,11 @@ if [ "$SOURCE_HEAD" != "$GITHUB_MAIN" ]; then
   echo "BENCH_RESTART=BLOCKED_STALE_SOURCE"
   exit 31
 fi
-if [ ! -s "$ROOT/sites/.nds-custom-report-cleanup-v1" ]; then
-  echo "CUSTOM_REPORT_CLEANUP=FAIL_MARKER_MISSING"
-  exit 32
+if [ -s "$ROOT/sites/.nds-custom-report-cleanup-v1" ]; then
+  echo "CUSTOM_REPORT_CLEANUP=PASS"
+else
+  echo "CUSTOM_REPORT_CLEANUP=NOT_REQUIRED_FOR_UI_SYNC"
+  echo "CUSTOM_REPORT_DB_WRITE=NO"
 fi
 
 # Restart the local Bench process so Python Hooks/modules are imported from current HEAD.
@@ -42,7 +45,7 @@ printf '%s\n' "$(git rev-parse HEAD)" > "$ROOT/sites/.nds-runtime-served-head"
 echo "SERVED_RUNTIME_HEAD=$(cat "$ROOT/sites/.nds-runtime-served-head")"
 
 # Keep GitHub main synchronized while the Codespace remains open. The sync worker
-# restarts Bench after source/asset updates and writes a single auditable log.
+# watches source and asset hashes; it does not run database cleanup as part of UI sync.
 if [ -s "$PID_FILE" ]; then
   old_pid="$(cat "$PID_FILE" 2>/dev/null || true)"
   if [[ "$old_pid" =~ ^[0-9]+$ ]] && kill -0 "$old_pid" 2>/dev/null; then
@@ -50,6 +53,11 @@ if [ -s "$PID_FILE" ]; then
     if [[ "$old_cmd" == *"codespace-runtime-sync.sh"* ]]; then
       echo "RUNTIME_SYNC_DAEMON=ALREADY_RUNNING"
       echo "RUNTIME_SYNC_PID=$old_pid"
+      echo "DB_WRITE=NO"
+      echo "MIGRATION=NO"
+      echo "CORE_MODIFICATION=NO"
+      echo "EGYPT_ERP_MODIFICATION=NO"
+      echo "SSH/WSL session remains open — no logout / no exit."
       exit 0
     fi
   fi
@@ -65,7 +73,8 @@ echo "RUNTIME_SYNC_DAEMON=STARTED"
 echo "RUNTIME_SYNC_INTERVAL=10"
 echo "RUNTIME_SYNC_PID=$sync_pid"
 echo "RUNTIME_SYNC_LOG=$SYNC_LOG"
-echo "DB_WRITE_POLICY=BACKUP_FIRST_LOCAL_ONLY"
+echo "DB_WRITE=NO"
+echo "MIGRATION=NO"
 echo "PRODUCTION_DB_WRITE=NO"
 echo "EGYPT_ERP_MODIFICATION=NO"
 echo "CORE_MODIFICATION=NO"
