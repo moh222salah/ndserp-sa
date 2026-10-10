@@ -336,10 +336,15 @@ const accountsDashboard = (() => {
 		const editor = page && page.querySelector("#editorjs");
 		if (!editor || !editor.parentNode || editor === preservedEditor) return;
 		if (preservedEditor && editorPlaceholder && editorPlaceholder.parentNode) {
-			// A newly rendered editor replaces the preserved reference; restore
-			// the previous one first so no Workspace DOM is discarded.
-			editorPlaceholder.replaceWith(preservedEditor);
+			// Keep the first Workspace editor as the restoration point. The theme
+			// may recreate another editor while this replacement is active.
+			editor.remove();
+			return;
 		}
+		// If Frappe replaced the page entirely, the old placeholder is detached;
+		// retain the newly rendered editor instead of restoring stale page DOM.
+		preservedEditor = null;
+		editorPlaceholder = null;
 		const placeholder = document.createComment("NDS Accounts Dashboard preserves the original Workspace editor");
 		editor.parentNode.insertBefore(placeholder, editor);
 		editor.remove();
