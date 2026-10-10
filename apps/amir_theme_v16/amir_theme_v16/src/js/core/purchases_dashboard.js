@@ -23,10 +23,11 @@ const purchasesDashboard = (() => {
    const names=new Set([norm(WORKSPACE)]);
    try{if(frappe.router?.slug)names.add(norm(frappe.router.slug(WORKSPACE)));}catch(_){}
    const routeName=norm(r[1]);
+   // A concrete different Workspace route must always win over stale sidebar/title state.
+   if(routeName&&!names.has(routeName))return false;
    const sidebarKey=norm(frappe.app?.sidebar?.sidebar_title);
    const pageTitle=norm(document.querySelector(".workspace-title")?.textContent||document.querySelector("#page-Workspaces .page-head .title-text")?.textContent);
    const scoped=Boolean(document.body?.classList.contains("nds-purchase-workspace-redesign"));
-   // The existing workspace enhancer is an authoritative fallback while Frappe's route/title settles.
    return names.has(routeName)||names.has(sidebarKey)||names.has(pageTitle)||scoped;
   }catch(_){return false;}
  }
