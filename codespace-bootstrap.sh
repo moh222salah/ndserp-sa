@@ -213,9 +213,8 @@ dst.write_text(json.dumps(cfg, indent=2) + "\n")
 PY
 
 cp bench/Procfile Procfile
-if ! grep -q '^runtime-sync:' Procfile; then
-  printf '%s\n' 'runtime-sync: bash codespace-runtime-sync.sh' >> Procfile
-fi
+# Runtime sync restarts Bench itself; keep it outside the Bench supervisor.
+sed -i '/^runtime-sync: bash codespace-runtime-sync\.sh$/d' Procfile
 
 bench setup redis
 bench setup socketio
