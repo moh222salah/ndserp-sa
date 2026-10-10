@@ -77,92 +77,6 @@ function bindAction(button, action) {
 	});
 }
 
-function enableHorizontalMotion(viewport, track, actions) {
-	// Keep complete duplicate sequences adjacent and move by exactly one sequence width.
-	// The modulo reset lands on an identical sequence, so the marquee never has an empty seam.
-	const speed = 24; // pixels per second; slightly faster than the prior 18 px/s
-	const rtl = getComputedStyle(viewport).direction === "rtl";
-	const originals = Array.from(track.children);
-	if (!originals.length) return;
-
-	let firstClone = null;
-	let cycleWidth = 0;
-	let offset = 0;
-	let previousTime = 0;
-	let frameId = 0;
-
-	viewport.dataset.motionState = "running";
-	viewport.setAttribute("data-amt-quick-actions-motion", "running");
-	track.setAttribute("data-amt-quick-actions-loop", "infinite");
-	track.style.willChange = "transform";
-	track.style.marginInline = "0";
-
-	const measureCycleWidth = () => {
-		if (!firstClone || !originals[0].isConnected || !firstClone.isConnected) return 0;
-		const originalLeft = originals[0].getBoundingClientRect().left;
-		const cloneLeft = firstClone.getBoundingClientRect().left;
-		const measured = Math.abs(cloneLeft - originalLeft);
-		return Number.isFinite(measured) ? measured : 0;
-	};
-
-	const appendCloneSet = () => {
-		originals.forEach((button, index) => {
-			const clone = button.cloneNode(true);
-			clone.classList.add("amt-quick-action-clone");
-			clone.setAttribute("aria-hidden", "true");
-			clone.tabIndex = -1;
-			bindAction(clone, actions[index]);
-			track.appendChild(clone);
-		});
-
-		if (!firstClone) firstClone = track.children[originals.length];
-		const measured = measureCycleWidth();
-		if (measured > 1) cycleWidth = measured;
-	};
-
-	const ensureLoopCoverage = () => {
-		if (!viewport.isConnected || !track.isConnected) return;
-		if (!firstClone) appendCloneSet();
-
-		const measured = measureCycleWidth();
-		if (measured > 1) cycleWidth = measured;
-		if (cycleWidth <= 1) return;
-
-		// At every animation offset there must be at least one full viewport of
-		// duplicated cards ahead, including the exact sequence-width reset point.
-		while (track.scrollWidth < viewport.clientWidth + cycleWidth + 1) {
-			appendCloneSet();
-		}
-		offset %= cycleWidth;
-	};
-
-	ensureLoopCoverage();
-	window.addEventListener("resize", ensureLoopCoverage, { passive: true });
-
-	const tick = (time) => {
-		if (!viewport.isConnected || !track.isConnected) {
-			cancelAnimationFrame(frameId);
-			window.removeEventListener("resize", ensureLoopCoverage);
-			track.style.willChange = "";
-			return;
-		}
-
-		if (cycleWidth > 1 && document.visibilityState !== "hidden") {
-			const elapsed = previousTime ? Math.min((time - previousTime) / 1000, 0.05) : 0;
-			offset = (offset + speed * elapsed) % cycleWidth;
-
-			// In RTL the visual flow advances toward the right; LTR advances left.
-			// Both wrap by the same measured cycle, keeping the first card adjacent to the last.
-			const translateX = rtl ? offset : -offset;
-			track.style.transform = "translate3d(" + translateX.toFixed(2) + "px, 0, 0)";
-		}
-		previousTime = time;
-		frameId = requestAnimationFrame(tick);
-	};
-
-	frameId = requestAnimationFrame(tick);
-}
-
 function buildSection(actions, arabic) {
 	const section = document.createElement("section");
 	section.className = "amt-quick-actions";
@@ -187,6 +101,7 @@ function buildSection(actions, arabic) {
 
 	const track = document.createElement("div");
 	track.className = "amt-quick-actions-track";
+	track.setAttribute("data-amt-quick-actions-layout", "static-grid");
 
 	for (const action of actions) {
 		const button = document.createElement("button");
@@ -211,7 +126,6 @@ function buildSection(actions, arabic) {
 	if (actions.length) {
 		grid.appendChild(track);
 		section.append(header, grid);
-		enableHorizontalMotion(grid, track, actions);
 	} else {
 		const empty = document.createElement("p");
 		empty.className = "amt-quick-actions-empty";
