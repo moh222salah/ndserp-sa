@@ -18,6 +18,39 @@ fi
 echo "=== NDS ERP SAUDI — POST-START RUNTIME ACTIVATION ==="
 echo "ROOT=$ROOT"
 
+# Keep source-to-runtime synchronization alive even if a one-shot build or
+# served-asset check fails. The loop retries safely; it never migrates or writes DB.
+runtime_sync_worker_is_running() {
+  local pid cmd cwd
+  [ -s "$PID_FILE" ] || return 1
+  pid="$(cat "$PID_FILE" 2>/dev/null || true)"
+  [[ "$pid" =~ ^[0-9]+$ ]] || return 1
+  kill -0 "$pid" 2>/dev/null || return 1
+  cmd="$(tr '\0' ' ' < "/proc/$pid/cmdline" 2>/dev/null || true)"
+  cwd="$(readlink -f "/proc/$pid/cwd" 2>/dev/null || true)"
+  [[ "$cmd" == *"$ROOT/codespace-runtime-sync.sh"* && "$cwd" == "$ROOT" ]]
+}
+
+ensure_runtime_sync_worker_on_exit() {
+  local rc=$?
+  trap - EXIT
+  if ! runtime_sync_worker_is_running; then
+    echo "RUNTIME_SYNC_RECOVERY=STARTING_AFTER_POSTSTART_EXIT exit=$rc" >> "$SYNC_LOG"
+    nohup env RUNTIME_SYNC_INTERVAL=10 bash "$ROOT/codespace-runtime-sync.sh" \
+      >> "$SYNC_LOG" 2>&1 < /dev/null &
+    local recovered_pid=$!
+    printf '%s\n' "$recovered_pid" > "$PID_FILE"
+    sleep 1
+    if kill -0 "$recovered_pid" 2>/dev/null; then
+      echo "RUNTIME_SYNC_RECOVERY=STARTED pid=$recovered_pid" >> "$SYNC_LOG"
+    else
+      echo "RUNTIME_SYNC_RECOVERY=FAIL pid=$recovered_pid" >> "$SYNC_LOG"
+    fi
+  fi
+  exit "$rc"
+}
+trap ensure_runtime_sync_worker_on_exit EXIT
+
 sudo service mariadb start
 
 # Stop a previous worker before the startup build; wait for any child build to
