@@ -197,13 +197,13 @@ const accountsDashboard = (() => {
 				'</article>' +
 				'<article class="nds-accounts-kpi-card" data-kpi="revenue">' +
 					'<div class="nds-accounts-kpi-top"><span class="nds-accounts-kpi-label"></span><span class="nds-accounts-kpi-icon" aria-hidden="true">↗</span></div>' +
-					'<div class="nds-accounts-kpi-value"><span data-kpi-value></span><small class="nds-accounts-currency"></small></div>' +
-					'<div class="nds-accounts-kpi-foot positive"><span data-kpi-trend></span><span class="nds-accounts-kpi-foot-caption"></span></div>' +
+					'<div class="nds-accounts-kpi-value"><span data-kpi-value></span><small class="nds-accounts-currency"></small><span class="nds-accounts-kpi-indicator positive" data-kpi-trend></span></div>' +
+					'<div class="nds-accounts-kpi-foot"><span class="nds-accounts-kpi-foot-caption"></span></div>' +
 				'</article>' +
 				'<article class="nds-accounts-kpi-card" data-kpi="expenses">' +
 					'<div class="nds-accounts-kpi-top"><span class="nds-accounts-kpi-label"></span><span class="nds-accounts-kpi-icon" aria-hidden="true">↗</span></div>' +
-					'<div class="nds-accounts-kpi-value"><span data-kpi-value></span><small class="nds-accounts-currency"></small></div>' +
-					'<div class="nds-accounts-kpi-foot caution"><span data-kpi-trend></span><span class="nds-accounts-kpi-foot-caption"></span></div>' +
+					'<div class="nds-accounts-kpi-value"><span data-kpi-value></span><small class="nds-accounts-currency"></small><span class="nds-accounts-kpi-indicator caution" data-kpi-trend></span></div>' +
+					'<div class="nds-accounts-kpi-foot"><span class="nds-accounts-kpi-foot-caption"></span></div>' +
 				'</article>' +
 				'<article class="nds-accounts-kpi-card" data-kpi="receivables">' +
 					'<div class="nds-accounts-kpi-top"><span class="nds-accounts-kpi-label"></span><span class="nds-accounts-kpi-icon" aria-hidden="true">◷</span></div>' +
