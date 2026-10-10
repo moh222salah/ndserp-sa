@@ -7,6 +7,7 @@ import { reportAutofit } from "./core/report_autofit.js";
 import { colorScheme } from "./core/color_scheme.js";
 import { workspaceEnhance } from "./core/workspace_enhance.js";
 import { salesDashboard } from "./core/sales_dashboard.js";
+import { purchasesDashboard } from "./core/purchases_dashboard.js";
 import { accountsDashboard } from "./core/accounts_dashboard.js";
 import { warehouseDashboard } from "./core/warehouse_dashboard.js";
 import { smartSubmitActions } from "./core/smart_submit_actions.js";
@@ -1091,6 +1092,8 @@ $(document).ready(function () {
 	workspaceEnhance.mount();
 	// Reference-led Sales Workspace: live KPI cards, charts and recent invoices.
 	salesDashboard.mount();
+	// Mount bilingual live Purchases Dashboard.
+	purchasesDashboard.mount();
 	// Reference-led Accounts Workspace: bilingual KPI cards, charts and invoices table.
 	accountsDashboard.mount();
 	// Live stock KPIs, stock movement, distribution and shortage list.

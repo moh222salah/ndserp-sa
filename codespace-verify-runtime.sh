@@ -110,6 +110,13 @@ for marker in '.nds-purchase-workspace-redesign' '#page-workspaces' '.codex-edit
   fi
 done
 echo "BUILT_PURCHASE_WORKSPACE_CSS=PASS"
+for marker in '.nds-purchase-dashboard' '.nds-purchase-kpi-grid' '.nds-purchase-charts-grid' '.nds-purchase-category-fill' '.nds-purchase-month-columns' '.nds-purchase-orders-table' '.nds-purchase-dashboard[dir=rtl]' '.nds-purchase-dashboard[dir=ltr]'; do
+  if ! grep -Fq "$marker" "$LOCAL_CSS"; then
+    echo "BUILT_PURCHASE_DASHBOARD_CSS=FAIL:MISSING_MARKER:$marker"
+    exit 54
+  fi
+done
+echo "BUILT_PURCHASE_DASHBOARD_CSS=PASS"
 echo "ASSET_URL=$ASSET_URL"
 
 READY=0
@@ -196,6 +203,13 @@ for marker in '.nds-purchase-workspace-redesign' '#page-workspaces' '.codex-edit
   fi
 done
 echo "SERVED_PURCHASE_WORKSPACE_CSS=PASS"
+for marker in '.nds-purchase-dashboard' '.nds-purchase-kpi-grid' '.nds-purchase-charts-grid' '.nds-purchase-category-fill' '.nds-purchase-month-columns' '.nds-purchase-orders-table' '.nds-purchase-dashboard[dir=rtl]' '.nds-purchase-dashboard[dir=ltr]'; do
+  if ! grep -Fq "$marker" "$LOCAL_CSS"; then
+    echo "SERVED_PURCHASE_DASHBOARD_CSS=FAIL:MISSING_MARKER:$marker"
+    exit 54
+  fi
+done
+echo "SERVED_PURCHASE_DASHBOARD_CSS=PASS"
 
 JS_ASSET_PATH="$("$ROOT/env/bin/python" - <<'PY'
 import json
@@ -271,6 +285,13 @@ if ! grep -Fq 'nds-purchase-workspace-redesign' "$LOCAL_JS_ASSET"; then
   exit 40
 fi
 echo "BUILT_PURCHASE_WORKSPACE_JS=PASS"
+for marker in 'nds-purchase-dashboard' 'nds-purchase-kpi-grid' 'nds-purchase-month-columns' 'nds-purchase-orders-table' 'Purchase Invoice' 'Purchase Receipt' 'data-purchase-direction'; do
+  if ! grep -Fq "$marker" "$LOCAL_JS_ASSET"; then
+    echo "BUILT_PURCHASE_DASHBOARD_JS=FAIL:MISSING_MARKER:$LOCAL_JS_ASSET"
+    exit 55
+  fi
+done
+echo "BUILT_PURCHASE_DASHBOARD_JS=PASS"
 SERVED_JS="$(mktemp)"
 trap 'rm -f "$LOCAL_CSS" "$SERVED_CSS" "$SERVED_JS"' EXIT
 JS_READY=0
@@ -339,6 +360,13 @@ if ! grep -Fq 'nds-purchase-workspace-redesign' "$SERVED_JS"; then
   exit 41
 fi
 echo "SERVED_PURCHASE_WORKSPACE_JS=PASS"
+for marker in 'nds-purchase-dashboard' 'nds-purchase-kpi-grid' 'nds-purchase-month-columns' 'nds-purchase-orders-table' 'Purchase Invoice' 'Purchase Receipt' 'data-purchase-direction'; do
+  if ! grep -Fq "$marker" "$SERVED_JS"; then
+    echo "SERVED_PURCHASE_DASHBOARD_JS=FAIL:MISSING_MARKER:$SERVED_JS"
+    exit 55
+  fi
+done
+echo "SERVED_PURCHASE_DASHBOARD_JS=PASS"
 if [ "$(sha256sum "$LOCAL_JS_ASSET" | awk '{print $1}')" != "$(sha256sum "$SERVED_JS" | awk '{print $1}')" ]; then
   echo "SERVED_QUICK_ACTIONS_JS=FAIL:HASH_MISMATCH"
   exit 23

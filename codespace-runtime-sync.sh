@@ -215,6 +215,11 @@ for key in required:
                 "PURCHASE_WORKSPACE_CSS=FAIL:MISSING_MARKERS:" + ",".join(missing)
             )
         print("PURCHASE_WORKSPACE_CSS=PASS")
+        required_purchase_dashboard_css = (".nds-purchase-dashboard", ".nds-purchase-kpi-grid", ".nds-purchase-charts-grid", ".nds-purchase-category-fill", ".nds-purchase-month-columns", ".nds-purchase-orders-table", ".nds-purchase-dashboard[dir=rtl]", ".nds-purchase-dashboard[dir=ltr]")
+        missing = [marker for marker in required_purchase_dashboard_css if marker not in css_compact]
+        if missing:
+            raise SystemExit("PURCHASE_DASHBOARD_CSS=FAIL:MISSING_MARKERS:" + ",".join(missing))
+        print("PURCHASE_DASHBOARD_CSS=PASS")
     elif key == "amir_theme.bundle.js":
         js = target.read_text(encoding="utf-8")
         # Use stable ASCII markers: production bundling may Unicode-escape Arabic literals.
@@ -301,6 +306,11 @@ for key in required:
         if "nds-purchase-workspace-redesign" not in js:
             raise SystemExit("PURCHASE_WORKSPACE_JS=FAIL:MISSING_MARKER:nds-purchase-workspace-redesign")
         print("PURCHASE_WORKSPACE_JS=PASS")
+        required_purchase_dashboard_js = ("nds-purchase-dashboard", "nds-purchase-kpi-grid", "nds-purchase-month-columns", "nds-purchase-orders-table", "Purchase Invoice", "Purchase Receipt", "data-purchase-direction")
+        missing = [marker for marker in required_purchase_dashboard_js if marker not in js]
+        if missing:
+            raise SystemExit("PURCHASE_DASHBOARD_JS=FAIL:MISSING_MARKERS:" + ",".join(missing))
+        print("PURCHASE_DASHBOARD_JS=PASS")
 
 print("ASSET_SERVE_TREE=PASS")
 PY

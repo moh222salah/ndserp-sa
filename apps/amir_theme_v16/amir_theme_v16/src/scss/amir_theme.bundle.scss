@@ -66,3 +66,6 @@
 
 // Sales Workspace — presentation-only, route-scoped layer.
 @import "components/sales-workspace-redesign";
+
+// Live bilingual Purchases Dashboard; preserve the standard Frappe header.
+@import "components/purchase-dashboard";

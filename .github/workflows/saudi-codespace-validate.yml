@@ -282,6 +282,21 @@ jobs:
           grep -Fq 'PURCHASE_WORKSPACE_JS=PASS' codespace-runtime-sync.sh
           grep -Fq 'SERVED_PURCHASE_WORKSPACE_CSS=PASS' codespace-verify-runtime.sh
           grep -Fq 'SERVED_PURCHASE_WORKSPACE_JS=PASS' codespace-verify-runtime.sh
+          grep -Fq 'nds-purchase-dashboard' apps/amir_theme_v16/amir_theme_v16/src/js/core/purchases_dashboard.js
+          grep -Fq 'Purchase Invoice' apps/amir_theme_v16/amir_theme_v16/src/js/core/purchases_dashboard.js
+          grep -Fq 'Purchase Receipt' apps/amir_theme_v16/amir_theme_v16/src/js/core/purchases_dashboard.js
+          grep -Fq 'purchasesDashboard.mount();' apps/amir_theme_v16/amir_theme_v16/src/js/amir_theme.bundle.js
+          grep -Fq '@import "components/purchase-dashboard";' apps/amir_theme_v16/amir_theme_v16/src/scss/amir_theme.bundle.scss
+          grep -Fq '.nds-purchase-dashboard' apps/amir_theme_v16/amir_theme_v16/src/scss/components/_purchase-dashboard.scss
+          grep -Fq 'PURCHASE_DASHBOARD_CSS=PASS' codespace-runtime-sync.sh
+          grep -Fq 'PURCHASE_DASHBOARD_JS=PASS' codespace-runtime-sync.sh
+          grep -Fq 'BUILT_PURCHASE_DASHBOARD_CSS=PASS' codespace-verify-runtime.sh
+          grep -Fq 'SERVED_PURCHASE_DASHBOARD_CSS=PASS' codespace-verify-runtime.sh
+          grep -Fq 'BUILT_PURCHASE_DASHBOARD_JS=PASS' codespace-verify-runtime.sh
+          grep -Fq 'SERVED_PURCHASE_DASHBOARD_JS=PASS' codespace-verify-runtime.sh
+          node --check --input-type=module < apps/amir_theme_v16/amir_theme_v16/src/js/core/purchases_dashboard.js
+          node --check --input-type=module < apps/amir_theme_v16/amir_theme_v16/src/js/amir_theme.bundle.js
+          echo "PURCHASE_DASHBOARD_SOURCE_AND_ASSET_GATES=PASS"
           echo "PURCHASE_WORKSPACE_SOURCE_AND_ASSET_GATES=PASS"
 
       - name: Verify Quick Actions static responsive grid

@@ -1,0 +1,81 @@
+/* Purchases Dashboard: modern SaaS UI; keep Frappe global header and native Workspace records. */
+body.nds-purchase-dashboard-ready #page-Workspaces{--nds-purchase-navy:#0A2342;--nds-purchase-blue:#164E8F;--nds-purchase-gold:#D4AF37;--nds-purchase-ink:#172B4D;--nds-purchase-muted:#64748b;--nds-purchase-line:#e5ebf2;background:#f4f7fb;color:var(--nds-purchase-ink)}
+body.nds-purchase-dashboard-ready #page-Workspaces .layout-main-section{box-sizing:border-box;width:100%;max-width:none;padding:14px 18px 28px;border:0;background:transparent;box-shadow:none}
+body.nds-purchase-dashboard-ready #page-Workspaces .nds-purchase-dashboard{width:100%;max-width:1600px;margin:0 auto 26px;color:var(--nds-purchase-ink);font-family:inherit}
+body.nds-purchase-dashboard-ready #page-Workspaces .nds-purchase-dashboard *{box-sizing:border-box}
+body.nds-purchase-dashboard-ready #page-Workspaces .nds-purchase-dashboard-header{display:flex;align-items:center;justify-content:space-between;gap:16px;margin:0 0 20px}
+body.nds-purchase-dashboard-ready #page-Workspaces .nds-purchase-dashboard-title{margin:0;color:var(--nds-purchase-navy);font-size:clamp(22px,2vw,29px);font-weight:800;line-height:1.35;letter-spacing:-.025em}
+body.nds-purchase-dashboard-ready #page-Workspaces .nds-purchase-dashboard-breadcrumb{display:flex;align-items:center;gap:8px;margin-top:7px;color:var(--nds-purchase-muted);font-size:12px;font-weight:500}
+body.nds-purchase-dashboard-ready #page-Workspaces .nds-purchase-dashboard-period{display:inline-flex;align-items:center;gap:9px;flex:0 0 auto;padding:9px 13px;border:1px solid var(--nds-purchase-line);border-radius:12px;background:#fff;color:var(--nds-purchase-ink);font-size:12px;font-weight:650;box-shadow:0 3px 10px rgba(10,35,66,.035)}
+body.nds-purchase-dashboard-ready #page-Workspaces .nds-purchase-kpi-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:15px;margin-bottom:18px}
+body.nds-purchase-dashboard-ready #page-Workspaces .nds-purchase-kpi-card{position:relative;min-width:0;min-height:146px;padding:18px;overflow:hidden;border:1px solid var(--nds-purchase-line);border-radius:15px;background:#fff;box-shadow:0 4px 14px rgba(15,35,65,.045);transition:transform .18s ease,box-shadow .18s ease,border-color .18s ease}
+body.nds-purchase-dashboard-ready #page-Workspaces .nds-purchase-kpi-card:before{position:absolute;inset-block:0;inset-inline-start:0;width:3px;background:var(--nds-purchase-blue);content:""}
+body.nds-purchase-dashboard-ready #page-Workspaces .nds-purchase-kpi-card[data-kpi=open]:before{background:var(--nds-purchase-gold)}
+body.nds-purchase-dashboard-ready #page-Workspaces .nds-purchase-kpi-card[data-kpi=suppliers]:before{background:#2d936c}
+body.nds-purchase-dashboard-ready #page-Workspaces .nds-purchase-kpi-card[data-kpi=lead]:before{background:#7b61b3}
+body.nds-purchase-dashboard-ready #page-Workspaces .nds-purchase-kpi-card:hover{transform:translateY(-2px);border-color:#cbd8e7;box-shadow:0 10px 25px rgba(15,45,80,.075)}
+body.nds-purchase-dashboard-ready #page-Workspaces .nds-purchase-kpi-top{display:flex;align-items:flex-start;justify-content:space-between;gap:9px}
+body.nds-purchase-dashboard-ready #page-Workspaces .nds-purchase-kpi-label{color:var(--nds-purchase-muted);font-size:12px;font-weight:700;line-height:1.6}
+body.nds-purchase-dashboard-ready #page-Workspaces .nds-purchase-kpi-icon{display:inline-grid;width:34px;height:34px;flex:0 0 34px;place-items:center;border-radius:11px;font-size:19px;font-weight:700}
+body.nds-purchase-dashboard-ready #page-Workspaces .nds-purchase-kpi-icon.tone-blue{background:#edf4fc;color:var(--nds-purchase-blue)}
+body.nds-purchase-dashboard-ready #page-Workspaces .nds-purchase-kpi-icon.tone-gold{background:#fbf5df;color:#98761e}
+body.nds-purchase-dashboard-ready #page-Workspaces .nds-purchase-kpi-icon.tone-green{background:#e9f7f0;color:#247c5b}
+body.nds-purchase-dashboard-ready #page-Workspaces .nds-purchase-kpi-icon.tone-violet{background:#f1edfb;color:#6f50a7}
+body.nds-purchase-dashboard-ready #page-Workspaces .nds-purchase-kpi-value{margin:13px 0 7px;color:var(--nds-purchase-navy);font-size:clamp(22px,2vw,30px);font-weight:800;line-height:1.25;letter-spacing:-.035em;overflow-wrap:anywhere;font-variant-numeric:tabular-nums}
+body.nds-purchase-dashboard-ready #page-Workspaces .nds-purchase-kpi-trend{display:block;min-height:18px;color:var(--nds-purchase-muted);font-size:11px;font-weight:600;line-height:1.6}
+body.nds-purchase-dashboard-ready #page-Workspaces .nds-purchase-kpi-trend.positive{color:#21835b}
+body.nds-purchase-dashboard-ready #page-Workspaces .nds-purchase-kpi-trend.negative{color:#c04b48}
+body.nds-purchase-dashboard-ready #page-Workspaces .nds-purchase-charts-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));align-items:stretch;gap:18px;margin-bottom:18px}
+body.nds-purchase-dashboard-ready #page-Workspaces .nds-purchase-panel{min-width:0;overflow:hidden;border:1px solid var(--nds-purchase-line);border-radius:15px;background:#fff;box-shadow:0 4px 14px rgba(15,35,65,.04)}
+body.nds-purchase-dashboard-ready #page-Workspaces .nds-purchase-panel-heading{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:18px 20px 14px;border-bottom:1px solid #edf1f6}
+body.nds-purchase-dashboard-ready #page-Workspaces .nds-purchase-panel-heading h2{margin:0;color:var(--nds-purchase-navy);font-size:15px;font-weight:800;line-height:1.45}
+body.nds-purchase-dashboard-ready #page-Workspaces .nds-purchase-panel-heading p{margin:5px 0 0;color:var(--nds-purchase-muted);font-size:11px;font-weight:500}
+body.nds-purchase-dashboard-ready #page-Workspaces .nds-purchase-panel-mark{display:inline-grid;width:34px;height:34px;place-items:center;flex:0 0 34px;border-radius:10px;background:#f1f5fa;color:var(--nds-purchase-blue);font-size:18px;font-weight:800}
+body.nds-purchase-dashboard-ready #page-Workspaces .nds-purchase-category-list{display:grid;gap:19px;padding:22px 20px 24px}
+body.nds-purchase-dashboard-ready #page-Workspaces .nds-purchase-category-row{display:grid;gap:9px;min-width:0}
+body.nds-purchase-dashboard-ready #page-Workspaces .nds-purchase-category-head{display:flex;justify-content:space-between;align-items:center;gap:12px;min-width:0}
+body.nds-purchase-dashboard-ready #page-Workspaces .nds-purchase-category-label{overflow:hidden;color:var(--nds-purchase-ink);font-size:12px;font-weight:700;text-overflow:ellipsis;white-space:nowrap}
+body.nds-purchase-dashboard-ready #page-Workspaces .nds-purchase-category-percent{flex:0 0 auto;color:var(--nds-purchase-muted);font-size:12px;font-weight:750;font-variant-numeric:tabular-nums}
+body.nds-purchase-dashboard-ready #page-Workspaces .nds-purchase-category-track{width:100%;height:8px;overflow:hidden;border-radius:999px;background:#edf1f6}
+body.nds-purchase-dashboard-ready #page-Workspaces .nds-purchase-category-fill{height:100%;border-radius:inherit;transition:width .35s ease}
+body.nds-purchase-dashboard-ready #page-Workspaces .nds-purchase-category-fill.tone-1{background:#164e8f}
+body.nds-purchase-dashboard-ready #page-Workspaces .nds-purchase-category-fill.tone-2{background:#d4af37}
+body.nds-purchase-dashboard-ready #page-Workspaces .nds-purchase-category-fill.tone-3{background:#369a73}
+body.nds-purchase-dashboard-ready #page-Workspaces .nds-purchase-category-fill.tone-4{background:#8263b5}
+body.nds-purchase-dashboard-ready #page-Workspaces .nds-purchase-category-fill.tone-5{background:#d16e43}
+body.nds-purchase-dashboard-ready #page-Workspaces .nds-purchase-monthly-chart{padding:18px 16px 16px}
+body.nds-purchase-dashboard-ready #page-Workspaces .nds-purchase-month-columns{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));align-items:end;gap:7px;min-height:230px;direction:inherit}
+body.nds-purchase-dashboard-ready #page-Workspaces .nds-purchase-month-column{display:flex;min-width:0;height:220px;flex-direction:column;align-items:center;justify-content:flex-end;gap:8px}
+body.nds-purchase-dashboard-ready #page-Workspaces .nds-purchase-month-value{width:100%;overflow:hidden;color:var(--nds-purchase-muted);font-size:9px;font-weight:650;text-align:center;text-overflow:ellipsis;white-space:nowrap;font-variant-numeric:tabular-nums}
+body.nds-purchase-dashboard-ready #page-Workspaces .nds-purchase-month-bar-area{display:flex;width:100%;height:132px;align-items:flex-end;justify-content:center;border-bottom:1px solid #e9eef5}
+body.nds-purchase-dashboard-ready #page-Workspaces .nds-purchase-month-bar{width:min(34px,72%);border-radius:7px 7px 2px 2px;background:linear-gradient(180deg,#3979bc 0%,#164e8f 100%);box-shadow:0 3px 7px rgba(22,78,143,.14);transition:height .35s ease}
+body.nds-purchase-dashboard-ready #page-Workspaces .nds-purchase-month-column:first-child .nds-purchase-month-bar{background:linear-gradient(180deg,#e4c75d 0%,#bd9421 100%)}
+body.nds-purchase-dashboard-ready #page-Workspaces .nds-purchase-month-label{display:block;max-width:100%;overflow:hidden;color:var(--nds-purchase-muted);font-size:10px;font-weight:650;text-align:center;text-overflow:ellipsis;white-space:nowrap}
+body.nds-purchase-dashboard-ready #page-Workspaces .nds-purchase-chart-empty,body.nds-purchase-dashboard-ready #page-Workspaces .nds-purchase-loading{display:flex;min-height:150px;align-items:center;justify-content:center;padding:20px;color:var(--nds-purchase-muted);font-size:12px;line-height:1.8;text-align:center}
+body.nds-purchase-dashboard-ready #page-Workspaces .nds-purchase-recent-panel{margin-bottom:8px}
+body.nds-purchase-dashboard-ready #page-Workspaces .nds-purchase-table-wrap{width:100%;overflow-x:auto}
+body.nds-purchase-dashboard-ready #page-Workspaces .nds-purchase-orders-table{width:100%;border:0;border-collapse:separate;border-spacing:0;color:var(--nds-purchase-ink);font-size:12px;text-align:start}
+body.nds-purchase-dashboard-ready #page-Workspaces .nds-purchase-orders-table thead{background:#f8fafc}
+body.nds-purchase-dashboard-ready #page-Workspaces .nds-purchase-orders-table th{padding:12px 18px;border-bottom:1px solid var(--nds-purchase-line);color:#596b82;font-size:11px;font-weight:750;white-space:nowrap}
+body.nds-purchase-dashboard-ready #page-Workspaces .nds-purchase-orders-table td{padding:14px 18px;border-bottom:1px solid #eff2f6;vertical-align:middle;white-space:nowrap}
+body.nds-purchase-dashboard-ready #page-Workspaces .nds-purchase-orders-table tbody tr:last-child td{border-bottom:0}
+body.nds-purchase-dashboard-ready #page-Workspaces .nds-purchase-orders-table tbody tr:hover{background:#f9fbfe}
+body.nds-purchase-dashboard-ready #page-Workspaces .nds-purchase-order-link{color:var(--nds-purchase-blue);font-weight:800;text-decoration:none}
+body.nds-purchase-dashboard-ready #page-Workspaces .nds-purchase-order-link:hover{color:var(--nds-purchase-navy);text-decoration:underline}
+body.nds-purchase-dashboard-ready #page-Workspaces .nds-purchase-order-supplier{font-weight:650}
+body.nds-purchase-dashboard-ready #page-Workspaces .nds-purchase-order-amount{color:var(--nds-purchase-navy);font-weight:800;font-variant-numeric:tabular-nums}
+body.nds-purchase-dashboard-ready #page-Workspaces .nds-purchase-status{display:inline-flex;align-items:center;min-height:25px;padding:4px 9px;border:1px solid transparent;border-radius:999px;font-size:10px;font-weight:750;line-height:1.4}
+body.nds-purchase-dashboard-ready #page-Workspaces .nds-purchase-status.pending{border-color:#f1df9d;background:#fff8de;color:#86650b}
+body.nds-purchase-dashboard-ready #page-Workspaces .nds-purchase-status.complete{border-color:#b9e6ce;background:#eaf8f0;color:#18734b}
+body.nds-purchase-dashboard-ready #page-Workspaces .nds-purchase-status.overdue{border-color:#f3c4c2;background:#fff0ef;color:#b73936}
+body.nds-purchase-dashboard-ready #page-Workspaces .nds-purchase-status.draft{border-color:#d7dfe9;background:#f1f4f8;color:#5c6878}
+body.nds-purchase-dashboard-ready #page-Workspaces .nds-purchase-status.cancelled{border-color:#e6caca;background:#f8eeee;color:#963c3c}
+body.nds-purchase-dashboard-ready #page-Workspaces .nds-purchase-status.hold{border-color:#d8cef1;background:#f3effb;color:#63449b}
+body.nds-purchase-dashboard-ready #page-Workspaces .nds-purchase-table-empty{padding:28px 16px;color:var(--nds-purchase-muted);text-align:center;white-space:normal}
+body.nds-purchase-dashboard-ready #page-Workspaces .nds-purchase-dashboard[dir=rtl]{direction:rtl;text-align:right}
+body.nds-purchase-dashboard-ready #page-Workspaces .nds-purchase-dashboard[dir=ltr]{direction:ltr;text-align:left}
+body.nds-purchase-dashboard-ready #page-Workspaces .nds-purchase-dashboard[dir=rtl] .nds-purchase-month-columns{direction:rtl}
+body.nds-purchase-dashboard-ready #page-Workspaces .nds-purchase-dashboard[dir=ltr] .nds-purchase-month-columns{direction:ltr}
+@media(max-width:1100px){body.nds-purchase-dashboard-ready #page-Workspaces .nds-purchase-kpi-grid{grid-template-columns:repeat(2,minmax(0,1fr))}body.nds-purchase-dashboard-ready #page-Workspaces .nds-purchase-charts-grid{grid-template-columns:minmax(0,1fr)}}
+@media(max-width:620px){body.nds-purchase-dashboard-ready #page-Workspaces .layout-main-section{padding:10px 8px 20px}body.nds-purchase-dashboard-ready #page-Workspaces .nds-purchase-dashboard-header{align-items:flex-start;flex-direction:column;gap:12px}body.nds-purchase-dashboard-ready #page-Workspaces .nds-purchase-kpi-grid{gap:9px}body.nds-purchase-dashboard-ready #page-Workspaces .nds-purchase-kpi-card{min-height:128px;padding:12px}body.nds-purchase-dashboard-ready #page-Workspaces .nds-purchase-kpi-value{font-size:20px}body.nds-purchase-dashboard-ready #page-Workspaces .nds-purchase-panel-heading{padding:14px 13px 11px}body.nds-purchase-dashboard-ready #page-Workspaces .nds-purchase-category-list{gap:15px;padding:16px 13px 18px}body.nds-purchase-dashboard-ready #page-Workspaces .nds-purchase-monthly-chart{padding:13px 7px 12px}body.nds-purchase-dashboard-ready #page-Workspaces .nds-purchase-month-columns{gap:3px}body.nds-purchase-dashboard-ready #page-Workspaces .nds-purchase-orders-table th,body.nds-purchase-dashboard-ready #page-Workspaces .nds-purchase-orders-table td{padding:11px}}
+@media(prefers-reduced-motion:reduce){body.nds-purchase-dashboard-ready #page-Workspaces .nds-purchase-dashboard *{transition:none}}
