@@ -20,7 +20,7 @@ const purchasesDashboard = (() => {
  }
  function syncDir(b){if(b){b.dir=lang()==="ar"?"rtl":"ltr";b.lang=lang();b.dataset.purchaseDirection=b.dir;}}
  function el(tag,cls,text){const n=document.createElement(tag);if(cls)n.className=cls;if(text!==undefined&&text!==null)n.textContent=String(text);return n;}
- function rpc(method,args){return new Promise((resolve,reject)=>{if(!window.frappe?.call)return reject(new Error("Frappe API unavailable"));frappe.call({method,args,callback:r=>resolve(r?.message),error:e=>reject(e||new Error("Request failed"));});});}
+ function rpc(method,args){return new Promise((resolve,reject)=>{if(!window.frappe?.call)return reject(new Error("Frappe API unavailable"));frappe.call({method,args,callback:r=>resolve(r?.message),error:e=>reject(e||new Error("Request failed"))});});}
  function list(doctype,fields,filters,extra){return rpc("frappe.client.get_list",Object.assign({doctype,fields,filters:filters||[],limit_page_length:1000},extra||{}));}
  async function count(doctype,filters){const r=await list(doctype,[{COUNT:"*",as:"record_count"}],filters,{limit_page_length:1});return Number(r?.[0]?.record_count||0);}
  function hasField(dt,f){try{return (frappe.get_meta(dt).fields||[]).some(x=>x.fieldname===f);}catch(_){return false;}}
