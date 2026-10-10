@@ -95,7 +95,7 @@ if grep -Fq 'nds-sales-dashboard-ready#page-workspaces.page-head{display:none!im
   exit 48
 fi
 echo "BUILT_SALES_HEADER=PASS"
-for marker in 'أقسام المبيعات' '.codex-editor__redactor' 'grid-template-columns:repeat(12,minmax(0,1fr))' 'grid-column:span6' '.links-widget-box'; do
+for marker in 'nds-sales-dashboard-ready#page-workspaces#editorjs::before' '.codex-editor__redactor' 'grid-template-columns:repeat(12,minmax(0,1fr))' 'grid-column:span6' '.links-widget-box'; do
   if ! grep -Fq "$marker" "$LOCAL_CSS"; then
     echo "BUILT_SALES_WORKSPACE_SECTIONS_CSS=FAIL:MISSING_MARKER:$marker"
     exit 50
@@ -185,7 +185,7 @@ if grep -Fq 'nds-sales-dashboard-ready#page-workspaces.page-head{display:none!im
   exit 49
 fi
 echo "SERVED_SALES_HEADER=PASS"
-for marker in 'أقسام المبيعات' '.codex-editor__redactor' 'grid-template-columns:repeat(12,minmax(0,1fr))' 'grid-column:span6' '.links-widget-box'; do
+for marker in 'nds-sales-dashboard-ready#page-workspaces#editorjs::before' '.codex-editor__redactor' 'grid-template-columns:repeat(12,minmax(0,1fr))' 'grid-column:span6' '.links-widget-box'; do
   if ! grep -Fq "$marker" "$LOCAL_CSS"; then
     echo "SERVED_SALES_WORKSPACE_SECTIONS_CSS=FAIL:MISSING_MARKER:$marker"
     exit 52
