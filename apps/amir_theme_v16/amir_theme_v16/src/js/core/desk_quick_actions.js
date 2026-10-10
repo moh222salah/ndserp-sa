@@ -78,8 +78,8 @@ function bindAction(button, action) {
 }
 
 function enableHorizontalMotion(viewport, track, actions) {
-	// Duplicate identical actions and cycle by exactly one sequence width.
-	// This creates a seamless one-way marquee rather than bouncing at either end.
+	// Keep complete duplicate sequences adjacent and move by exactly one sequence width.
+	// The modulo reset lands on an identical sequence, so the marquee never has an empty seam.
 	const speed = 24; // pixels per second; slightly faster than the prior 18 px/s
 	const rtl = getComputedStyle(viewport).direction === "rtl";
 	const originals = Array.from(track.children);
@@ -89,7 +89,6 @@ function enableHorizontalMotion(viewport, track, actions) {
 	let cycleWidth = 0;
 	let offset = 0;
 	let previousTime = 0;
-	let focusInside = false;
 	let frameId = 0;
 
 	viewport.dataset.motionState = "running";
@@ -97,6 +96,14 @@ function enableHorizontalMotion(viewport, track, actions) {
 	track.setAttribute("data-amt-quick-actions-loop", "infinite");
 	track.style.willChange = "transform";
 	track.style.marginInline = "0";
+
+	const measureCycleWidth = () => {
+		if (!firstClone || !originals[0].isConnected || !firstClone.isConnected) return 0;
+		const originalLeft = originals[0].getBoundingClientRect().left;
+		const cloneLeft = firstClone.getBoundingClientRect().left;
+		const measured = Math.abs(cloneLeft - originalLeft);
+		return Number.isFinite(measured) ? measured : 0;
+	};
 
 	const appendCloneSet = () => {
 		originals.forEach((button, index) => {
@@ -109,17 +116,24 @@ function enableHorizontalMotion(viewport, track, actions) {
 		});
 
 		if (!firstClone) firstClone = track.children[originals.length];
-		cycleWidth = firstClone
-			? Math.abs(firstClone.getBoundingClientRect().left - originals[0].getBoundingClientRect().left)
-			: 0;
+		const measured = measureCycleWidth();
+		if (measured > 1) cycleWidth = measured;
 	};
 
 	const ensureLoopCoverage = () => {
 		if (!viewport.isConnected || !track.isConnected) return;
 		if (!firstClone) appendCloneSet();
-		while (cycleWidth > 1 && track.scrollWidth < viewport.clientWidth + cycleWidth) {
+
+		const measured = measureCycleWidth();
+		if (measured > 1) cycleWidth = measured;
+		if (cycleWidth <= 1) return;
+
+		// At every animation offset there must be at least one full viewport of
+		// duplicated cards ahead, including the exact sequence-width reset point.
+		while (track.scrollWidth < viewport.clientWidth + cycleWidth + 1) {
 			appendCloneSet();
 		}
+		offset %= cycleWidth;
 	};
 
 	ensureLoopCoverage();
@@ -133,28 +147,18 @@ function enableHorizontalMotion(viewport, track, actions) {
 			return;
 		}
 
-		ensureLoopCoverage();
-		if (cycleWidth > 1 && !focusInside && document.visibilityState !== "hidden") {
+		if (cycleWidth > 1 && document.visibilityState !== "hidden") {
 			const elapsed = previousTime ? Math.min((time - previousTime) / 1000, 0.05) : 0;
 			offset = (offset + speed * elapsed) % cycleWidth;
 
-			// RTL needs the opposite transform sign because flex row order is reversed;
-			// the visual motion remains one-way and the repeated sequence stays aligned.
+			// In RTL the visual flow advances toward the right; LTR advances left.
+			// Both wrap by the same measured cycle, keeping the first card adjacent to the last.
 			const translateX = rtl ? offset : -offset;
 			track.style.transform = "translate3d(" + translateX.toFixed(2) + "px, 0, 0)";
 		}
 		previousTime = time;
 		frameId = requestAnimationFrame(tick);
 	};
-
-	viewport.addEventListener("focusin", () => {
-		focusInside = true;
-		previousTime = 0;
-	});
-	viewport.addEventListener("focusout", (event) => {
-		focusInside = viewport.contains(event.relatedTarget);
-		previousTime = 0;
-	});
 
 	frameId = requestAnimationFrame(tick);
 }
