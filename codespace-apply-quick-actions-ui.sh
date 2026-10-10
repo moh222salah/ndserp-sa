@@ -61,8 +61,24 @@ echo "SOURCE_SYNC=ALREADY_CURRENT"
 # finish naturally. This never kills bench build and never deletes its lock file.
 bash "$ROOT/codespace-quiesce-runtime-sync.sh"
 
-# Ensure the local Codespace DB service is available for read-only site checks.
-sudo service mariadb start
+# Ensure MariaDB is available, but avoid an unnecessary sudo prompt when
+# the Codespace service is already accepting local TCP connections.
+if timeout 1 bash -c ':</dev/tcp/127.0.0.1/3306' 2>/dev/null; then
+  echo "MARIADB=ALREADY_LISTENING"
+else
+  sudo service mariadb start
+  for _ in $(seq 1 20); do
+    if timeout 1 bash -c ':</dev/tcp/127.0.0.1/3306' 2>/dev/null; then
+      break
+    fi
+    sleep 1
+  done
+  if ! timeout 1 bash -c ':</dev/tcp/127.0.0.1/3306' 2>/dev/null; then
+    echo "MARIADB=FAIL:PORT_3306_NOT_LISTENING"
+    exit 41
+  fi
+  echo "MARIADB=STARTED"
+fi
 
 # This one-shot builds and verifies the current sources; serving verification is
 # intentionally deferred until the local Bench server has reloaded its manifest.
