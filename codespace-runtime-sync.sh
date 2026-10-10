@@ -391,7 +391,7 @@ sync_once() {
   current="$(git rev-parse HEAD)"
   remote="$(git rev-parse origin/main)"
   branch="$(git branch --show-current)"
-  force_rebuild=0
+  force_rebuild="${NDS_FORCE_ASSET_REBUILD:-0}"
   tracked_dirty=0
   if ! git diff --quiet || ! git diff --cached --quiet; then
     tracked_dirty=1
@@ -407,6 +407,7 @@ sync_once() {
   # untracked/ignored runtime files (sites, logs, local environment).
   if [ "$current" != "$remote" ] || [ "$tracked_dirty" -eq 1 ] || [ "$branch" != "main" ]; then
     force_rebuild=1
+    export NDS_FORCE_ASSET_REBUILD=1
     echo "SOURCE_SYNC=RESET_TO_GITHUB_MAIN"
     if [ "$branch" = "main" ]; then
       git reset --hard "$remote"
