@@ -26,8 +26,7 @@ echo "PORT=8080"
 
 is_dirty() {
   ! git diff --quiet ||
-  ! git diff --cached --quiet ||
-  [ -n "$(git ls-files --others --exclude-standard)" ]
+  ! git diff --cached --quiet
 }
 
 git fetch origin main
@@ -36,22 +35,49 @@ remote="$(git rev-parse origin/main)"
 echo "CODESPACE_HEAD=$current"
 echo "GITHUB_MAIN=$remote"
 
-if [ "$current" != "$remote" ]; then
+branch="$(git branch --show-current)"
+if [ "$branch" != "main" ]; then
+  echo "SOURCE_SYNC=BLOCKED_NON_MAIN_BRANCH:$branch"
+  git status --short
+  exit 22
+fi
+if [ "$current" != "$remote" ] || is_dirty; then
   if is_dirty; then
-    echo "SOURCE_SYNC=BLOCKED_DIRTY_WORKTREE"
-    git status --short
-    echo "SAFE_BOUNDARY=NO_RESET_OF_LOCAL_CHANGES"
-    exit 20
+    mkdir -p "$ROOT/logs"
+    local_patch="$ROOT/logs/pre-sync-tracked-changes-$(date +%Y%m%d_%H%M%S).patch"
+    git diff HEAD --binary > "$local_patch"
+    echo "LOCAL_TRACKED_CHANGES_BACKUP=$local_patch"
+    git stash push -m "NDS ERP pre-sync tracked backup $(date +%Y%m%d_%H%M%S)" -- .
+    echo "LOCAL_TRACKED_CHANGES_STASHED=PASS"
   fi
-  git switch main
-  if git merge-base --is-ancestor "$current" "$remote"; then
-    git pull --ff-only origin main
-  else
-    echo "SOURCE_SYNC=RESET_TO_GITHUB_MAIN"
-    git reset --hard "$remote"
+  current="$(git rev-parse HEAD)"
+  remote="$(git rev-parse origin/main)"
+  if [ "$current" != "$remote" ]; then
+    if git merge-base --is-ancestor "$current" "$remote"; then
+      git pull --ff-only origin main
+    else
+      echo "SOURCE_SYNC=BLOCKED_NON_FAST_FORWARD"
+      echo "LOCAL_CHANGES_BACKUP=logs/pre-sync-tracked-changes-*.patch"
+      echo "SAFE_BOUNDARY=NO_UNSAFE_SOURCE_REWRITE"
+      exit 21
+    fi
+  fi
+  if is_dirty; then
+    echo "SOURCE_SYNC=FAIL_TRACKED_WORKTREE_NOT_CLEAN"
+    git status --short
+    exit 23
+  fi
+  current="$(git rev-parse HEAD)"
+  remote="$(git rev-parse origin/main)"
+  if [ "$current" != "$remote" ]; then
+    echo "SOURCE_SYNC=FAIL_HEAD_MISMATCH"
+    echo "CODESPACE_HEAD=$current"
+    echo "GITHUB_MAIN=$remote"
+    exit 24
   fi
   echo "SOURCE_SYNC=PASS"
-  # Re-enter the updated copy of this script after source synchronization.
+  echo "SOURCE_HEAD=$current"
+  echo "TRACKED_WORKTREE=GITHUB_MAIN"
   exec bash "$ROOT/codespace-apply-quick-actions-ui.sh" "$@"
 fi
 
