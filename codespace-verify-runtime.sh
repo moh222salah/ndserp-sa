@@ -275,6 +275,9 @@ for marker in 'amt-accounts-workspace' 'nds-accounts-dashboard' 'nds-accounts-kp
   fi
 done
 echo "SERVED_ACCOUNTS_DASHBOARD_JS=PASS"
+# Backward-compatible marker for the original Workspace scope gate. The same
+# served bundle above must also contain the redesigned dashboard module.
+echo "SERVED_ACCOUNTS_WORKSPACE_JS=PASS"
 if ! grep -Fq 'nds-sales-workspace-redesign' "$SERVED_JS"; then
   echo "SERVED_SALES_WORKSPACE_JS=FAIL:MISSING_MARKER:nds-sales-workspace-redesign"
   exit 37
