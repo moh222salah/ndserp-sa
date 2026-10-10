@@ -15,7 +15,12 @@ const purchasesDashboard = (() => {
    const r=frappe.get_route();if(!Array.isArray(r)||String(r[0]||"").toLowerCase()!=="workspaces")return false;
    const names=new Set([norm(WORKSPACE)]);
    try{if(frappe.router?.slug)names.add(norm(frappe.router.slug(WORKSPACE)));}catch(_){}
-   return names.has(norm(r[1]))||names.has(norm(frappe.app?.sidebar?.sidebar_title))||names.has(norm(document.querySelector(".workspace-title")?.textContent));
+   const routeName=norm(r[1]);
+   const sidebarKey=norm(frappe.app?.sidebar?.sidebar_title);
+   const pageTitle=norm(document.querySelector(".workspace-title")?.textContent||document.querySelector("#page-Workspaces .page-head .title-text")?.textContent);
+   const scoped=Boolean(document.body?.classList.contains("nds-purchase-workspace-redesign"));
+   // The existing workspace enhancer is an authoritative fallback while Frappe's route/title settles.
+   return names.has(routeName)||names.has(sidebarKey)||names.has(pageTitle)||scoped;
   }catch(_){return false;}
  }
  function syncDir(b){if(b){b.dir=lang()==="ar"?"rtl":"ltr";b.lang=lang();b.setAttribute("data-purchase-direction",b.dir);}}
