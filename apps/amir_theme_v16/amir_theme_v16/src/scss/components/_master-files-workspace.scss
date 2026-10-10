@@ -1,0 +1,97 @@
+/* NDS ERP Saudi — Master Files Workspace card skin.
+ * Presentation-only: preserves Workspace records, content, order, links, values,
+ * permissions, data sources, and business behavior.
+ */
+body.nds-master-files-workspace #page-Workspaces .widget.shortcut-widget-box,
+body.nds-master-files-workspace #page-Workspaces .widget.number-widget-box {
+  position: relative;
+  min-width: 0;
+  overflow: hidden;
+  border: 1px solid var(--border-color, #e5ebf2);
+  border-radius: 15px;
+  background: var(--card-bg, #fff);
+  box-shadow: 0 4px 16px rgba(10, 35, 66, 0.055);
+  transition: transform 180ms ease, box-shadow 180ms ease, border-color 180ms ease;
+}
+body.nds-master-files-workspace #page-Workspaces .widget.shortcut-widget-box::before,
+body.nds-master-files-workspace #page-Workspaces .widget.number-widget-box::before {
+  position: absolute;
+  z-index: 1;
+  inset-block: 0;
+  inset-inline-start: 0;
+  width: 3px;
+  background: linear-gradient(180deg, #164e8f 0%, #0a2342 68%, #d4af37 100%);
+  content: "";
+  pointer-events: none;
+}
+body.nds-master-files-workspace #page-Workspaces .widget.shortcut-widget-box:hover,
+body.nds-master-files-workspace #page-Workspaces .widget.number-widget-box:hover,
+body.nds-master-files-workspace #page-Workspaces .widget.shortcut-widget-box:focus-within,
+body.nds-master-files-workspace #page-Workspaces .widget.number-widget-box:focus-within {
+  transform: translateY(-2px);
+  border-color: color-mix(in srgb, #164e8f 28%, var(--border-color, #e5ebf2));
+  box-shadow: 0 10px 24px rgba(10, 35, 66, 0.095);
+}
+body.nds-master-files-workspace #page-Workspaces .widget.shortcut-widget-box .widget-head,
+body.nds-master-files-workspace #page-Workspaces .widget.number-widget-box .widget-head {
+  padding: 14px 16px 8px;
+  border-bottom-color: color-mix(in srgb, var(--border-color, #e5ebf2) 70%, transparent);
+}
+body.nds-master-files-workspace #page-Workspaces .widget.shortcut-widget-box .widget-title,
+body.nds-master-files-workspace #page-Workspaces .widget.number-widget-box .widget-title {
+  color: var(--heading-color, #0a2342);
+  font-size: 13px;
+  font-weight: 750;
+  line-height: 1.6;
+}
+body.nds-master-files-workspace #page-Workspaces .widget.shortcut-widget-box .widget-body,
+body.nds-master-files-workspace #page-Workspaces .widget.number-widget-box .widget-body {
+  padding: 9px 16px 16px;
+}
+body.nds-master-files-workspace #page-Workspaces .widget.shortcut-widget-box .widget-icon {
+  color: #164e8f;
+}
+body.nds-master-files-workspace #page-Workspaces .widget.number-widget-box .number {
+  color: var(--heading-color, #0a2342);
+  font-size: clamp(22px, 1.7vw, 29px);
+  font-weight: 800;
+  line-height: 1.28;
+  letter-spacing: -0.025em;
+  font-variant-numeric: tabular-nums;
+  overflow-wrap: anywhere;
+}
+body.nds-master-files-workspace #page-Workspaces .widget.number-widget-box .card-stats {
+  margin-top: 7px;
+  font-size: 11px;
+  font-weight: 600;
+}
+body.nds-master-files-workspace #page-Workspaces .widget.shortcut-widget-box a:focus-visible,
+body.nds-master-files-workspace #page-Workspaces .widget.number-widget-box a:focus-visible {
+  outline: 2px solid #164e8f;
+  outline-offset: 3px;
+  border-radius: 5px;
+}
+@media (max-width: 767px) {
+  body.nds-master-files-workspace #page-Workspaces .widget.shortcut-widget-box,
+  body.nds-master-files-workspace #page-Workspaces .widget.number-widget-box {
+    border-radius: 12px;
+  }
+  body.nds-master-files-workspace #page-Workspaces .widget.shortcut-widget-box .widget-head,
+  body.nds-master-files-workspace #page-Workspaces .widget.number-widget-box .widget-head {
+    padding: 12px 13px 7px;
+  }
+  body.nds-master-files-workspace #page-Workspaces .widget.shortcut-widget-box .widget-body,
+  body.nds-master-files-workspace #page-Workspaces .widget.number-widget-box .widget-body {
+    padding: 8px 13px 13px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  body.nds-master-files-workspace #page-Workspaces .widget.shortcut-widget-box,
+  body.nds-master-files-workspace #page-Workspaces .widget.number-widget-box {
+    transition: none;
+  }
+  body.nds-master-files-workspace #page-Workspaces .widget.shortcut-widget-box:hover,
+  body.nds-master-files-workspace #page-Workspaces .widget.number-widget-box:hover {
+    transform: none;
+  }
+}
