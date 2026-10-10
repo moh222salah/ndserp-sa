@@ -282,7 +282,7 @@ for marker in 'nds-sales-dashboard' 'nds-sales-revenue-chart' 'nds-sales-channel
   fi
 done
 echo "BUILT_SALES_DASHBOARD_JS=PASS"
-for marker in 'Monthly Sales' 'Latest Sales Invoices' 'workspace_map' 'frappe.client.get_list' 'reports-1' 'reports-2' 'reports-3' 'Sales by Channel' 'Unavailable' 'Sales NDS ERP' 'ndsSalesOriginalText'; do
+for marker in 'Monthly Sales' 'Latest Sales Invoices' 'workspace_map' 'frappe.client.get_list' 'reports-1' 'reports-2' 'reports-3' 'Sales by Channel' 'Unavailable' 'Sales NDS ERP' 'ndsSalesOriginalText' 'Home' 'Items & Pricing' 'Work' 'Settings' 'Reports'; do
   if ! grep -Fq "$marker" "$LOCAL_JS_ASSET"; then
     echo "BUILT_SALES_LIVE_BILINGUAL=FAIL:MISSING_MARKER:$marker"
     exit 54
@@ -306,6 +306,11 @@ for marker in 'nds-purchase-dashboard' 'nds-purchase-kpi-grid' 'nds-purchase-mon
   fi
 done
 echo "BUILT_PURCHASE_DASHBOARD_JS=PASS"
+if grep -Fq 'data-purchase-period' "$LOCAL_JS_ASSET" || grep -Fq 'لوحة المشتريات' "$LOCAL_JS_ASSET"; then
+  echo "BUILT_PURCHASE_DASHBOARD_TOP_METADATA=FAIL:STILL_PRESENT"
+  exit 56
+fi
+echo "BUILT_PURCHASE_DASHBOARD_TOP_METADATA=PASS"
 if ! grep -Fq 'nds-master-files-workspace' "$LOCAL_JS_ASSET"; then
   echo "BUILT_MASTER_FILES_WORKSPACE_JS=FAIL:MISSING_MARKER:nds-master-files-workspace"
   exit 60
@@ -362,7 +367,7 @@ for marker in 'nds-sales-dashboard' 'nds-sales-revenue-chart' 'nds-sales-channel
   fi
 done
 echo "SERVED_SALES_DASHBOARD_JS=PASS"
-for marker in 'Monthly Sales' 'Latest Sales Invoices' 'workspace_map' 'frappe.client.get_list' 'reports-1' 'reports-2' 'reports-3' 'Sales by Channel' 'Unavailable' 'Sales NDS ERP' 'ndsSalesOriginalText'; do
+for marker in 'Monthly Sales' 'Latest Sales Invoices' 'workspace_map' 'frappe.client.get_list' 'reports-1' 'reports-2' 'reports-3' 'Sales by Channel' 'Unavailable' 'Sales NDS ERP' 'ndsSalesOriginalText' 'Home' 'Items & Pricing' 'Work' 'Settings' 'Reports'; do
   if ! grep -Fq "$marker" "$SERVED_JS"; then
     echo "SERVED_SALES_LIVE_BILINGUAL=FAIL:MISSING_MARKER:$marker"
     exit 56
@@ -386,6 +391,11 @@ for marker in 'nds-purchase-dashboard' 'nds-purchase-kpi-grid' 'nds-purchase-mon
   fi
 done
 echo "SERVED_PURCHASE_DASHBOARD_JS=PASS"
+if grep -Fq 'data-purchase-period' "$SERVED_JS" || grep -Fq 'لوحة المشتريات' "$SERVED_JS"; then
+  echo "SERVED_PURCHASE_DASHBOARD_TOP_METADATA=FAIL:STILL_PRESENT"
+  exit 57
+fi
+echo "SERVED_PURCHASE_DASHBOARD_TOP_METADATA=PASS"
 if ! grep -Fq 'nds-master-files-workspace' "$SERVED_JS"; then
   echo "SERVED_MASTER_FILES_WORKSPACE_JS=FAIL:MISSING_MARKER:nds-master-files-workspace"
   exit 61
