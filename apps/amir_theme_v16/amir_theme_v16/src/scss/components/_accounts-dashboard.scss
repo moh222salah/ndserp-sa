@@ -229,6 +229,29 @@ body.amt-accounts-workspace.nds-accounts-dashboard-ready #page-Workspaces .nds-a
   letter-spacing: 0;
 }
 
+body.amt-accounts-workspace.nds-accounts-dashboard-ready #page-Workspaces .nds-accounts-kpi-indicator {
+  display: inline-flex;
+  flex: 0 0 auto;
+  align-items: center;
+  justify-content: center;
+  margin-inline-start: 2px;
+  padding: 4px 7px;
+  border-radius: 6px;
+  background: #eaf5ef;
+  color: var(--nds-accounts-green);
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0;
+  line-height: 1.3;
+  white-space: nowrap;
+  direction: ltr;
+}
+
+body.amt-accounts-workspace.nds-accounts-dashboard-ready #page-Workspaces .nds-accounts-kpi-card[data-kpi="expenses"] .nds-accounts-kpi-indicator {
+  background: #fbf1e2;
+  color: #b37b31;
+}
+
 body.amt-accounts-workspace.nds-accounts-dashboard-ready #page-Workspaces .nds-accounts-kpi-foot {
   display: flex;
   align-items: center;
