@@ -12,6 +12,7 @@ const salesDashboard = (() => {
 	const READY_CLASS = "nds-sales-dashboard-ready";
 	let settleTimers = [];
 	let observer = null;
+	let directionObserver = null;
 	let observedBody = null;
 	let installStarted = false;
 
@@ -40,6 +41,32 @@ const salesDashboard = (() => {
 		} catch (_) {
 			return false;
 		}
+	}
+
+	function currentLanguage() {
+		const bootLanguage = window.frappe && frappe.boot && frappe.boot.lang;
+		return String(
+			bootLanguage
+			|| (document.documentElement && document.documentElement.getAttribute("lang"))
+			|| "en"
+		).toLowerCase();
+	}
+
+	function currentDirection() {
+		const htmlDirection = String(
+			document.documentElement && document.documentElement.getAttribute("dir") || ""
+		).toLowerCase();
+		if (htmlDirection === "rtl" || htmlDirection === "ltr") return htmlDirection;
+		return currentLanguage().startsWith("ar") ? "rtl" : "ltr";
+	}
+
+	function syncDashboardDirection(board) {
+		if (!board) return;
+		const direction = currentDirection();
+		board.setAttribute("dir", direction);
+		board.setAttribute("data-sales-direction", direction);
+		const language = currentLanguage();
+		if (language) board.setAttribute("lang", language);
 	}
 
 	function make(tag, className, text) {
@@ -174,7 +201,7 @@ const salesDashboard = (() => {
 	function buildDashboard() {
 		const board = make("section", DASHBOARD_CLASS);
 		board.id = DASHBOARD_ID;
-		board.setAttribute("dir", "rtl");
+		syncDashboardDirection(board);
 		board.setAttribute("aria-label", "لوحة المبيعات");
 		board.innerHTML =
 			'<header class="nds-sales-dashboard-header">' +
@@ -547,6 +574,7 @@ const salesDashboard = (() => {
 		if (!host) return;
 		const current = document.getElementById(DASHBOARD_ID);
 		if (current && current.isConnected && current.parentElement === host) {
+			syncDashboardDirection(current);
 			document.body.classList.add(READY_CLASS);
 			return;
 		}
@@ -580,6 +608,17 @@ const salesDashboard = (() => {
 				frappe.router.on("change", scheduleSync);
 			}
 			window.addEventListener("popstate", scheduleSync);
+			if (!directionObserver && document.documentElement) {
+				directionObserver = new MutationObserver(() => {
+					const board = document.getElementById(DASHBOARD_ID);
+					if (board && isSalesWorkspace()) syncDashboardDirection(board);
+					scheduleSync();
+				});
+				directionObserver.observe(document.documentElement, {
+					attributes: true,
+					attributeFilter: ["dir", "lang"],
+				});
+			}
 			if (document.body && observedBody !== document.body) {
 				if (observer) observer.disconnect();
 				observedBody = document.body;
