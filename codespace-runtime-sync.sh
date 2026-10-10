@@ -151,6 +151,16 @@ for key in required:
             ".nds-sales-invoices",
             ".nds-sales-dashboard[dir=rtl]",
             ".nds-sales-dashboard[dir=ltr]",
+            ".nds-sales-workspace-sections",
+            ".nds-sales-workspace-sections[dir=rtl]",
+            ".nds-sales-workspace-sections[dir=ltr]",
+            ".nds-sales-section-grid",
+            ".nds-sales-section-card",
+            ".nds-sales-section-card[dir=rtl]",
+            ".nds-sales-section-card[dir=ltr]",
+            ".nds-sales-section-link",
+            "grid-template-columns:repeat(2,minmax(0,1fr))",
+            "grid-template-columns:minmax(0,1fr)",
             "grid-template-columns:repeat(4,minmax(0,1fr))",
         )
         missing = [marker for marker in required_sales_workspace_css if marker not in css_compact]
@@ -171,9 +181,6 @@ for key in required:
             raise SystemExit(
                 "SALES_WORKSPACE_SECTIONS_CSS=FAIL:MISSING_MARKERS:" + ",".join(missing)
             )
-        hidden_sales_sections = "nds-sales-dashboard-ready#page-workspaces#editorjs{display:none!important"
-        if hidden_sales_sections in css_compact:
-            raise SystemExit("SALES_WORKSPACE_SECTIONS=FAIL:HIDDEN_BY_THEME")
         print("SALES_WORKSPACE_SECTIONS_CSS=PASS")
         hidden_sales_header = "nds-sales-dashboard-ready#page-workspaces.page-head{display:none!important"
         if hidden_sales_header in css_compact:
@@ -248,6 +255,12 @@ for key in required:
             "nds-sales-revenue-chart",
             "nds-sales-channels-chart",
             "nds-sales-invoices",
+            "nds-sales-workspace-sections",
+            "nds-sales-section-card",
+            "workspace_map",
+            "الأصناف والتسعير",
+            "الإعدادات",
+            "التقارير",
             "data-sales-direction",
         )
         missing = [marker for marker in required_sales_workspace_js if marker not in js]
