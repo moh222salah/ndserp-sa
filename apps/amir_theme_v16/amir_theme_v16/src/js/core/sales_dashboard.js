@@ -982,8 +982,12 @@ const salesDashboard = (() => {
 				if (observer) observer.disconnect();
 				observedBody = document.body;
 				observer = new MutationObserver(() => {
-					if (isSalesWorkspace() && !document.getElementById(DASHBOARD_ID)) scheduleSync();
-					else if (!isSalesWorkspace() && document.getElementById(DASHBOARD_ID)) cleanup();
+					if (isSalesWorkspace()) {
+						if (!document.getElementById(DASHBOARD_ID)) scheduleSync();
+						else syncArabicWorkspaceCardVisibility(currentDirection());
+					} else if (document.getElementById(DASHBOARD_ID)) {
+						cleanup();
+					}
 				});
 				observer.observe(document.body, { childList: true, subtree: true });
 			}
