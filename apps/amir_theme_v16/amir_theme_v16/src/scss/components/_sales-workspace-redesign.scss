@@ -12,7 +12,7 @@ body.nds-sales-workspace-redesign #page-Workspaces {
   background: #f4f7fb;
   color: var(--nds-sales-ink);
 }
-body.nds-sales-workspace-redesign #page-Workspaces .page-head {
+body.nds-sales-workspace-redesign:not(.nds-sales-dashboard-ready) #page-Workspaces .page-head {
   background: linear-gradient(115deg, #0A2342 0%, #164E8F 72%, #1d5c9f 100%);
   border: 0;
   border-radius: 16px;
@@ -20,9 +20,9 @@ body.nds-sales-workspace-redesign #page-Workspaces .page-head {
   padding: 20px 24px;
   box-shadow: 0 10px 28px rgba(10,35,66,.14);
 }
-body.nds-sales-workspace-redesign #page-Workspaces .page-head .title-text,
-body.nds-sales-workspace-redesign #page-Workspaces .page-head h3,
-body.nds-sales-workspace-redesign #page-Workspaces .page-head .ellipsis {
+body.nds-sales-workspace-redesign:not(.nds-sales-dashboard-ready) #page-Workspaces .page-head .title-text,
+body.nds-sales-workspace-redesign:not(.nds-sales-dashboard-ready) #page-Workspaces .page-head h3,
+body.nds-sales-workspace-redesign:not(.nds-sales-dashboard-ready) #page-Workspaces .page-head .ellipsis {
   color: #fff;
 }
 body.nds-sales-workspace-redesign #page-Workspaces .layout-main-section {
@@ -450,10 +450,7 @@ body.nds-purchase-workspace-redesign #page-Workspaces #editorjs table tbody tr:h
   }
 }
 
-/* Reference-led Sales Dashboard: live KPI row, two charts, latest invoices table. */
-body.nds-sales-workspace-redesign.nds-sales-dashboard-ready #page-Workspaces .page-head {
-  display: none !important;
-}
+/* The Frappe page header remains visible; only the native Workspace editor is replaced. */
 body.nds-sales-workspace-redesign.nds-sales-dashboard-ready #page-Workspaces .layout-main-section {
   box-sizing: border-box;
   padding: 8px clamp(10px, 1.1vw, 18px) 24px;
@@ -468,10 +465,15 @@ body.nds-sales-workspace-redesign.nds-sales-dashboard-ready #page-Workspaces .nd
   width: 100%;
   min-width: 0;
   color: #27323c;
-  direction: rtl;
   font-family: inherit;
   line-height: 1.5;
   padding: 4px 0 12px;
+}
+body.nds-sales-workspace-redesign.nds-sales-dashboard-ready #page-Workspaces .nds-sales-dashboard[dir="rtl"] {
+  direction: rtl;
+}
+body.nds-sales-workspace-redesign.nds-sales-dashboard-ready #page-Workspaces .nds-sales-dashboard[dir="ltr"] {
+  direction: ltr;
 }
 body.nds-sales-workspace-redesign.nds-sales-dashboard-ready #page-Workspaces .nds-sales-dashboard *,
 body.nds-sales-workspace-redesign.nds-sales-dashboard-ready #page-Workspaces .nds-sales-dashboard *::before,
@@ -737,7 +739,7 @@ body.nds-sales-workspace-redesign.nds-sales-dashboard-ready #page-Workspaces .nd
 }
 body.nds-sales-workspace-redesign.nds-sales-dashboard-ready #page-Workspaces .nds-sales-channel-fill {
   height: 100%;
-  margin-right: auto;
+  margin-inline-start: auto;
   border-radius: 5px 0 0 5px;
   background: #4b9b8c;
   transition: width .2s ease;
@@ -784,7 +786,7 @@ body.nds-sales-workspace-redesign.nds-sales-dashboard-ready #page-Workspaces .nd
   min-width: 650px;
   border-collapse: collapse;
   border-spacing: 0;
-  text-align: right;
+  text-align: start;
 }
 body.nds-sales-workspace-redesign.nds-sales-dashboard-ready #page-Workspaces .nds-sales-invoice-table th {
   padding: 10px 18px;
