@@ -287,7 +287,7 @@ fi
 echo "BUILT_PURCHASE_WORKSPACE_JS=PASS"
 for marker in 'nds-purchase-dashboard' 'nds-purchase-kpi-grid' 'nds-purchase-month-columns' 'nds-purchase-orders-table' 'Purchase Invoice' 'Purchase Receipt' 'data-purchase-direction'; do
   if ! grep -Fq "$marker" "$LOCAL_JS_ASSET"; then
-    echo "BUILT_PURCHASE_DASHBOARD_JS=FAIL:MISSING_MARKER:$LOCAL_JS_ASSET"
+    echo "BUILT_PURCHASE_DASHBOARD_JS=FAIL:MISSING_MARKER:$marker"
     exit 55
   fi
 done
@@ -362,7 +362,7 @@ fi
 echo "SERVED_PURCHASE_WORKSPACE_JS=PASS"
 for marker in 'nds-purchase-dashboard' 'nds-purchase-kpi-grid' 'nds-purchase-month-columns' 'nds-purchase-orders-table' 'Purchase Invoice' 'Purchase Receipt' 'data-purchase-direction'; do
   if ! grep -Fq "$marker" "$SERVED_JS"; then
-    echo "SERVED_PURCHASE_DASHBOARD_JS=FAIL:MISSING_MARKER:$SERVED_JS"
+    echo "SERVED_PURCHASE_DASHBOARD_JS=FAIL:MISSING_MARKER:$marker"
     exit 55
   fi
 done
