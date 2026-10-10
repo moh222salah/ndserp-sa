@@ -70,7 +70,7 @@ for marker in '.nds-warehouse-workspace' 'border-block-start:3pxsolid#0a2342'; d
   fi
 done
 echo "BUILT_WAREHOUSE_WORKSPACE_CSS=PASS"
-for marker in '.amt-accounts-workspace' '.codex-editor__redactor' 'grid-template-columns:repeat(12,minmax(0,1fr))' '#bd5548' '.nds-accounts-dashboard' '.nds-accounts-kpi-grid' '.nds-accounts-kpi-indicator' '.nds-accounts-analysis-grid' '.nds-accounts-expenses-chart' '.nds-accounts-revenue-chart' '.nds-accounts-invoice-table' '.nds-accounts-status.overdue' 'grid-template-columns:repeat(4,minmax(0,1fr))'; do
+for marker in '.amt-accounts-workspace' '.codex-editor__redactor' 'grid-template-columns:repeat(12,minmax(0,1fr))' '#bd5548' '.nds-accounts-dashboard' '.nds-accounts-kpi-grid' '.nds-accounts-kpi-indicator' '.nds-accounts-analysis-grid' '.nds-accounts-expense-list' '.nds-accounts-expenses-axis' '.nds-accounts-chart-plot' '.nds-accounts-month-bars' '.nds-accounts-invoice-table' '.nds-accounts-status.overdue' 'grid-template-columns:repeat(4,minmax(0,1fr))'; do
   if ! grep -Fq "$marker" "$LOCAL_CSS"; then
     echo "BUILT_ACCOUNTS_WORKSPACE_CSS=FAIL:MISSING_MARKER:$marker"
     exit 30
@@ -160,7 +160,7 @@ for marker in '.nds-warehouse-workspace' 'border-block-start:3pxsolid#0a2342'; d
   fi
 done
 echo "SERVED_WAREHOUSE_WORKSPACE_CSS=PASS"
-for marker in '.amt-accounts-workspace' '.codex-editor__redactor' 'grid-template-columns:repeat(12,minmax(0,1fr))' '#bd5548' '.nds-accounts-dashboard' '.nds-accounts-kpi-grid' '.nds-accounts-kpi-indicator' '.nds-accounts-analysis-grid' '.nds-accounts-expenses-chart' '.nds-accounts-revenue-chart' '.nds-accounts-invoice-table' '.nds-accounts-status.overdue' 'grid-template-columns:repeat(4,minmax(0,1fr))'; do
+for marker in '.amt-accounts-workspace' '.codex-editor__redactor' 'grid-template-columns:repeat(12,minmax(0,1fr))' '#bd5548' '.nds-accounts-dashboard' '.nds-accounts-kpi-grid' '.nds-accounts-kpi-indicator' '.nds-accounts-analysis-grid' '.nds-accounts-expense-list' '.nds-accounts-expenses-axis' '.nds-accounts-chart-plot' '.nds-accounts-month-bars' '.nds-accounts-invoice-table' '.nds-accounts-status.overdue' 'grid-template-columns:repeat(4,minmax(0,1fr))'; do
   if ! grep -Fq "$marker" "$LOCAL_CSS"; then
     echo "SERVED_ACCOUNTS_WORKSPACE_CSS=FAIL:MISSING_MARKER:$marker"
     exit 31
