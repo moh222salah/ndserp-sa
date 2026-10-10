@@ -121,6 +121,12 @@ for key in required:
             ".codex-editor__redactor",
             "grid-template-columns:repeat(12,minmax(0,1fr))",
             "#bd5548",
+            ".nds-accounts-dashboard",
+            ".nds-accounts-kpi-grid",
+            ".nds-accounts-expenses-chart",
+            ".nds-accounts-revenue-chart",
+            ".nds-accounts-invoice-table",
+            "grid-template-columns:repeat(4,minmax(0,1fr))",
         )
         missing = [marker for marker in required_accounts_css if marker not in css_compact]
         if missing:
@@ -182,8 +188,18 @@ for key in required:
         if "nds-warehouse-workspace" not in js:
             raise SystemExit("WAREHOUSE_WORKSPACE_JS=FAIL:MISSING_MARKER:nds-warehouse-workspace")
         print("WAREHOUSE_WORKSPACE_JS=PASS")
-        if "amt-accounts-workspace" not in js:
-            raise SystemExit("ACCOUNTS_WORKSPACE_JS=FAIL:MISSING_MARKER:amt-accounts-workspace")
+        required_accounts_js = (
+            "amt-accounts-workspace",
+            "nds-accounts-dashboard",
+            "nds-accounts-kpi-grid",
+            "nds-accounts-invoice-table",
+            "Accounts Dashboard",
+        )
+        missing = [marker for marker in required_accounts_js if marker not in js]
+        if missing:
+            raise SystemExit(
+                "ACCOUNTS_WORKSPACE_JS=FAIL:MISSING_MARKERS:" + ",".join(missing)
+            )
         print("ACCOUNTS_WORKSPACE_JS=PASS")
         required_sales_workspace_js = (
             "nds-sales-workspace-redesign",
