@@ -70,7 +70,7 @@ for marker in '.nds-warehouse-workspace' 'border-block-start:3pxsolid#0a2342'; d
   fi
 done
 echo "BUILT_WAREHOUSE_WORKSPACE_CSS=PASS"
-for marker in '.amt-accounts-workspace' '.codex-editor__redactor' 'grid-template-columns:repeat(12,minmax(0,1fr))' '#bd5548'; do
+for marker in '.amt-accounts-workspace' '.codex-editor__redactor' 'grid-template-columns:repeat(12,minmax(0,1fr))' '#bd5548' '.nds-accounts-dashboard' '.nds-accounts-kpi-grid' '.nds-accounts-expenses-chart' '.nds-accounts-revenue-chart' '.nds-accounts-invoice-table' 'grid-template-columns:repeat(4,minmax(0,1fr))'; do
   if ! grep -Fq "$marker" "$LOCAL_CSS"; then
     echo "BUILT_ACCOUNTS_WORKSPACE_CSS=FAIL:MISSING_MARKER:$marker"
     exit 30
@@ -144,7 +144,7 @@ for marker in '.nds-warehouse-workspace' 'border-block-start:3pxsolid#0a2342'; d
   fi
 done
 echo "SERVED_WAREHOUSE_WORKSPACE_CSS=PASS"
-for marker in '.amt-accounts-workspace' '.codex-editor__redactor' 'grid-template-columns:repeat(12,minmax(0,1fr))' '#bd5548'; do
+for marker in '.amt-accounts-workspace' '.codex-editor__redactor' 'grid-template-columns:repeat(12,minmax(0,1fr))' '#bd5548' '.nds-accounts-dashboard' '.nds-accounts-kpi-grid' '.nds-accounts-expenses-chart' '.nds-accounts-revenue-chart' '.nds-accounts-invoice-table' 'grid-template-columns:repeat(4,minmax(0,1fr))'; do
   if ! grep -Fq "$marker" "$LOCAL_CSS"; then
     echo "SERVED_ACCOUNTS_WORKSPACE_CSS=FAIL:MISSING_MARKER:$marker"
     exit 31
@@ -208,11 +208,13 @@ if ! grep -Fq 'nds-warehouse-workspace' "$LOCAL_JS_ASSET"; then
   exit 28
 fi
 echo "BUILT_WAREHOUSE_WORKSPACE_JS=PASS"
-if ! grep -Fq 'amt-accounts-workspace' "$LOCAL_JS_ASSET"; then
-  echo "BUILT_ACCOUNTS_WORKSPACE_JS=FAIL:MISSING_MARKER:amt-accounts-workspace"
-  exit 32
-fi
-echo "BUILT_ACCOUNTS_WORKSPACE_JS=PASS"
+for marker in 'amt-accounts-workspace' 'nds-accounts-dashboard' 'nds-accounts-kpi-grid' 'nds-accounts-invoice-table' 'Accounts Dashboard'; do
+  if ! grep -Fq "$marker" "$LOCAL_JS_ASSET"; then
+    echo "BUILT_ACCOUNTS_DASHBOARD_JS=FAIL:MISSING_MARKER:$marker"
+    exit 46
+  fi
+done
+echo "BUILT_ACCOUNTS_DASHBOARD_JS=PASS"
 if ! grep -Fq 'nds-sales-workspace-redesign' "$LOCAL_JS_ASSET"; then
   echo "BUILT_SALES_WORKSPACE_JS=FAIL:MISSING_MARKER:nds-sales-workspace-redesign"
   exit 36
@@ -256,11 +258,13 @@ if ! grep -Fq 'nds-warehouse-workspace' "$SERVED_JS"; then
   exit 29
 fi
 echo "SERVED_WAREHOUSE_WORKSPACE_JS=PASS"
-if ! grep -Fq 'amt-accounts-workspace' "$SERVED_JS"; then
-  echo "SERVED_ACCOUNTS_WORKSPACE_JS=FAIL:MISSING_MARKER:amt-accounts-workspace"
-  exit 33
-fi
-echo "SERVED_ACCOUNTS_WORKSPACE_JS=PASS"
+for marker in 'amt-accounts-workspace' 'nds-accounts-dashboard' 'nds-accounts-kpi-grid' 'nds-accounts-invoice-table' 'Accounts Dashboard'; do
+  if ! grep -Fq "$marker" "$SERVED_JS"; then
+    echo "SERVED_ACCOUNTS_DASHBOARD_JS=FAIL:MISSING_MARKER:$marker"
+    exit 47
+  fi
+done
+echo "SERVED_ACCOUNTS_DASHBOARD_JS=PASS"
 if ! grep -Fq 'nds-sales-workspace-redesign' "$SERVED_JS"; then
   echo "SERVED_SALES_WORKSPACE_JS=FAIL:MISSING_MARKER:nds-sales-workspace-redesign"
   exit 37
