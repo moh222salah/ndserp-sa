@@ -123,9 +123,12 @@ for key in required:
             "#bd5548",
             ".nds-accounts-dashboard",
             ".nds-accounts-kpi-grid",
+            ".nds-accounts-kpi-indicator",
+            ".nds-accounts-analysis-grid",
             ".nds-accounts-expenses-chart",
             ".nds-accounts-revenue-chart",
             ".nds-accounts-invoice-table",
+            ".nds-accounts-status.overdue",
             "grid-template-columns:repeat(4,minmax(0,1fr))",
         )
         missing = [marker for marker in required_accounts_css if marker not in css_compact]
@@ -216,8 +219,20 @@ for key in required:
             "amt-accounts-workspace",
             "nds-accounts-dashboard",
             "nds-accounts-kpi-grid",
+            "nds-accounts-kpi-indicator",
             "nds-accounts-invoice-table",
             "Accounts Dashboard",
+            "386,400",
+            "1,284,600",
+            "898,200",
+            "214,500",
+            "12.4% ↑",
+            "4.6% ↑",
+            "SI-2026-0339",
+            "SI-2026-0321",
+            "SI-2026-0330",
+            "SI-2026-0335",
+            "SI-2026-0337",
         )
         missing = [marker for marker in required_accounts_js if marker not in js]
         if missing:
