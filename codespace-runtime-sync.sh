@@ -160,7 +160,7 @@ for key in required:
             )
         print("SALES_WORKSPACE_CSS=PASS")
         required_sales_sections_css = (
-            "أقسام المبيعات",
+            ".nds-sales-dashboard-ready#page-workspaces#editorjs::before",
             ".codex-editor__redactor",
             "grid-template-columns:repeat(12,minmax(0,1fr))",
             "grid-column:span6",
