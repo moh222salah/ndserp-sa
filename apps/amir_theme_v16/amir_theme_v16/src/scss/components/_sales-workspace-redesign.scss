@@ -450,7 +450,10 @@ body.nds-purchase-workspace-redesign #page-Workspaces #editorjs table tbody tr:h
   }
 }
 
-/* The Frappe page header remains visible; only the native Workspace editor is replaced. */
+/* Keep the five native Sales navigation sections visible beneath the redesigned dashboard.
+ * The custom dashboard owns its KPIs/charts; the original Workspace records and
+ * destinations stay intact, while only the legacy duplicate header/shortcuts/chart
+ * blocks remain out of view. */
 body.nds-sales-workspace-redesign.nds-sales-dashboard-ready #page-Workspaces .layout-main-section {
   box-sizing: border-box;
   padding: 8px clamp(10px, 1.1vw, 18px) 24px;
@@ -459,7 +462,104 @@ body.nds-sales-workspace-redesign.nds-sales-dashboard-ready #page-Workspaces .la
   box-shadow: none;
 }
 body.nds-sales-workspace-redesign.nds-sales-dashboard-ready #page-Workspaces #editorjs {
-  display: none !important;
+  display: block;
+  width: 100%;
+  max-width: none;
+  margin: 22px 0 0;
+  padding: 0 0 18px;
+}
+body.nds-sales-workspace-redesign.nds-sales-dashboard-ready #page-Workspaces #editorjs::before {
+  content: "أقسام المبيعات";
+  display: block;
+  margin: 0 0 14px;
+  padding-inline-start: 12px;
+  border-inline-start: 3px solid #D4AF37;
+  color: #0A2342;
+  font-size: 18px;
+  font-weight: 800;
+  line-height: 1.45;
+}
+body.nds-sales-workspace-redesign.nds-sales-dashboard-ready #page-Workspaces .layout-main-section:has(.nds-sales-dashboard[dir="ltr"]) #editorjs::before {
+  content: "Sales sections";
+}
+body.nds-sales-workspace-redesign.nds-sales-dashboard-ready #page-Workspaces #editorjs .codex-editor__redactor {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  align-items: stretch;
+  align-content: start;
+  gap: 16px;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+}
+body.nds-sales-workspace-redesign.nds-sales-dashboard-ready #page-Workspaces #editorjs .ce-block {
+  box-sizing: border-box;
+  display: block;
+  float: none;
+  width: 100%;
+  max-width: none;
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+}
+/* The live Sales Workspace stores these five navigation groups as link cards.
+ * Show those records only: avoid duplicating the redesigned dashboard above. */
+body.nds-sales-workspace-redesign.nds-sales-dashboard-ready #page-Workspaces #editorjs .ce-block:not(:has(.links-widget-box)) {
+  display: none;
+}
+body.nds-sales-workspace-redesign.nds-sales-dashboard-ready #page-Workspaces #editorjs .ce-block:has(.links-widget-box) {
+  grid-column: span 6;
+  min-width: 0;
+}
+body.nds-sales-workspace-redesign.nds-sales-dashboard-ready #page-Workspaces #editorjs .widget.links-widget-box {
+  box-sizing: border-box;
+  height: 100%;
+  min-height: 100%;
+  overflow: hidden;
+  border: 1px solid #e1e6ee;
+  border-top: 3px solid #D4AF37;
+  border-radius: 14px;
+  background: #fff;
+  box-shadow: 0 4px 16px rgba(10, 35, 66, .055);
+  transition: border-color 160ms ease, box-shadow 160ms ease, transform 160ms ease;
+}
+body.nds-sales-workspace-redesign.nds-sales-dashboard-ready #page-Workspaces #editorjs .widget.links-widget-box:hover {
+  transform: translateY(-2px);
+  border-color: #c5d5e8;
+  box-shadow: 0 9px 24px rgba(10, 35, 66, .09);
+}
+body.nds-sales-workspace-redesign.nds-sales-dashboard-ready #page-Workspaces #editorjs .links-widget-box .widget-head {
+  padding: 16px 18px 9px;
+  border-bottom: 1px solid #edf1f6;
+}
+body.nds-sales-workspace-redesign.nds-sales-dashboard-ready #page-Workspaces #editorjs .links-widget-box .widget-title {
+  color: #0A2342;
+  font-size: 15px;
+  font-weight: 800;
+}
+body.nds-sales-workspace-redesign.nds-sales-dashboard-ready #page-Workspaces #editorjs .links-widget-box .widget-body {
+  padding: 0 14px 14px;
+}
+body.nds-sales-workspace-redesign.nds-sales-dashboard-ready #page-Workspaces #editorjs .links-widget-box .link-item {
+  min-height: 42px;
+  padding: 10px 8px;
+  border-radius: 7px;
+  transition: background 140ms ease, color 140ms ease;
+}
+body.nds-sales-workspace-redesign.nds-sales-dashboard-ready #page-Workspaces #editorjs .links-widget-box .link-item:not(:first-child) {
+  border-top: 1px solid rgba(225, 230, 238, .72);
+}
+body.nds-sales-workspace-redesign.nds-sales-dashboard-ready #page-Workspaces #editorjs .links-widget-box .link-item:hover {
+  background: #f2f6fc;
+  color: #164E8F;
+}
+@media (max-width: 760px) {
+  body.nds-sales-workspace-redesign.nds-sales-dashboard-ready #page-Workspaces #editorjs .codex-editor__redactor {
+    gap: 12px;
+  }
+  body.nds-sales-workspace-redesign.nds-sales-dashboard-ready #page-Workspaces #editorjs .ce-block:has(.links-widget-box) {
+    grid-column: span 12;
+  }
 }
 body.nds-sales-workspace-redesign.nds-sales-dashboard-ready #page-Workspaces .nds-sales-dashboard {
   width: 100%;

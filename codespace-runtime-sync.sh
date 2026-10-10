@@ -154,6 +154,22 @@ for key in required:
                 "SALES_WORKSPACE_CSS=FAIL:MISSING_MARKERS:" + ",".join(missing)
             )
         print("SALES_WORKSPACE_CSS=PASS")
+        required_sales_sections_css = (
+            "أقسام المبيعات",
+            ".codex-editor__redactor",
+            "grid-template-columns:repeat(12,minmax(0,1fr))",
+            "grid-column:span6",
+            ".links-widget-box",
+        )
+        missing = [marker for marker in required_sales_sections_css if marker not in css_compact]
+        if missing:
+            raise SystemExit(
+                "SALES_WORKSPACE_SECTIONS_CSS=FAIL:MISSING_MARKERS:" + ",".join(missing)
+            )
+        hidden_sales_sections = "nds-sales-dashboard-ready#page-workspaces#editorjs{display:none!important"
+        if hidden_sales_sections in css_compact:
+            raise SystemExit("SALES_WORKSPACE_SECTIONS=FAIL:HIDDEN_BY_THEME")
+        print("SALES_WORKSPACE_SECTIONS_CSS=PASS")
         hidden_sales_header = "nds-sales-dashboard-ready#page-workspaces.page-head{display:none!important"
         if hidden_sales_header in css_compact:
             raise SystemExit("SALES_WORKSPACE_HEADER=FAIL:HIDDEN_BY_THEME")
