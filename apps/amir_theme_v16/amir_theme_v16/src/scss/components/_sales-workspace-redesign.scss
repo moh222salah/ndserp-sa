@@ -472,11 +472,11 @@ body.nds-sales-workspace-redesign.nds-sales-dashboard-ready #page-Workspaces .nd
   font-family: inherit;
   line-height: 1.55;
 }
-body.nds-sales-workspace-redesign.nds-sales-dashboard-ready #page-Workspaces .nds-sales-workspace-sections[dir="rtl"] {
+body.nds-sales-workspace-redesign.nds-sales-dashboard-ready #page-Workspaces .nds-sales-workspace-sections[dir=rtl] {
   direction: rtl;
   text-align: right;
 }
-body.nds-sales-workspace-redesign.nds-sales-dashboard-ready #page-Workspaces .nds-sales-workspace-sections[dir="ltr"] {
+body.nds-sales-workspace-redesign.nds-sales-dashboard-ready #page-Workspaces .nds-sales-workspace-sections[dir=ltr] {
   direction: ltr;
   text-align: left;
 }
@@ -523,11 +523,11 @@ body.nds-sales-workspace-redesign.nds-sales-dashboard-ready #page-Workspaces .nd
   border-color: #c5d5e8;
   box-shadow: 0 9px 24px rgba(10, 35, 66, .09);
 }
-body.nds-sales-workspace-redesign.nds-sales-dashboard-ready #page-Workspaces .nds-sales-section-card[dir="rtl"] {
+body.nds-sales-workspace-redesign.nds-sales-dashboard-ready #page-Workspaces .nds-sales-section-card[dir=rtl] {
   direction: rtl;
   text-align: right;
 }
-body.nds-sales-workspace-redesign.nds-sales-dashboard-ready #page-Workspaces .nds-sales-section-card[dir="ltr"] {
+body.nds-sales-workspace-redesign.nds-sales-dashboard-ready #page-Workspaces .nds-sales-section-card[dir=ltr] {
   direction: ltr;
   text-align: left;
 }
@@ -626,26 +626,26 @@ body.nds-sales-workspace-redesign.nds-sales-dashboard-ready #page-Workspaces .nd
   direction: ltr;
 }
 /* Force page direction to follow the active Frappe language, including visual item flow. */
-body.nds-sales-workspace-redesign.nds-sales-dashboard-ready #page-Workspaces .nds-sales-dashboard[dir="rtl"],
-body.nds-sales-workspace-redesign.nds-sales-dashboard-ready #page-Workspaces .nds-sales-dashboard[dir="rtl"] .nds-sales-kpi-grid,
-body.nds-sales-workspace-redesign.nds-sales-dashboard-ready #page-Workspaces .nds-sales-dashboard[dir="rtl"] .nds-sales-charts-grid,
-body.nds-sales-workspace-redesign.nds-sales-dashboard-ready #page-Workspaces .nds-sales-dashboard[dir="rtl"] .nds-sales-panel-heading,
-body.nds-sales-workspace-redesign.nds-sales-dashboard-ready #page-Workspaces .nds-sales-dashboard[dir="rtl"] .nds-sales-invoice-table {
+body.nds-sales-workspace-redesign.nds-sales-dashboard-ready #page-Workspaces .nds-sales-dashboard[dir=rtl],
+body.nds-sales-workspace-redesign.nds-sales-dashboard-ready #page-Workspaces .nds-sales-dashboard[dir=rtl] .nds-sales-kpi-grid,
+body.nds-sales-workspace-redesign.nds-sales-dashboard-ready #page-Workspaces .nds-sales-dashboard[dir=rtl] .nds-sales-charts-grid,
+body.nds-sales-workspace-redesign.nds-sales-dashboard-ready #page-Workspaces .nds-sales-dashboard[dir=rtl] .nds-sales-panel-heading,
+body.nds-sales-workspace-redesign.nds-sales-dashboard-ready #page-Workspaces .nds-sales-dashboard[dir=rtl] .nds-sales-invoice-table {
   direction: rtl;
   text-align: right;
 }
-body.nds-sales-workspace-redesign.nds-sales-dashboard-ready #page-Workspaces .nds-sales-dashboard[dir="ltr"],
-body.nds-sales-workspace-redesign.nds-sales-dashboard-ready #page-Workspaces .nds-sales-dashboard[dir="ltr"] .nds-sales-kpi-grid,
-body.nds-sales-workspace-redesign.nds-sales-dashboard-ready #page-Workspaces .nds-sales-dashboard[dir="ltr"] .nds-sales-charts-grid,
-body.nds-sales-workspace-redesign.nds-sales-dashboard-ready #page-Workspaces .nds-sales-dashboard[dir="ltr"] .nds-sales-panel-heading,
-body.nds-sales-workspace-redesign.nds-sales-dashboard-ready #page-Workspaces .nds-sales-dashboard[dir="ltr"] .nds-sales-invoice-table {
+body.nds-sales-workspace-redesign.nds-sales-dashboard-ready #page-Workspaces .nds-sales-dashboard[dir=ltr],
+body.nds-sales-workspace-redesign.nds-sales-dashboard-ready #page-Workspaces .nds-sales-dashboard[dir=ltr] .nds-sales-kpi-grid,
+body.nds-sales-workspace-redesign.nds-sales-dashboard-ready #page-Workspaces .nds-sales-dashboard[dir=ltr] .nds-sales-charts-grid,
+body.nds-sales-workspace-redesign.nds-sales-dashboard-ready #page-Workspaces .nds-sales-dashboard[dir=ltr] .nds-sales-panel-heading,
+body.nds-sales-workspace-redesign.nds-sales-dashboard-ready #page-Workspaces .nds-sales-dashboard[dir=ltr] .nds-sales-invoice-table {
   direction: ltr;
   text-align: left;
 }
-body.nds-sales-workspace-redesign.nds-sales-dashboard-ready #page-Workspaces .nds-sales-workspace-sections[dir="rtl"] .nds-sales-section-grid {
+body.nds-sales-workspace-redesign.nds-sales-dashboard-ready #page-Workspaces .nds-sales-workspace-sections[dir=rtl] .nds-sales-section-grid {
   direction: rtl;
 }
-body.nds-sales-workspace-redesign.nds-sales-dashboard-ready #page-Workspaces .nds-sales-workspace-sections[dir="ltr"] .nds-sales-section-grid {
+body.nds-sales-workspace-redesign.nds-sales-dashboard-ready #page-Workspaces .nds-sales-workspace-sections[dir=ltr] .nds-sales-section-grid {
   direction: ltr;
 }
 body.nds-sales-workspace-redesign.nds-sales-dashboard-ready #page-Workspaces .nds-sales-dashboard *,

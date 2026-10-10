@@ -768,7 +768,7 @@ const salesDashboard = (() => {
 			const invoicesCard = board.querySelector('[data-kpi="invoices"]');
 			const averageCard = board.querySelector('[data-kpi="average"]');
 			[salesCard, invoicesCard, averageCard].forEach((card) => {
-				setText(card, "[data-kpi-value]", "غير متاح");
+				setText(card, "[data-kpi-value]", copy("غير متاح", "Unavailable"));
 				setTrend(card, "[data-kpi-trend]", { text: copy("تعذر تحميل بيانات الفواتير", "Could not load invoice data"), state: "neutral" });
 			});
 			const revenue = board.querySelector("[data-revenue-chart]");
@@ -785,7 +785,7 @@ const salesDashboard = (() => {
 				state: "neutral",
 			});
 		} else {
-			setText(oppCard, "[data-kpi-value]", "غير متاح");
+			setText(oppCard, "[data-kpi-value]", copy("غير متاح", "Unavailable"));
 			setTrend(oppCard, "[data-kpi-trend]", { text: copy("تعذر تحميل بيانات فرص CRM", "Could not load CRM opportunities"), state: "neutral" });
 		}
 

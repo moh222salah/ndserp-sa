@@ -95,7 +95,7 @@ if grep -Fq 'nds-sales-dashboard-ready#page-workspaces.page-head{display:none!im
   exit 48
 fi
 echo "BUILT_SALES_HEADER=PASS"
-for marker in '.nds-sales-workspace-sections' '.nds-sales-workspace-sections[dir="rtl"]' '.nds-sales-workspace-sections[dir="ltr"]' '.nds-sales-section-grid' '.nds-sales-section-card' '.nds-sales-section-card[dir="rtl"]' '.nds-sales-section-card[dir="ltr"]' '.nds-sales-section-link' 'grid-template-columns:repeat(2,minmax(0,1fr))' 'grid-template-columns:minmax(0,1fr)'; do
+for marker in '.nds-sales-workspace-sections' '.nds-sales-workspace-sections[dir=rtl]' '.nds-sales-workspace-sections[dir=ltr]' '.nds-sales-section-grid' '.nds-sales-section-card' '.nds-sales-section-card[dir=rtl]' '.nds-sales-section-card[dir=ltr]' '.nds-sales-section-link' 'grid-template-columns:repeat(2,minmax(0,1fr))' 'grid-template-columns:minmax(0,1fr)'; do
   if ! grep -Fq "$marker" "$LOCAL_CSS"; then
     echo "BUILT_SALES_WORKSPACE_SECTIONS_CSS=FAIL:MISSING_MARKER:$marker"
     exit 50
@@ -181,7 +181,7 @@ if grep -Fq 'nds-sales-dashboard-ready#page-workspaces.page-head{display:none!im
   exit 49
 fi
 echo "SERVED_SALES_HEADER=PASS"
-for marker in '.nds-sales-workspace-sections' '.nds-sales-workspace-sections[dir="rtl"]' '.nds-sales-workspace-sections[dir="ltr"]' '.nds-sales-section-grid' '.nds-sales-section-card' '.nds-sales-section-card[dir="rtl"]' '.nds-sales-section-card[dir="ltr"]' '.nds-sales-section-link' 'grid-template-columns:repeat(2,minmax(0,1fr))' 'grid-template-columns:minmax(0,1fr)'; do
+for marker in '.nds-sales-workspace-sections' '.nds-sales-workspace-sections[dir=rtl]' '.nds-sales-workspace-sections[dir=ltr]' '.nds-sales-section-grid' '.nds-sales-section-card' '.nds-sales-section-card[dir=rtl]' '.nds-sales-section-card[dir=ltr]' '.nds-sales-section-link' 'grid-template-columns:repeat(2,minmax(0,1fr))' 'grid-template-columns:minmax(0,1fr)'; do
   if ! grep -Fq "$marker" "$LOCAL_CSS"; then
     echo "SERVED_SALES_WORKSPACE_SECTIONS_CSS=FAIL:MISSING_MARKER:$marker"
     exit 52
@@ -253,7 +253,7 @@ for marker in 'nds-sales-dashboard' 'nds-sales-revenue-chart' 'nds-sales-channel
   fi
 done
 echo "BUILT_SALES_DASHBOARD_JS=PASS"
-for marker in 'Monthly Sales' 'Latest Sales Invoices' 'workspace_map' 'get_list' 'reports-1' 'reports-2' 'reports-3' 'grid-template-columns:repeat(2,minmax(0,1fr))' 'grid-template-columns:minmax(0,1fr)'; do
+for marker in 'Monthly Sales' 'Latest Sales Invoices' 'workspace_map' 'frappe.client.get_list' 'reports-1' 'reports-2' 'reports-3' 'Revenue by Channel' 'Unavailable'; do
   if ! grep -Fq "$marker" "$LOCAL_JS_ASSET"; then
     echo "BUILT_SALES_LIVE_BILINGUAL=FAIL:MISSING_MARKER:$marker"
     exit 54
@@ -320,13 +320,13 @@ for marker in 'nds-sales-dashboard' 'nds-sales-revenue-chart' 'nds-sales-channel
   fi
 done
 echo "SERVED_SALES_DASHBOARD_JS=PASS"
-for marker in 'Monthly Sales' 'Latest Sales Invoices' 'workspace_map' 'get_list' 'reports-1' 'reports-2' 'reports-3' 'grid-template-columns:repeat(2,minmax(0,1fr))' 'grid-template-columns:minmax(0,1fr)'; do
+for marker in 'Monthly Sales' 'Latest Sales Invoices' 'workspace_map' 'frappe.client.get_list' 'reports-1' 'reports-2' 'reports-3' 'Revenue by Channel' 'Unavailable'; do
   if ! grep -Fq "$marker" "$SERVED_JS"; then
     echo "SERVED_SALES_LIVE_BILINGUAL=FAIL:MISSING_MARKER:$marker"
     exit 56
   fi
 done
-if grep -Fq 'data-sales-period' "$LOCAL_JS_ASSET" || grep -Fq 'Nexterp v16' "$LOCAL_JS_ASSET"; then
+if grep -Fq 'data-sales-period' "$SERVED_JS" || grep -Fq 'Nexterp v16' "$SERVED_JS"; then
   echo "SERVED_SALES_TOP_METADATA=FAIL:STILL_PRESENT"
   exit 57
 fi
