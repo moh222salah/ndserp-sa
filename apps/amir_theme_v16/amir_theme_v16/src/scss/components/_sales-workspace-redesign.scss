@@ -452,7 +452,6 @@ body.nds-purchase-workspace-redesign #page-Workspaces #editorjs table tbody tr:h
 
 /* Apply Arabic/LTR direction to the actual Workspace page container, not only dashboard children. */
 body.nds-sales-workspace-redesign.nds-sales-dashboard-ready #page-Workspaces[dir=rtl],
-body.nds-sales-workspace-redesign.nds-sales-dashboard-ready #page-Workspaces[dir=rtl] .page-head,
 body.nds-sales-workspace-redesign.nds-sales-dashboard-ready #page-Workspaces[dir=rtl] .layout-main-section,
 body.nds-sales-workspace-redesign.nds-sales-dashboard-ready #page-Workspaces[dir=rtl] .layout-main-section #editorjs,
 body.nds-sales-workspace-redesign.nds-sales-dashboard-ready #page-Workspaces[dir=rtl] .layout-main-section #editorjs .codex-editor__redactor {
@@ -460,10 +459,21 @@ body.nds-sales-workspace-redesign.nds-sales-dashboard-ready #page-Workspaces[dir
   text-align: right;
 }
 body.nds-sales-workspace-redesign.nds-sales-dashboard-ready #page-Workspaces[dir=ltr],
-body.nds-sales-workspace-redesign.nds-sales-dashboard-ready #page-Workspaces[dir=ltr] .page-head,
 body.nds-sales-workspace-redesign.nds-sales-dashboard-ready #page-Workspaces[dir=ltr] .layout-main-section,
 body.nds-sales-workspace-redesign.nds-sales-dashboard-ready #page-Workspaces[dir=ltr] .layout-main-section #editorjs,
 body.nds-sales-workspace-redesign.nds-sales-dashboard-ready #page-Workspaces[dir=ltr] .layout-main-section #editorjs .codex-editor__redactor {
+  direction: ltr;
+  text-align: left;
+}
+/* Preserve the standard header layout; align only its title to the active language. */
+body.nds-sales-workspace-redesign.nds-sales-dashboard-ready #page-Workspaces .page-head {
+  direction: ltr;
+}
+body.nds-sales-workspace-redesign.nds-sales-dashboard-ready #page-Workspaces .page-head .title-text[dir=rtl] {
+  direction: rtl;
+  text-align: right;
+}
+body.nds-sales-workspace-redesign.nds-sales-dashboard-ready #page-Workspaces .page-head .title-text[dir=ltr] {
   direction: ltr;
   text-align: left;
 }
