@@ -104,10 +104,14 @@ const salesDashboard = (() => {
 	function syncWorkspaceDirection(direction, language) {
 		const page = document.getElementById("page-Workspaces");
 		if (!page) return;
+		const header = page.querySelector(".page-head");
+		// Restore any header direction inherited from an older script version; only its title is direction-aware.
+		restoreTrackedAttribute(header, "dir", "ndsSalesOriginalDir");
+		restoreTrackedAttribute(header, "data-sales-direction", "ndsSalesOriginalDataSalesDirection");
+		restoreTrackedAttribute(header, "lang", "ndsSalesOriginalLang");
 		const main = page.querySelector(".layout-main-section");
 		const targets = [
 			page,
-			page.querySelector(".page-head"),
 			main,
 			main && main.querySelector("#editorjs"),
 			main && main.querySelector("#editorjs .codex-editor__redactor"),
@@ -133,6 +137,7 @@ const salesDashboard = (() => {
 		const direction = currentDirection();
 		const language = currentLanguage();
 		syncWorkspaceDirection(direction, language);
+		syncArabicWorkspaceCardVisibility(direction);
 		syncSalesPageHeader();
 		if (!board) return;
 		board.setAttribute("dir", direction);
@@ -288,7 +293,7 @@ const salesDashboard = (() => {
 	const SALES_SECTION_DEFINITIONS = [
 		{ key: "home", ar: "الرئيسية", en: "Home", icon: "home", matches: /الرئيسية|^home$|main/ },
 		{ key: "items-pricing", ar: "الأصناف والتسعير", en: "Items & Pricing", icon: "stock", matches: /اصناف.*تسعير|items?.*pricing|items\s*&\s*pricing|pricing.*items/ },
-		{ key: "customer", ar: "العميل", en: "Customers", icon: "users", matches: /العميل|العملاء|customer/ },
+		{ key: "work", ar: "العمل", en: "Work", icon: "briefcase", matches: /العمل|العميل|العملاء|work|customer/ },
 		{ key: "settings", ar: "الإعدادات", en: "Settings", icon: "settings", matches: /اعداد|settings|setup/ },
 		{ key: "reports", ar: "التقارير", en: "Reports", icon: "sheet", matches: /تقارير|reports/ },
 	];
@@ -307,6 +312,42 @@ const salesDashboard = (() => {
 	function sectionDefinition(label) {
 		const normalized = normalizeSectionLabel(label);
 		return SALES_SECTION_DEFINITIONS.find((definition) => definition.matches.test(normalized)) || null;
+	}
+
+	const ARABIC_HIDDEN_WORKSPACE_CARDS = new Set([
+		"اتجاهات طلبات البيع",
+		"الصنف",
+		"فواتير البيع",
+		"اوامر البيع",
+		"أوامر البيع",
+		"اذن التسليم",
+		"إذن التسليم",
+		"سند الدفع",
+		"لوحة المؤشرات",
+	].map(normalizeSectionLabel));
+
+	function syncArabicWorkspaceCardVisibility(direction) {
+		const blocks = document.querySelectorAll("#page-Workspaces #editorjs .ce-block");
+		const hideArabicCards = direction === "rtl";
+		blocks.forEach((block) => {
+			const heading = block.querySelector(".ce-header, h1, h2, h3, h4, .h4, .widget-title, [data-title]");
+			if (!heading) return;
+			const label = normalizeSectionLabel(heading.textContent || "");
+			const shouldHide = hideArabicCards && ARABIC_HIDDEN_WORKSPACE_CARDS.has(label);
+			if (shouldHide) {
+				if (!Object.prototype.hasOwnProperty.call(block.dataset, "ndsSalesOriginalHidden")) {
+					block.dataset.ndsSalesOriginalHidden = block.hidden ? "1" : "0";
+				}
+				block.dataset.ndsSalesArabicSuppressed = "1";
+				block.hidden = true;
+				return;
+			}
+			if (Object.prototype.hasOwnProperty.call(block.dataset, "ndsSalesOriginalHidden")) {
+				block.hidden = block.dataset.ndsSalesOriginalHidden === "1";
+				delete block.dataset.ndsSalesOriginalHidden;
+				delete block.dataset.ndsSalesArabicSuppressed;
+			}
+		});
 	}
 
 	function getSalesWorkspaceRecord() {
@@ -348,8 +389,10 @@ const salesDashboard = (() => {
 		const reports = groups.find((group) => group.definition.key === "reports");
 		if (!reports) return groups;
 		const reportLinks = reports.links;
-		const splitPoint1 = Math.ceil(reportLinks.length / 3);
-		const splitPoint2 = Math.ceil((reportLinks.length - splitPoint1) / 2) + splitPoint1;
+		const firstSize = Math.floor(reportLinks.length / 3) + (reportLinks.length % 3 > 0 ? 1 : 0);
+		const secondSize = Math.floor(reportLinks.length / 3) + (reportLinks.length % 3 > 1 ? 1 : 0);
+		const splitPoint1 = firstSize;
+		const splitPoint2 = firstSize + secondSize;
 		const reportGroups = [
 			{ definition: { ...reports.definition, key: "reports-1" }, links: reportLinks.slice(0, splitPoint1) },
 			{ definition: { ...reports.definition, key: "reports-2" }, links: reportLinks.slice(splitPoint1, splitPoint2) },
