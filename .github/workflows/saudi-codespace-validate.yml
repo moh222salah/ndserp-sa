@@ -49,6 +49,21 @@ jobs:
             echo "APP_SOURCE=PASS:$app"
           done < bench/apps.txt
 
+      - name: Verify Master Files Workspace visual isolation and runtime asset gates
+        run: |
+          test -s apps/amir_theme_v16/amir_theme_v16/src/scss/components/_master-files-workspace.scss
+          grep -Fq '@import "components/master-files-workspace";' apps/amir_theme_v16/amir_theme_v16/src/scss/amir_theme.bundle.scss
+          grep -Fq 'function syncMasterFilesWorkspaceScope()' apps/amir_theme_v16/amir_theme_v16/src/js/core/workspace_enhance.js
+          grep -Fq 'syncMasterFilesWorkspaceScope();' apps/amir_theme_v16/amir_theme_v16/src/js/core/workspace_enhance.js
+          grep -Fq 'MASTER_FILES_WORKSPACE_CSS=PASS' codespace-runtime-sync.sh
+          grep -Fq 'MASTER_FILES_WORKSPACE_JS=PASS' codespace-runtime-sync.sh
+          grep -Fq 'BUILT_MASTER_FILES_WORKSPACE_CSS=PASS' codespace-verify-runtime.sh
+          grep -Fq 'SERVED_MASTER_FILES_WORKSPACE_CSS=PASS' codespace-verify-runtime.sh
+          grep -Fq 'BUILT_MASTER_FILES_WORKSPACE_JS=PASS' codespace-verify-runtime.sh
+          grep -Fq 'SERVED_MASTER_FILES_WORKSPACE_JS=PASS' codespace-verify-runtime.sh
+          node --check --input-type=module < apps/amir_theme_v16/amir_theme_v16/src/js/core/workspace_enhance.js
+          echo "MASTER_FILES_WORKSPACE_SOURCE_AND_ASSET_GATES=PASS"
+
       - name: Verify warehouse workspace visual isolation and runtime asset guards
         run: |
           test -s apps/amir_theme_v16/amir_theme_v16/src/scss/layouts/_warehouse-workspace.scss

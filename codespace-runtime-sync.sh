@@ -220,6 +220,18 @@ for key in required:
         if missing:
             raise SystemExit("PURCHASE_DASHBOARD_CSS=FAIL:MISSING_MARKERS:" + ",".join(missing))
         print("PURCHASE_DASHBOARD_CSS=PASS")
+        required_master_files_css = (
+            ".nds-master-files-workspace",
+            ".widget.shortcut-widget-box",
+            ".widget.number-widget-box",
+            "#164e8f",
+            "#d4af37",
+            "prefers-reduced-motion:reduce",
+        )
+        missing = [marker for marker in required_master_files_css if marker not in css_compact]
+        if missing:
+            raise SystemExit("MASTER_FILES_WORKSPACE_CSS=FAIL:MISSING_MARKERS:" + ",".join(missing))
+        print("MASTER_FILES_WORKSPACE_CSS=PASS")
     elif key == "amir_theme.bundle.js":
         js = target.read_text(encoding="utf-8")
         # Use stable ASCII markers: production bundling may Unicode-escape Arabic literals.
@@ -311,6 +323,9 @@ for key in required:
         if missing:
             raise SystemExit("PURCHASE_DASHBOARD_JS=FAIL:MISSING_MARKERS:" + ",".join(missing))
         print("PURCHASE_DASHBOARD_JS=PASS")
+        if "nds-master-files-workspace" not in js:
+            raise SystemExit("MASTER_FILES_WORKSPACE_JS=FAIL:MISSING_MARKER:nds-master-files-workspace")
+        print("MASTER_FILES_WORKSPACE_JS=PASS")
 
 print("ASSET_SERVE_TREE=PASS")
 PY

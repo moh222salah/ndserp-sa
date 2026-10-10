@@ -117,6 +117,13 @@ for marker in '.nds-purchase-dashboard' '.nds-purchase-kpi-grid' '.nds-purchase-
   fi
 done
 echo "BUILT_PURCHASE_DASHBOARD_CSS=PASS"
+for marker in '.nds-master-files-workspace' '.widget.shortcut-widget-box' '.widget.number-widget-box' '#164e8f' '#d4af37' 'prefers-reduced-motion:reduce'; do
+  if ! grep -Fq "$marker" "$LOCAL_CSS"; then
+    echo "BUILT_MASTER_FILES_WORKSPACE_CSS=FAIL:MISSING_MARKER:$marker"
+    exit 58
+  fi
+done
+echo "BUILT_MASTER_FILES_WORKSPACE_CSS=PASS"
 echo "ASSET_URL=$ASSET_URL"
 
 READY=0
@@ -210,6 +217,13 @@ for marker in '.nds-purchase-dashboard' '.nds-purchase-kpi-grid' '.nds-purchase-
   fi
 done
 echo "SERVED_PURCHASE_DASHBOARD_CSS=PASS"
+for marker in '.nds-master-files-workspace' '.widget.shortcut-widget-box' '.widget.number-widget-box' '#164e8f' '#d4af37' 'prefers-reduced-motion:reduce'; do
+  if ! grep -Fq "$marker" "$LOCAL_CSS"; then
+    echo "SERVED_MASTER_FILES_WORKSPACE_CSS=FAIL:MISSING_MARKER:$marker"
+    exit 59
+  fi
+done
+echo "SERVED_MASTER_FILES_WORKSPACE_CSS=PASS"
 
 JS_ASSET_PATH="$("$ROOT/env/bin/python" - <<'PY'
 import json
@@ -292,6 +306,11 @@ for marker in 'nds-purchase-dashboard' 'nds-purchase-kpi-grid' 'nds-purchase-mon
   fi
 done
 echo "BUILT_PURCHASE_DASHBOARD_JS=PASS"
+if ! grep -Fq 'nds-master-files-workspace' "$LOCAL_JS_ASSET"; then
+  echo "BUILT_MASTER_FILES_WORKSPACE_JS=FAIL:MISSING_MARKER:nds-master-files-workspace"
+  exit 60
+fi
+echo "BUILT_MASTER_FILES_WORKSPACE_JS=PASS"
 SERVED_JS="$(mktemp)"
 trap 'rm -f "$LOCAL_CSS" "$SERVED_CSS" "$SERVED_JS"' EXIT
 JS_READY=0
@@ -367,6 +386,11 @@ for marker in 'nds-purchase-dashboard' 'nds-purchase-kpi-grid' 'nds-purchase-mon
   fi
 done
 echo "SERVED_PURCHASE_DASHBOARD_JS=PASS"
+if ! grep -Fq 'nds-master-files-workspace' "$SERVED_JS"; then
+  echo "SERVED_MASTER_FILES_WORKSPACE_JS=FAIL:MISSING_MARKER:nds-master-files-workspace"
+  exit 61
+fi
+echo "SERVED_MASTER_FILES_WORKSPACE_JS=PASS"
 if [ "$(sha256sum "$LOCAL_JS_ASSET" | awk '{print $1}')" != "$(sha256sum "$SERVED_JS" | awk '{print $1}')" ]; then
   echo "SERVED_QUICK_ACTIONS_JS=FAIL:HASH_MISMATCH"
   exit 23
