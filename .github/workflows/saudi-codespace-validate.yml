@@ -98,8 +98,8 @@ jobs:
           for marker in ("nds-warehouse-dashboard", "nds-warehouse-kpi-grid", "nds-warehouse-movement-chart", "nds-warehouse-distribution-chart", "nds-warehouse-shortage-table", "Stock Ledger Entry", "frappe.client.get_list"):
               assert marker in dashboard_js, f"Missing warehouse dashboard JS marker: {marker}"
           assert "warehouseDashboard.mount();" in entry_js
-          assert "getMovement(company,end)" in dashboard_js
-          assert "getShortages(company)" in dashboard_js
+          assert "async function getMovement(company,end,warehouseNames)" in dashboard_js
+          assert "async function getShortages(company, warehouseNames)" in dashboard_js
           print("WAREHOUSE_WORKSPACE_SOURCE_SCOPE=PASS")
           print("WAREHOUSE_DASHBOARD_LIVE_DATA_SOURCE=PASS")
           PY
