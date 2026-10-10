@@ -327,6 +327,31 @@ jobs:
           echo "PURCHASE_DASHBOARD_SOURCE_AND_ASSET_GATES=PASS"
           echo "PURCHASE_WORKSPACE_SOURCE_AND_ASSET_GATES=PASS"
 
+      - name: Verify bilingual live Sales Workspace and clean Purchases KPI header
+        run: |
+          node --check --input-type=module < apps/amir_theme_v16/amir_theme_v16/src/js/core/sales_dashboard.js
+          node --check --input-type=module < apps/amir_theme_v16/amir_theme_v16/src/js/core/purchases_dashboard.js
+          grep -Fq 'copy("المبيعات NDS ERP", "Sales NDS ERP")' apps/amir_theme_v16/amir_theme_v16/src/js/core/sales_dashboard.js
+          grep -Fq 'return documentLanguage || bootLanguage || "en";' apps/amir_theme_v16/amir_theme_v16/src/js/core/sales_dashboard.js
+          grep -Fq 'if (activeRouteName && !expected.has(activeRouteName)) return false;' apps/amir_theme_v16/amir_theme_v16/src/js/core/sales_dashboard.js
+          grep -Fq 'const scoped=Boolean(document.body?.classList.contains("nds-purchase-workspace-redesign"));' apps/amir_theme_v16/amir_theme_v16/src/js/core/purchases_dashboard.js
+          grep -Fq 'if(routeName&&!names.has(routeName))return false;' apps/amir_theme_v16/amir_theme_v16/src/js/core/purchases_dashboard.js
+          grep -Fq 'en: "Home"' apps/amir_theme_v16/amir_theme_v16/src/js/core/sales_dashboard.js
+          grep -Fq 'en: "Items & Pricing"' apps/amir_theme_v16/amir_theme_v16/src/js/core/sales_dashboard.js
+          grep -Fq 'en: "Work"' apps/amir_theme_v16/amir_theme_v16/src/js/core/sales_dashboard.js
+          grep -Fq 'en: "Settings"' apps/amir_theme_v16/amir_theme_v16/src/js/core/sales_dashboard.js
+          grep -Fq 'en: "Reports"' apps/amir_theme_v16/amir_theme_v16/src/js/core/sales_dashboard.js
+          grep -Fq 'return SALES_SECTION_DEFINITIONS.map((definition) => ({ definition, links: [] }));' apps/amir_theme_v16/amir_theme_v16/src/js/core/sales_dashboard.js
+          grep -Fq '"frappe.client.get_list"' apps/amir_theme_v16/amir_theme_v16/src/js/core/sales_dashboard.js
+          grep -Fq '"Sales Invoice"' apps/amir_theme_v16/amir_theme_v16/src/js/core/sales_dashboard.js
+          grep -Fq 'b.innerHTML=\x27<section class="nds-purchase-kpi-grid"' apps/amir_theme_v16/amir_theme_v16/src/js/core/purchases_dashboard.js
+          ! grep -Fq 'لوحة المشتريات' apps/amir_theme_v16/amir_theme_v16/src/js/core/purchases_dashboard.js
+          ! grep -Fq 'Nexterp v16' apps/amir_theme_v16/amir_theme_v16/src/js/core/purchases_dashboard.js
+          ! grep -Fq 'data-purchase-period' apps/amir_theme_v16/amir_theme_v16/src/js/core/purchases_dashboard.js
+          echo "SALES_WORKSPACE_BILINGUAL_DIRECTION=PASS"
+          echo "SALES_WORKSPACE_LIVE_DATA=PASS"
+          echo "PURCHASE_KPI_HEADER_CLEANUP=PASS"
+
       - name: Verify Quick Actions static responsive grid
         run: |
           grep -Fq 'data-amt-quick-actions-layout", "static-grid"' apps/amir_theme_v16/amir_theme_v16/src/js/core/desk_quick_actions.js
