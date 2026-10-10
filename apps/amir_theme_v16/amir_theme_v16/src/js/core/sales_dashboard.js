@@ -16,6 +16,7 @@ const salesDashboard = (() => {
 	let directionObserver = null;
 	let observedBody = null;
 	let installStarted = false;
+	let directionTargets = [];
 
 	function routeName(value) {
 		return String(value || "").trim().toLowerCase().replace(/[_\s]+/g, "-");
@@ -84,11 +85,56 @@ const salesDashboard = (() => {
 		title.removeAttribute("dir");
 	}
 
+	function trackAttribute(node, attribute, key, value) {
+		if (!node) return;
+		if (!Object.prototype.hasOwnProperty.call(node.dataset, key)) {
+			node.dataset[key] = node.hasAttribute(attribute) ? node.getAttribute(attribute) : "__nds_original_attribute_unset__";
+		}
+		node.setAttribute(attribute, value);
+	}
+
+	function restoreTrackedAttribute(node, attribute, key) {
+		if (!node || !Object.prototype.hasOwnProperty.call(node.dataset, key)) return;
+		const original = node.dataset[key];
+		if (original === "__nds_original_attribute_unset__") node.removeAttribute(attribute);
+		else node.setAttribute(attribute, original);
+		delete node.dataset[key];
+	}
+
+	function syncWorkspaceDirection(direction, language) {
+		const page = document.getElementById("page-Workspaces");
+		if (!page) return;
+		const main = page.querySelector(".layout-main-section");
+		const targets = [
+			page,
+			page.querySelector(".page-head"),
+			main,
+			main && main.querySelector("#editorjs"),
+			main && main.querySelector("#editorjs .codex-editor__redactor"),
+		].filter(Boolean);
+		targets.forEach((node) => {
+			if (!directionTargets.includes(node)) directionTargets.push(node);
+			trackAttribute(node, "dir", "ndsSalesOriginalDir", direction);
+			trackAttribute(node, "data-sales-direction", "ndsSalesOriginalDataSalesDirection", direction);
+			if (language) trackAttribute(node, "lang", "ndsSalesOriginalLang", language);
+		});
+	}
+
+	function restoreWorkspaceDirection() {
+		directionTargets.forEach((node) => {
+			restoreTrackedAttribute(node, "dir", "ndsSalesOriginalDir");
+			restoreTrackedAttribute(node, "data-sales-direction", "ndsSalesOriginalDataSalesDirection");
+			restoreTrackedAttribute(node, "lang", "ndsSalesOriginalLang");
+		});
+		directionTargets = [];
+	}
+
 	function syncDashboardDirection(board) {
-		syncSalesPageHeader();
-		if (!board) return;
 		const direction = currentDirection();
 		const language = currentLanguage();
+		syncWorkspaceDirection(direction, language);
+		syncSalesPageHeader();
+		if (!board) return;
 		board.setAttribute("dir", direction);
 		board.setAttribute("data-sales-direction", direction);
 		if (language) board.setAttribute("lang", language);
@@ -853,6 +899,7 @@ const salesDashboard = (() => {
 
 	function cleanup() {
 		restoreSalesPageHeader();
+		restoreWorkspaceDirection();
 		const current = document.getElementById(DASHBOARD_ID);
 		const sections = document.getElementById(SALES_SECTIONS_ID);
 		if (current) current.remove();
