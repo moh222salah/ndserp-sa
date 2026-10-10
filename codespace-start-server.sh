@@ -25,12 +25,15 @@ bench_pids() {
 }
 
 port_listener_pids() {
+  local pids=""
   if command -v ss >/dev/null 2>&1; then
-    ss -H -ltnp 'sport = :8080' 2>/dev/null |
-      grep -oE 'pid=[0-9]+' | cut -d= -f2 | sort -u
-  elif command -v lsof >/dev/null 2>&1; then
-    lsof -nP -t -iTCP:8080 -sTCP:LISTEN 2>/dev/null | sort -u
+    pids="$(ss -H -ltnp 'sport = :8080' 2>/dev/null |
+      grep -oE 'pid=[0-9]+' | cut -d= -f2 | sort -u || true)"
   fi
+  if [ -z "$pids" ] && command -v lsof >/dev/null 2>&1; then
+    pids="$(lsof -nP -t -iTCP:8080 -sTCP:LISTEN 2>/dev/null | sort -u || true)"
+  fi
+  printf '%s\n' "$pids" | sed '/^$/d'
 }
 
 echo "=== NDS ERP SAUDI — ENSURE BENCH SERVER ==="
