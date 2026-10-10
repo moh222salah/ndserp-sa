@@ -10,5 +10,3 @@ watch: bench watch
 schedule: bench schedule
 
 worker: bench worker 1>> logs/worker.log 2>> logs/worker.error.log
-
-runtime-sync: bash codespace-runtime-sync.sh
