@@ -175,12 +175,15 @@ for key in required:
                 "SALES_WORKSPACE_CSS=FAIL:MISSING_MARKERS:" + ",".join(missing)
             )
         print("SALES_WORKSPACE_CSS=PASS")
+        # Validate the actual sales-section styling emitted by the current source.
+        # The workspace selector guard used previously did not exist in this stylesheet
+        # and incorrectly blocked unrelated UI asset builds.
         required_sales_sections_css = (
-            ".nds-sales-dashboard-ready#page-workspaces#editorjs::before",
-            ".codex-editor__redactor",
-            "grid-template-columns:repeat(12,minmax(0,1fr))",
-            "grid-column:span6",
-            ".links-widget-box",
+            ".nds-sales-section-grid",
+            ".nds-sales-section-card",
+            ".nds-sales-section-link",
+            "grid-template-columns:repeat(2,minmax(0,1fr))",
+            "grid-template-columns:minmax(0,1fr)",
         )
         missing = [marker for marker in required_sales_sections_css if marker not in css_compact]
         if missing:
