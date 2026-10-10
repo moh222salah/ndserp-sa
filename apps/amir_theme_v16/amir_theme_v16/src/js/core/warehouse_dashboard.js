@@ -6,7 +6,7 @@ const warehouseDashboard = (() => {
   "use strict";
   const ID = "nds-warehouse-dashboard";
   const READY = "nds-warehouse-dashboard-ready";
-  const TARGET = "مخازن NDS ERP";
+  const TARGETS = ["مخازن NDS ERP", "المخازن NDS ERP", "لوحة المخازن", "Warehouse Dashboard", "Warehouses NDS ERP", "NDS ERP Warehouses"];
   let installed = false, domObserver = null, langObserver = null, observedBody = null, timers = [];
   const TXT = {
     ar: {
@@ -45,10 +45,12 @@ const warehouseDashboard = (() => {
   function isTarget() {
     try {
       const route = frappe.get_route();
-      if (!Array.isArray(route) || route[0] !== "Workspaces") return false;
-      let slug = TARGET;
-      try { if (frappe.router && frappe.router.slug) slug = frappe.router.slug(TARGET); } catch (_) {}
-      const expected = new Set([norm(TARGET), norm(slug)]);
+      if (!Array.isArray(route) || String(route[0] || "").toLowerCase() !== "workspaces") return false;
+      const expected = new Set();
+      TARGETS.forEach((name) => {
+        expected.add(norm(name));
+        try { if (frappe.router && frappe.router.slug) expected.add(norm(frappe.router.slug(name))); } catch (_) {}
+      });
       const sidebar = frappe.app && frappe.app.sidebar && frappe.app.sidebar.sidebar_title;
       const heading = document.querySelector("#page-Workspaces .workspace-title, .workspace-title")?.textContent || "";
       return [route[1], sidebar, heading].some((v) => expected.has(norm(v)));
@@ -116,11 +118,11 @@ const warehouseDashboard = (() => {
   }
   function money(value) {
     const currency = (frappe.boot && frappe.boot.sysdefaults && frappe.boot.sysdefaults.currency) || "SAR";
-    return fmt(value) + " " + (currency === "SAR" ? "ر.س" : currency);
+    return fmt(value) + " " + (currency === "SAR" ? (t() === TXT.ar ? "ر.س" : "SAR") : currency);
   }
   function build() {
     const c = t(), board = el("section","nds-warehouse-dashboard");
-    board.id = ID; board.setAttribute("aria-label",c.title); board.setAttribute("data-warehouse-dashboard-version","1"); setDirection(board);
+    board.id = ID; board.setAttribute("aria-label",c.title); board.setAttribute("data-warehouse-dashboard-version","2"); setDirection(board);
     board.innerHTML =
       '<header class="nds-warehouse-dashboard-header"><div class="nds-warehouse-dashboard-heading"><h1>'+c.title+'</h1><div class="nds-warehouse-dashboard-breadcrumb"><span>NDS ERP Saudi</span><span aria-hidden="true">/</span><span>'+c.module+'</span><span aria-hidden="true">/</span><span>'+c.overview+'</span></div></div><div class="nds-warehouse-dashboard-period"><span class="nds-warehouse-period-icon" aria-hidden="true">◷</span><span>'+c.period+'</span></div></header>'+
       '<section class="nds-warehouse-kpi-grid" aria-label="'+c.title+'">'+
@@ -174,11 +176,11 @@ const warehouseDashboard = (() => {
     anchor.addEventListener("click",(event)=>{event.preventDefault();if(window.frappe&&frappe.set_route)frappe.set_route("Form",doctype,name);});cell.appendChild(anchor);
   }
   async function getShortages(company, warehouseNames) {
-    const rows=await getList("Bin",["item_code","warehouse","actual_qty","projected_qty","stock_uom"],[["Bin","projected_qty","<",0]].concat(inventoryWarehouseFilters("Bin",company,warehouseNames)),{order_by:"projected_qty asc",limit_page_length:10});
+    const rows=await getList("Bin",["item_code","warehouse","actual_qty","projected_qty"],[["Bin","projected_qty","<",0]].concat(inventoryWarehouseFilters("Bin",company,warehouseNames)),{order_by:"projected_qty asc",limit_page_length:10});
     if(!Array.isArray(rows))return null;const codes=[...new Set(rows.map((r)=>r.item_code).filter(Boolean))];let items=[];
-    if(codes.length){try{items=await getList("Item",["name","item_name"],[["Item","name","in",codes]],{limit_page_length:codes.length})||[];}catch(_){}}
-    const itemNames=new Map(items.map((r)=>[r.name,r.item_name||r.name]));
-    return rows.map((r)=>Object.assign({},r,{item_name:itemNames.get(r.item_code)||r.item_code}));
+    if(codes.length){try{items=await getList("Item",["name","item_name","stock_uom"],[["Item","name","in",codes]],{limit_page_length:codes.length})||[];}catch(_){}}
+    const itemDetails=new Map(items.map((r)=>[r.name,{item_name:r.item_name||r.name,stock_uom:r.stock_uom||""}]));
+    return rows.map((r)=>Object.assign({},r,itemDetails.get(r.item_code)||{item_name:r.item_code,stock_uom:""}));
   }
   function renderShortages(board,rows) {
     const body=board.querySelector("[data-shortage-rows]");if(!body)return;body.replaceChildren();
