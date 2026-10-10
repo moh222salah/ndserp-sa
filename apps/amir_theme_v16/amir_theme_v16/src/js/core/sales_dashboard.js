@@ -300,7 +300,7 @@ const salesDashboard = (() => {
 	const SALES_SECTION_DEFINITIONS = [
 		{ key: "home", ar: "الرئيسية", en: "Home", icon: "home", matches: /الرئيسية|^home$|main|^sales$|المبيعات|البيع/ },
 		{ key: "items-pricing", ar: "الأصناف والتسعير", en: "Items & Pricing", icon: "stock", matches: /اصناف.*تسعير|item.*pric|items?.*pricing|items\s*&\s*pricing|pricing.*items|catalog/ },
-		{ key: "work", ar: "العمل", en: "Work", icon: "briefcase", matches: /^العمل$|العملاء|^work$|customer|operation/ },
+		{ key: "work", ar: "العمل", en: "Work", icon: "briefcase", matches: /^العمل$|العميل|العملاء|^work$|customer|operation/ },
 		{ key: "settings", ar: "الإعدادات", en: "Settings", icon: "settings", matches: /اعداد|settings|setup|configuration/ },
 		{ key: "reports", ar: "التقارير", en: "Reports", icon: "sheet", matches: /تقارير|reports|analytics/ },
 	];
@@ -323,6 +323,8 @@ const salesDashboard = (() => {
 
 	const ARABIC_HIDDEN_WORKSPACE_CARDS = new Set([
 		"اتجاهات طلبات البيع",
+		"اتجاهات اوامر البيع",
+		"اتجاهات أوامر البيع",
 		"الصنف",
 		"فواتير البيع",
 		"اوامر البيع",
