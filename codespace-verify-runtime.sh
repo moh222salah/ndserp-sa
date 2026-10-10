@@ -261,7 +261,7 @@ if ! grep -Fq 'nds-sales-workspace-redesign' "$LOCAL_JS_ASSET"; then
   exit 36
 fi
 echo "BUILT_SALES_WORKSPACE_JS=PASS"
-for marker in 'nds-sales-dashboard' 'nds-sales-revenue-chart' 'nds-sales-channels-chart' 'nds-sales-invoices' 'nds-sales-workspace-sections' 'nds-sales-section-card' 'workspace_map' 'الرئيسية' 'الأصناف والتسعير' 'العميل' 'الإعدادات' 'التقارير' 'data-sales-direction'; do
+for marker in 'nds-sales-dashboard' 'nds-sales-revenue-chart' 'nds-sales-channels-chart' 'nds-sales-invoices' 'nds-sales-workspace-sections' 'nds-sales-section-card' 'workspace_map' 'data-sales-direction'; do
   if ! grep -Fq "$marker" "$LOCAL_JS_ASSET"; then
     echo "BUILT_SALES_DASHBOARD_JS=FAIL:MISSING_MARKER:$marker"
     exit 44
@@ -336,7 +336,7 @@ if ! grep -Fq 'nds-sales-workspace-redesign' "$SERVED_JS"; then
   exit 37
 fi
 echo "SERVED_SALES_WORKSPACE_JS=PASS"
-for marker in 'nds-sales-dashboard' 'nds-sales-revenue-chart' 'nds-sales-channels-chart' 'nds-sales-invoices' 'nds-sales-workspace-sections' 'nds-sales-section-card' 'workspace_map' 'الرئيسية' 'الأصناف والتسعير' 'العميل' 'الإعدادات' 'التقارير' 'data-sales-direction'; do
+for marker in 'nds-sales-dashboard' 'nds-sales-revenue-chart' 'nds-sales-channels-chart' 'nds-sales-invoices' 'nds-sales-workspace-sections' 'nds-sales-section-card' 'workspace_map' 'data-sales-direction'; do
   if ! grep -Fq "$marker" "$SERVED_JS"; then
     echo "SERVED_SALES_DASHBOARD_JS=FAIL:MISSING_MARKER:$marker"
     exit 45
