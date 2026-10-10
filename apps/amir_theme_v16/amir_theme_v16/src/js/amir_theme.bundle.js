@@ -8,6 +8,7 @@ import { colorScheme } from "./core/color_scheme.js";
 import { workspaceEnhance } from "./core/workspace_enhance.js";
 import { salesDashboard } from "./core/sales_dashboard.js";
 import { accountsDashboard } from "./core/accounts_dashboard.js";
+import { warehouseDashboard } from "./core/warehouse_dashboard.js";
 import { smartSubmitActions } from "./core/smart_submit_actions.js";
 import { translationToggle } from "./core/translation_toggle.js";
 import { progressBar } from "./core/progress_bar.js";
@@ -1092,6 +1093,8 @@ $(document).ready(function () {
 	salesDashboard.mount();
 	// Reference-led Accounts Workspace: bilingual KPI cards, charts and invoices table.
 	accountsDashboard.mount();
+	// Live stock KPIs, stock movement, distribution and shortage list.
+	warehouseDashboard.mount();
 	// Save & Final Submit / Revert to Draft / Cancel & Delete on submittable
 	// doctypes with no active Workflow — see core/smart_submit_actions.js.
 	if (amtEnabled("enable_smart_actions")) smartSubmitActions.mount();

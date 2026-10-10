@@ -109,6 +109,12 @@ for key in required:
         required_warehouse_css = (
             ".nds-warehouse-workspace",
             "border-block-start:3pxsolid#0a2342",
+            ".nds-warehouse-dashboard",
+            ".nds-warehouse-kpi-grid",
+            ".nds-warehouse-movement-chart",
+            ".nds-warehouse-distribution-chart",
+            ".nds-warehouse-shortage-table",
+            "grid-template-columns:repeat(4,minmax(0,1fr))",
         )
         missing = [marker for marker in required_warehouse_css if marker not in css_compact]
         if missing:
@@ -221,8 +227,19 @@ for key in required:
                 "QUICK_ACTIONS_JS=FAIL:MISSING_MARKERS:" + ",".join(missing)
             )
         print("QUICK_ACTIONS_JS=PASS")
-        if "nds-warehouse-workspace" not in js:
-            raise SystemExit("WAREHOUSE_WORKSPACE_JS=FAIL:MISSING_MARKER:nds-warehouse-workspace")
+        required_warehouse_js = (
+            "nds-warehouse-workspace",
+            "nds-warehouse-dashboard",
+            "nds-warehouse-kpi-grid",
+            "nds-warehouse-movement-chart",
+            "nds-warehouse-distribution-chart",
+            "nds-warehouse-shortage-table",
+            "Stock Ledger Entry",
+            "frappe.client.get_list",
+        )
+        missing = [marker for marker in required_warehouse_js if marker not in js]
+        if missing:
+            raise SystemExit("WAREHOUSE_WORKSPACE_JS=FAIL:MISSING_MARKERS:" + ",".join(missing))
         print("WAREHOUSE_WORKSPACE_JS=PASS")
         required_accounts_js = (
             "amt-accounts-workspace",

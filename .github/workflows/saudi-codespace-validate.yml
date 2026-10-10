@@ -52,23 +52,41 @@ jobs:
       - name: Verify warehouse workspace visual isolation and runtime asset guards
         run: |
           test -s apps/amir_theme_v16/amir_theme_v16/src/scss/layouts/_warehouse-workspace.scss
+          test -s apps/amir_theme_v16/amir_theme_v16/src/scss/components/_warehouse-dashboard.scss
+          test -s apps/amir_theme_v16/amir_theme_v16/src/js/core/warehouse_dashboard.js
           grep -Fq '@import "layouts/warehouse-workspace";' apps/amir_theme_v16/amir_theme_v16/src/scss/amir_theme.bundle.scss
+          grep -Fq '@import "components/warehouse-dashboard";' apps/amir_theme_v16/amir_theme_v16/src/scss/amir_theme.bundle.scss
+          grep -Fq 'import { warehouseDashboard } from "./core/warehouse_dashboard.js";' apps/amir_theme_v16/amir_theme_v16/src/js/amir_theme.bundle.js
+          grep -Fq 'warehouseDashboard.mount();' apps/amir_theme_v16/amir_theme_v16/src/js/amir_theme.bundle.js
           grep -Fq 'function syncWarehouseWorkspaceScope()' apps/amir_theme_v16/amir_theme_v16/src/js/core/workspace_enhance.js
           grep -Fq 'document.documentElement.classList.toggle("nds-warehouse-workspace", Boolean(active))' apps/amir_theme_v16/amir_theme_v16/src/js/core/workspace_enhance.js
           grep -Fq 'WAREHOUSE_WORKSPACE_CSS=PASS' codespace-runtime-sync.sh
           grep -Fq 'WAREHOUSE_WORKSPACE_JS=PASS' codespace-runtime-sync.sh
           grep -Fq 'SERVED_WAREHOUSE_WORKSPACE_CSS=PASS' codespace-verify-runtime.sh
           grep -Fq 'SERVED_WAREHOUSE_WORKSPACE_JS=PASS' codespace-verify-runtime.sh
+          grep -Fq 'nds-warehouse-dashboard' codespace-runtime-sync.sh
+          grep -Fq 'nds-warehouse-dashboard' codespace-verify-runtime.sh
           python3 - <<'PY'
           from pathlib import Path
           css = Path("apps/amir_theme_v16/amir_theme_v16/src/scss/layouts/_warehouse-workspace.scss").read_text(encoding="utf-8")
+          dashboard_css = Path("apps/amir_theme_v16/amir_theme_v16/src/scss/components/_warehouse-dashboard.scss").read_text(encoding="utf-8")
+          dashboard_js = Path("apps/amir_theme_v16/amir_theme_v16/src/js/core/warehouse_dashboard.js").read_text(encoding="utf-8")
+          entry_js = Path("apps/amir_theme_v16/amir_theme_v16/src/js/amir_theme.bundle.js").read_text(encoding="utf-8")
           js = Path("apps/amir_theme_v16/amir_theme_v16/src/js/core/workspace_enhance.js").read_text(encoding="utf-8")
           # Only the named workspace receives these layout rules.
           assert 'html.nds-warehouse-workspace [data-page-route="Workspaces"]' in css
           assert 'currentWorkspaceKey() === "مخازن NDS ERP"' in js
           assert "number-widget-box" in css and "dashboard-widget-box" in css
           assert "shortcut-widget-box" in css and "links-widget-box" in css
+          for marker in (".nds-warehouse-dashboard", ".nds-warehouse-kpi-grid", ".nds-warehouse-movement-chart", ".nds-warehouse-distribution-chart", ".nds-warehouse-shortage-table", "grid-template-columns:repeat(4,minmax(0,1fr))"):
+              assert marker in dashboard_css.replace(" ", ""), f"Missing warehouse dashboard CSS marker: {marker}"
+          for marker in ("nds-warehouse-dashboard", "nds-warehouse-kpi-grid", "nds-warehouse-movement-chart", "nds-warehouse-distribution-chart", "nds-warehouse-shortage-table", "Stock Ledger Entry", "frappe.client.get_list"):
+              assert marker in dashboard_js, f"Missing warehouse dashboard JS marker: {marker}"
+          assert "warehouseDashboard.mount();" in entry_js
+          assert "getMovement(company,end)" in dashboard_js
+          assert "getShortages(company)" in dashboard_js
           print("WAREHOUSE_WORKSPACE_SOURCE_SCOPE=PASS")
+          print("WAREHOUSE_DASHBOARD_LIVE_DATA_SOURCE=PASS")
           PY
           echo "WAREHOUSE_WORKSPACE_VISUAL_ISOLATION=PASS"
 

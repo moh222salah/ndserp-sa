@@ -1,0 +1,116 @@
+/*
+ * NDS ERP Saudi — warehouse Workspace dashboard. Route-scoped RTL/LTR.
+ */
+html.nds-warehouse-workspace.nds-warehouse-dashboard-ready #page-Workspaces{--warehouse-ink:#202c37;--warehouse-muted:#788691;--warehouse-line:#e4e9ee;--warehouse-panel:#fff;--warehouse-bg:#f5f7f9;--warehouse-in:#39856d;--warehouse-out:#164e8f;--warehouse-alert:#bd5548;color:var(--warehouse-ink);background:var(--warehouse-bg);}
+html.nds-warehouse-workspace.nds-warehouse-dashboard-ready #page-Workspaces .layout-main-section{box-sizing:border-box;width:100%;max-width:none;padding:8px clamp(10px,1.15vw,20px) 24px;border:0;background:transparent;box-shadow:none;}
+html.nds-warehouse-workspace.nds-warehouse-dashboard-ready #page-Workspaces .nds-warehouse-dashboard{box-sizing:border-box;width:100%;min-width:0;padding:4px 0 12px;color:var(--warehouse-ink);direction:rtl;font-family:inherit;font-size:13px;line-height:1.5;}
+html.nds-warehouse-workspace.nds-warehouse-dashboard-ready #page-Workspaces .nds-warehouse-dashboard[dir="ltr"]{direction:ltr;}
+html.nds-warehouse-workspace.nds-warehouse-dashboard-ready #page-Workspaces .nds-warehouse-dashboard *,
+html.nds-warehouse-workspace.nds-warehouse-dashboard-ready #page-Workspaces .nds-warehouse-dashboard *::before,
+html.nds-warehouse-workspace.nds-warehouse-dashboard-ready #page-Workspaces .nds-warehouse-dashboard *::after{box-sizing:border-box;}
+html.nds-warehouse-workspace.nds-warehouse-dashboard-ready #page-Workspaces .nds-warehouse-dashboard-header{display:flex;align-items:center;justify-content:space-between;gap:18px;min-height:64px;margin:0 0 15px;}
+html.nds-warehouse-workspace.nds-warehouse-dashboard-ready #page-Workspaces .nds-warehouse-dashboard-heading{min-width:0;}
+html.nds-warehouse-workspace.nds-warehouse-dashboard-ready #page-Workspaces .nds-warehouse-dashboard-heading h1{margin:0;color:var(--warehouse-ink);font-size:clamp(22px,1.55vw,27px);font-weight:800;line-height:1.35;letter-spacing:-.025em;}
+html.nds-warehouse-workspace.nds-warehouse-dashboard-ready #page-Workspaces .nds-warehouse-dashboard-breadcrumb{display:flex;flex-wrap:wrap;align-items:center;gap:7px;margin-top:5px;color:#89959e;font-size:11px;font-weight:600;}
+html.nds-warehouse-workspace.nds-warehouse-dashboard-ready #page-Workspaces .nds-warehouse-dashboard-breadcrumb span:first-child{color:#39856d;font-weight:750;}
+html.nds-warehouse-workspace.nds-warehouse-dashboard-ready #page-Workspaces .nds-warehouse-dashboard-period{display:inline-flex;flex:0 0 auto;align-items:center;gap:8px;padding:8px 11px;border:1px solid var(--warehouse-line);border-radius:9px;background:#fff;color:#667580;box-shadow:0 1px 3px rgba(25,42,54,.025);font-size:12px;font-weight:650;white-space:nowrap;}
+html.nds-warehouse-workspace.nds-warehouse-dashboard-ready #page-Workspaces .nds-warehouse-period-icon{display:inline-grid;width:24px;height:24px;place-items:center;border-radius:7px;background:#eaf0f8;color:#164e8f;font-size:16px;}
+html.nds-warehouse-workspace.nds-warehouse-dashboard-ready #page-Workspaces .nds-warehouse-kpi-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));align-items:stretch;gap:13px;margin-bottom:15px;}
+html.nds-warehouse-workspace.nds-warehouse-dashboard-ready #page-Workspaces .nds-warehouse-kpi-card{display:flex;flex-direction:column;min-width:0;min-height:132px;padding:14px 16px 13px;overflow:hidden;border:1px solid var(--warehouse-line);border-top:3px solid #0a2342;border-radius:11px;background:#fff;box-shadow:0 2px 7px rgba(32,48,60,.035);transition:box-shadow .18s ease,transform .18s ease;}
+html.nds-warehouse-workspace.nds-warehouse-dashboard-ready #page-Workspaces .nds-warehouse-kpi-card:hover{transform:translateY(-2px);box-shadow:0 8px 20px rgba(32,48,60,.075);}
+html.nds-warehouse-workspace.nds-warehouse-dashboard-ready #page-Workspaces .nds-warehouse-kpi-card[data-kpi="warehouses"]{border-top-color:#164e8f;}
+html.nds-warehouse-workspace.nds-warehouse-dashboard-ready #page-Workspaces .nds-warehouse-kpi-card[data-kpi="items"]{border-top-color:#d4af37;}
+html.nds-warehouse-workspace.nds-warehouse-dashboard-ready #page-Workspaces .nds-warehouse-kpi-card[data-kpi="shortages"]{border-top-color:#bd5548;}
+html.nds-warehouse-workspace.nds-warehouse-dashboard-ready #page-Workspaces .nds-warehouse-kpi-top{display:flex;align-items:center;justify-content:space-between;gap:8px;min-height:27px;}
+html.nds-warehouse-workspace.nds-warehouse-dashboard-ready #page-Workspaces .nds-warehouse-kpi-label{color:var(--warehouse-muted);font-size:12px;font-weight:700;}
+html.nds-warehouse-workspace.nds-warehouse-dashboard-ready #page-Workspaces .nds-warehouse-kpi-icon{display:inline-grid;flex:0 0 auto;width:30px;height:30px;place-items:center;border-radius:9px;background:#eaf0f8;color:#0a2342;font-size:17px;font-weight:800;}
+html.nds-warehouse-workspace.nds-warehouse-dashboard-ready #page-Workspaces .nds-warehouse-kpi-card[data-kpi="items"] .nds-warehouse-kpi-icon{background:#fbf4df;color:#9a7920;}
+html.nds-warehouse-workspace.nds-warehouse-dashboard-ready #page-Workspaces .nds-warehouse-kpi-card[data-kpi="shortages"] .nds-warehouse-kpi-icon{background:#faeae8;color:#bd5548;}
+html.nds-warehouse-workspace.nds-warehouse-dashboard-ready #page-Workspaces .nds-warehouse-kpi-value{display:flex;flex-wrap:wrap;align-items:baseline;gap:5px;margin:10px 0 7px;color:#23313b;font-size:clamp(21px,1.8vw,29px);font-weight:800;letter-spacing:-.035em;line-height:1.2;font-variant-numeric:tabular-nums;overflow-wrap:anywhere;}
+html.nds-warehouse-workspace.nds-warehouse-dashboard-ready #page-Workspaces .nds-warehouse-kpi-caption{margin-top:auto;color:#96a0a8;font-size:10px;font-weight:550;line-height:1.4;}
+html.nds-warehouse-workspace.nds-warehouse-dashboard-ready #page-Workspaces .nds-warehouse-kpi-card.is-unavailable .nds-warehouse-kpi-value,
+html.nds-warehouse-workspace.nds-warehouse-dashboard-ready #page-Workspaces .nds-warehouse-kpi-card.is-unavailable .nds-warehouse-kpi-caption{color:#bd5548;}
+html.nds-warehouse-workspace.nds-warehouse-dashboard-ready #page-Workspaces .nds-warehouse-analysis-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));align-items:stretch;gap:14px;margin-bottom:15px;}
+html.nds-warehouse-workspace.nds-warehouse-dashboard-ready #page-Workspaces .nds-warehouse-panel{position:relative;min-width:0;overflow:hidden;border:1px solid var(--warehouse-line);border-radius:11px;background:var(--warehouse-panel);box-shadow:0 2px 7px rgba(32,48,60,.03);}
+html.nds-warehouse-workspace.nds-warehouse-dashboard-ready #page-Workspaces .nds-warehouse-movement-chart,
+html.nds-warehouse-workspace.nds-warehouse-dashboard-ready #page-Workspaces .nds-warehouse-distribution-chart{min-height:292px;}
+html.nds-warehouse-workspace.nds-warehouse-dashboard-ready #page-Workspaces .nds-warehouse-panel-heading{display:flex;align-items:center;justify-content:space-between;gap:12px;min-width:0;padding:15px 17px 12px;border-bottom:1px solid #eef1f4;}
+html.nds-warehouse-workspace.nds-warehouse-dashboard-ready #page-Workspaces .nds-warehouse-panel-heading>div{min-width:0;}
+html.nds-warehouse-workspace.nds-warehouse-dashboard-ready #page-Workspaces .nds-warehouse-panel-heading h2{margin:0;color:#283640;font-size:14px;font-weight:800;line-height:1.5;}
+html.nds-warehouse-workspace.nds-warehouse-dashboard-ready #page-Workspaces .nds-warehouse-panel-heading p{margin:4px 0 0;color:#87939c;font-size:11px;font-weight:500;line-height:1.5;}
+html.nds-warehouse-workspace.nds-warehouse-dashboard-ready #page-Workspaces .nds-warehouse-panel-mark{display:inline-grid;flex:0 0 auto;width:31px;height:31px;place-items:center;border-radius:9px;background:#e9f4ef;color:#39856d;font-size:18px;font-weight:800;}
+html.nds-warehouse-workspace.nds-warehouse-dashboard-ready #page-Workspaces .nds-warehouse-panel-mark.is-blue{background:#eaf0f8;color:#164e8f;}
+html.nds-warehouse-workspace.nds-warehouse-dashboard-ready #page-Workspaces .nds-warehouse-panel-mark.is-alert{background:#faeae8;color:#bd5548;}
+html.nds-warehouse-workspace.nds-warehouse-dashboard-ready #page-Workspaces .nds-warehouse-movement-legend{display:flex;align-items:center;flex-wrap:wrap;gap:14px;padding:11px 18px 0;color:#7e8a93;font-size:11px;font-weight:650;}
+html.nds-warehouse-workspace.nds-warehouse-dashboard-ready #page-Workspaces .nds-warehouse-movement-legend span{display:inline-flex;align-items:center;gap:6px;}
+html.nds-warehouse-workspace.nds-warehouse-dashboard-ready #page-Workspaces .nds-warehouse-movement-legend i{display:inline-block;width:8px;height:8px;border-radius:3px;background:var(--warehouse-in);}
+html.nds-warehouse-workspace.nds-warehouse-dashboard-ready #page-Workspaces .nds-warehouse-movement-legend i.outgoing{background:var(--warehouse-out);}
+html.nds-warehouse-workspace.nds-warehouse-dashboard-ready #page-Workspaces .nds-warehouse-movement-body{min-height:204px;padding:13px 17px 15px;}
+html.nds-warehouse-workspace.nds-warehouse-dashboard-ready #page-Workspaces .nds-warehouse-movement-columns{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));align-items:stretch;gap:9px;min-height:175px;padding-top:3px;}
+html.nds-warehouse-workspace.nds-warehouse-dashboard-ready #page-Workspaces .nds-warehouse-month-column{display:flex;min-width:0;flex-direction:column;align-items:stretch;justify-content:flex-end;gap:8px;}
+html.nds-warehouse-workspace.nds-warehouse-dashboard-ready #page-Workspaces .nds-warehouse-month-bars{display:flex;align-items:flex-end;justify-content:center;gap:5px;height:132px;padding-top:5px;border-bottom:1px solid #e7ebef;}
+html.nds-warehouse-workspace.nds-warehouse-dashboard-ready #page-Workspaces .nds-warehouse-bar-track{display:flex;flex:0 1 16px;align-items:flex-end;justify-content:center;width:16px;height:100%;min-width:5px;}
+html.nds-warehouse-workspace.nds-warehouse-dashboard-ready #page-Workspaces .nds-warehouse-bar{display:block;width:100%;min-height:0;border-radius:4px 4px 0 0;background:var(--warehouse-in);transition:height .22s ease;}
+html.nds-warehouse-workspace.nds-warehouse-dashboard-ready #page-Workspaces .nds-warehouse-bar-track.outgoing .nds-warehouse-bar{background:var(--warehouse-out);}
+html.nds-warehouse-workspace.nds-warehouse-dashboard-ready #page-Workspaces .nds-warehouse-month-label{overflow:hidden;color:#849099;font-size:10px;font-weight:650;text-align:center;text-overflow:ellipsis;white-space:nowrap;}
+html.nds-warehouse-workspace.nds-warehouse-dashboard-ready #page-Workspaces .nds-warehouse-distribution-body{min-height:204px;padding:18px 17px 16px;}
+html.nds-warehouse-workspace.nds-warehouse-dashboard-ready #page-Workspaces .nds-warehouse-distribution-list{display:grid;gap:15px;}
+html.nds-warehouse-workspace.nds-warehouse-dashboard-ready #page-Workspaces .nds-warehouse-distribution-row{min-width:0;}
+html.nds-warehouse-workspace.nds-warehouse-dashboard-ready #page-Workspaces .nds-warehouse-distribution-head{display:flex;align-items:baseline;justify-content:space-between;gap:10px;margin-bottom:7px;}
+html.nds-warehouse-workspace.nds-warehouse-dashboard-ready #page-Workspaces .nds-warehouse-distribution-name{min-width:0;overflow:hidden;color:#53616b;font-size:11px;font-weight:650;text-overflow:ellipsis;white-space:nowrap;}
+html.nds-warehouse-workspace.nds-warehouse-dashboard-ready #page-Workspaces .nds-warehouse-distribution-value{flex:0 0 auto;color:#364550;font-size:11px;font-weight:800;font-variant-numeric:tabular-nums;}
+html.nds-warehouse-workspace.nds-warehouse-dashboard-ready #page-Workspaces .nds-warehouse-distribution-track{height:8px;overflow:hidden;border-radius:99px;background:#edf1f4;}
+html.nds-warehouse-workspace.nds-warehouse-dashboard-ready #page-Workspaces .nds-warehouse-distribution-fill{display:block;height:100%;border-radius:inherit;background:#164e8f;transition:width .3s ease;}
+html.nds-warehouse-workspace.nds-warehouse-dashboard-ready #page-Workspaces .nds-warehouse-distribution-row:nth-child(3n+2) .nds-warehouse-distribution-fill{background:#d4af37;}
+html.nds-warehouse-workspace.nds-warehouse-dashboard-ready #page-Workspaces .nds-warehouse-distribution-row:nth-child(3n) .nds-warehouse-distribution-fill{background:#39856d;}
+html.nds-warehouse-workspace.nds-warehouse-dashboard-ready #page-Workspaces .nds-warehouse-chart-empty,
+html.nds-warehouse-workspace.nds-warehouse-dashboard-ready #page-Workspaces .nds-warehouse-loading{display:grid;min-height:155px;place-items:center;padding:18px;color:#89959e;font-size:12px;font-weight:600;line-height:1.7;text-align:center;}
+html.nds-warehouse-workspace.nds-warehouse-dashboard-ready #page-Workspaces .nds-warehouse-shortage-table{margin:0 0 16px;}
+html.nds-warehouse-workspace.nds-warehouse-dashboard-ready #page-Workspaces .nds-warehouse-table-wrap{width:100%;overflow-x:auto;}
+html.nds-warehouse-workspace.nds-warehouse-dashboard-ready #page-Workspaces .nds-warehouse-table{width:100%;border-collapse:separate;border-spacing:0;color:#43515b;font-size:12px;}
+html.nds-warehouse-workspace.nds-warehouse-dashboard-ready #page-Workspaces .nds-warehouse-table th{padding:11px 15px;border-bottom:1px solid #edf0f3;background:#fafbfc;color:#7e8a93;font-size:10px;font-weight:750;text-align:start;white-space:nowrap;}
+html.nds-warehouse-workspace.nds-warehouse-dashboard-ready #page-Workspaces .nds-warehouse-table td{padding:11px 15px;border-bottom:1px solid #f0f2f4;vertical-align:middle;}
+html.nds-warehouse-workspace.nds-warehouse-dashboard-ready #page-Workspaces .nds-warehouse-table tbody tr:last-child td{border-bottom:0;}
+html.nds-warehouse-workspace.nds-warehouse-dashboard-ready #page-Workspaces .nds-warehouse-table tbody tr:hover td{background:#f9fbfd;}
+html.nds-warehouse-workspace.nds-warehouse-dashboard-ready #page-Workspaces .nds-warehouse-table td:first-child{min-width:185px;color:#273640;font-weight:700;}
+html.nds-warehouse-workspace.nds-warehouse-dashboard-ready #page-Workspaces .nds-warehouse-table a{color:#164e8f;text-decoration:none;}
+html.nds-warehouse-workspace.nds-warehouse-dashboard-ready #page-Workspaces .nds-warehouse-table a:hover{text-decoration:underline;}
+html.nds-warehouse-workspace.nds-warehouse-dashboard-ready #page-Workspaces .nds-warehouse-item-code{display:block;margin-top:2px;color:#98a1a8;font-size:10px;font-weight:500;direction:ltr;text-align:start;}
+html.nds-warehouse-workspace.nds-warehouse-dashboard-ready #page-Workspaces .nds-warehouse-table .is-numeric{font-variant-numeric:tabular-nums;direction:ltr;text-align:start;white-space:nowrap;}
+html.nds-warehouse-workspace.nds-warehouse-dashboard-ready #page-Workspaces .nds-warehouse-table .is-negative{color:#bd5548;font-weight:800;}
+html.nds-warehouse-workspace.nds-warehouse-dashboard-ready #page-Workspaces .nds-warehouse-table-empty{padding:22px 15px;color:#89959e;text-align:center;}
+html.nds-warehouse-workspace.nds-warehouse-dashboard-ready #page-Workspaces .nds-warehouse-navigation-heading{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:4px 0 8px;padding:13px 15px;border:1px solid var(--warehouse-line);border-inline-start:3px solid #d4af37;border-radius:9px;background:#fff;}
+html.nds-warehouse-workspace.nds-warehouse-dashboard-ready #page-Workspaces .nds-warehouse-navigation-heading h2{margin:0;color:#283640;font-size:14px;font-weight:800;}
+html.nds-warehouse-workspace.nds-warehouse-dashboard-ready #page-Workspaces .nds-warehouse-navigation-heading p{margin:3px 0 0;color:#87939c;font-size:11px;}
+html.nds-warehouse-workspace.nds-warehouse-dashboard-ready #page-Workspaces #editorjs .codex-editor__redactor{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));align-items:stretch;gap:13px;padding-bottom:14px;}
+html.nds-warehouse-workspace.nds-warehouse-dashboard-ready #page-Workspaces #editorjs .codex-editor__redactor>.ce-block:has(.ce-header),
+html.nds-warehouse-workspace.nds-warehouse-dashboard-ready #page-Workspaces #editorjs .codex-editor__redactor>.ce-block:has(.number-widget-box),
+html.nds-warehouse-workspace.nds-warehouse-dashboard-ready #page-Workspaces #editorjs .codex-editor__redactor>.ce-block:has(.chart),
+html.nds-warehouse-workspace.nds-warehouse-dashboard-ready #page-Workspaces #editorjs .codex-editor__redactor>.ce-block:has(.spacer){display:none;}
+html.nds-warehouse-workspace.nds-warehouse-dashboard-ready #page-Workspaces #editorjs .codex-editor__redactor>.ce-block:has(.shortcut-widget-box){grid-column:span 3;min-width:0;}
+html.nds-warehouse-workspace.nds-warehouse-dashboard-ready #page-Workspaces #editorjs .codex-editor__redactor>.ce-block:has(.links-widget-box){grid-column:span 4;min-width:0;}
+html.nds-warehouse-workspace.nds-warehouse-dashboard-ready #page-Workspaces #editorjs .widget.shortcut-widget-box,
+html.nds-warehouse-workspace.nds-warehouse-dashboard-ready #page-Workspaces #editorjs .widget.links-widget-box{height:100%;box-shadow:0 2px 7px rgba(32,48,60,.03);}
+@media(max-width:1024px){
+html.nds-warehouse-workspace.nds-warehouse-dashboard-ready #page-Workspaces .nds-warehouse-kpi-grid{grid-template-columns:repeat(2,minmax(0,1fr));}
+html.nds-warehouse-workspace.nds-warehouse-dashboard-ready #page-Workspaces .nds-warehouse-analysis-grid{grid-template-columns:minmax(0,1fr);}
+html.nds-warehouse-workspace.nds-warehouse-dashboard-ready #page-Workspaces #editorjs .codex-editor__redactor>.ce-block:has(.links-widget-box){grid-column:span 6;}
+}
+@media(max-width:767px){
+html.nds-warehouse-workspace.nds-warehouse-dashboard-ready #page-Workspaces .layout-main-section{padding:8px 7px 16px;}
+html.nds-warehouse-workspace.nds-warehouse-dashboard-ready #page-Workspaces .nds-warehouse-dashboard-header{align-items:flex-start;flex-direction:column;gap:9px;}
+html.nds-warehouse-workspace.nds-warehouse-dashboard-ready #page-Workspaces .nds-warehouse-kpi-grid{gap:9px;}
+html.nds-warehouse-workspace.nds-warehouse-dashboard-ready #page-Workspaces .nds-warehouse-kpi-card{min-height:114px;padding:11px 12px;}
+html.nds-warehouse-workspace.nds-warehouse-dashboard-ready #page-Workspaces .nds-warehouse-analysis-grid{gap:10px;}
+html.nds-warehouse-workspace.nds-warehouse-dashboard-ready #page-Workspaces .nds-warehouse-panel-heading{padding:12px 13px 10px;}
+html.nds-warehouse-workspace.nds-warehouse-dashboard-ready #page-Workspaces .nds-warehouse-movement-body,
+html.nds-warehouse-workspace.nds-warehouse-dashboard-ready #page-Workspaces .nds-warehouse-distribution-body{padding-inline:10px;}
+html.nds-warehouse-workspace.nds-warehouse-dashboard-ready #page-Workspaces .nds-warehouse-movement-columns{gap:4px;}
+html.nds-warehouse-workspace.nds-warehouse-dashboard-ready #page-Workspaces #editorjs .codex-editor__redactor>.ce-block:has(.shortcut-widget-box){grid-column:span 6;}
+html.nds-warehouse-workspace.nds-warehouse-dashboard-ready #page-Workspaces #editorjs .codex-editor__redactor>.ce-block:has(.links-widget-box){grid-column:span 12;}
+}
+@media(prefers-reduced-motion:reduce){
+html.nds-warehouse-workspace.nds-warehouse-dashboard-ready #page-Workspaces .nds-warehouse-kpi-card,
+html.nds-warehouse-workspace.nds-warehouse-dashboard-ready #page-Workspaces .nds-warehouse-bar,
+html.nds-warehouse-workspace.nds-warehouse-dashboard-ready #page-Workspaces .nds-warehouse-distribution-fill{transition:none;}
+}
