@@ -41,7 +41,6 @@ const accountsDashboard = (() => {
 			overdue: "متأخرة",
 			collecting: "قيد التحصيل",
 			sar: "ر.س",
-			loading: "عرض تصميمي — القيم وفق مواصفات الطلب وليست محمّلة من قاعدة بيانات ERP.",
 		},
 		en: {
 			title: "Accounts Dashboard",
@@ -74,7 +73,6 @@ const accountsDashboard = (() => {
 			overdue: "Overdue",
 			collecting: "In Collection",
 			sar: "SAR",
-			loading: "Design preview — these values are supplied by the brief, not loaded from ERP records.",
 		},
 	};
 
@@ -229,8 +227,7 @@ const accountsDashboard = (() => {
 					'<thead><tr><th data-th="id"></th><th data-th="customer"></th><th data-th="due"></th><th data-th="amount"></th><th data-th="status"></th></tr></thead>' +
 					'<tbody data-invoice-rows></tbody>' +
 				'</table></div>' +
-			'</section>' +
-			'<p class="nds-accounts-dashboard-note" data-dashboard-note></p>';
+			'</section>' +;
 
 		board.querySelector("[data-accounts-title]").textContent = t.title;
 		board.querySelector("[data-accounts-module]").textContent = t.breadcrumbModule;
@@ -262,7 +259,6 @@ const accountsDashboard = (() => {
 		board.querySelector('[data-th="due"]').textContent = t.dueDate;
 		board.querySelector('[data-th="amount"]').textContent = t.amount;
 		board.querySelector('[data-th="status"]').textContent = t.status;
-		board.querySelector("[data-dashboard-note]").textContent = t.loading;
 
 		renderExpenses(board, t);
 		renderMonths(board, t, language);
