@@ -316,7 +316,11 @@ for key in required:
             "data-sales-direction",
             "ARABIC_HIDDEN_WORKSPACE_CARDS",
             "syncArabicWorkspaceCardVisibility",
+            'en: "Home"',
+            'en: "Items & Pricing"',
             'en: "Work"',
+            'en: "Settings"',
+            'en: "Reports"',
             "ndsSalesOriginalDataSalesDirection",
         )
         missing = [marker for marker in required_sales_workspace_js if marker not in js]
@@ -328,6 +332,9 @@ for key in required:
         if "nds-purchase-workspace-redesign" not in js:
             raise SystemExit("PURCHASE_WORKSPACE_JS=FAIL:MISSING_MARKER:nds-purchase-workspace-redesign")
         print("PURCHASE_WORKSPACE_JS=PASS")
+        if "لوحة المشتريات" in js or "Nexterp v16" in js or "data-purchase-period" in js:
+            raise SystemExit("PURCHASE_DASHBOARD_TOP_METADATA=FAIL:STILL_PRESENT")
+        print("PURCHASE_DASHBOARD_TOP_METADATA=PASS")
         required_purchase_dashboard_js = ("nds-purchase-dashboard", "nds-purchase-kpi-grid", "nds-purchase-month-columns", "nds-purchase-orders-table", "Purchase Invoice", "Purchase Receipt", "data-purchase-direction")
         missing = [marker for marker in required_purchase_dashboard_js if marker not in js]
         if missing:
