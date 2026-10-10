@@ -253,6 +253,18 @@ for marker in 'nds-sales-dashboard' 'nds-sales-revenue-chart' 'nds-sales-channel
   fi
 done
 echo "BUILT_SALES_DASHBOARD_JS=PASS"
+for marker in 'Monthly Sales' 'Latest Sales Invoices' 'workspace_map' 'get_list' 'reports-1' 'reports-2' 'reports-3' 'grid-template-columns:repeat(2,minmax(0,1fr))' 'grid-template-columns:minmax(0,1fr)'; do
+  if ! grep -Fq "$marker" "$LOCAL_JS_ASSET"; then
+    echo "BUILT_SALES_LIVE_BILINGUAL=FAIL:MISSING_MARKER:$marker"
+    exit 54
+  fi
+done
+if grep -Fq 'data-sales-period' "$LOCAL_JS_ASSET" || grep -Fq 'Nexterp v16' "$LOCAL_JS_ASSET"; then
+  echo "BUILT_SALES_TOP_METADATA=FAIL:STILL_PRESENT"
+  exit 55
+fi
+echo "BUILT_SALES_LIVE_BILINGUAL=PASS"
+
 if ! grep -Fq 'nds-purchase-workspace-redesign' "$LOCAL_JS_ASSET"; then
   echo "BUILT_PURCHASE_WORKSPACE_JS=FAIL:MISSING_MARKER:nds-purchase-workspace-redesign"
   exit 40
@@ -307,7 +319,19 @@ for marker in 'nds-sales-dashboard' 'nds-sales-revenue-chart' 'nds-sales-channel
     exit 45
   fi
 done
-echo "BUILT_SALES_DASHBOARD_JS=PASS"
+echo "SERVED_SALES_DASHBOARD_JS=PASS"
+for marker in 'Monthly Sales' 'Latest Sales Invoices' 'workspace_map' 'get_list' 'reports-1' 'reports-2' 'reports-3' 'grid-template-columns:repeat(2,minmax(0,1fr))' 'grid-template-columns:minmax(0,1fr)'; do
+  if ! grep -Fq "$marker" "$SERVED_JS"; then
+    echo "SERVED_SALES_LIVE_BILINGUAL=FAIL:MISSING_MARKER:$marker"
+    exit 56
+  fi
+done
+if grep -Fq 'data-sales-period' "$LOCAL_JS_ASSET" || grep -Fq 'Nexterp v16' "$LOCAL_JS_ASSET"; then
+  echo "SERVED_SALES_TOP_METADATA=FAIL:STILL_PRESENT"
+  exit 57
+fi
+echo "SERVED_SALES_LIVE_BILINGUAL=PASS"
+
 if ! grep -Fq 'nds-purchase-workspace-redesign' "$SERVED_JS"; then
   echo "SERVED_PURCHASE_WORKSPACE_JS=FAIL:MISSING_MARKER:nds-purchase-workspace-redesign"
   exit 41

@@ -53,15 +53,17 @@ const salesDashboard = (() => {
 		).toLowerCase();
 	}
 
+	function isEnglish() {
+		return !currentLanguage().startsWith("ar");
+	}
+
+	function copy(arabic, english) {
+		return isEnglish() ? english : arabic;
+	}
+
 	function currentDirection() {
-		// Frappe's active language is authoritative; the root dir is a fallback
-		// for pages where boot language is not available yet.
-		const language = currentLanguage();
-		if (language) return language.startsWith("ar") ? "rtl" : "ltr";
-		const htmlDirection = String(
-			document.documentElement && document.documentElement.getAttribute("dir") || ""
-		).toLowerCase();
-		return htmlDirection === "rtl" ? "rtl" : "ltr";
+		// Use the active ERP language consistently for direction across every sales component.
+		return isEnglish() ? "ltr" : "rtl";
 	}
 
 	function syncDashboardDirection(board) {
@@ -71,12 +73,15 @@ const salesDashboard = (() => {
 		board.setAttribute("dir", direction);
 		board.setAttribute("data-sales-direction", direction);
 		if (language) board.setAttribute("lang", language);
+		board.querySelectorAll(".nds-sales-kpi-grid, .nds-sales-charts-grid, .nds-sales-invoices, .nds-sales-invoice-table, .nds-sales-invoice-table th, .nds-sales-invoice-table td").forEach((node) => {
+			node.setAttribute("dir", direction);
+		});
 		const sections = document.getElementById(SALES_SECTIONS_ID);
 		if (sections) {
 			sections.setAttribute("dir", direction);
 			sections.setAttribute("data-sales-direction", direction);
 			if (language) sections.setAttribute("lang", language);
-			sections.querySelectorAll(".nds-sales-section-card, .nds-sales-section-link").forEach((node) => {
+			sections.querySelectorAll(".nds-sales-section-card, .nds-sales-section-card-head, .nds-sales-section-card-title, .nds-sales-section-links, .nds-sales-section-link, .nds-sales-sections-header, .nds-sales-sections-title, .nds-sales-sections-description").forEach((node) => {
 				node.setAttribute("dir", direction);
 			});
 		}
@@ -146,7 +151,7 @@ const salesDashboard = (() => {
 	function monthLabel(key) {
 		try {
 			const date = new Date(key + "-01T12:00:00");
-			return new Intl.DateTimeFormat("ar-EG", {
+			return new Intl.DateTimeFormat(isEnglish() ? "en-US" : "ar-EG", {
 				month: "long",
 				calendar: "gregory",
 			}).format(date);
@@ -174,7 +179,7 @@ const salesDashboard = (() => {
 
 	function money(value) {
 		const code = currencyCode();
-		const suffix = code === "SAR" ? "ر.س" : code;
+		const suffix = code === "SAR" ? (isEnglish() ? "SAR" : "ر.س") : code;
 		return number(value, 0) + " " + suffix;
 	}
 
@@ -185,18 +190,18 @@ const salesDashboard = (() => {
 
 	function trendText(current, previous, kind) {
 		const delta = current - previous;
-		if (previous === 0 && current === 0) return { text: "لا توجد حركة في الفترة المقارنة", state: "neutral" };
-		if (previous === 0 && current > 0) return { text: "نشاط جديد هذا الشهر", state: "positive" };
+		if (previous === 0 && current === 0) return { text: copy("لا توجد حركة في الفترة المقارنة", "No activity in comparison period"), state: "neutral" };
+		if (previous === 0 && current > 0) return { text: copy("نشاط جديد هذا الشهر", "New activity this month"), state: "positive" };
 		if (kind === "count") {
-			if (delta > 0) return { text: "↑ " + number(delta) + " فاتورة جديدة عن الشهر السابق", state: "positive" };
-			if (delta < 0) return { text: "↓ " + number(Math.abs(delta)) + " فاتورة عن الشهر السابق", state: "negative" };
-			return { text: "لا تغيير عن الشهر السابق", state: "neutral" };
+			if (delta > 0) return { text: "↑ " + number(delta) + copy(" فاتورة جديدة عن الشهر السابق", " new invoices vs. previous month"), state: "positive" };
+			if (delta < 0) return { text: "↓ " + number(Math.abs(delta)) + copy(" فاتورة عن الشهر السابق", " invoices vs. previous month"), state: "negative" };
+			return { text: copy("لا تغيير عن الشهر السابق", "No change vs. previous month"), state: "neutral" };
 		}
 		const change = percentChange(current, previous);
-		if (change === null) return { text: "لا توجد بيانات مقارنة", state: "neutral" };
+		if (change === null) return { text: copy("لا توجد بيانات مقارنة", "No comparison data"), state: "neutral" };
 		const arrow = change > 0 ? "↑ " : change < 0 ? "↓ " : "";
 		const state = change > 0 ? "positive" : change < 0 ? "negative" : "neutral";
-		return { text: arrow + number(Math.abs(change), 1) + "% عن الشهر السابق", state };
+		return { text: arrow + number(Math.abs(change), 1) + copy("% عن الشهر السابق", "% vs. previous month"), state };
 	}
 
 	function setText(root, selector, text) {
@@ -275,7 +280,17 @@ const salesDashboard = (() => {
 			}
 			activeGroup.links.push(item);
 		});
-		return groups;
+		const reports = groups.find((group) => group.definition.key === "reports");
+		if (!reports) return groups;
+		const reportLinks = reports.links;
+		const splitPoint1 = Math.ceil(reportLinks.length / 3);
+		const splitPoint2 = Math.ceil((reportLinks.length - splitPoint1) / 2) + splitPoint1;
+		const reportGroups = [
+			{ definition: { ...reports.definition, key: "reports-1" }, links: reportLinks.slice(0, splitPoint1) },
+			{ definition: { ...reports.definition, key: "reports-2" }, links: reportLinks.slice(splitPoint1, splitPoint2) },
+			{ definition: { ...reports.definition, key: "reports-3" }, links: reportLinks.slice(splitPoint2) },
+		];
+		return groups.filter((group) => group.definition.key !== "reports").concat(reportGroups);
 	}
 
 	function salesLinkRoute(item) {
@@ -307,6 +322,46 @@ const salesDashboard = (() => {
 		}
 	}
 
+	function salesSectionLinkLabel(item, direction) {
+		const arabic = String(item.label || item.link_to || "");
+		if (direction === "rtl") return __(arabic);
+		const translations = {
+			"العملاء": "Customers", "العميل": "Customers", "مندوب المبيعات": "Sales Person",
+			"شريك المبيعات": "Sales Partner", "عرض سعر": "Quotation", "امر البيع": "Sales Order",
+			"اذن التسليم": "Delivery Note", "قائمة الالتقاط": "Pick List", "فاتورة البيع": "Sales Invoice",
+			"سند الدفع": "Payment Entry", "طلب الدفع": "Payment Request", "امر اجمالي": "Blanket Order",
+			"المطالبة": "Dunning", "الصنف": "Item", "مجموعة الاصناف": "Item Group", "مجموعة الأصناف": "Item Group",
+			"قاعدة التسعير": "Item Price", "قائمة التسعير": "Price List", "حزمة المنتجات": "Product Bundle",
+			"قاعدة التسعير المتقدمة": "Pricing Rule", "المخطط الترويجي": "Promotional Scheme",
+			"قاعدة الشحن": "Shipping Rule", "كود الخصم": "Coupon Code",
+			"قالب ضرائب المبيعات": "Sales Taxes and Charges Template", "الشروط والاحكام": "Terms and Conditions",
+			"طرق الدفع": "Modes of Payment", "الحملة": "Campaign", "مجموعات العملاء": "Customer Groups",
+			"عناوين الاتصال": "Contacts", "العناوين": "Addresses", "المنطقه التابع لها": "Territory",
+			"فرع": "Branch", "تحليل المبيعات": "Sales Analytics", "تحليل اوامر البيع": "Sales Order Analysis",
+			"اتجاهات اوامر البيع": "Sales Order Trends", "تحليل فواتير البيع": "Sales Invoice Trends",
+			"اتجاهات عروض الاسعار": "Quotation Trends", "اتجاهات اذن التسليم": "Delivery Note Trends",
+			"عروض الاسعار المفقودة": "Lost Quotations", "سجل المبيعات": "Sales Register",
+			"سجل حركة المبيعات وفقا لصنف": "Item-wise Sales Register", "سجل مبيعات الاصناف": "Item-wise Sales History",
+			"ملخص مدفوعات المبيعات": "Sales Payment Summary", "ربحيه البيع": "Gross Profit",
+			"الاصناف غير النشطة": "Inactive Sales Items", "الذمم المدينة": "Accounts Receivable",
+			"ملخص الذمم المدينة": "Accounts Receivable Summary", "ملخص دفتر العميل": "Customer Ledger Summary",
+			"رصيد ائتمان العميل": "Customer Credit Balance", "اصناف مسلمة للفوترة": "Delivered Items To Be Billed",
+			"حالة شروط دفع اوامر البيع": "Payment Terms Status for Sales Order", "اوامر البيع المعلقة": "Pending SO Items For Purchase Request",
+			"عموله مناديب البيع": "Sales Person Commission Summary", "تفاصيل عموله مندوب البيع": "Sales Person-wise Transaction Summary",
+			"هدف مندوب البيع": "Sales Person Target Variance", "عمولة شركاء المبيعات": "Sales Partners Commission",
+			"ملخص عمولة شريك المبيعات": "Sales Partner Commission Summary", "معاملات شريك المبيعات": "Sales Partner Transaction Summary",
+			"هدف شريك المبيعات": "Sales Partner Target Variance", "هدف المنطقة": "Territory Target Variance",
+			"اكتساب العملاء والولاء": "Customer Acquisition and Loyalty", "العملاء غير النشطين": "Inactive Customers",
+			"عملاء بدون معاملات بيع": "Customers Without Sales Transactions", "اسعار الاصناف حسب العميل": "Customer-wise Item Price",
+			"عناوين واتصالات العملاء": "Address And Contacts", "المخزون المتاح لحزم المنتجات": "Available Stock for Packing Items",
+			"تفاصيل تكامل زاتكا": "ZATCA Integration Details", "ملخص تكامل زاتكا": "ZATCA Integration Summary",
+		};
+		const translated = translations[arabic];
+		if (translated) return translated;
+		const fallback = String(item.link_to || arabic);
+		return /[\u0600-\u06FF]/.test(fallback) ? __(arabic) : fallback;
+	}
+
 	function renderSalesSections(host, board) {
 		if (!host || !board) return false;
 		const groups = getSalesSectionGroups();
@@ -335,10 +390,10 @@ const salesDashboard = (() => {
 
 		const header = make("header", "nds-sales-sections-header");
 		header.setAttribute("dir", direction);
-		const heading = make("h2", "nds-sales-sections-title", direction === "rtl" ? "أقسام المبيعات" : "Sales sections");
+		const heading = make("h2", "nds-sales-sections-title", copy("أقسام المبيعات", "Sales sections"));
 		heading.setAttribute("dir", direction);
 		const helper = make("p", "nds-sales-sections-description",
-			direction === "rtl" ? "الوصول المباشر إلى أقسام ووظائف المبيعات" : "Quick access to sales tools and reports");
+			copy("الوصول المباشر إلى أقسام ووظائف المبيعات", "Quick access to sales tools and reports"));
 		helper.setAttribute("dir", direction);
 		header.append(heading, helper);
 		sections.appendChild(header);
@@ -370,7 +425,7 @@ const salesDashboard = (() => {
 			list.setAttribute("dir", direction);
 			list.setAttribute("aria-label", direction === "rtl" ? definition.ar : definition.en);
 			group.links.forEach((item) => {
-				const link = make("a", "nds-sales-section-link", __(item.label || item.link_to));
+				const link = make("a", "nds-sales-section-link", salesSectionLinkLabel(item, direction));
 				link.href = "#";
 				link.setAttribute("dir", direction);
 				link.setAttribute("data-sales-link-type", item.link_type);
@@ -406,60 +461,52 @@ const salesDashboard = (() => {
 		const board = make("section", DASHBOARD_CLASS);
 		board.id = DASHBOARD_ID;
 		syncDashboardDirection(board);
-		board.setAttribute("aria-label", "لوحة المبيعات");
+		board.setAttribute("aria-label", copy("مؤشرات وتحليلات المبيعات", "Sales metrics and analytics"));
 		board.innerHTML =
-			'<header class="nds-sales-dashboard-header">' +
-				'<div class="nds-sales-dashboard-heading">' +
-					'<h1>لوحة المبيعات</h1>' +
-					'<div class="nds-sales-dashboard-breadcrumb"><span>Nexterp v16</span><span aria-hidden="true">/</span><span>المبيعات</span><span aria-hidden="true">/</span><span>نظرة عامة</span></div>' +
-				'</div>' +
-				'<div class="nds-sales-dashboard-period">' +
-					'<span class="nds-sales-dashboard-period-icon" aria-hidden="true">◷</span>' +
-					'<span data-sales-period>الفترة الحالية</span>' +
-				'</div>' +
-			'</header>' +
-			'<section class="nds-sales-kpi-grid" aria-label="مؤشرات المبيعات">' +
+			'<section class="nds-sales-kpi-grid" aria-label="' + copy("مؤشرات المبيعات", "Sales metrics") + '">' +
 				'<article class="nds-sales-kpi-card" data-kpi="sales">' +
-					'<div class="nds-sales-kpi-label">إجمالي المبيعات (الشهر)</div>' +
+					'<div class="nds-sales-kpi-label">' + copy("إجمالي المبيعات (الشهر)", "Monthly Sales") + '</div>' +
 					'<div class="nds-sales-kpi-value" data-kpi-value>—</div>' +
-					'<div class="nds-sales-kpi-trend neutral" data-kpi-trend>جارٍ تحميل البيانات…</div>' +
+					'<div class="nds-sales-kpi-trend neutral" data-kpi-trend>' + copy("جارٍ تحميل البيانات…", "Loading live data…") + '</div>' +
 				'</article>' +
 				'<article class="nds-sales-kpi-card" data-kpi="invoices">' +
-					'<div class="nds-sales-kpi-label">عدد الفواتير</div>' +
+					'<div class="nds-sales-kpi-label">' + copy("عدد الفواتير", "Invoice Count") + '</div>' +
 					'<div class="nds-sales-kpi-value" data-kpi-value>—</div>' +
-					'<div class="nds-sales-kpi-trend neutral" data-kpi-trend>جارٍ تحميل البيانات…</div>' +
+					'<div class="nds-sales-kpi-trend neutral" data-kpi-trend>' + copy("جارٍ تحميل البيانات…", "Loading live data…") + '</div>' +
 				'</article>' +
 				'<article class="nds-sales-kpi-card" data-kpi="average">' +
-					'<div class="nds-sales-kpi-label">متوسط قيمة الفاتورة</div>' +
+					'<div class="nds-sales-kpi-label">' + copy("متوسط قيمة الفاتورة", "Average Invoice Value") + '</div>' +
 					'<div class="nds-sales-kpi-value" data-kpi-value>—</div>' +
-					'<div class="nds-sales-kpi-trend neutral" data-kpi-trend>جارٍ تحميل البيانات…</div>' +
+					'<div class="nds-sales-kpi-trend neutral" data-kpi-trend>' + copy("جارٍ تحميل البيانات…", "Loading live data…") + '</div>' +
 				'</article>' +
 				'<article class="nds-sales-kpi-card" data-kpi="opportunities">' +
-					'<div class="nds-sales-kpi-label">فرص مفتوحة (CRM)</div>' +
+					'<div class="nds-sales-kpi-label">' + copy("فرص مفتوحة (CRM)", "Open Opportunities (CRM)") + '</div>' +
 					'<div class="nds-sales-kpi-value" data-kpi-value>—</div>' +
-					'<div class="nds-sales-kpi-trend neutral" data-kpi-trend>جارٍ تحميل البيانات…</div>' +
+					'<div class="nds-sales-kpi-trend neutral" data-kpi-trend>' + copy("جارٍ تحميل البيانات…", "Loading live data…") + '</div>' +
 				'</article>' +
 			'</section>' +
-			'<section class="nds-sales-charts-grid" aria-label="تحليلات المبيعات">' +
+			'<section class="nds-sales-charts-grid" aria-label="' + copy("تحليلات المبيعات", "Sales analytics") + '">' +
 				'<article class="nds-sales-panel nds-sales-revenue-chart" aria-labelledby="nds-sales-revenue-title">' +
-					'<div class="nds-sales-panel-heading"><div><h2 id="nds-sales-revenue-title">المبيعات — آخر 6 أشهر</h2><p>بالريال السعودي</p></div></div>' +
-					'<div class="nds-sales-revenue-chart-body" data-revenue-chart><div class="nds-sales-loading">جارٍ تحميل بيانات الرسم البياني…</div></div>' +
+					'<div class="nds-sales-panel-heading"><div><h2 id="nds-sales-revenue-title">' + copy("المبيعات — آخر 6 أشهر", "Sales — Last 6 Months") + '</h2><p>' + copy("بالريال السعودي", "Saudi Riyal (SAR)") + '</p></div></div>' +
+					'<div class="nds-sales-revenue-chart-body" data-revenue-chart><div class="nds-sales-loading">' + copy("جارٍ تحميل بيانات الرسم البياني…", "Loading chart data…") + '</div></div>' +
 				'</article>' +
 				'<article class="nds-sales-panel nds-sales-channels-chart" aria-labelledby="nds-sales-channels-title">' +
-					'<div class="nds-sales-panel-heading"><div><h2 id="nds-sales-channels-title">المبيعات حسب القناة</h2><p data-channel-caption>النسبة من إجمالي المبيعات للفترة</p></div></div>' +
-					'<div class="nds-sales-channel-list" data-channel-chart><div class="nds-sales-loading">جارٍ تحميل بيانات التوزيع…</div></div>' +
+					'<div class="nds-sales-panel-heading"><div><h2 id="nds-sales-channels-title">' + copy("المبيعات حسب القناة", "Sales by Channel") + '</h2><p data-channel-caption>' + copy("النسبة من إجمالي المبيعات للفترة", "Share of sales for the period") + '</p></div></div>' +
+					'<div class="nds-sales-channel-list" data-channel-chart><div class="nds-sales-loading">' + copy("جارٍ تحميل بيانات التوزيع…", "Loading channel distribution…") + '</div></div>' +
 				'</article>' +
 			'</section>' +
 			'<section class="nds-sales-panel nds-sales-invoices" aria-labelledby="nds-sales-invoices-title">' +
 				'<div class="nds-sales-panel-heading nds-sales-invoices-heading">' +
-					'<div><h2 id="nds-sales-invoices-title">أحدث فواتير المبيعات</h2><p>آخر 5 عمليات</p></div>' +
+					'<div><h2 id="nds-sales-invoices-title">' + copy("أحدث فواتير المبيعات", "Latest Sales Invoices") + '</h2><p>' + copy("آخر 5 عمليات", "Latest 5 transactions") + '</p></div>' +
 				'</div>' +
 				'<div class="nds-sales-table-wrap">' +
-					'<table class="nds-sales-invoice-table"><thead><tr><th>رقم الفاتورة</th><th>العميل</th><th>التاريخ</th><th>المبلغ</th><th>الحالة</th></tr></thead>' +
-					'<tbody data-invoice-rows><tr><td colspan="5" class="nds-sales-table-empty">جارٍ تحميل أحدث الفواتير…</td></tr></tbody></table>' +
+					'<table class="nds-sales-invoice-table"><thead><tr><th>' + copy("رقم الفاتورة", "Invoice") + '</th><th>' + copy("العميل", "Customer") + '</th><th>' + copy("التاريخ", "Date") + '</th><th>' + copy("المبلغ", "Amount") + '</th><th>' + copy("الحالة", "Status") + '</th></tr></thead>' +
+					'<tbody data-invoice-rows><tr><td colspan="5" class="nds-sales-table-empty">' + copy("جارٍ تحميل أحدث الفواتير…", "Loading latest invoices…") + '</td></tr></tbody></table>' +
 				'</div>' +
 			'</section>';
-
+		board.querySelectorAll(".nds-sales-kpi-grid, .nds-sales-charts-grid, .nds-sales-invoices, .nds-sales-invoice-table, .nds-sales-invoice-table th, .nds-sales-invoice-table td").forEach((node) => {
+			node.setAttribute("dir", currentDirection());
+		});
 		return board;
 	}
 
@@ -508,7 +555,7 @@ const salesDashboard = (() => {
 		container.replaceChildren();
 		const maximum = Math.max(0, ...buckets.map((item) => item.total));
 		if (!buckets.length || maximum <= 0) {
-			container.appendChild(make("div", "nds-sales-chart-empty", "لا توجد مبيعات مسجلة خلال الفترة المعروضة."));
+			container.appendChild(make("div", "nds-sales-chart-empty", copy("لا توجد مبيعات مسجلة خلال الفترة المعروضة.", "No sales recorded during the selected period.")));
 			return;
 		}
 		const columns = make("div", "nds-sales-revenue-columns");
@@ -573,9 +620,9 @@ const salesDashboard = (() => {
 
 	function channelLabel(field, value) {
 		if (field === "is_pos") {
-			return Number(value) ? "نقاط البيع (POS)" : "فواتير خارج نقاط البيع";
+			return Number(value) ? copy("نقاط البيع (POS)", "Point of Sale (POS)") : copy("فواتير خارج نقاط البيع", "Non-POS Invoices");
 		}
-		return String(value || "غير محدد");
+		return String(value || copy("غير محدد", "Unspecified"));
 	}
 
 	function renderChannels(board, result) {
@@ -589,10 +636,10 @@ const salesDashboard = (() => {
 		})).sort((a, b) => b.total - a.total);
 		const total = sorted.reduce((sum, item) => sum + item.total, 0);
 		if (!sorted.length || total <= 0) {
-			container.appendChild(make("div", "nds-sales-chart-empty", "لا توجد بيانات كافية لتوزيع المبيعات حسب القناة."));
+			container.appendChild(make("div", "nds-sales-chart-empty", copy("لا توجد بيانات كافية لتوزيع المبيعات حسب القناة.", "Not enough data to show sales by channel.")));
 			return;
 		}
-		setText(board, "[data-channel-caption]", "النسبة من إجمالي الشهر");
+		setText(board, "[data-channel-caption]", copy("النسبة من إجمالي الشهر", "Share of monthly sales"));
 		sorted.slice(0, 3).forEach((item, index) => {
 			const pct = (item.total / total) * 100;
 			const row = make("div", "nds-sales-channel-row");
@@ -615,17 +662,17 @@ const salesDashboard = (() => {
 
 	function statusLabel(status) {
 		const labels = {
-			Paid: "مسددة",
-			Unpaid: "غير مسددة",
-			Overdue: "متأخرة",
-			"Partly Paid": "مدفوعة جزئيًا",
-			Draft: "مسودة",
-			Submitted: "معتمدة",
-			Cancelled: "ملغاة",
-			Return: "مرتجع",
-			"Credit Note Issued": "إشعار دائن",
+			Paid: ["مسددة", "Paid"],
+			Unpaid: ["غير مسددة", "Unpaid"],
+			Overdue: ["متأخرة", "Overdue"],
+			"Partly Paid": ["مدفوعة جزئيًا", "Partly Paid"],
+			Draft: ["مسودة", "Draft"],
+			Submitted: ["معتمدة", "Submitted"],
+			Cancelled: ["ملغاة", "Cancelled"],
+			Return: ["مرتجع", "Return"],
+			"Credit Note Issued": ["إشعار دائن", "Credit Note Issued"],
 		};
-		return labels[status] || status || "—";
+		return (labels[status] ? copy(labels[status][0], labels[status][1]) : status) || "—";
 	}
 
 	function renderInvoices(board, invoices) {
@@ -634,7 +681,7 @@ const salesDashboard = (() => {
 		body.replaceChildren();
 		if (!invoices || !invoices.length) {
 			const row = make("tr");
-			const cell = make("td", "nds-sales-table-empty", "لا توجد فواتير بيع معتمدة لعرضها.");
+			const cell = make("td", "nds-sales-table-empty", copy("لا توجد فواتير بيع معتمدة لعرضها.", "No submitted sales invoices to display."));
 			cell.colSpan = 5;
 			row.appendChild(cell);
 			body.appendChild(row);
@@ -668,15 +715,9 @@ const salesDashboard = (() => {
 		});
 	}
 
-	function updatePeriod(board, today) {
-		const key = monthKey(today);
-		setText(board, "[data-sales-period]", "الفترة: " + monthLabel(key) + " " + key.slice(0, 4));
-	}
-
 	async function loadDashboardData(board) {
 		const today = todayISO();
 		const start = monthStart(today, -5);
-		updatePeriod(board, today);
 
 		const dailyPromise = loadDailySales(start, today);
 		const opportunitiesPromise = getList("Opportunity", [
@@ -728,10 +769,10 @@ const salesDashboard = (() => {
 			const averageCard = board.querySelector('[data-kpi="average"]');
 			[salesCard, invoicesCard, averageCard].forEach((card) => {
 				setText(card, "[data-kpi-value]", "غير متاح");
-				setTrend(card, "[data-kpi-trend]", { text: "تعذر تحميل بيانات الفواتير", state: "neutral" });
+				setTrend(card, "[data-kpi-trend]", { text: copy("تعذر تحميل بيانات الفواتير", "Could not load invoice data"), state: "neutral" });
 			});
 			const revenue = board.querySelector("[data-revenue-chart]");
-			if (revenue) revenue.replaceChildren(make("div", "nds-sales-chart-empty", "تعذر تحميل بيانات المبيعات. تحقق من صلاحية قراءة الفواتير."));
+			if (revenue) revenue.replaceChildren(make("div", "nds-sales-chart-empty", copy("تعذر تحميل بيانات المبيعات. تحقق من صلاحية قراءة الفواتير.", "Could not load sales data. Check invoice read permissions.")));
 		}
 
 		const opportunities = await opportunitiesPromise;
@@ -740,12 +781,12 @@ const salesDashboard = (() => {
 			const opp = opportunities[0];
 			setText(oppCard, "[data-kpi-value]", number(opp.opportunity_count || 0));
 			setTrend(oppCard, "[data-kpi-trend]", {
-				text: "القيمة المتوقعة: " + money(opp.expected_total || 0),
+				text: copy("القيمة المتوقعة: ", "Expected value: ") + money(opp.expected_total || 0),
 				state: "neutral",
 			});
 		} else {
 			setText(oppCard, "[data-kpi-value]", "غير متاح");
-			setTrend(oppCard, "[data-kpi-trend]", { text: "تعذر تحميل بيانات فرص CRM", state: "neutral" });
+			setTrend(oppCard, "[data-kpi-trend]", { text: copy("تعذر تحميل بيانات فرص CRM", "Could not load CRM opportunities"), state: "neutral" });
 		}
 
 		const channels = await channelsPromise;
@@ -757,7 +798,7 @@ const salesDashboard = (() => {
 			if (body) {
 				body.replaceChildren();
 				const row = make("tr");
-				const cell = make("td", "nds-sales-table-empty", "تعذر تحميل أحدث الفواتير بسبب الصلاحيات أو الاتصال.");
+				const cell = make("td", "nds-sales-table-empty", copy("تعذر تحميل أحدث الفواتير بسبب الصلاحيات أو الاتصال.", "Could not load recent invoices. Check access permissions or connectivity."));
 				cell.colSpan = 5;
 				row.appendChild(cell);
 				body.appendChild(row);

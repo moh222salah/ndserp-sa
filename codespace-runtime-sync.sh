@@ -274,10 +274,12 @@ for key in required:
             "nds-sales-invoices",
             "nds-sales-workspace-sections",
             "nds-sales-section-card",
+            "reports-1",
+            "reports-2",
+            "reports-3",
             "workspace_map",
-            "الأصناف والتسعير",
-            "الإعدادات",
-            "التقارير",
+            "Monthly Sales",
+            "Latest Sales Invoices",
             "data-sales-direction",
         )
         missing = [marker for marker in required_sales_workspace_js if marker not in js]
