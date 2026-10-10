@@ -1,0 +1,698 @@
+/*
+ * NDS ERP Saudi — Accounts Dashboard, bilingual RTL/LTR.
+ * Route-scoped and presentation-only. No Workspace, database or business logic edits.
+ */
+body.amt-accounts-workspace.nds-accounts-dashboard-ready #page-Workspaces {
+  --nds-accounts-navy: #0A2342;
+  --nds-accounts-blue: #164E8F;
+  --nds-accounts-gold: #D4AF37;
+  --nds-accounts-ink: #202c37;
+  --nds-accounts-muted: #7a8791;
+  --nds-accounts-line: #e5e9ee;
+  --nds-accounts-bg: #f5f6f8;
+  --nds-accounts-orange: #c96d38;
+  --nds-accounts-orange-light: #eaa06a;
+  --nds-accounts-green: #438a6d;
+  --nds-accounts-red: #bf5757;
+  background: var(--nds-accounts-bg);
+  color: var(--nds-accounts-ink);
+}
+
+body.amt-accounts-workspace.nds-accounts-dashboard-ready #page-Workspaces .page-head {
+  display: none !important;
+}
+
+body.amt-accounts-workspace.nds-accounts-dashboard-ready #page-Workspaces .layout-main-section {
+  box-sizing: border-box;
+  width: 100%;
+  max-width: none;
+  padding: 8px clamp(10px, 1.15vw, 20px) 24px;
+  border: 0;
+  background: transparent;
+  box-shadow: none;
+}
+
+body.amt-accounts-workspace.nds-accounts-dashboard-ready #page-Workspaces #editorjs {
+  display: none !important;
+}
+
+body.amt-accounts-workspace.nds-accounts-dashboard-ready #page-Workspaces .nds-accounts-dashboard {
+  container: accounts-board / inline-size;
+  box-sizing: border-box;
+  width: 100%;
+  min-width: 0;
+  padding: 4px 0 14px;
+  color: var(--nds-accounts-ink);
+  direction: rtl;
+  font-family: inherit;
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+body.amt-accounts-workspace.nds-accounts-dashboard-ready #page-Workspaces .nds-accounts-dashboard[dir="ltr"] {
+  direction: ltr;
+}
+
+body.amt-accounts-workspace.nds-accounts-dashboard-ready #page-Workspaces .nds-accounts-dashboard *,
+body.amt-accounts-workspace.nds-accounts-dashboard-ready #page-Workspaces .nds-accounts-dashboard *::before,
+body.amt-accounts-workspace.nds-accounts-dashboard-ready #page-Workspaces .nds-accounts-dashboard *::after {
+  box-sizing: border-box;
+}
+
+body.amt-accounts-workspace.nds-accounts-dashboard-ready #page-Workspaces .nds-accounts-dashboard-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+  min-height: 62px;
+  margin: 0 0 16px;
+}
+
+body.amt-accounts-workspace.nds-accounts-dashboard-ready #page-Workspaces .nds-accounts-dashboard-heading {
+  min-width: 0;
+}
+
+body.amt-accounts-workspace.nds-accounts-dashboard-ready #page-Workspaces .nds-accounts-dashboard-heading h1 {
+  margin: 0;
+  color: var(--nds-accounts-ink);
+  font-size: clamp(21px, 1.5vw, 26px);
+  font-weight: 800;
+  line-height: 1.35;
+  letter-spacing: -.025em;
+}
+
+body.amt-accounts-workspace.nds-accounts-dashboard-ready #page-Workspaces .nds-accounts-dashboard-breadcrumb {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 7px;
+  margin-top: 5px;
+  color: #8b969e;
+  font-size: 11px;
+  font-weight: 500;
+}
+
+body.amt-accounts-workspace.nds-accounts-dashboard-ready #page-Workspaces .nds-accounts-dashboard-breadcrumb span:first-child {
+  color: var(--nds-accounts-green);
+  font-weight: 700;
+}
+
+body.amt-accounts-workspace.nds-accounts-dashboard-ready #page-Workspaces .nds-accounts-dashboard-period {
+  display: inline-flex;
+  flex: 0 0 auto;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 11px;
+  border: 1px solid #e2e7eb;
+  border-radius: 9px;
+  background: #fff;
+  color: #667580;
+  box-shadow: 0 1px 3px rgba(25, 42, 54, .025);
+  font-size: 12px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+body.amt-accounts-workspace.nds-accounts-dashboard-ready #page-Workspaces .nds-accounts-period-icon {
+  display: inline-grid;
+  width: 24px;
+  height: 24px;
+  place-items: center;
+  border-radius: 7px;
+  background: #fff1e7;
+  color: var(--nds-accounts-orange);
+  font-size: 15px;
+}
+
+body.amt-accounts-workspace.nds-accounts-dashboard-ready #page-Workspaces .nds-accounts-kpi-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  align-items: stretch;
+  gap: 14px;
+  margin-bottom: 16px;
+}
+
+body.amt-accounts-workspace.nds-accounts-dashboard-ready #page-Workspaces .nds-accounts-kpi-card {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  min-height: 139px;
+  padding: 15px 16px 13px;
+  overflow: hidden;
+  border: 1px solid var(--nds-accounts-line);
+  border-top: 3px solid var(--nds-accounts-orange);
+  border-radius: 11px;
+  background: #fff;
+  box-shadow: 0 2px 6px rgba(32, 48, 60, .025);
+  transition: border-color .18s ease, box-shadow .18s ease, transform .18s ease;
+}
+
+body.amt-accounts-workspace.nds-accounts-dashboard-ready #page-Workspaces .nds-accounts-kpi-card:hover {
+  transform: translateY(-2px);
+  border-color: #d3dce2;
+  box-shadow: 0 8px 20px rgba(32, 48, 60, .065);
+}
+
+body.amt-accounts-workspace.nds-accounts-dashboard-ready #page-Workspaces .nds-accounts-kpi-card[data-kpi="revenue"] {
+  border-top-color: var(--nds-accounts-green);
+}
+
+body.amt-accounts-workspace.nds-accounts-dashboard-ready #page-Workspaces .nds-accounts-kpi-card[data-kpi="expenses"] {
+  border-top-color: #c58b3c;
+}
+
+body.amt-accounts-workspace.nds-accounts-dashboard-ready #page-Workspaces .nds-accounts-kpi-card[data-kpi="receivables"] {
+  border-top-color: var(--nds-accounts-navy);
+}
+
+body.amt-accounts-workspace.nds-accounts-dashboard-ready #page-Workspaces .nds-accounts-kpi-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  min-height: 26px;
+}
+
+body.amt-accounts-workspace.nds-accounts-dashboard-ready #page-Workspaces .nds-accounts-kpi-label {
+  color: #7a8790;
+  font-size: 12px;
+  font-weight: 650;
+}
+
+body.amt-accounts-workspace.nds-accounts-dashboard-ready #page-Workspaces .nds-accounts-kpi-icon {
+  display: inline-grid;
+  flex: 0 0 auto;
+  width: 28px;
+  height: 28px;
+  place-items: center;
+  border-radius: 8px;
+  background: #fff1e7;
+  color: var(--nds-accounts-orange);
+  font-size: 17px;
+  font-weight: 800;
+}
+
+body.amt-accounts-workspace.nds-accounts-dashboard-ready #page-Workspaces .nds-accounts-kpi-card[data-kpi="revenue"] .nds-accounts-kpi-icon {
+  background: #eaf5ef;
+  color: var(--nds-accounts-green);
+}
+
+body.amt-accounts-workspace.nds-accounts-dashboard-ready #page-Workspaces .nds-accounts-kpi-card[data-kpi="expenses"] .nds-accounts-kpi-icon {
+  background: #fbf1e2;
+  color: #b37b31;
+}
+
+body.amt-accounts-workspace.nds-accounts-dashboard-ready #page-Workspaces .nds-accounts-kpi-card[data-kpi="receivables"] .nds-accounts-kpi-icon {
+  background: #eaf0f8;
+  color: var(--nds-accounts-blue);
+}
+
+body.amt-accounts-workspace.nds-accounts-dashboard-ready #page-Workspaces .nds-accounts-kpi-value {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 5px;
+  margin: 9px 0 8px;
+  color: #26323c;
+  font-size: clamp(21px, 1.8vw, 28px);
+  font-weight: 800;
+  letter-spacing: -.035em;
+  line-height: 1.2;
+  font-variant-numeric: tabular-nums;
+  overflow-wrap: anywhere;
+}
+
+body.amt-accounts-workspace.nds-accounts-dashboard-ready #page-Workspaces .nds-accounts-kpi-value small {
+  color: #87929a;
+  font-size: 11px;
+  font-weight: 650;
+  letter-spacing: 0;
+}
+
+body.amt-accounts-workspace.nds-accounts-dashboard-ready #page-Workspaces .nds-accounts-kpi-foot {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 5px;
+  margin-top: auto;
+  color: #85919a;
+  font-size: 11px;
+  font-weight: 600;
+  line-height: 1.4;
+}
+
+body.amt-accounts-workspace.nds-accounts-dashboard-ready #page-Workspaces .nds-accounts-kpi-foot.positive {
+  color: var(--nds-accounts-green);
+}
+
+body.amt-accounts-workspace.nds-accounts-dashboard-ready #page-Workspaces .nds-accounts-kpi-foot.caution {
+  color: #ad792e;
+}
+
+body.amt-accounts-workspace.nds-accounts-dashboard-ready #page-Workspaces .nds-accounts-kpi-foot.alert {
+  color: var(--nds-accounts-red);
+}
+
+body.amt-accounts-workspace.nds-accounts-dashboard-ready #page-Workspaces .nds-accounts-kpi-foot-caption {
+  color: #a0a9b0;
+  font-size: 10px;
+  font-weight: 500;
+}
+
+body.amt-accounts-workspace.nds-accounts-dashboard-ready #page-Workspaces .nds-accounts-analysis-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  align-items: stretch;
+  gap: 14px;
+  margin-bottom: 16px;
+  direction: inherit;
+}
+
+body.amt-accounts-workspace.nds-accounts-dashboard-ready #page-Workspaces .nds-accounts-panel {
+  position: relative;
+  min-width: 0;
+  overflow: hidden;
+  border: 1px solid #e2e7eb;
+  border-radius: 11px;
+  background: #fff;
+  box-shadow: 0 2px 6px rgba(32, 48, 60, .025);
+}
+
+body.amt-accounts-workspace.nds-accounts-dashboard-ready #page-Workspaces .nds-accounts-panel-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  min-width: 0;
+  padding: 17px 18px 12px;
+  border-bottom: 1px solid #f0f2f4;
+}
+
+body.amt-accounts-workspace.nds-accounts-dashboard-ready #page-Workspaces .nds-accounts-panel-heading > div {
+  min-width: 0;
+}
+
+body.amt-accounts-workspace.nds-accounts-dashboard-ready #page-Workspaces .nds-accounts-panel-heading h2 {
+  margin: 0;
+  color: #283640;
+  font-size: 14px;
+  font-weight: 800;
+  line-height: 1.5;
+}
+
+body.amt-accounts-workspace.nds-accounts-dashboard-ready #page-Workspaces .nds-accounts-panel-heading p {
+  margin: 4px 0 0;
+  color: #88949d;
+  font-size: 11px;
+  font-weight: 500;
+  line-height: 1.5;
+}
+
+body.amt-accounts-workspace.nds-accounts-dashboard-ready #page-Workspaces .nds-accounts-panel-mark {
+  display: inline-grid;
+  flex: 0 0 auto;
+  width: 32px;
+  height: 32px;
+  place-items: center;
+  border-radius: 9px;
+  background: #fbefe6;
+  color: var(--nds-accounts-orange);
+  font-size: 16px;
+  font-weight: 800;
+}
+
+body.amt-accounts-workspace.nds-accounts-dashboard-ready #page-Workspaces .nds-accounts-expense-list {
+  display: grid;
+  gap: 17px;
+  padding: 18px 18px 6px 62px;
+}
+
+body.amt-accounts-workspace.nds-accounts-dashboard-ready #page-Workspaces .nds-accounts-expense-row {
+  min-width: 0;
+}
+
+body.amt-accounts-workspace.nds-accounts-dashboard-ready #page-Workspaces .nds-accounts-expense-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 8px;
+}
+
+body.amt-accounts-workspace.nds-accounts-dashboard-ready #page-Workspaces .nds-accounts-expense-label {
+  min-width: 0;
+  color: #52616c;
+  font-size: 12px;
+  font-weight: 650;
+}
+
+body.amt-accounts-workspace.nds-accounts-dashboard-ready #page-Workspaces .nds-accounts-expense-pct {
+  flex: 0 0 auto;
+  color: #65727d;
+  font-size: 12px;
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+}
+
+body.amt-accounts-workspace.nds-accounts-dashboard-ready #page-Workspaces .nds-accounts-expense-track {
+  height: 9px;
+  overflow: hidden;
+  border-radius: 99px;
+  background: #eff1f3;
+}
+
+body.amt-accounts-workspace.nds-accounts-dashboard-ready #page-Workspaces .nds-accounts-expense-fill {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: #854a2c;
+  transition: width .4s ease;
+}
+
+body.amt-accounts-workspace.nds-accounts-dashboard-ready #page-Workspaces .nds-accounts-expense-row.tone-cogs .nds-accounts-expense-fill {
+  background: #d1a12d;
+}
+
+body.amt-accounts-workspace.nds-accounts-dashboard-ready #page-Workspaces .nds-accounts-expense-row.tone-operational .nds-accounts-expense-fill {
+  background: var(--nds-accounts-navy);
+}
+
+body.amt-accounts-workspace.nds-accounts-dashboard-ready #page-Workspaces .nds-accounts-expenses-axis {
+  position: absolute;
+  top: 119px;
+  left: 18px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 125px;
+  color: #9aa3aa;
+  font-size: 10px;
+  font-variant-numeric: tabular-nums;
+  text-align: left;
+  direction: ltr;
+}
+
+body.amt-accounts-workspace.nds-accounts-dashboard-ready #page-Workspaces .nds-accounts-chart-legend {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 14px;
+  padding: 12px 18px 0;
+  color: #7f8b94;
+  font-size: 11px;
+  font-weight: 600;
+}
+
+body.amt-accounts-workspace.nds-accounts-dashboard-ready #page-Workspaces .nds-accounts-chart-legend > span {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+body.amt-accounts-workspace.nds-accounts-dashboard-ready #page-Workspaces .nds-accounts-chart-legend i {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 3px;
+  background: var(--nds-accounts-orange);
+}
+
+body.amt-accounts-workspace.nds-accounts-dashboard-ready #page-Workspaces .nds-accounts-chart-legend i.expenses-key {
+  opacity: .48;
+}
+
+body.amt-accounts-workspace.nds-accounts-dashboard-ready #page-Workspaces .nds-accounts-chart-plot {
+  min-width: 0;
+  padding: 9px 16px 13px;
+}
+
+body.amt-accounts-workspace.nds-accounts-dashboard-ready #page-Workspaces .nds-accounts-chart-columns {
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  align-items: end;
+  gap: 10px;
+  height: 202px;
+  padding: 10px 4px 0;
+  border-bottom: 1px solid #e9edf0;
+  background: repeating-linear-gradient(to top, transparent 0, transparent 43px, #f0f2f4 44px, transparent 45px);
+  direction: inherit;
+}
+
+body.amt-accounts-workspace.nds-accounts-dashboard-ready #page-Workspaces .nds-accounts-month-column {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  min-width: 0;
+  height: 100%;
+}
+
+body.amt-accounts-workspace.nds-accounts-dashboard-ready #page-Workspaces .nds-accounts-month-bars {
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  gap: 4px;
+  width: 100%;
+  height: 168px;
+}
+
+body.amt-accounts-workspace.nds-accounts-dashboard-ready #page-Workspaces .nds-accounts-bar {
+  display: block;
+  width: min(29%, 15px);
+  min-height: 5px;
+  border-radius: 5px 5px 1px 1px;
+  background: var(--nds-accounts-orange);
+  box-shadow: 0 2px 4px rgba(201, 109, 56, .12);
+}
+
+body.amt-accounts-workspace.nds-accounts-dashboard-ready #page-Workspaces .nds-accounts-bar.expenses {
+  opacity: .48;
+}
+
+body.amt-accounts-workspace.nds-accounts-dashboard-ready #page-Workspaces .nds-accounts-month-label {
+  display: block;
+  width: 100%;
+  padding-top: 8px;
+  color: #7c8992;
+  font-size: 10px;
+  font-weight: 650;
+  text-align: center;
+  white-space: nowrap;
+}
+
+body.amt-accounts-workspace.nds-accounts-dashboard-ready #page-Workspaces .nds-accounts-invoices {
+  margin-bottom: 12px;
+}
+
+body.amt-accounts-workspace.nds-accounts-dashboard-ready #page-Workspaces .nds-accounts-invoices-heading {
+  padding: 16px 18px 13px;
+}
+
+body.amt-accounts-workspace.nds-accounts-dashboard-ready #page-Workspaces .nds-accounts-invoice-count {
+  display: inline-grid;
+  flex: 0 0 auto;
+  width: 30px;
+  height: 30px;
+  place-items: center;
+  border-radius: 8px;
+  background: #fff0e6;
+  color: var(--nds-accounts-orange);
+  font-size: 11px;
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+}
+
+body.amt-accounts-workspace.nds-accounts-dashboard-ready #page-Workspaces .nds-accounts-table-wrap {
+  width: 100%;
+  overflow-x: auto;
+  overscroll-behavior-inline: contain;
+}
+
+body.amt-accounts-workspace.nds-accounts-dashboard-ready #page-Workspaces .nds-accounts-invoice-table {
+  width: 100%;
+  min-width: 700px;
+  border-collapse: separate;
+  border-spacing: 0;
+  background: #fff;
+  color: var(--nds-accounts-ink);
+  font-size: 12px;
+  text-align: start;
+}
+
+body.amt-accounts-workspace.nds-accounts-dashboard-ready #page-Workspaces .nds-accounts-invoice-table th,
+body.amt-accounts-workspace.nds-accounts-dashboard-ready #page-Workspaces .nds-accounts-invoice-table td {
+  padding: 13px 16px;
+  border-bottom: 1px solid #eef1f3;
+  text-align: start;
+  vertical-align: middle;
+  white-space: nowrap;
+}
+
+body.amt-accounts-workspace.nds-accounts-dashboard-ready #page-Workspaces .nds-accounts-invoice-table th {
+  background: #fafbfc;
+  color: #86929b;
+  font-size: 11px;
+  font-weight: 700;
+}
+
+body.amt-accounts-workspace.nds-accounts-dashboard-ready #page-Workspaces .nds-accounts-invoice-table tbody tr {
+  transition: background .14s ease;
+}
+
+body.amt-accounts-workspace.nds-accounts-dashboard-ready #page-Workspaces .nds-accounts-invoice-table tbody tr:hover {
+  background: #fafbfd;
+}
+
+body.amt-accounts-workspace.nds-accounts-dashboard-ready #page-Workspaces .nds-accounts-invoice-table tbody tr:last-child td {
+  border-bottom: 0;
+}
+
+body.amt-accounts-workspace.nds-accounts-dashboard-ready #page-Workspaces .nds-accounts-invoice-table .invoice-id {
+  color: var(--nds-accounts-blue);
+  font-weight: 750;
+  font-variant-numeric: tabular-nums;
+}
+
+body.amt-accounts-workspace.nds-accounts-dashboard-ready #page-Workspaces .nds-accounts-invoice-table .invoice-customer {
+  color: #394852;
+  font-weight: 650;
+}
+
+body.amt-accounts-workspace.nds-accounts-dashboard-ready #page-Workspaces .nds-accounts-invoice-table .invoice-date {
+  color: #7f8c95;
+  font-size: 11px;
+  font-variant-numeric: tabular-nums;
+}
+
+body.amt-accounts-workspace.nds-accounts-dashboard-ready #page-Workspaces .nds-accounts-invoice-table .invoice-amount {
+  color: #303d47;
+  font-weight: 750;
+  font-variant-numeric: tabular-nums;
+}
+
+body.amt-accounts-workspace.nds-accounts-dashboard-ready #page-Workspaces .nds-accounts-invoice-table .invoice-currency {
+  margin-inline-start: 5px;
+  color: #8a969e;
+  font-size: 10px;
+  font-weight: 550;
+}
+
+body.amt-accounts-workspace.nds-accounts-dashboard-ready #page-Workspaces .nds-accounts-status {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 80px;
+  padding: 5px 9px;
+  border-radius: 6px;
+  font-size: 10.5px;
+  font-weight: 750;
+}
+
+body.amt-accounts-workspace.nds-accounts-dashboard-ready #page-Workspaces .nds-accounts-status.overdue {
+  background: #fdecec;
+  color: #b94545;
+}
+
+body.amt-accounts-workspace.nds-accounts-dashboard-ready #page-Workspaces .nds-accounts-status.collecting {
+  background: #fff3d7;
+  color: #93691d;
+}
+
+body.amt-accounts-workspace.nds-accounts-dashboard-ready #page-Workspaces .nds-accounts-dashboard-note {
+  margin: 8px 2px 0;
+  color: #a0a8ae;
+  font-size: 10px;
+  text-align: start;
+}
+
+@container accounts-board (max-width: 840px) {
+  body.amt-accounts-workspace.nds-accounts-dashboard-ready #page-Workspaces .nds-accounts-kpi-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+  }
+
+  body.amt-accounts-workspace.nds-accounts-dashboard-ready #page-Workspaces .nds-accounts-analysis-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+@container accounts-board (max-width: 500px) {
+  body.amt-accounts-workspace.nds-accounts-dashboard-ready #page-Workspaces .nds-accounts-kpi-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  body.amt-accounts-workspace.nds-accounts-dashboard-ready #page-Workspaces .nds-accounts-kpi-card {
+    min-height: 116px;
+  }
+
+  body.amt-accounts-workspace.nds-accounts-dashboard-ready #page-Workspaces .nds-accounts-analysis-grid {
+    gap: 12px;
+  }
+
+  body.amt-accounts-workspace.nds-accounts-dashboard-ready #page-Workspaces .nds-accounts-expenses-axis {
+    left: 12px;
+  }
+
+  body.amt-accounts-workspace.nds-accounts-dashboard-ready #page-Workspaces .nds-accounts-expense-list {
+    padding-right: 12px;
+    padding-left: 54px;
+  }
+
+  body.amt-accounts-workspace.nds-accounts-dashboard-ready #page-Workspaces .nds-accounts-chart-plot {
+    padding-right: 8px;
+    padding-left: 8px;
+  }
+
+  body.amt-accounts-workspace.nds-accounts-dashboard-ready #page-Workspaces .nds-accounts-chart-columns {
+    gap: 4px;
+  }
+
+  body.amt-accounts-workspace.nds-accounts-dashboard-ready #page-Workspaces .nds-accounts-month-label {
+    font-size: 9px;
+  }
+}
+
+@media (max-width: 580px) {
+  body.amt-accounts-workspace.nds-accounts-dashboard-ready #page-Workspaces .layout-main-section {
+    padding: 8px 8px 18px;
+  }
+
+  body.amt-accounts-workspace.nds-accounts-dashboard-ready #page-Workspaces .nds-accounts-dashboard-header {
+    align-items: flex-start;
+    gap: 8px;
+  }
+
+  body.amt-accounts-workspace.nds-accounts-dashboard-ready #page-Workspaces .nds-accounts-dashboard-heading h1 {
+    font-size: 20px;
+  }
+
+  body.amt-accounts-workspace.nds-accounts-dashboard-ready #page-Workspaces .nds-accounts-dashboard-period {
+    padding: 6px 8px;
+    font-size: 10px;
+  }
+
+  body.amt-accounts-workspace.nds-accounts-dashboard-ready #page-Workspaces .nds-accounts-kpi-card {
+    padding: 13px;
+  }
+
+  body.amt-accounts-workspace.nds-accounts-dashboard-ready #page-Workspaces .nds-accounts-kpi-value {
+    font-size: 24px;
+  }
+
+  body.amt-accounts-workspace.nds-accounts-dashboard-ready #page-Workspaces .nds-accounts-panel-heading {
+    padding-inline: 13px;
+  }
+
+  body.amt-accounts-workspace.nds-accounts-dashboard-ready #page-Workspaces .nds-accounts-chart-legend {
+    padding-inline: 13px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  body.amt-accounts-workspace.nds-accounts-dashboard-ready #page-Workspaces .nds-accounts-dashboard *,
+  body.amt-accounts-workspace.nds-accounts-dashboard-ready #page-Workspaces .nds-accounts-dashboard *::before,
+  body.amt-accounts-workspace.nds-accounts-dashboard-ready #page-Workspaces .nds-accounts-dashboard *::after {
+    transition: none;
+    animation: none;
+  }
+}
