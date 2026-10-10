@@ -284,19 +284,17 @@ jobs:
           grep -Fq 'SERVED_PURCHASE_WORKSPACE_JS=PASS' codespace-verify-runtime.sh
           echo "PURCHASE_WORKSPACE_SOURCE_AND_ASSET_GATES=PASS"
 
-      - name: Verify Quick Actions infinite horizontal marquee
+      - name: Verify Quick Actions static responsive grid
         run: |
-          grep -Fq 'const speed = 24;' apps/amir_theme_v16/amir_theme_v16/src/js/core/desk_quick_actions.js
-          grep -Fq 'data-amt-quick-actions-loop' apps/amir_theme_v16/amir_theme_v16/src/js/core/desk_quick_actions.js
-          grep -Fq 'amt-quick-action-clone' apps/amir_theme_v16/amir_theme_v16/src/js/core/desk_quick_actions.js
-          grep -Fq 'offset = (offset + speed * elapsed) % cycleWidth;' apps/amir_theme_v16/amir_theme_v16/src/js/core/desk_quick_actions.js
-          ! grep -Fq 'direction = -1' apps/amir_theme_v16/amir_theme_v16/src/js/core/desk_quick_actions.js
-          grep -Fq 'margin-inline: 0;' apps/amir_theme_v16/amir_theme_v16/src/scss/layouts/_desk-quick-actions.scss
-          grep -Fq 'data-amt-quick-actions-loop' codespace-runtime-sync.sh
-          grep -Fq 'amt-quick-action-clone' codespace-runtime-sync.sh
-          grep -Fq 'data-amt-quick-actions-loop' codespace-verify-runtime.sh
-          grep -Fq 'amt-quick-action-clone' codespace-verify-runtime.sh
-          echo "QUICK_ACTIONS_INFINITE_MARQUEE_SOURCE=PASS"
+          grep -Fq 'data-amt-quick-actions-layout", "static-grid"' apps/amir_theme_v16/amir_theme_v16/src/js/core/desk_quick_actions.js
+          ! grep -Fq 'enableHorizontalMotion' apps/amir_theme_v16/amir_theme_v16/src/js/core/desk_quick_actions.js
+          ! grep -Fq 'amt-quick-action-clone' apps/amir_theme_v16/amir_theme_v16/src/js/core/desk_quick_actions.js
+          grep -Fq 'grid-template-columns: repeat(7, minmax(0, 1fr));' apps/amir_theme_v16/amir_theme_v16/src/scss/layouts/_desk-quick-actions.scss
+          grep -Fq 'grid-template-columns: repeat(4, minmax(0, 1fr));' apps/amir_theme_v16/amir_theme_v16/src/scss/layouts/_desk-quick-actions.scss
+          grep -Fq 'grid-template-columns: repeat(2, minmax(0, 1fr));' apps/amir_theme_v16/amir_theme_v16/src/scss/layouts/_desk-quick-actions.scss
+          grep -Fq 'data-amt-quick-actions-layout' codespace-runtime-sync.sh
+          grep -Fq 'data-amt-quick-actions-layout' codespace-verify-runtime.sh
+          echo "QUICK_ACTIONS_STATIC_GRID_SOURCE=PASS"
 
       - name: Git whitespace check
         run: git diff --check
