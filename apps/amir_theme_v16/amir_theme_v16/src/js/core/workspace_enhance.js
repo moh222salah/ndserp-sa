@@ -472,11 +472,31 @@ let scheduled = false;
  * Apply a visual-only CSS scope on the warehouse Workspace route.
  * This never changes Workspace data, metrics, links, permissions or business logic.
  */
+const WAREHOUSE_WORKSPACE_NAMES = ["مخازن NDS ERP", "المخازن NDS ERP", "لوحة المخازن", "Warehouse Dashboard", "Warehouses NDS ERP", "NDS ERP Warehouses"];
+
 function syncWarehouseWorkspaceScope() {
-	const route = window.frappe && typeof frappe.get_route === "function" ? frappe.get_route() : [];
-	const active = Array.isArray(route)
-		&& route[0] === "Workspaces"
-		&& currentWorkspaceKey() === "مخازن NDS ERP";
+	let route = [];
+	try {
+		route = window.frappe && typeof frappe.get_route === "function" ? frappe.get_route() : [];
+	} catch (e) {
+		route = [];
+	}
+	const normalize = (value) => String(value || "").trim().toLowerCase().replace(/[_\s]+/g, "-");
+	const expectedNames = new Set();
+	WAREHOUSE_WORKSPACE_NAMES.forEach((name) => {
+		expectedNames.add(normalize(name));
+		try {
+			if (frappe.router && typeof frappe.router.slug === "function") {
+				expectedNames.add(normalize(frappe.router.slug(name)));
+			}
+		} catch (e) {
+			/* Keep canonical name as fallback. */
+		}
+	});
+	const activeKey = currentWorkspaceKey() || "";
+	const activeTitle = document.querySelector(".workspace-title")?.textContent?.trim() || "";
+	const nameMatches = [route[1], activeKey, activeTitle].some((value) => expectedNames.has(normalize(value)));
+	const active = String(route[0] || "").trim().toLowerCase() === "workspaces" && nameMatches;
 	document.documentElement.classList.toggle("nds-warehouse-workspace", Boolean(active));
 }
 
