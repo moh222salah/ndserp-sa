@@ -18,7 +18,7 @@ const purchasesDashboard = (() => {
    return names.has(norm(r[1]))||names.has(norm(frappe.app?.sidebar?.sidebar_title))||names.has(norm(document.querySelector(".workspace-title")?.textContent));
   }catch(_){return false;}
  }
- function syncDir(b){if(b){b.dir=lang()==="ar"?"rtl":"ltr";b.lang=lang();b.dataset.purchaseDirection=b.dir;}}
+ function syncDir(b){if(b){b.dir=lang()==="ar"?"rtl":"ltr";b.lang=lang();b.setAttribute("data-purchase-direction",b.dir);}}
  function el(tag,cls,text){const n=document.createElement(tag);if(cls)n.className=cls;if(text!==undefined&&text!==null)n.textContent=String(text);return n;}
  function rpc(method,args){return new Promise((resolve,reject)=>{if(!window.frappe?.call)return reject(new Error("Frappe API unavailable"));frappe.call({method,args,callback:r=>resolve(r?.message),error:e=>reject(e||new Error("Request failed"))});});}
  function list(doctype,fields,filters,extra){return rpc("frappe.client.get_list",Object.assign({doctype,fields,filters:filters||[],limit_page_length:1000},extra||{}));}
