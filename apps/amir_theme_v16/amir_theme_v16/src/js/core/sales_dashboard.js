@@ -180,7 +180,7 @@ const salesDashboard = (() => {
 			'<header class="nds-sales-dashboard-header">' +
 				'<div class="nds-sales-dashboard-heading">' +
 					'<h1>لوحة المبيعات</h1>' +
-					'<div class="nds-sales-dashboard-breadcrumb"><span>المبيعات</span><span aria-hidden="true">/</span><span>نظرة عامة</span></div>' +
+					'<div class="nds-sales-dashboard-breadcrumb"><span>Nexterp v16</span><span aria-hidden="true">/</span><span>المبيعات</span><span aria-hidden="true">/</span><span>نظرة عامة</span></div>' +
 				'</div>' +
 				'<div class="nds-sales-dashboard-period">' +
 					'<span class="nds-sales-dashboard-period-icon" aria-hidden="true">◷</span>' +
@@ -211,7 +211,7 @@ const salesDashboard = (() => {
 			'</section>' +
 			'<section class="nds-sales-charts-grid" aria-label="تحليلات المبيعات">' +
 				'<article class="nds-sales-panel nds-sales-revenue-chart" aria-labelledby="nds-sales-revenue-title">' +
-					'<div class="nds-sales-panel-heading"><div><h2 id="nds-sales-revenue-title">المبيعات — آخر 6 أشهر</h2><p>إجمالي قيمة فواتير البيع المعتمدة</p></div></div>' +
+					'<div class="nds-sales-panel-heading"><div><h2 id="nds-sales-revenue-title">المبيعات — آخر 6 أشهر</h2><p>بالريال السعودي</p></div></div>' +
 					'<div class="nds-sales-revenue-chart-body" data-revenue-chart><div class="nds-sales-loading">جارٍ تحميل بيانات الرسم البياني…</div></div>' +
 				'</article>' +
 				'<article class="nds-sales-panel nds-sales-channels-chart" aria-labelledby="nds-sales-channels-title">' +
@@ -221,8 +221,7 @@ const salesDashboard = (() => {
 			'</section>' +
 			'<section class="nds-sales-panel nds-sales-invoices" aria-labelledby="nds-sales-invoices-title">' +
 				'<div class="nds-sales-panel-heading nds-sales-invoices-heading">' +
-					'<div><h2 id="nds-sales-invoices-title">أحدث فواتير المبيعات</h2><p>آخر 5 فواتير بيع معتمدة</p></div>' +
-					'<button type="button" class="nds-sales-view-all" data-sales-view-all>عرض جميع الفواتير <span aria-hidden="true">←</span></button>' +
+					'<div><h2 id="nds-sales-invoices-title">أحدث فواتير المبيعات</h2><p>آخر 5 عمليات</p></div>' +
 				'</div>' +
 				'<div class="nds-sales-table-wrap">' +
 					'<table class="nds-sales-invoice-table"><thead><tr><th>رقم الفاتورة</th><th>العميل</th><th>التاريخ</th><th>المبلغ</th><th>الحالة</th></tr></thead>' +
@@ -230,12 +229,6 @@ const salesDashboard = (() => {
 				'</div>' +
 			'</section>';
 
-		const viewAll = board.querySelector("[data-sales-view-all]");
-		viewAll.addEventListener("click", () => {
-			if (window.frappe && typeof frappe.set_route === "function") {
-				frappe.set_route("List", "Sales Invoice");
-			}
-		});
 		return board;
 	}
 
@@ -288,7 +281,7 @@ const salesDashboard = (() => {
 			return;
 		}
 		const columns = make("div", "nds-sales-revenue-columns");
-		buckets.slice().reverse().forEach((item) => {
+		buckets.forEach((item) => {
 			const column = make("div", "nds-sales-revenue-column");
 			const barArea = make("div", "nds-sales-revenue-bar-area");
 			const bar = make("div", "nds-sales-revenue-bar");
@@ -297,9 +290,7 @@ const salesDashboard = (() => {
 			bar.title = item.label + " — " + money(item.total);
 			bar.setAttribute("aria-label", item.label + " " + money(item.total));
 			barArea.appendChild(bar);
-			const value = make("span", "nds-sales-revenue-value", item.total > 0 ? number(item.total) : "0");
 			const label = make("span", "nds-sales-revenue-month", item.label);
-			column.appendChild(value);
 			column.appendChild(barArea);
 			column.appendChild(label);
 			columns.appendChild(column);
@@ -370,10 +361,8 @@ const salesDashboard = (() => {
 			container.appendChild(make("div", "nds-sales-chart-empty", "لا توجد بيانات كافية لتوزيع المبيعات حسب القناة."));
 			return;
 		}
-		setText(board, "[data-channel-caption]", result.field === "is_pos"
-			? "نقاط البيع مقارنة بالفواتير خارجها"
-			: "النسبة من إجمالي المبيعات خلال آخر 6 أشهر");
-		sorted.slice(0, 4).forEach((item, index) => {
+		setText(board, "[data-channel-caption]", "النسبة من إجمالي الشهر");
+		sorted.slice(0, 3).forEach((item, index) => {
 			const pct = (item.total / total) * 100;
 			const row = make("div", "nds-sales-channel-row");
 			const head = make("div", "nds-sales-channel-head");
@@ -464,7 +453,7 @@ const salesDashboard = (() => {
 			{ SUM: "opportunity_amount", as: "expected_total" },
 		], [["Opportunity", "status", "=", "Open"]], { limit_page_length: 1 })
 			.catch(() => null);
-		const channelsPromise = loadChannelRows(start, today).catch(() => ({ field: null, rows: [] }));
+		const channelsPromise = loadChannelRows(monthStart(today, 0), today).catch(() => ({ field: null, rows: [] }));
 		const invoicesPromise = getList("Sales Invoice", [
 			"name", "customer", "customer_name", "posting_date", "base_grand_total", "status", "currency",
 		], [
