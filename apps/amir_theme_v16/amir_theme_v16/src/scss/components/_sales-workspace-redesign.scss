@@ -642,6 +642,15 @@ body.nds-sales-workspace-redesign.nds-sales-dashboard-ready #page-Workspaces .nd
   direction: ltr;
   text-align: left;
 }
+body.nds-sales-workspace-redesign.nds-sales-dashboard-ready #page-Workspaces .page-head .title-text[dir=rtl] {
+  direction: rtl;
+  text-align: right;
+}
+body.nds-sales-workspace-redesign.nds-sales-dashboard-ready #page-Workspaces .page-head .title-text[dir=ltr] {
+  direction: ltr;
+  text-align: left;
+}
+
 body.nds-sales-workspace-redesign.nds-sales-dashboard-ready #page-Workspaces .nds-sales-workspace-sections[dir=rtl] .nds-sales-section-grid {
   direction: rtl;
 }

@@ -66,7 +66,26 @@ const salesDashboard = (() => {
 		return isEnglish() ? "ltr" : "rtl";
 	}
 
+	function syncSalesPageHeader() {
+		const title = document.querySelector("#page-Workspaces .page-head .title-text");
+		if (!title) return;
+		if (!Object.prototype.hasOwnProperty.call(title.dataset, "ndsSalesOriginalText")) {
+			title.dataset.ndsSalesOriginalText = title.textContent || "";
+		}
+		title.textContent = copy("المبيعات NDS ERP", "Sales NDS ERP");
+		title.setAttribute("dir", currentDirection());
+	}
+
+	function restoreSalesPageHeader() {
+		const title = document.querySelector("#page-Workspaces .page-head .title-text");
+		if (!title || !Object.prototype.hasOwnProperty.call(title.dataset, "ndsSalesOriginalText")) return;
+		title.textContent = title.dataset.ndsSalesOriginalText;
+		delete title.dataset.ndsSalesOriginalText;
+		title.removeAttribute("dir");
+	}
+
 	function syncDashboardDirection(board) {
+		syncSalesPageHeader();
 		if (!board) return;
 		const direction = currentDirection();
 		const language = currentLanguage();
@@ -833,6 +852,7 @@ const salesDashboard = (() => {
 	}
 
 	function cleanup() {
+		restoreSalesPageHeader();
 		const current = document.getElementById(DASHBOARD_ID);
 		const sections = document.getElementById(SALES_SECTIONS_ID);
 		if (current) current.remove();

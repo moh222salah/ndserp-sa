@@ -283,6 +283,8 @@ for key in required:
             "workspace_map",
             "Monthly Sales",
             "Latest Sales Invoices",
+            "Sales NDS ERP",
+            "ndsSalesOriginalText",
             "data-sales-direction",
         )
         missing = [marker for marker in required_sales_workspace_js if marker not in js]

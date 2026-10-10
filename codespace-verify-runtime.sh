@@ -253,7 +253,7 @@ for marker in 'nds-sales-dashboard' 'nds-sales-revenue-chart' 'nds-sales-channel
   fi
 done
 echo "BUILT_SALES_DASHBOARD_JS=PASS"
-for marker in 'Monthly Sales' 'Latest Sales Invoices' 'workspace_map' 'frappe.client.get_list' 'reports-1' 'reports-2' 'reports-3' 'Sales by Channel' 'Unavailable'; do
+for marker in 'Monthly Sales' 'Latest Sales Invoices' 'workspace_map' 'frappe.client.get_list' 'reports-1' 'reports-2' 'reports-3' 'Sales by Channel' 'Unavailable' 'Sales NDS ERP' 'ndsSalesOriginalText'; do
   if ! grep -Fq "$marker" "$LOCAL_JS_ASSET"; then
     echo "BUILT_SALES_LIVE_BILINGUAL=FAIL:MISSING_MARKER:$marker"
     exit 54
@@ -320,7 +320,7 @@ for marker in 'nds-sales-dashboard' 'nds-sales-revenue-chart' 'nds-sales-channel
   fi
 done
 echo "SERVED_SALES_DASHBOARD_JS=PASS"
-for marker in 'Monthly Sales' 'Latest Sales Invoices' 'workspace_map' 'frappe.client.get_list' 'reports-1' 'reports-2' 'reports-3' 'Sales by Channel' 'Unavailable'; do
+for marker in 'Monthly Sales' 'Latest Sales Invoices' 'workspace_map' 'frappe.client.get_list' 'reports-1' 'reports-2' 'reports-3' 'Sales by Channel' 'Unavailable' 'Sales NDS ERP' 'ndsSalesOriginalText'; do
   if ! grep -Fq "$marker" "$SERVED_JS"; then
     echo "SERVED_SALES_LIVE_BILINGUAL=FAIL:MISSING_MARKER:$marker"
     exit 56
