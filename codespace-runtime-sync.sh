@@ -159,6 +159,8 @@ for key in required:
             ".nds-sales-revenue-chart",
             ".nds-sales-channels-chart",
             ".nds-sales-invoices",
+            "#page-workspaces[dir=rtl]",
+            "#page-workspaces[dir=ltr]",
             ".nds-sales-dashboard[dir=rtl]",
             ".nds-sales-dashboard[dir=ltr]",
             ".nds-sales-workspace-sections",
@@ -308,6 +310,7 @@ for key in required:
             "Sales NDS ERP",
             "ndsSalesOriginalText",
             "data-sales-direction",
+            "ndsSalesOriginalDataSalesDirection",
         )
         missing = [marker for marker in required_sales_workspace_js if marker not in js]
         if missing:
