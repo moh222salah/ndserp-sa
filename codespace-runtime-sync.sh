@@ -176,6 +176,8 @@ for key in required:
             "amt-quick-actions-grid",
             "amt-quick-actions-track",
             "data-amt-quick-actions-motion",
+            "data-amt-quick-actions-loop",
+            "amt-quick-action-clone",
             "translate3d(",
             "Sales Invoice",
         )
