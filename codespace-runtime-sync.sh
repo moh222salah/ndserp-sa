@@ -161,6 +161,7 @@ for key in required:
             ".nds-sales-invoices",
             "#page-workspaces[dir=rtl]",
             "#page-workspaces[dir=ltr]",
+            "#page-workspaces .page-head{direction:ltr;",
             ".nds-sales-dashboard[dir=rtl]",
             ".nds-sales-dashboard[dir=ltr]",
             ".nds-sales-workspace-sections",
@@ -313,6 +314,9 @@ for key in required:
             "Sales NDS ERP",
             "ndsSalesOriginalText",
             "data-sales-direction",
+            "ARABIC_HIDDEN_WORKSPACE_CARDS",
+            "syncArabicWorkspaceCardVisibility",
+            'en: "Work"',
             "ndsSalesOriginalDataSalesDirection",
         )
         missing = [marker for marker in required_sales_workspace_js if marker not in js]
