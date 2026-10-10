@@ -256,7 +256,7 @@ for marker in 'amt-quick-actions-title' 'amt-quick-actions-grid' 'amt-quick-acti
 done
 if grep -Fq "data-amt-quick-actions-loop" "$LOCAL_JS_ASSET" || grep -Fq "amt-quick-action-clone" "$LOCAL_JS_ASSET"; then echo "BUILT_QUICK_ACTIONS_JS=FAIL:LEGACY_MOTION_PRESENT"; exit 20; fi
 echo "BUILT_QUICK_ACTIONS_STATIC=PASS"
-for marker in 'nds-warehouse-workspace' 'nds-warehouse-dashboard' 'nds-warehouse-kpi-grid' 'nds-warehouse-movement-chart' 'nds-warehouse-distribution-chart' 'nds-warehouse-shortage-table' 'Stock Ledger Entry' 'frappe.client.get_list'; do
+for marker in 'nds-warehouse-workspace' 'nds-warehouse-dashboard' 'nds-warehouse-kpi-grid' 'nds-warehouse-movement-chart' 'nds-warehouse-distribution-chart' 'nds-warehouse-shortage-table' 'data-warehouse-dashboard-version' 'Warehouse Dashboard' 'Current Stock Value' 'Stock Ledger Entry' 'frappe.client.get_list'; do
   if ! grep -Fq "$marker" "$LOCAL_JS_ASSET"; then
     echo "BUILT_WAREHOUSE_WORKSPACE_JS=FAIL:MISSING_MARKER:$marker"
     exit 28
@@ -333,7 +333,7 @@ for marker in 'amt-quick-actions-title' 'amt-quick-actions-grid' 'amt-quick-acti
 done
 if grep -Fq "data-amt-quick-actions-loop" "$SERVED_JS" || grep -Fq "amt-quick-action-clone" "$SERVED_JS"; then echo "SERVED_QUICK_ACTIONS_JS=FAIL:LEGACY_MOTION_PRESENT"; exit 22; fi
 echo "SERVED_QUICK_ACTIONS_STATIC=PASS"
-for marker in 'nds-warehouse-workspace' 'nds-warehouse-dashboard' 'nds-warehouse-kpi-grid' 'nds-warehouse-movement-chart' 'nds-warehouse-distribution-chart' 'nds-warehouse-shortage-table' 'Stock Ledger Entry' 'frappe.client.get_list'; do
+for marker in 'nds-warehouse-workspace' 'nds-warehouse-dashboard' 'nds-warehouse-kpi-grid' 'nds-warehouse-movement-chart' 'nds-warehouse-distribution-chart' 'nds-warehouse-shortage-table' 'data-warehouse-dashboard-version' 'Warehouse Dashboard' 'Current Stock Value' 'Stock Ledger Entry' 'frappe.client.get_list'; do
   if ! grep -Fq "$marker" "$SERVED_JS"; then
     echo "SERVED_WAREHOUSE_WORKSPACE_JS=FAIL:MISSING_MARKER:$marker"
     exit 29
