@@ -1001,8 +1001,16 @@ const salesDashboard = (() => {
 				observedBody = document.body;
 				observer = new MutationObserver(() => {
 					if (isSalesWorkspace()) {
-						if (!document.getElementById(DASHBOARD_ID)) scheduleSync();
-						else syncArabicWorkspaceCardVisibility(currentDirection());
+						const board = document.getElementById(DASHBOARD_ID);
+						if (!board) {
+							scheduleSync();
+						} else {
+							syncArabicWorkspaceCardVisibility(currentDirection());
+							// Workspace links may arrive after the initial route paint. Refresh the
+							// custom section view from the current real Workspace model on DOM updates.
+							const host = document.querySelector("#page-Workspaces .layout-main-section");
+							if (host) renderSalesSections(host, board);
+						}
 					} else if (document.getElementById(DASHBOARD_ID)) {
 						cleanup();
 					}
