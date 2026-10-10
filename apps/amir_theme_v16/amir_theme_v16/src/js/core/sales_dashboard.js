@@ -53,11 +53,14 @@ const salesDashboard = (() => {
 	}
 
 	function currentDirection() {
+		// Frappe's active language is authoritative; the root dir is a fallback
+		// for pages where boot language is not available yet.
+		const language = currentLanguage();
+		if (language) return language.startsWith("ar") ? "rtl" : "ltr";
 		const htmlDirection = String(
 			document.documentElement && document.documentElement.getAttribute("dir") || ""
 		).toLowerCase();
-		if (htmlDirection === "rtl" || htmlDirection === "ltr") return htmlDirection;
-		return currentLanguage().startsWith("ar") ? "rtl" : "ltr";
+		return htmlDirection === "rtl" ? "rtl" : "ltr";
 	}
 
 	function syncDashboardDirection(board) {
