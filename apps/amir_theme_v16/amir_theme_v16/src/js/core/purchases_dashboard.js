@@ -50,7 +50,7 @@ const purchasesDashboard = (() => {
  function amountTrend(a,b){if(!a&&!b)return{text:tr("noActivity"),state:"neutral"};if(a&&!b)return{text:tr("newActivity"),state:"positive"};if(!b)return{text:tr("noCompare"),state:"neutral"};const d=(a-b)/b*100;return{text:(d>0?"↑ ":d<0?"↓ ":"")+number(Math.abs(d),1)+"% "+tr("monthCompare"),state:d>0?"positive":d<0?"negative":"neutral"};}
  function countTrend(a,b){const d=a-b;if(!d)return{text:tr("same"),state:"neutral"};return{text:(d>0?"↑ ":"↓ ")+number(Math.abs(d))+" "+tr("orders")+" "+tr("weekCompare"),state:d>0?"positive":"negative"};}
  function build(){
-  const b=el("section","nds-purchase-dashboard");b.id=ID;b.dataset.purchaseLanguage=lang();syncDir(b);b.setAttribute("aria-label",tr("title"));
+  const b=el("section","nds-purchase-dashboard");b.id=ID;b.dataset.purchaseLanguage=lang();syncDir(b);b.setAttribute("aria-label",tr("metrics"));
   b.innerHTML='<section class="nds-purchase-kpi-grid" aria-label="'+tr("metrics")+'">'+
    '<article class="nds-purchase-kpi-card" data-kpi="spend"><div class="nds-purchase-kpi-top"><span class="nds-purchase-kpi-label">'+tr("spend")+'</span><span class="nds-purchase-kpi-icon tone-blue">↗</span></div><div class="nds-purchase-kpi-value" data-kpi-value>—</div><div class="nds-purchase-kpi-trend" data-kpi-trend>'+tr("loading")+'</div></article>'+
    '<article class="nds-purchase-kpi-card" data-kpi="open"><div class="nds-purchase-kpi-top"><span class="nds-purchase-kpi-label">'+tr("open")+'</span><span class="nds-purchase-kpi-icon tone-gold">▤</span></div><div class="nds-purchase-kpi-value" data-kpi-value>—</div><div class="nds-purchase-kpi-trend" data-kpi-trend>'+tr("loading")+'</div></article>'+
