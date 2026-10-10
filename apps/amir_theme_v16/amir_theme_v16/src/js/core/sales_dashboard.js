@@ -36,8 +36,11 @@ const salesDashboard = (() => {
 				// Use the canonical Workspace name when slugging is unavailable.
 			}
 			const expected = new Set([target, routeName(slug)]);
+			const activeRouteName = routeName(route[1]);
+			// Never let an old sidebar title mount Sales UI on a different concrete Workspace route.
+			if (activeRouteName && !expected.has(activeRouteName)) return false;
 			const key = frappe.app && frappe.app.sidebar && frappe.app.sidebar.sidebar_title;
-			const routeMatches = expected.has(routeName(route[1]));
+			const routeMatches = expected.has(activeRouteName);
 			const keyMatches = expected.has(routeName(key));
 			return routeMatches || keyMatches;
 		} catch (_) {
