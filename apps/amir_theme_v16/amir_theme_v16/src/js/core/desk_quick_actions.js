@@ -63,47 +63,83 @@ function iconMarkup(name, className) {
 	);
 }
 
-function enableHorizontalMotion(viewport, track) {
-	// This component explicitly requires visible motion; scrollLeft is avoided
-	// because its RTL semantics vary by browser. Animation pauses on interaction.
-	const speed = 18; // balanced, continuous movement in pixels per second
+function bindAction(button, action) {
+	button.addEventListener("click", () => {
+		if (action.route) {
+			if (typeof frappe.set_route === "function") frappe.set_route(action.route);
+			return;
+		}
+
+		// Re-check create permission before opening the native form flow.
+		const permitted = frappe.boot?.user?.can_create;
+		if (!Array.isArray(permitted) || !permitted.includes(action.doctype)) return;
+		if (typeof frappe.new_doc === "function") frappe.new_doc(action.doctype);
+	});
+}
+
+function enableHorizontalMotion(viewport, track, actions) {
+	// Duplicate identical actions and cycle by exactly one sequence width.
+	// This creates a seamless one-way marquee rather than bouncing at either end.
+	const speed = 24; // pixels per second; slightly faster than the prior 18 px/s
 	const rtl = getComputedStyle(viewport).direction === "rtl";
+	const originals = Array.from(track.children);
+	if (!originals.length) return;
+
+	let firstClone = null;
+	let cycleWidth = 0;
 	let offset = 0;
-	let direction = 1;
 	let previousTime = 0;
 	let focusInside = false;
 	let frameId = 0;
 
 	viewport.dataset.motionState = "running";
 	viewport.setAttribute("data-amt-quick-actions-motion", "running");
+	track.setAttribute("data-amt-quick-actions-loop", "infinite");
 	track.style.willChange = "transform";
-	track.style.marginInline = "auto";
+	track.style.marginInline = "0";
+
+	const appendCloneSet = () => {
+		originals.forEach((button, index) => {
+			const clone = button.cloneNode(true);
+			clone.classList.add("amt-quick-action-clone");
+			clone.setAttribute("aria-hidden", "true");
+			clone.tabIndex = -1;
+			bindAction(clone, actions[index]);
+			track.appendChild(clone);
+		});
+
+		if (!firstClone) firstClone = track.children[originals.length];
+		cycleWidth = firstClone
+			? Math.abs(firstClone.getBoundingClientRect().left - originals[0].getBoundingClientRect().left)
+			: 0;
+	};
+
+	const ensureLoopCoverage = () => {
+		if (!viewport.isConnected || !track.isConnected) return;
+		if (!firstClone) appendCloneSet();
+		while (cycleWidth > 1 && track.scrollWidth < viewport.clientWidth + cycleWidth) {
+			appendCloneSet();
+		}
+	};
+
+	ensureLoopCoverage();
+	window.addEventListener("resize", ensureLoopCoverage, { passive: true });
 
 	const tick = (time) => {
 		if (!viewport.isConnected || !track.isConnected) {
 			cancelAnimationFrame(frameId);
+			window.removeEventListener("resize", ensureLoopCoverage);
 			track.style.willChange = "";
 			return;
 		}
 
-		const contentOverflow = Math.max(0, track.scrollWidth - viewport.clientWidth);
-		// If the available actions fit, use a small centred sway so motion remains
-		// visible rather than silently becoming static for users with fewer permissions.
-		const travel = contentOverflow > 1 ? contentOverflow : 28;
-		if (!focusInside && document.visibilityState !== "hidden") {
+		ensureLoopCoverage();
+		if (cycleWidth > 1 && !focusInside && document.visibilityState !== "hidden") {
 			const elapsed = previousTime ? Math.min((time - previousTime) / 1000, 0.05) : 0;
-			offset += direction * speed * elapsed;
+			offset = (offset + speed * elapsed) % cycleWidth;
 
-			if (offset >= travel) {
-				offset = travel;
-				direction = -1;
-			} else if (offset <= 0) {
-				offset = 0;
-				direction = 1;
-			}
-
-			// Transform the content track itself instead of relying on RTL-dependent
-			// scrollLeft semantics, which differ across browser engines.
+			// RTL needs the opposite transform sign because flex row order is reversed;
+			// the visual motion remains one-way and the repeated sequence stays aligned.
 			const translateX = rtl ? offset : -offset;
 			track.style.transform = "translate3d(" + translateX.toFixed(2) + "px, 0, 0)";
 		}
@@ -164,24 +200,14 @@ function buildSection(actions, arabic) {
 		label.textContent = action[arabic ? "ar" : "en"];
 
 		button.append(icon, label);
-		button.addEventListener("click", () => {
-			if (action.route) {
-				if (typeof frappe.set_route === "function") frappe.set_route(action.route);
-				return;
-			}
-
-			// Re-check the boot permission before opening the native form flow.
-			const permitted = frappe.boot?.user?.can_create;
-			if (!Array.isArray(permitted) || !permitted.includes(action.doctype)) return;
-			if (typeof frappe.new_doc === "function") frappe.new_doc(action.doctype);
-		});
+		bindAction(button, action);
 		track.appendChild(button);
 	}
 
 	if (actions.length) {
 		grid.appendChild(track);
 		section.append(header, grid);
-		enableHorizontalMotion(grid, track);
+		enableHorizontalMotion(grid, track, actions);
 	} else {
 		const empty = document.createElement("p");
 		empty.className = "amt-quick-actions-empty";
