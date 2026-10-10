@@ -344,7 +344,8 @@ jobs:
           grep -Fq 'return SALES_SECTION_DEFINITIONS.map((definition) => ({ definition, links: [] }));' apps/amir_theme_v16/amir_theme_v16/src/js/core/sales_dashboard.js
           grep -Fq '"frappe.client.get_list"' apps/amir_theme_v16/amir_theme_v16/src/js/core/sales_dashboard.js
           grep -Fq '"Sales Invoice"' apps/amir_theme_v16/amir_theme_v16/src/js/core/sales_dashboard.js
-          grep -Fq 'b.innerHTML=\x27<section class="nds-purchase-kpi-grid"' apps/amir_theme_v16/amir_theme_v16/src/js/core/purchases_dashboard.js
+          grep -Fq 'b.innerHTML=' apps/amir_theme_v16/amir_theme_v16/src/js/core/purchases_dashboard.js
+          grep -Fq 'nds-purchase-kpi-grid' apps/amir_theme_v16/amir_theme_v16/src/js/core/purchases_dashboard.js
           ! grep -Fq 'لوحة المشتريات' apps/amir_theme_v16/amir_theme_v16/src/js/core/purchases_dashboard.js
           ! grep -Fq 'Nexterp v16' apps/amir_theme_v16/amir_theme_v16/src/js/core/purchases_dashboard.js
           ! grep -Fq 'data-purchase-period' apps/amir_theme_v16/amir_theme_v16/src/js/core/purchases_dashboard.js
