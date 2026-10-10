@@ -144,6 +144,8 @@ for key in required:
             ".nds-sales-revenue-chart",
             ".nds-sales-channels-chart",
             ".nds-sales-invoices",
+            ".nds-sales-dashboard[dir=rtl]",
+            ".nds-sales-dashboard[dir=ltr]",
             "grid-template-columns:repeat(4,minmax(0,1fr))",
         )
         missing = [marker for marker in required_sales_workspace_css if marker not in css_compact]
@@ -152,6 +154,10 @@ for key in required:
                 "SALES_WORKSPACE_CSS=FAIL:MISSING_MARKERS:" + ",".join(missing)
             )
         print("SALES_WORKSPACE_CSS=PASS")
+        hidden_sales_header = "nds-sales-dashboard-ready#page-workspaces.page-head{display:none!important"
+        if hidden_sales_header in css_compact:
+            raise SystemExit("SALES_WORKSPACE_HEADER=FAIL:HIDDEN_BY_THEME")
+        print("SALES_WORKSPACE_HEADER=PASS")
         required_purchase_workspace_css = (
             ".nds-purchase-workspace-redesign",
             "#page-workspaces",
@@ -209,6 +215,7 @@ for key in required:
             "nds-sales-revenue-chart",
             "nds-sales-channels-chart",
             "nds-sales-invoices",
+            "data-sales-direction",
         )
         missing = [marker for marker in required_sales_workspace_js if marker not in js]
         if missing:
