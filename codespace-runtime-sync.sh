@@ -91,10 +91,14 @@ for key in required:
             ".amt-quick-actions-grid",
             ".amt-quick-action-arrow",
             ".amt-quick-actions-track",
-            "height:104px",
-            "min-height:104px",
-            "width:36px",
-            "width:20px",
+            "display:grid",
+            "grid-template-columns:repeat(7,minmax(0,1fr))",
+            "grid-template-columns:repeat(4,minmax(0,1fr))",
+            "grid-template-columns:repeat(2,minmax(0,1fr))",
+            "height:92px",
+            "min-height:92px",
+            "width:30px",
+            "width:16px",
             "margin-top:auto",
             "background:#eef1f4",
             "display:none!important",
@@ -218,10 +222,9 @@ for key in required:
             "amt-quick-actions-title",
             "amt-quick-actions-grid",
             "amt-quick-actions-track",
-            "data-amt-quick-actions-motion",
-            "data-amt-quick-actions-loop",
-            "amt-quick-action-clone",
-            "translate3d(",
+            "data-amt-quick-actions-layout",
+            "static-grid",
+            "amt-quick-action-label",
             "Sales Invoice",
         )
         missing = [marker for marker in required_quick_actions_js if marker not in js]
@@ -229,6 +232,8 @@ for key in required:
             raise SystemExit(
                 "QUICK_ACTIONS_JS=FAIL:MISSING_MARKERS:" + ",".join(missing)
             )
+        if "data-amt-quick-actions-loop" in js or "amt-quick-action-clone" in js:
+            raise SystemExit("QUICK_ACTIONS_JS=FAIL:LEGACY_MOTION_PRESENT")
         print("QUICK_ACTIONS_JS=PASS")
         required_warehouse_js = (
             "nds-warehouse-workspace",
