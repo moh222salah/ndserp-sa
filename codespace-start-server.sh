@@ -18,10 +18,19 @@ bench_pids() {
     [ -n "$pid" ] || continue
     [ -e "/proc/$pid/cwd" ] || continue
     cwd="$(readlink -f "/proc/$pid/cwd" 2>/dev/null || true)"
-    if [ "$cwd" = "$ROOT" ]; then
-      printf '%s\n' "$pid"
-    fi
+    case "$cwd" in
+      "$ROOT"|"$ROOT"/*) printf '%s\n' "$pid" ;;
+    esac
   done < <(pgrep -f '[b]ench start|[h]oncho start' || true)
+}
+
+port_listener_pids() {
+  if command -v ss >/dev/null 2>&1; then
+    ss -H -ltnp 'sport = :8080' 2>/dev/null |
+      grep -oE 'pid=[0-9]+' | cut -d= -f2 | sort -u
+  elif command -v lsof >/dev/null 2>&1; then
+    lsof -nP -t -iTCP:8080 -sTCP:LISTEN 2>/dev/null | sort -u
+  fi
 }
 
 echo "=== NDS ERP SAUDI — ENSURE BENCH SERVER ==="
@@ -57,10 +66,37 @@ if [ "${NDS_FORCE_BENCH_RESTART:-0}" = "1" ]; then
     sleep 1
   done
 
+  # A terminated bench supervisor can leave an orphaned web worker bound to 8080.
+  # This port is reserved for the Saudi Codespace Bench runtime.
+  if http_ready; then
+    mapfile -t listener_pids < <(port_listener_pids)
+    if [ "${#listener_pids[@]}" -gt 0 ]; then
+      echo "STALE_HTTP_LISTENERS=${listener_pids[*]}"
+      for pid in "${listener_pids[@]}"; do
+        kill -TERM "$pid" 2>/dev/null || true
+      done
+      for _ in $(seq 1 10); do
+        if ! http_ready; then break; fi
+        sleep 1
+      done
+      if http_ready; then
+        mapfile -t listener_pids < <(port_listener_pids)
+        for pid in "${listener_pids[@]}"; do
+          kill -KILL "$pid" 2>/dev/null || true
+        done
+        for _ in $(seq 1 10); do
+          if ! http_ready; then break; fi
+          sleep 1
+        done
+      fi
+    fi
+  fi
+
   mapfile -t remaining_pids < <(bench_pids)
   if http_ready || [ "${#remaining_pids[@]}" -gt 0 ]; then
     echo "BENCH_RESTART=FAIL:OLD_RUNTIME_STILL_ACTIVE"
     echo "BENCH_PIDS=${remaining_pids[*]:-unknown}"
+    echo "HTTP_LISTENER_PIDS=$(port_listener_pids | paste -sd, -)"
     exit 2
   fi
   echo "BENCH_RESTART=PASS"
