@@ -384,45 +384,54 @@ echo "ROOT=$ROOT"
 echo "SITE=$SITE"
 echo "INTERVAL=${INTERVAL}s"
 
-is_dirty() {
-  ! git diff --quiet ||
-  ! git diff --cached --quiet ||
-  [ -n "$(git ls-files --others --exclude-standard)" ]
-}
-
 sync_once() {
   git fetch origin main
 
-  local current remote source_marker served_marker needs_build
+  local current remote source_marker served_marker needs_build force_rebuild tracked_dirty branch
   current="$(git rev-parse HEAD)"
   remote="$(git rev-parse origin/main)"
+  branch="$(git branch --show-current)"
+  force_rebuild=0
+  tracked_dirty=0
+  if ! git diff --quiet || ! git diff --cached --quiet; then
+    tracked_dirty=1
+  fi
 
   echo "CODESPACE_HEAD=$current"
   echo "GITHUB_MAIN=$remote"
+  echo "CODESPACE_BRANCH=$branch"
+  echo "TRACKED_WORKTREE_DIRTY=$tracked_dirty"
 
-  if [ "$current" != "$remote" ]; then
-    if is_dirty; then
-      echo "SOURCE_SYNC=BLOCKED_DIRTY_WORKTREE"
-      git status --short
-      return 0
-    fi
-
-    git switch main
-
-    # GitHub main is the sole source of truth for this Saudi Codespace.
-    # A clean ahead/diverged checkout must never survive as a runtime source.
-    if git merge-base --is-ancestor "$current" "$remote"; then
-      git pull --ff-only origin main
-    else
-      echo "SOURCE_SYNC=RESET_TO_GITHUB_MAIN"
+  # GitHub main is authoritative. A stale branch OR modified tracked files used to
+  # block the sync loop forever; reset tracked files to main, but never clean
+  # untracked/ignored runtime files (sites, logs, local environment).
+  if [ "$current" != "$remote" ] || [ "$tracked_dirty" -eq 1 ] || [ "$branch" != "main" ]; then
+    force_rebuild=1
+    echo "SOURCE_SYNC=RESET_TO_GITHUB_MAIN"
+    if [ "$branch" = "main" ]; then
       git reset --hard "$remote"
+    else
+      git switch --discard-changes -C main "$remote"
     fi
 
     current="$(git rev-parse HEAD)"
+    if [ "$current" != "$remote" ]; then
+      echo "SOURCE_SYNC=FAIL_HEAD_MISMATCH"
+      return 31
+    fi
+    if ! git diff --quiet || ! git diff --cached --quiet; then
+      echo "SOURCE_SYNC=FAIL_TRACKED_WORKTREE_STILL_DIRTY"
+      git status --short
+      return 32
+    fi
     echo "SOURCE_SYNC=PASS"
     echo "SOURCE_HEAD=$current"
+    echo "TRACKED_WORKTREE=RESET_TO_GITHUB_MAIN"
+    if [ -n "$(git ls-files --others --exclude-standard)" ]; then
+      echo "UNTRACKED_FILES=PRESERVED"
+    fi
 
-    # Re-exec the freshly synced script so the active worker uses current GitHub source immediately.
+    # Re-exec the freshly synced script so the active worker uses the current GitHub source immediately.
     if [ "${RUNTIME_SYNC_REEXEC:-0}" != "1" ]; then
       export RUNTIME_SYNC_REEXEC=1
       # A locked worker remains a single cycle after a source refresh.
@@ -455,8 +464,9 @@ sync_once() {
   fi
 
   needs_build=0
-  if [ "$source_marker" != "$current" ]; then
+  if [ "$force_rebuild" -eq 1 ] || [ "$source_marker" != "$current" ]; then
     needs_build=1
+    echo "ASSET_FRESHNESS=FORCED_AFTER_SOURCE_SYNC"
   elif ! verify_amir_assets >/dev/null 2>&1; then
     # A stale/missing asset tree forces a rebuild even when the Git SHA is unchanged.
     needs_build=1
@@ -483,7 +493,7 @@ sync_once() {
       else
         NDS_FORCE_BENCH_RESTART=1 bash "$ROOT/codespace-start-server.sh"
         bash "$ROOT/codespace-verify-runtime.sh"
-        printf '%s\\n' "$current" > sites/.nds-runtime-served-head
+        printf '%s\n' "$current" > sites/.nds-runtime-served-head
         echo "SERVED_ASSET_REFRESH=PASS"
       fi
     else
