@@ -261,6 +261,9 @@ for key in required:
             "nds-warehouse-movement-chart",
             "nds-warehouse-distribution-chart",
             "nds-warehouse-shortage-table",
+            "data-warehouse-dashboard-version",
+            "Warehouse Dashboard",
+            "Current Stock Value",
             "Stock Ledger Entry",
             "frappe.client.get_list",
         )
