@@ -41,7 +41,7 @@ const accountsDashboard = (() => {
 			overdue: "متأخرة",
 			collecting: "قيد التحصيل",
 			sar: "ر.س",
-			loading: "بيانات العرض المحددة في التصميم",
+			loading: "عرض تصميمي — القيم وفق مواصفات الطلب وليست محمّلة من قاعدة بيانات ERP.",
 		},
 		en: {
 			title: "Accounts Dashboard",
@@ -74,7 +74,7 @@ const accountsDashboard = (() => {
 			overdue: "Overdue",
 			collecting: "In Collection",
 			sar: "SAR",
-			loading: "Values supplied in the dashboard design brief",
+			loading: "Design preview — these values are supplied by the brief, not loaded from ERP records.",
 		},
 	};
 
@@ -110,6 +110,8 @@ const accountsDashboard = (() => {
 	];
 
 	let installStarted = false;
+	let preservedEditor = null;
+	let editorPlaceholder = null;
 	let observer = null;
 	let observedBody = null;
 	let scheduledTimers = [];
@@ -330,6 +332,29 @@ const accountsDashboard = (() => {
 		});
 	}
 
+	function detachWorkspaceEditor(page) {
+		const editor = page && page.querySelector("#editorjs");
+		if (!editor || !editor.parentNode || editor === preservedEditor) return;
+		if (preservedEditor && editorPlaceholder && editorPlaceholder.parentNode) {
+			// A newly rendered editor replaces the preserved reference; restore
+			// the previous one first so no Workspace DOM is discarded.
+			editorPlaceholder.replaceWith(preservedEditor);
+		}
+		const placeholder = document.createComment("NDS Accounts Dashboard preserves the original Workspace editor");
+		editor.parentNode.insertBefore(placeholder, editor);
+		editor.remove();
+		preservedEditor = editor;
+		editorPlaceholder = placeholder;
+	}
+
+	function restoreWorkspaceEditor() {
+		if (preservedEditor && editorPlaceholder && editorPlaceholder.parentNode) {
+			editorPlaceholder.replaceWith(preservedEditor);
+		}
+		preservedEditor = null;
+		editorPlaceholder = null;
+	}
+
 	function mountIfReady() {
 		if (!isAccountsWorkspace()) {
 			cleanup();
@@ -343,17 +368,20 @@ const accountsDashboard = (() => {
 		const current = document.getElementById(DASHBOARD_ID);
 		if (current && current.isConnected && current.parentElement === host && current.dataset.language === language) {
 			document.body.classList.add(READY_CLASS);
+			detachWorkspaceEditor(page);
 			return;
 		}
 		const next = buildDashboard(language);
 		if (current && current.parentElement) current.replaceWith(next);
 		else host.insertBefore(next, host.firstChild);
 		document.body.classList.add(READY_CLASS);
+		detachWorkspaceEditor(page);
 	}
 
 	function cleanup() {
 		const board = document.getElementById(DASHBOARD_ID);
 		if (board) board.remove();
+		restoreWorkspaceEditor();
 		if (document.body) document.body.classList.remove(READY_CLASS);
 	}
 
@@ -376,8 +404,12 @@ const accountsDashboard = (() => {
 				if (observer) observer.disconnect();
 				observedBody = document.body;
 				observer = new MutationObserver(() => {
-					if (isAccountsWorkspace() && !document.getElementById(DASHBOARD_ID)) scheduleSync();
-					else if (!isAccountsWorkspace() && document.getElementById(DASHBOARD_ID)) cleanup();
+					if (isAccountsWorkspace()) {
+						if (!document.getElementById(DASHBOARD_ID)) scheduleSync();
+						else detachWorkspaceEditor(document.querySelector("#page-Workspaces"));
+					} else if (document.getElementById(DASHBOARD_ID)) {
+						cleanup();
+					}
 				});
 				observer.observe(document.body, { childList: true, subtree: true });
 			}
