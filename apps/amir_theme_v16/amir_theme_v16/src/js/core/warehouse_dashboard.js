@@ -81,7 +81,14 @@ const warehouseDashboard = (() => {
     } catch (_) {}
     return (frappe.boot && frappe.boot.sysdefaults && frappe.boot.sysdefaults.company) || "";
   }
+  // Bin and Stock Ledger Entry do not have a company field in standard ERPNext.
+  // Scope them through the warehouses owned by the selected company instead.
   function companyFilters(doctype, company) { return company ? [[doctype,"company","=",company]] : []; }
+  function inventoryWarehouseFilters(doctype, company, warehouseNames) {
+    if (!company) return [];
+    if (Array.isArray(warehouseNames) && warehouseNames.length) return [[doctype,"warehouse","in",warehouseNames]];
+    return [[doctype,"warehouse","=","__nds_no_matching_warehouse__"]];
+  }
   async function aggregate(doctype, operation, field, alias, filters) {
     const expression = {}; expression[operation] = field; expression.as = alias;
     const rows = await getList(doctype,[expression],filters,{limit_page_length:1});
@@ -166,8 +173,8 @@ const warehouseDashboard = (() => {
     if(!name){cell.textContent="—";return;}const anchor=el("a","",label||name);anchor.href="#";
     anchor.addEventListener("click",(event)=>{event.preventDefault();if(window.frappe&&frappe.set_route)frappe.set_route("Form",doctype,name);});cell.appendChild(anchor);
   }
-  async function getShortages(company) {
-    const rows=await getList("Bin",["item_code","warehouse","actual_qty","projected_qty","stock_uom"],[["Bin","projected_qty","<",0]].concat(companyFilters("Bin",company)),{order_by:"projected_qty asc",limit_page_length:10});
+  async function getShortages(company, warehouseNames) {
+    const rows=await getList("Bin",["item_code","warehouse","actual_qty","projected_qty","stock_uom"],[["Bin","projected_qty","<",0]].concat(inventoryWarehouseFilters("Bin",company,warehouseNames)),{order_by:"projected_qty asc",limit_page_length:10});
     if(!Array.isArray(rows))return null;const codes=[...new Set(rows.map((r)=>r.item_code).filter(Boolean))];let items=[];
     if(codes.length){try{items=await getList("Item",["name","item_name"],[["Item","name","in",codes]],{limit_page_length:codes.length})||[];}catch(_){}}
     const itemNames=new Map(items.map((r)=>[r.name,r.item_name||r.name]));
@@ -179,8 +186,8 @@ const warehouseDashboard = (() => {
     rows.forEach((r)=>{const row=el("tr"),item=el("td"),warehouse=el("td");appendLink(item,"Item",r.item_code,r.item_name||r.item_code);item.appendChild(el("small","nds-warehouse-item-code",r.item_code));appendLink(warehouse,"Warehouse",r.warehouse,r.warehouse);
       row.append(item,warehouse,el("td","is-numeric",fmt(r.actual_qty,2)),el("td","is-numeric is-negative",fmt(r.projected_qty,2)),el("td","",r.stock_uom||"—"));body.appendChild(row);});
   }
-  async function getMovement(company,end) {
-    const filters=[["Stock Ledger Entry","is_cancelled","=",0],["Stock Ledger Entry","posting_date",">=",monthStart(end,-5)],["Stock Ledger Entry","posting_date","<=",end]].concat(companyFilters("Stock Ledger Entry",company));
+  async function getMovement(company,end,warehouseNames) {
+    const filters=[["Stock Ledger Entry","is_cancelled","=",0],["Stock Ledger Entry","posting_date",">=",monthStart(end,-5)],["Stock Ledger Entry","posting_date","<=",end]].concat(inventoryWarehouseFilters("Stock Ledger Entry",company,warehouseNames));
     const fields=["posting_date",{SUM:"actual_qty",as:"quantity"}];
     const incoming=getList("Stock Ledger Entry",fields,filters.concat([["Stock Ledger Entry","actual_qty",">",0]]),{group_by:"posting_date",order_by:"posting_date asc",limit_page_length:1000});
     const outgoing=getList("Stock Ledger Entry",fields,filters.concat([["Stock Ledger Entry","actual_qty","<",0]]),{group_by:"posting_date",order_by:"posting_date asc",limit_page_length:1000});
@@ -188,16 +195,20 @@ const warehouseDashboard = (() => {
   }
   async function loadData(board) {
     const company=defaultCompany(),end=today(),warehouseFilters=[["Warehouse","disabled","=",0],["Warehouse","is_group","=",0]].concat(companyFilters("Warehouse",company));
-    const itemFilters=[["Item","disabled","=",0],["Item","is_stock_item","=",1]],bins=companyFilters("Bin",company);
+    const itemFilters=[["Item","disabled","=",0],["Item","is_stock_item","=",1]];
+    // Resolve company-owned warehouses once, then use the real Bin/SLE warehouse field.
+    const companyWarehouses = company ? await getList("Warehouse",["name"],[["Warehouse","company","=",company],["Warehouse","disabled","=",0],["Warehouse","is_group","=",0]],{limit_page_length:500}).catch(()=>[]) : [];
+    const warehouseNames = Array.isArray(companyWarehouses) ? companyWarehouses.map((row)=>row.name).filter(Boolean) : [];
+    const bins=inventoryWarehouseFilters("Bin",company,warehouseNames);
     const valuedBins=[["Bin","stock_value",">",0]].concat(bins),shortageBins=[["Bin","projected_qty","<",0]].concat(bins);
     const results=await Promise.all([
       aggregate("Bin","SUM","stock_value","total_stock_value",bins).catch(()=>null),
       aggregate("Warehouse","COUNT","*","active_warehouses",warehouseFilters).catch(()=>null),
       aggregate("Item","COUNT","*","active_items",itemFilters).catch(()=>null),
       aggregate("Bin","COUNT","*","shortage_cases",shortageBins).catch(()=>null),
-      getMovement(company,end).catch(()=>null),
+      getMovement(company,end,warehouseNames).catch(()=>null),
       getList("Bin",["warehouse",{SUM:"stock_value",as:"stock_value"}],valuedBins,{group_by:"warehouse",order_by:"stock_value desc",limit_page_length:8}).catch(()=>null),
-      getShortages(company).catch(()=>null)
+      getShortages(company,warehouseNames).catch(()=>null)
     ]);
     setKpi(board,"stock-value",results[0]===null?null:money(results[0]),results[0]===null);
     setKpi(board,"warehouses",results[1]===null?null:fmt(results[1]),results[1]===null);
