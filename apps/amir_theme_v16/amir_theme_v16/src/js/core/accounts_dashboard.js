@@ -227,7 +227,7 @@ const accountsDashboard = (() => {
 					'<thead><tr><th data-th="id"></th><th data-th="customer"></th><th data-th="due"></th><th data-th="amount"></th><th data-th="status"></th></tr></thead>' +
 					'<tbody data-invoice-rows></tbody>' +
 				'</table></div>' +
-			'</section>' +;
+			'</section>';
 
 		board.querySelector("[data-accounts-title]").textContent = t.title;
 		board.querySelector("[data-accounts-module]").textContent = t.breadcrumbModule;
