@@ -296,6 +296,12 @@ jobs:
           grep -Fq 'SERVED_PURCHASE_DASHBOARD_JS=PASS' codespace-verify-runtime.sh
           node --check --input-type=module < apps/amir_theme_v16/amir_theme_v16/src/js/core/purchases_dashboard.js
           node --check --input-type=module < apps/amir_theme_v16/amir_theme_v16/src/js/amir_theme.bundle.js
+          grep -Fq 'nds-purchase-workspace-redesign' apps/amir_theme_v16/amir_theme_v16/src/js/core/purchases_dashboard.js
+          grep -Fq 'const scoped=Boolean(document.body?.classList.contains("nds-purchase-workspace-redesign"));' apps/amir_theme_v16/amir_theme_v16/src/js/core/purchases_dashboard.js
+          grep -Fq 'trap ensure_runtime_sync_worker_on_exit EXIT' codespace-poststart.sh
+          grep -Fq 'RUNTIME_SYNC_RECOVERY=STARTING_AFTER_POSTSTART_EXIT' codespace-poststart.sh
+          echo "PURCHASE_DASHBOARD_ACTIVATION_FALLBACK=PASS"
+          echo "CODESPACE_SYNC_RECOVERY_GUARD=PASS"
           echo "PURCHASE_DASHBOARD_SOURCE_AND_ASSET_GATES=PASS"
           echo "PURCHASE_WORKSPACE_SOURCE_AND_ASSET_GATES=PASS"
 
