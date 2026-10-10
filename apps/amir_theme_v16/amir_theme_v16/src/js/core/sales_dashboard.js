@@ -53,10 +53,8 @@ const salesDashboard = (() => {
 
 		// The visible Desk locale wins over a stale boot value after in-app language changes.
 		if (rootDirection === "rtl") return documentLanguage.startsWith("ar") ? documentLanguage : "ar";
-		if (rootDirection === "ltr") {
-			if (documentLanguage.startsWith("en")) return documentLanguage;
-			if (bootLanguage.startsWith("en")) return bootLanguage;
-			return "en";
+		if (rootDirection === "ltr" && (documentLanguage.startsWith("en") || bootLanguage.startsWith("en"))) {
+			return documentLanguage.startsWith("en") ? documentLanguage : bootLanguage;
 		}
 		return documentLanguage || bootLanguage || "en";
 	}
