@@ -145,7 +145,15 @@ const accountsDashboard = (() => {
 			const routeName = normalize(route[1]);
 			const pageTitle = normalize(document.querySelector(".workspace-title")?.textContent);
 			const sidebarTitle = normalize(frappe.app && frappe.app.sidebar && frappe.app.sidebar.sidebar_title);
-			return expected.has(routeName) || expected.has(pageTitle) || expected.has(sidebarTitle);
+			const scoped = Boolean(document.body && document.body.classList.contains("amt-accounts-workspace"));
+
+			// The theme's route-scoped class is maintained by the existing Workspace
+			// enhancer. Use it as a fallback during route/title settling, not as a
+			// replacement for Frappe's canonical route check.
+			return expected.has(routeName)
+				|| expected.has(pageTitle)
+				|| expected.has(sidebarTitle)
+				|| scoped;
 		} catch (_) {
 			return false;
 		}
@@ -361,9 +369,21 @@ const accountsDashboard = (() => {
 			cleanup();
 			return;
 		}
-		const page = document.querySelector("#page-Workspaces");
-		const host = page && page.querySelector(".layout-main-section");
+
+		// Frappe v16 creates the Workspaces wrapper as #page-Workspaces. Resolve
+		// from the editor as a fallback in case a theme or Frappe re-render changes
+		// the wrapper id while keeping the native Workspace editor intact.
+		const knownPage = document.getElementById("page-Workspaces")
+			|| document.querySelector('.page-container[data-page-route="Workspaces"]');
+		const existingEditor = knownPage?.querySelector("#editorjs") || document.querySelector("#editorjs");
+		const page = knownPage || existingEditor?.closest(".page-container");
+		const host = existingEditor?.closest(".layout-main-section")
+			|| page?.querySelector(".layout-main-section");
 		if (!host) return;
+
+		// Keep styling deterministic; do not depend on the sidebar enhancer's
+		// separate MutationObserver winning the same-render timing race.
+		document.body.classList.add("amt-accounts-workspace");
 
 		const language = getLanguage();
 		const current = document.getElementById(DASHBOARD_ID);
