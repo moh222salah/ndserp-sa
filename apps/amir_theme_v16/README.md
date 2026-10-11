@@ -1,4 +1,4 @@
-<h1 align="center">Eng-Amir Theme v16</h1>
+<h1 align="center"> NDS ERP Theme v16</h1>
 
 <p align="center">
   A bilingual (Arabic / English) enterprise theme for <strong>ERPNext v16</strong> and
