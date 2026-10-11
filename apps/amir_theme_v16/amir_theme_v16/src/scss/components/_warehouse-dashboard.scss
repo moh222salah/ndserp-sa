@@ -148,3 +148,134 @@ html.nds-warehouse-workspace #page-Workspaces[dir=ltr] #editorjs .chart {
   direction: ltr;
   text-align: start;
 }
+
+
+/* Native warehouse navigation is moved into these dashboard cards at runtime.
+   Link nodes remain the original Frappe nodes, so routes and click handlers survive. */
+html.nds-warehouse-workspace.nds-warehouse-dashboard-ready #page-Workspaces .nds-warehouse-navigation {
+  margin: 0 0 16px;
+}
+html.nds-warehouse-workspace.nds-warehouse-dashboard-ready #page-Workspaces .nds-warehouse-navigation-heading {
+  margin: 4px 0 10px;
+}
+html.nds-warehouse-workspace.nds-warehouse-dashboard-ready #page-Workspaces .nds-warehouse-navigation-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  align-items: stretch;
+  gap: 14px;
+  direction: inherit;
+}
+html.nds-warehouse-workspace.nds-warehouse-dashboard-ready #page-Workspaces .nds-warehouse-nav-card {
+  min-width: 0;
+  overflow: hidden;
+  border: 1px solid var(--warehouse-line);
+  border-radius: 11px;
+  border-block-start: 3px solid #0a2342;
+  background: #fff;
+  box-shadow: 0 2px 7px rgba(32, 48, 60, .035);
+}
+html.nds-warehouse-workspace.nds-warehouse-dashboard-ready #page-Workspaces [data-warehouse-nav-category="reports"] {
+  border-block-start-color: #164e8f;
+}
+html.nds-warehouse-workspace.nds-warehouse-dashboard-ready #page-Workspaces [data-warehouse-nav-category="movements"] {
+  border-block-start-color: #d4af37;
+}
+html.nds-warehouse-workspace.nds-warehouse-dashboard-ready #page-Workspaces .nds-warehouse-nav-card-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  min-height: 54px;
+  padding: 12px 15px;
+  border-bottom: 1px solid #eef1f4;
+}
+html.nds-warehouse-workspace.nds-warehouse-dashboard-ready #page-Workspaces .nds-warehouse-nav-card-heading h3 {
+  min-width: 0;
+  margin: 0;
+  color: #283640;
+  font-size: 13px;
+  font-weight: 800;
+  line-height: 1.5;
+}
+html.nds-warehouse-workspace.nds-warehouse-dashboard-ready #page-Workspaces .nds-warehouse-nav-card-heading > span {
+  display: inline-grid;
+  flex: 0 0 auto;
+  width: 27px;
+  height: 27px;
+  place-items: center;
+  border-radius: 8px;
+  background: #eaf0f8;
+  color: #0a2342;
+  font-size: 16px;
+  font-weight: 800;
+}
+html.nds-warehouse-workspace.nds-warehouse-dashboard-ready #page-Workspaces [data-warehouse-nav-category="reports"] .nds-warehouse-nav-card-heading > span {
+  color: #164e8f;
+}
+html.nds-warehouse-workspace.nds-warehouse-dashboard-ready #page-Workspaces [data-warehouse-nav-category="movements"] .nds-warehouse-nav-card-heading > span {
+  background: #fbf4df;
+  color: #9a7920;
+}
+html.nds-warehouse-workspace.nds-warehouse-dashboard-ready #page-Workspaces .nds-warehouse-nav-links {
+  display: grid;
+  gap: 1px;
+  min-height: 74px;
+  padding: 7px 10px 10px;
+}
+html.nds-warehouse-workspace.nds-warehouse-dashboard-ready #page-Workspaces .nds-warehouse-nav-link {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  min-width: 0;
+  padding: 9px 8px;
+  border-radius: 7px;
+  color: #43515b;
+  text-align: start;
+  text-decoration: none;
+  line-height: 1.5;
+  overflow-wrap: anywhere;
+  transition: background .14s ease, color .14s ease;
+}
+html.nds-warehouse-workspace.nds-warehouse-dashboard-ready #page-Workspaces .nds-warehouse-nav-link:hover,
+html.nds-warehouse-workspace.nds-warehouse-dashboard-ready #page-Workspaces .nds-warehouse-nav-link:focus-visible {
+  background: #f0f5fa;
+  color: #164e8f;
+}
+html.nds-warehouse-workspace.nds-warehouse-dashboard-ready #page-Workspaces .nds-warehouse-nav-link .link-content {
+  display: flex;
+  flex: 1 1 auto;
+  align-items: center;
+  min-width: 0;
+  width: auto;
+  white-space: normal;
+  text-align: start;
+  overflow-wrap: anywhere;
+}
+html.nds-warehouse-workspace.nds-warehouse-dashboard-ready #page-Workspaces .nds-warehouse-nav-empty {
+  margin: 0;
+  padding: 12px 8px;
+  color: #89959e;
+  font-size: 11px;
+  line-height: 1.7;
+  text-align: start;
+}
+html.nds-warehouse-workspace.nds-warehouse-dashboard-ready #page-Workspaces #editorjs .ce-block.nds-warehouse-links-consumed {
+  display: none;
+}
+@media (max-width: 1024px) {
+  html.nds-warehouse-workspace.nds-warehouse-dashboard-ready #page-Workspaces .nds-warehouse-navigation-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+@media (max-width: 767px) {
+  html.nds-warehouse-workspace.nds-warehouse-dashboard-ready #page-Workspaces .nds-warehouse-navigation-grid {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 10px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  html.nds-warehouse-workspace.nds-warehouse-dashboard-ready #page-Workspaces .nds-warehouse-nav-link {
+    transition: none;
+  }
+}
