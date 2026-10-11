@@ -12,14 +12,19 @@ const ACTIONS = [
 	{ doctype: "Purchase Invoice", ar: "فاتورة مشتريات", en: "Purchase Invoice", icon: "briefcase" },
 	{ doctype: "Payment Entry", ar: "سند قبض", en: "Payment Receipt", icon: "credit-card" },
 	{ doctype: "Customer", ar: "عميل جديد", en: "New Customer", icon: "user" },
-	{ doctype: "Stock Entry", ar: "حركة مخزون", en: "Stock Entry", icon: "package" },
+	{ doctype: "Stock Entry", ar: "حركة مخزون", en: "Stock Movement", icon: "package" },
 	{ doctype: "Journal Entry", ar: "قيد يومية", en: "Journal Entry", icon: "ledger" },
 	{ route: ["List", "Report"], ar: "التقارير", en: "Reports", icon: "chart" },
 ];
 
 function isArabic() {
-	const lang = String(frappe.boot?.lang || document.documentElement.lang || "").toLowerCase();
-	return document.documentElement.dir === "rtl" || lang.startsWith("ar");
+	// Language controls labels; text direction is a separate presentation concern.
+	const lang = String(frappe.boot?.lang || document.documentElement.lang || "")
+		.trim()
+		.toLowerCase();
+	if (lang) return lang === "ar" || lang.startsWith("ar-") || lang.startsWith("ar_");
+	// Direction is only a fallback when no language information is available.
+	return document.documentElement.dir === "rtl";
 }
 
 function allowedActions() {
@@ -59,7 +64,7 @@ function iconMarkup(name, className) {
 	return (
 		'<svg class="' + className + '" viewBox="0 0 24 24" aria-hidden="true" focusable="false">' +
 		drawing +
-		'</svg>'
+		"</svg>"
 	);
 }
 
