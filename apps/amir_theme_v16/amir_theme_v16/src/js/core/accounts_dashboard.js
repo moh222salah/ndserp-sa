@@ -295,6 +295,70 @@ const accountsDashboard = (() => {
 		return widgets;
 	}
 
+	// "Main Accounts" shows exactly these documents, in this order. Matching is by the
+	// DocType route slug (/desk/<slug>) or data-link-to, so it does not depend on the
+	// Workspace's link labels or language, and anything else in the Workspace (shortcuts,
+	// number cards, charts, other link cards) never appears in this section.
+	const MAIN_ACCOUNTS_ALLOWED = [
+		"company",
+		"branch",
+		"account",
+		"fiscal-year",
+		"payment-term",
+		"payment-entry",
+		"journal-entry",
+		"mode-of-payment",
+		"cost-center",
+	];
+
+	function getLinkRowSlug(row) {
+		const href = String(row.getAttribute("href") || row.getAttribute("data-route") || "");
+		const match = href.match(/\/(?:desk|app)\/([^\/?#]+)/i);
+		if (match) {
+			try {
+				return decodeURIComponent(match[1]).toLowerCase();
+			} catch (error) {
+				return match[1].toLowerCase();
+			}
+		}
+		return String(row.getAttribute("data-link-to") || row.getAttribute("data-doctype") || "")
+			.trim().toLowerCase().replace(/\s+/g, "-");
+	}
+
+	function restrictToMainAccounts(widgets) {
+		const rowSelector = ".widget-body a.link-item, .widget-body a[data-link-to], .widget-body [data-link-type]";
+		const found = new Map();
+		let base = null;
+		let baseCount = 0;
+
+		widgets.forEach((widget) => {
+			let count = 0;
+			Array.from(widget.querySelectorAll(rowSelector)).forEach((row) => {
+				const slug = getLinkRowSlug(row);
+				if (!MAIN_ACCOUNTS_ALLOWED.includes(slug)) return;
+				count += 1;
+				if (!found.has(slug)) found.set(slug, row);
+			});
+			if (count > baseCount) {
+				base = widget;
+				baseCount = count;
+			}
+		});
+
+		if (!base) return [];
+
+		const baseRows = Array.from(base.querySelectorAll(rowSelector));
+		const anchor = baseRows.find((row) => MAIN_ACCOUNTS_ALLOWED.includes(getLinkRowSlug(row)));
+		const container = anchor && anchor.parentElement;
+		if (!container) return [];
+
+		baseRows.forEach((row) => row.remove());
+		MAIN_ACCOUNTS_ALLOWED.forEach((slug) => {
+			if (found.has(slug)) container.appendChild(found.get(slug));
+		});
+		return [base];
+	}
+
 	function populateNativeAccountSections(board, sourceEditor, language) {
 		if (!board) return;
 		const t = LANGUAGES[language];
@@ -309,7 +373,10 @@ const accountsDashboard = (() => {
 			if (title) title.textContent = section.label;
 			if (!grid) return;
 
-			const sourceWidgets = collectNativeAccountWidgets(sourceEditor, section);
+			const collectedWidgets = collectNativeAccountWidgets(sourceEditor, section);
+			const sourceWidgets = section.key === "main-accounts"
+				? restrictToMainAccounts(collectedWidgets)
+				: collectedWidgets;
 			const signature = sourceWidgets.map((widget) => {
 				const links = Array.from(widget.querySelectorAll(".link-item"))
 					.map((link) => (link.textContent || "").trim()).join("|");
