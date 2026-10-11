@@ -62,7 +62,14 @@ for key in required:
     print(f"ASSET_SHA256={digest}")
     if key == "amir_theme.bundle.css":
         css = target.read_text(encoding="utf-8").lower()
-        required_header_markers = ("body .navbar", "58px", "#0a2342")
+        required_header_markers = (
+            "body .navbar",
+            "58px",
+            "#0a2342",
+            "html[dir=rtl] body .navbar .navbar-nav",
+            "html[dir=rtl] .page-head .navbar-breadcrumbs",
+            "html[dir=ltr] body .navbar .navbar-nav",
+        )
         missing = [marker for marker in required_header_markers if marker not in css]
         if missing:
             raise SystemExit("MODERN_HEADER_CSS=FAIL:MISSING_MARKERS:" + ",".join(missing))
