@@ -96,6 +96,9 @@ jobs:
           assert 'html.nds-warehouse-workspace [data-page-route="Workspaces"]' in css
           assert 'const WAREHOUSE_WORKSPACE_NAMES = ["مخازن NDS ERP", "المخازن NDS ERP", "لوحة المخازن", "Warehouse Dashboard", "Warehouses NDS ERP", "NDS ERP Warehouses"];' in js
           assert 'data-warehouse-dashboard-version","3"' in dashboard_js
+          assert 'data-nds-ui-direction' in dashboard_js
+          assert 'document.querySelector("body .navbar .navbar-nav")' in dashboard_js
+          assert 'const arabic = candidates.some((value) => value.startsWith("ar"));' in dashboard_js
           assert '["name","item_name","stock_uom"]' in dashboard_js
           assert 'runtime-sync:' not in Path("Procfile").read_text(encoding="utf-8")
           assert "runtime-sync: bash codespace-runtime-sync.sh" not in Path("codespace-bootstrap.sh").read_text(encoding="utf-8")
@@ -105,6 +108,9 @@ jobs:
           assert ".ce-block:has(.shortcut-widget-box)" in dashboard_css
           for marker in (".nds-warehouse-dashboard", ".nds-warehouse-kpi-grid", ".nds-warehouse-movement-chart", ".nds-warehouse-distribution-chart", ".nds-warehouse-shortage-table", ".nds-warehouse-navigation-grid", ".nds-warehouse-nav-card", ".nds-warehouse-nav-link", "#page-Workspaces[dir=rtl]", "#page-Workspaces[dir=ltr]", "grid-template-columns:repeat(4,minmax(0,1fr))"):
               assert marker in dashboard_css.replace(" ", ""), f"Missing warehouse dashboard CSS marker: {marker}"
+          modern_header_css = Path("apps/amir_theme_v16/amir_theme_v16/src/scss/components/_modern-header.scss").read_text(encoding="utf-8")
+          assert 'html[dir="rtl"] body .navbar .navbar-nav' in modern_header_css
+          assert 'html[dir="rtl"] .page-head .navbar-breadcrumbs' in modern_header_css
           for marker in ("nds-warehouse-dashboard", "nds-warehouse-kpi-grid", "nds-warehouse-movement-chart", "nds-warehouse-distribution-chart", "nds-warehouse-shortage-table", "data-warehouse-dashboard-version", "data-warehouse-nav-links", "Warehouse Dashboard", "Current Stock Value", "Stock Ledger Entry", "frappe.client.get_list"):
               assert marker in dashboard_js, f"Missing warehouse dashboard JS marker: {marker}"
           assert "warehouseDashboard.mount();" in entry_js
@@ -277,10 +283,12 @@ jobs:
           grep -Fq 'background: #ffffff;' apps/amir_theme_v16/amir_theme_v16/src/scss/components/_modern-header.scss
           grep -Fq 'color: #0a2342;' apps/amir_theme_v16/amir_theme_v16/src/scss/components/_modern-header.scss
           grep -Fq 'prefers-reduced-motion: reduce' apps/amir_theme_v16/amir_theme_v16/src/scss/components/_modern-header.scss
+          grep -Fq 'html[dir="rtl"] body .navbar .navbar-nav' apps/amir_theme_v16/amir_theme_v16/src/scss/components/_modern-header.scss
+          grep -Fq 'html[dir="rtl"] .page-head .navbar-breadcrumbs' apps/amir_theme_v16/amir_theme_v16/src/scss/components/_modern-header.scss
           grep -Fq 'MODERN_HEADER_CSS=PASS' codespace-runtime-sync.sh
-          grep -Fq 'required_header_markers = ("body .navbar", "58px", "#0a2342")' codespace-runtime-sync.sh
-          grep -Fq 'required_header_markers = ("body .navbar", "58px", "#0a2342")' codespace-bootstrap.sh
-          grep -Fq "for marker in 'body .navbar' '58px' '#0a2342'; do" codespace-verify-runtime.sh
+          grep -Fq 'html[dir=rtl] body .navbar .navbar-nav' codespace-runtime-sync.sh
+          grep -Fq 'html[dir=rtl] body .navbar .navbar-nav' codespace-bootstrap.sh
+          grep -Fq 'html[dir=rtl] body .navbar .navbar-nav' codespace-verify-runtime.sh
           grep -Fq 'MODERN_HEADER_CSS=FAIL:MISSING_MARKERS:' codespace-runtime-sync.sh
           grep -Fq 'SERVED_HEADER_CSS=PASS' codespace-verify-runtime.sh
           grep -Fq 'HEADER_RUNTIME_VERIFICATION=PASS' codespace-verify-runtime.sh
