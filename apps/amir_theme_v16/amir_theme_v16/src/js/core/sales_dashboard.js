@@ -54,11 +54,16 @@ const salesDashboard = (() => {
 		const documentLanguage = String(root && root.getAttribute("lang") || "").toLowerCase();
 		const bootLanguage = String(window.frappe && frappe.boot && frappe.boot.lang || "").toLowerCase();
 
-		// The visible Desk locale wins over a stale boot value after in-app language changes.
-		if (rootDirection === "rtl") return documentLanguage.startsWith("ar") ? documentLanguage : "ar";
-		if (rootDirection === "ltr" && (documentLanguage.startsWith("en") || bootLanguage.startsWith("en"))) {
-			return documentLanguage.startsWith("en") ? documentLanguage : bootLanguage;
+		// Arabic locale must win when Desk's lang/boot values say Arabic even if
+		// a stale root dir is still LTR; this was the reason the page stayed LTR.
+		if (rootDirection === "rtl" || documentLanguage.startsWith("ar") || bootLanguage.startsWith("ar")) {
+			if (documentLanguage.startsWith("ar")) return documentLanguage;
+			if (bootLanguage.startsWith("ar")) return bootLanguage;
+			return "ar";
 		}
+		if (documentLanguage.startsWith("en")) return documentLanguage;
+		if (bootLanguage.startsWith("en")) return bootLanguage;
+		if (rootDirection === "ltr") return "en";
 		return documentLanguage || bootLanguage || "en";
 	}
 
@@ -120,9 +125,11 @@ const salesDashboard = (() => {
 		const main = page.querySelector(".layout-main-section");
 		const targets = [
 			page,
+			header,
 			main,
 			main && main.querySelector("#editorjs"),
 			main && main.querySelector("#editorjs .codex-editor__redactor"),
+			main && main.querySelector("#editorjs .codex-editor__redactor .ce-block"),
 		].filter(Boolean);
 		targets.forEach((node) => {
 			if (!directionTargets.includes(node)) directionTargets.push(node);
@@ -1005,6 +1012,8 @@ const salesDashboard = (() => {
 						if (!board) {
 							scheduleSync();
 						} else {
+							// Reapply page-level direction after Frappe replaces or rerenders Workspace DOM.
+							syncDashboardDirection(board);
 							syncArabicWorkspaceCardVisibility(currentDirection());
 							// Workspace links may arrive after the initial route paint. Refresh the
 							// custom section view from the current real Workspace model on DOM updates.
