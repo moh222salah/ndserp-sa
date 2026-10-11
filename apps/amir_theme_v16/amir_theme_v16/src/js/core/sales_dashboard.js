@@ -586,7 +586,10 @@ const salesDashboard = (() => {
 		const direction = currentDirection();
 		const language = currentLanguage();
 		const signature = direction + "|" + groups.map((group) =>
-			group.definition.key + ":" + group.links.map((item) => item.label + ">" + item.link_to).join(",")
+			group.definition.key + ":" + group.links.map((item) => JSON.stringify([
+				item.label || "", item.link_to || "", item.link_type || "", item.url || "",
+				item.filters || "", item.route_options || "", item.hidden || 0, item.only_for || "",
+			])).join(",")
 		).join("|");
 		const existing = document.getElementById(SALES_SECTIONS_ID);
 		if (existing && existing.parentElement === host && existing.dataset.salesSignature === signature) {
