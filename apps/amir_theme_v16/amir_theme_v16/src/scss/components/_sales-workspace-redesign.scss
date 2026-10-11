@@ -1212,3 +1212,45 @@ body.nds-sales-workspace-redesign.nds-sales-dashboard-ready #page-Workspaces[dat
   direction: ltr !important;
   text-align: left !important;
 }
+
+
+/* NDS Purchase Workspace — bottom navigation cards, top accents only (UI-only). */
+body.nds-purchase-workspace-redesign #page-Workspaces #editorjs .widget.links-widget-box {
+  position: relative;
+  border-top-color: transparent;
+  background: #fff;
+  --nds-purchase-section-accent: #C58B3C;
+}
+body.nds-purchase-workspace-redesign #page-Workspaces #editorjs .widget.links-widget-box::before {
+  position: absolute;
+  inset-block-start: 0;
+  inset-inline: 0;
+  z-index: 1;
+  height: 3px;
+  background: var(--nds-purchase-section-accent);
+  content: "";
+  pointer-events: none;
+}
+body.nds-purchase-workspace-redesign #page-Workspaces #editorjs .ce-block:has([card_name="الرئيسية"]) .widget.links-widget-box,
+body.nds-purchase-workspace-redesign #page-Workspaces #editorjs .ce-block:has([card_name="Home"]) .widget.links-widget-box {
+  --nds-purchase-section-accent: #164E8F;
+}
+body.nds-purchase-workspace-redesign #page-Workspaces #editorjs .ce-block:has([card_name*="التقارير"]) .widget.links-widget-box,
+body.nds-purchase-workspace-redesign #page-Workspaces #editorjs .ce-block:has([card_name*="Report"]) .widget.links-widget-box {
+  --nds-purchase-section-accent: #D4AF37;
+}
+body.nds-purchase-workspace-redesign #page-Workspaces #editorjs .ce-block:has([card_name*="الأصناف"]) .widget.links-widget-box,
+body.nds-purchase-workspace-redesign #page-Workspaces #editorjs .ce-block:has([card_name*="الاصناف"]) .widget.links-widget-box,
+body.nds-purchase-workspace-redesign #page-Workspaces #editorjs .ce-block:has([card_name*="التسعير"]) .widget.links-widget-box,
+body.nds-purchase-workspace-redesign #page-Workspaces #editorjs .ce-block:has([card_name*="Item"]) .widget.links-widget-box,
+body.nds-purchase-workspace-redesign #page-Workspaces #editorjs .ce-block:has([card_name*="Pricing"]) .widget.links-widget-box {
+  --nds-purchase-section-accent: #2D936C;
+}
+body.nds-purchase-workspace-redesign #page-Workspaces #editorjs .ce-block:has([card_name*="المورد"]) .widget.links-widget-box,
+body.nds-purchase-workspace-redesign #page-Workspaces #editorjs .ce-block:has([card_name*="Supplier"]) .widget.links-widget-box {
+  --nds-purchase-section-accent: #7B61B3;
+}
+/* The requested cards use the clean design without the per-link arrow marker. */
+body.nds-purchase-workspace-redesign #page-Workspaces #editorjs .widget.links-widget-box .amt-link-lead-arrow {
+  display: none;
+}
