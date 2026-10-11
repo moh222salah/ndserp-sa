@@ -109,3 +109,65 @@ body .navbar :focus-visible {
 		animation-duration: 0.01ms;
 	}
 }
+
+
+/* Arabic Desk direction: apply direction to the actual global header and
+   Workspace breadcrumb row, not only to the injected dashboard container. */
+html[dir="rtl"] body .navbar,
+html[dir="rtl"] body .navbar .container-fluid,
+html[dir="rtl"] body .navbar .navbar-collapse,
+html[dir="rtl"] body .navbar .navbar-nav,
+html[dir="rtl"] body .navbar .navbar-brand,
+html[dir="rtl"] body .navbar .navbar-home,
+html[dir="rtl"] body .navbar .nav-link,
+html[dir="rtl"] body .navbar .navbar-icon,
+html[dir="rtl"] body .navbar .search-bar,
+html[dir="rtl"] body .navbar .search-bar input,
+html[dir="rtl"] body .navbar .awesomplete input,
+html[dir="rtl"] .page-head,
+html[dir="rtl"] .page-head .page-head-content,
+html[dir="rtl"] .page-head .title-area,
+html[dir="rtl"] .page-head .title-text,
+html[dir="rtl"] .page-head .navbar-breadcrumbs,
+html[dir="rtl"] .page-head .navbar-breadcrumbs li,
+html[dir="rtl"] .page-head .navbar-breadcrumbs a {
+  direction: rtl;
+  text-align: right;
+}
+
+html[dir="rtl"] body .navbar .navbar-nav {
+  margin-inline-start: 0;
+  margin-inline-end: auto;
+}
+
+html[dir="rtl"] body .navbar .search-bar input,
+html[dir="rtl"] body .navbar .awesomplete input {
+  text-align: right;
+}
+
+html[dir="ltr"] body .navbar,
+html[dir="ltr"] body .navbar .container-fluid,
+html[dir="ltr"] body .navbar .navbar-collapse,
+html[dir="ltr"] body .navbar .navbar-nav,
+html[dir="ltr"] body .navbar .navbar-brand,
+html[dir="ltr"] body .navbar .navbar-home,
+html[dir="ltr"] body .navbar .nav-link,
+html[dir="ltr"] body .navbar .navbar-icon,
+html[dir="ltr"] body .navbar .search-bar,
+html[dir="ltr"] body .navbar .search-bar input,
+html[dir="ltr"] body .navbar .awesomplete input,
+html[dir="ltr"] .page-head,
+html[dir="ltr"] .page-head .page-head-content,
+html[dir="ltr"] .page-head .title-area,
+html[dir="ltr"] .page-head .title-text,
+html[dir="ltr"] .page-head .navbar-breadcrumbs,
+html[dir="ltr"] .page-head .navbar-breadcrumbs li,
+html[dir="ltr"] .page-head .navbar-breadcrumbs a {
+  direction: ltr;
+  text-align: left;
+}
+
+html[dir="ltr"] body .navbar .navbar-nav {
+  margin-inline-start: auto;
+  margin-inline-end: 0;
+}
