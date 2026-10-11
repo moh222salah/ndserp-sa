@@ -223,20 +223,6 @@ const accountsDashboard = (() => {
 		board.setAttribute("lang", language);
 		board.setAttribute("aria-label", t.title);
 		board.innerHTML =
-			'<header class="nds-accounts-dashboard-header">' +
-				'<div class="nds-accounts-dashboard-heading">' +
-					'<h1 data-accounts-title></h1>' +
-					'<div class="nds-accounts-dashboard-breadcrumb">' +
-						'<span>Nexterp v16</span><span aria-hidden="true">/</span>' +
-						'<span data-accounts-module></span><span aria-hidden="true">/</span>' +
-						'<span data-accounts-overview></span>' +
-					'</div>' +
-				'</div>' +
-				'<div class="nds-accounts-dashboard-period" aria-label="' + t.period + '">' +
-					'<span class="nds-accounts-period-icon" aria-hidden="true">◷</span>' +
-					'<span>' + t.period + '</span>' +
-				'</div>' +
-			'</header>' +
 			'<section class="nds-accounts-kpi-grid" aria-label="' + t.title + '">' +
 				'<article class="nds-accounts-kpi-card" data-kpi="profit">' +
 					'<div class="nds-accounts-kpi-top"><span class="nds-accounts-kpi-label"></span><span class="nds-accounts-kpi-icon" aria-hidden="true">↗</span></div>' +
@@ -285,9 +271,6 @@ const accountsDashboard = (() => {
 				'</table></div>' +
 			'</section>';
 
-		board.querySelector("[data-accounts-title]").textContent = t.title;
-		board.querySelector("[data-accounts-module]").textContent = t.breadcrumbModule;
-		board.querySelector("[data-accounts-overview]").textContent = t.breadcrumbOverview;
 
 		const kpis = [["profit",t.netProfit],["revenue",t.revenue],["expenses",t.expenses],["receivables",t.receivables]];
 		kpis.forEach(([key,label]) => {
@@ -341,7 +324,7 @@ const accountsDashboard = (() => {
 	function renderExpenses(board,t,items,lang){const host=board.querySelector("[data-expense-list]");if(!host)return;host.replaceChildren();if(items===null){host.appendChild(make("div","nds-accounts-chart-empty",t.loadingCategories));return;}if(items===false){host.appendChild(make("div","nds-accounts-chart-empty",t.dataError));return;}if(!items.length){host.appendChild(make("div","nds-accounts-chart-empty",t.noExpenses));return;}items.forEach((x,i)=>{const row=make("div","nds-accounts-expense-row tone-"+["payroll","cogs","operational"][i%3]),head=make("div","nds-accounts-expense-head");head.append(make("span","nds-accounts-expense-label",x.label),make("span","nds-accounts-expense-pct",num(x.pct,lang,1)+"%"));const track=make("div","nds-accounts-expense-track"),fill=make("span","nds-accounts-expense-fill");fill.style.width=Math.max(0,Math.min(100,Number(x.pct||0)))+"%";fill.title=x.label+" — "+money(x.total,board.dataset.currency,lang);fill.setAttribute("aria-hidden","true");track.appendChild(fill);row.append(head,track);host.appendChild(row);});}
 	function renderMonths(board,t,lang,months){const plot=board.querySelector("[data-month-chart]");if(!plot)return;plot.replaceChildren();if(months===null){plot.appendChild(make("div","nds-accounts-chart-empty",t.loadingChart));return;}if(months===false||!months.some(m=>m.revenue||m.expenses)){plot.appendChild(make("div","nds-accounts-chart-empty",months===false?t.dataError:t.noFinancialData));return;}const grid=make("div","nds-accounts-chart-columns"),max=Math.max(1,...months.map(m=>Math.max(m.revenue,m.expenses)));months.forEach(m=>{const col=make("div","nds-accounts-month-column"),bars=make("div","nds-accounts-month-bars"),r=make("span","nds-accounts-bar revenue"),e=make("span","nds-accounts-bar expenses");r.style.height=(m.revenue>0?Math.max(3,m.revenue/max*100):0)+"%";e.style.height=(m.expenses>0?Math.max(3,m.expenses/max*100):0)+"%";r.title=t.revenueLegend+" — "+m.label+": "+money(m.revenue,board.dataset.currency,lang);e.title=t.expensesLegend+" — "+m.label+": "+money(m.expenses,board.dataset.currency,lang);r.setAttribute("aria-label",r.title);e.setAttribute("aria-label",e.title);bars.append(r,e);col.append(bars,make("span","nds-accounts-month-label",m.label));grid.appendChild(col);});plot.appendChild(grid);}
 	function renderInvoices(board,t,rows,now,currency){const body=board.querySelector("[data-invoice-rows]");if(!body)return;body.replaceChildren();if(rows===null||rows===false){const row=make("tr"),cell=make("td","nds-accounts-table-empty",rows===null?t.loadingInvoices:t.dataError);cell.colSpan=5;row.appendChild(cell);body.appendChild(row);return;}board.querySelector(".nds-accounts-invoice-count").textContent=num(rows.length,board.dataset.language);if(!rows.length){const row=make("tr"),cell=make("td","nds-accounts-table-empty",t.noInvoices);cell.colSpan=5;row.appendChild(cell);body.appendChild(row);return;}rows.forEach(inv=>{const row=make("tr"),id=make("td","invoice-id",inv.name||"—"),cust=make("td","invoice-customer",inv.customer||"—"),due=make("td","invoice-date",inv.due_date||"—");id.setAttribute("dir","ltr");due.setAttribute("dir","ltr");const amt=make("td","invoice-amount"),out=Number(inv.outstanding_amount||0);amt.append(make("span","invoice-amount-value",num(out,board.dataset.language,2)),make("small","invoice-currency",inv.currency||currency));const late=Boolean(inv.due_date&&inv.due_date<now)||String(inv.status||"")==="Overdue",status=make("td","invoice-status");status.appendChild(make("span","nds-accounts-status "+(late?"overdue":"collecting"),late?t.overdue:t.collecting));row.append(id,cust,due,amt,status);body.appendChild(row);});}
-	async function loadDashboard(board){const lang=board.dataset.language==="en"?"en":"ar",t=LANGUAGES[lang],now=today(),curKey=monthKey(now),start=monthStart(now,-5),curStart=monthStart(now,0),prevKey=monthKey(monthStart(now,-1)),day=Number(String(now).slice(8,10));const company=(window.frappe&&frappe.defaults&&frappe.defaults.get_user_default?frappe.defaults.get_user_default("Company"):null)||(frappe.boot&&frappe.boot.sysdefaults&&frappe.boot.sysdefaults.company)||"",currency=String((frappe.boot&&frappe.boot.sysdefaults&&frappe.boot.sysdefaults.currency)||"SAR").toUpperCase();board.dataset.currency=currency;board.querySelectorAll(".nds-accounts-currency").forEach(n=>n.textContent=currency);const p=board.querySelector(".nds-accounts-dashboard-period");if(p){p.setAttribute("aria-label",periodLabel(now,lang));const pl=p.querySelector("span:last-child");if(pl)pl.textContent=periodLabel(now,lang);}if(!company){["profit","revenue","expenses","receivables"].forEach(k=>unavailable(board,k,t.companyMissing));renderExpenses(board,t,false,lang);renderMonths(board,t,lang,false);renderInvoices(board,t,false,now,currency);return;}
+	async function loadDashboard(board){const lang=board.dataset.language==="en"?"en":"ar",t=LANGUAGES[lang],now=today(),curKey=monthKey(now),start=monthStart(now,-5),curStart=monthStart(now,0),prevKey=monthKey(monthStart(now,-1)),day=Number(String(now).slice(8,10));const company=(window.frappe&&frappe.defaults&&frappe.defaults.get_user_default?frappe.defaults.get_user_default("Company"):null)||(frappe.boot&&frappe.boot.sysdefaults&&frappe.boot.sysdefaults.company)||"",currency=String((frappe.boot&&frappe.boot.sysdefaults&&frappe.boot.sysdefaults.currency)||"SAR").toUpperCase();board.dataset.currency=currency;board.querySelectorAll(".nds-accounts-currency").forEach(n=>n.textContent=currency);if(!company){["profit","revenue","expenses","receivables"].forEach(k=>unavailable(board,k,t.companyMissing));renderExpenses(board,t,false,lang);renderMonths(board,t,lang,false);renderInvoices(board,t,false,now,currency);return;}
 		const req=await Promise.allSettled([
 			list("Account",["name","account_name","root_type","account_type","is_group","disabled"],[["Account","company","=",company],["Account","is_group","=",0],["Account","disabled","=",0]],{order_by:"lft asc",limit_page_length:5000}),
 			aggregate("Sales Invoice",[{COUNT:"*",as:"invoice_count"}],[["Sales Invoice","company","=",company],["Sales Invoice","docstatus","=",1],["Sales Invoice","is_return","=",0],["Sales Invoice","outstanding_amount",">",0],["Sales Invoice","due_date","<",now]]),

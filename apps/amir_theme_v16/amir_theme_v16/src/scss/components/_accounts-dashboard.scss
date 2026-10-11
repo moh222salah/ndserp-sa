@@ -18,10 +18,6 @@ body.amt-accounts-workspace.nds-accounts-dashboard-ready #page-Workspaces {
   color: var(--nds-accounts-ink);
 }
 
-body.amt-accounts-workspace.nds-accounts-dashboard-ready #page-Workspaces .page-head {
-  display: none !important;
-}
-
 body.amt-accounts-workspace.nds-accounts-dashboard-ready #page-Workspaces .layout-main-section {
   box-sizing: border-box;
   width: 100%;
@@ -57,71 +53,6 @@ body.amt-accounts-workspace.nds-accounts-dashboard-ready #page-Workspaces .nds-a
 body.amt-accounts-workspace.nds-accounts-dashboard-ready #page-Workspaces .nds-accounts-dashboard *::before,
 body.amt-accounts-workspace.nds-accounts-dashboard-ready #page-Workspaces .nds-accounts-dashboard *::after {
   box-sizing: border-box;
-}
-
-body.amt-accounts-workspace.nds-accounts-dashboard-ready #page-Workspaces .nds-accounts-dashboard-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 18px;
-  min-height: 62px;
-  margin: 0 0 16px;
-}
-
-body.amt-accounts-workspace.nds-accounts-dashboard-ready #page-Workspaces .nds-accounts-dashboard-heading {
-  min-width: 0;
-}
-
-body.amt-accounts-workspace.nds-accounts-dashboard-ready #page-Workspaces .nds-accounts-dashboard-heading h1 {
-  margin: 0;
-  color: var(--nds-accounts-ink);
-  font-size: clamp(21px, 1.5vw, 26px);
-  font-weight: 800;
-  line-height: 1.35;
-  letter-spacing: -.025em;
-}
-
-body.amt-accounts-workspace.nds-accounts-dashboard-ready #page-Workspaces .nds-accounts-dashboard-breadcrumb {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 7px;
-  margin-top: 5px;
-  color: #8b969e;
-  font-size: 11px;
-  font-weight: 500;
-}
-
-body.amt-accounts-workspace.nds-accounts-dashboard-ready #page-Workspaces .nds-accounts-dashboard-breadcrumb span:first-child {
-  color: var(--nds-accounts-green);
-  font-weight: 700;
-}
-
-body.amt-accounts-workspace.nds-accounts-dashboard-ready #page-Workspaces .nds-accounts-dashboard-period {
-  display: inline-flex;
-  flex: 0 0 auto;
-  align-items: center;
-  gap: 8px;
-  padding: 8px 11px;
-  border: 1px solid #e2e7eb;
-  border-radius: 9px;
-  background: #fff;
-  color: #667580;
-  box-shadow: 0 1px 3px rgba(25, 42, 54, .025);
-  font-size: 12px;
-  font-weight: 600;
-  white-space: nowrap;
-}
-
-body.amt-accounts-workspace.nds-accounts-dashboard-ready #page-Workspaces .nds-accounts-period-icon {
-  display: inline-grid;
-  width: 24px;
-  height: 24px;
-  place-items: center;
-  border-radius: 7px;
-  background: #fff1e7;
-  color: var(--nds-accounts-orange);
-  font-size: 15px;
 }
 
 body.amt-accounts-workspace.nds-accounts-dashboard-ready #page-Workspaces .nds-accounts-kpi-grid {
@@ -678,20 +609,6 @@ body.amt-accounts-workspace.nds-accounts-dashboard-ready #page-Workspaces .nds-a
 @media (max-width: 580px) {
   body.amt-accounts-workspace.nds-accounts-dashboard-ready #page-Workspaces .layout-main-section {
     padding: 8px 8px 18px;
-  }
-
-  body.amt-accounts-workspace.nds-accounts-dashboard-ready #page-Workspaces .nds-accounts-dashboard-header {
-    align-items: flex-start;
-    gap: 8px;
-  }
-
-  body.amt-accounts-workspace.nds-accounts-dashboard-ready #page-Workspaces .nds-accounts-dashboard-heading h1 {
-    font-size: 20px;
-  }
-
-  body.amt-accounts-workspace.nds-accounts-dashboard-ready #page-Workspaces .nds-accounts-dashboard-period {
-    padding: 6px 8px;
-    font-size: 10px;
   }
 
   body.amt-accounts-workspace.nds-accounts-dashboard-ready #page-Workspaces .nds-accounts-kpi-card {
