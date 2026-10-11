@@ -1161,3 +1161,54 @@ body.nds-sales-workspace-redesign.nds-sales-dashboard-ready #page-Workspaces .nd
     animation: none !important;
   }
 }
+
+
+/* Persistent Sales Workspace direction fix v3: header, native cards and editor follow the active locale. */
+body.nds-sales-workspace-redesign.nds-sales-dashboard-ready #page-Workspaces[data-sales-direction-fix="sales-rtl-direction-v3"][dir=rtl],
+body.nds-sales-workspace-redesign.nds-sales-dashboard-ready #page-Workspaces[data-sales-direction-fix="sales-rtl-direction-v3"][dir=rtl] .page-head,
+body.nds-sales-workspace-redesign.nds-sales-dashboard-ready #page-Workspaces[data-sales-direction-fix="sales-rtl-direction-v3"][dir=rtl] .page-head .title-area,
+body.nds-sales-workspace-redesign.nds-sales-dashboard-ready #page-Workspaces[data-sales-direction-fix="sales-rtl-direction-v3"][dir=rtl] .page-head .page-title,
+body.nds-sales-workspace-redesign.nds-sales-dashboard-ready #page-Workspaces[data-sales-direction-fix="sales-rtl-direction-v3"][dir=rtl] .page-head .title-text,
+body.nds-sales-workspace-redesign.nds-sales-dashboard-ready #page-Workspaces[data-sales-direction-fix="sales-rtl-direction-v3"][dir=rtl] .page-head .page-actions,
+body.nds-sales-workspace-redesign.nds-sales-dashboard-ready #page-Workspaces[data-sales-direction-fix="sales-rtl-direction-v3"][dir=rtl] .layout-main-section,
+body.nds-sales-workspace-redesign.nds-sales-dashboard-ready #page-Workspaces[data-sales-direction-fix="sales-rtl-direction-v3"][dir=rtl] #editorjs,
+body.nds-sales-workspace-redesign.nds-sales-dashboard-ready #page-Workspaces[data-sales-direction-fix="sales-rtl-direction-v3"][dir=rtl] #editorjs .codex-editor__redactor,
+body.nds-sales-workspace-redesign.nds-sales-dashboard-ready #page-Workspaces[data-sales-direction-fix="sales-rtl-direction-v3"][dir=rtl] #editorjs .ce-block,
+body.nds-sales-workspace-redesign.nds-sales-dashboard-ready #page-Workspaces[data-sales-direction-fix="sales-rtl-direction-v3"][dir=rtl] #editorjs .widget,
+body.nds-sales-workspace-redesign.nds-sales-dashboard-ready #page-Workspaces[data-sales-direction-fix="sales-rtl-direction-v3"][dir=rtl] #editorjs .shortcut-widget-box,
+body.nds-sales-workspace-redesign.nds-sales-dashboard-ready #page-Workspaces[data-sales-direction-fix="sales-rtl-direction-v3"][dir=rtl] #editorjs .links-widget-box,
+body.nds-sales-workspace-redesign.nds-sales-dashboard-ready #page-Workspaces[data-sales-direction-fix="sales-rtl-direction-v3"][dir=rtl] #editorjs .number-widget-box,
+body.nds-sales-workspace-redesign.nds-sales-dashboard-ready #page-Workspaces[data-sales-direction-fix="sales-rtl-direction-v3"][dir=rtl] #editorjs .chart-widget,
+body.nds-sales-workspace-redesign.nds-sales-dashboard-ready #page-Workspaces[data-sales-direction-fix="sales-rtl-direction-v3"][dir=rtl] #editorjs .widget-head,
+body.nds-sales-workspace-redesign.nds-sales-dashboard-ready #page-Workspaces[data-sales-direction-fix="sales-rtl-direction-v3"][dir=rtl] #editorjs .widget-title,
+body.nds-sales-workspace-redesign.nds-sales-dashboard-ready #page-Workspaces[data-sales-direction-fix="sales-rtl-direction-v3"][dir=rtl] #editorjs .link-item,
+body.nds-sales-workspace-redesign.nds-sales-dashboard-ready #page-Workspaces[data-sales-direction-fix="sales-rtl-direction-v3"][dir=rtl] #editorjs table,
+body.nds-sales-workspace-redesign.nds-sales-dashboard-ready #page-Workspaces[data-sales-direction-fix="sales-rtl-direction-v3"][dir=rtl] #editorjs th,
+body.nds-sales-workspace-redesign.nds-sales-dashboard-ready #page-Workspaces[data-sales-direction-fix="sales-rtl-direction-v3"][dir=rtl] #editorjs td {
+  direction: rtl !important;
+  text-align: right !important;
+}
+body.nds-sales-workspace-redesign.nds-sales-dashboard-ready #page-Workspaces[data-sales-direction-fix="sales-rtl-direction-v3"][dir=ltr],
+body.nds-sales-workspace-redesign.nds-sales-dashboard-ready #page-Workspaces[data-sales-direction-fix="sales-rtl-direction-v3"][dir=ltr] .page-head,
+body.nds-sales-workspace-redesign.nds-sales-dashboard-ready #page-Workspaces[data-sales-direction-fix="sales-rtl-direction-v3"][dir=ltr] .page-head .title-area,
+body.nds-sales-workspace-redesign.nds-sales-dashboard-ready #page-Workspaces[data-sales-direction-fix="sales-rtl-direction-v3"][dir=ltr] .page-head .page-title,
+body.nds-sales-workspace-redesign.nds-sales-dashboard-ready #page-Workspaces[data-sales-direction-fix="sales-rtl-direction-v3"][dir=ltr] .page-head .title-text,
+body.nds-sales-workspace-redesign.nds-sales-dashboard-ready #page-Workspaces[data-sales-direction-fix="sales-rtl-direction-v3"][dir=ltr] .page-head .page-actions,
+body.nds-sales-workspace-redesign.nds-sales-dashboard-ready #page-Workspaces[data-sales-direction-fix="sales-rtl-direction-v3"][dir=ltr] .layout-main-section,
+body.nds-sales-workspace-redesign.nds-sales-dashboard-ready #page-Workspaces[data-sales-direction-fix="sales-rtl-direction-v3"][dir=ltr] #editorjs,
+body.nds-sales-workspace-redesign.nds-sales-dashboard-ready #page-Workspaces[data-sales-direction-fix="sales-rtl-direction-v3"][dir=ltr] #editorjs .codex-editor__redactor,
+body.nds-sales-workspace-redesign.nds-sales-dashboard-ready #page-Workspaces[data-sales-direction-fix="sales-rtl-direction-v3"][dir=ltr] #editorjs .ce-block,
+body.nds-sales-workspace-redesign.nds-sales-dashboard-ready #page-Workspaces[data-sales-direction-fix="sales-rtl-direction-v3"][dir=ltr] #editorjs .widget,
+body.nds-sales-workspace-redesign.nds-sales-dashboard-ready #page-Workspaces[data-sales-direction-fix="sales-rtl-direction-v3"][dir=ltr] #editorjs .shortcut-widget-box,
+body.nds-sales-workspace-redesign.nds-sales-dashboard-ready #page-Workspaces[data-sales-direction-fix="sales-rtl-direction-v3"][dir=ltr] #editorjs .links-widget-box,
+body.nds-sales-workspace-redesign.nds-sales-dashboard-ready #page-Workspaces[data-sales-direction-fix="sales-rtl-direction-v3"][dir=ltr] #editorjs .number-widget-box,
+body.nds-sales-workspace-redesign.nds-sales-dashboard-ready #page-Workspaces[data-sales-direction-fix="sales-rtl-direction-v3"][dir=ltr] #editorjs .chart-widget,
+body.nds-sales-workspace-redesign.nds-sales-dashboard-ready #page-Workspaces[data-sales-direction-fix="sales-rtl-direction-v3"][dir=ltr] #editorjs .widget-head,
+body.nds-sales-workspace-redesign.nds-sales-dashboard-ready #page-Workspaces[data-sales-direction-fix="sales-rtl-direction-v3"][dir=ltr] #editorjs .widget-title,
+body.nds-sales-workspace-redesign.nds-sales-dashboard-ready #page-Workspaces[data-sales-direction-fix="sales-rtl-direction-v3"][dir=ltr] #editorjs .link-item,
+body.nds-sales-workspace-redesign.nds-sales-dashboard-ready #page-Workspaces[data-sales-direction-fix="sales-rtl-direction-v3"][dir=ltr] #editorjs table,
+body.nds-sales-workspace-redesign.nds-sales-dashboard-ready #page-Workspaces[data-sales-direction-fix="sales-rtl-direction-v3"][dir=ltr] #editorjs th,
+body.nds-sales-workspace-redesign.nds-sales-dashboard-ready #page-Workspaces[data-sales-direction-fix="sales-rtl-direction-v3"][dir=ltr] #editorjs td {
+  direction: ltr !important;
+  text-align: left !important;
+}

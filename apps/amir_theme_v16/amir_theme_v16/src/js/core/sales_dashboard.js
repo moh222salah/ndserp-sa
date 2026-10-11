@@ -11,6 +11,7 @@ const salesDashboard = (() => {
 	const SALES_SECTIONS_ID = "nds-sales-workspace-sections";
 	const SALES_WORKSPACE_NAME = "المبيعات NDS ERP";
 	const READY_CLASS = "nds-sales-dashboard-ready";
+	const SALES_DIRECTION_FIX_VERSION = "sales-rtl-direction-v3";
 	let settleTimers = [];
 	let observer = null;
 	let directionObserver = null;
@@ -48,23 +49,38 @@ const salesDashboard = (() => {
 		}
 	}
 
+	function hasArabicWorkspaceText() {
+		const page = document.getElementById("page-Workspaces");
+		if (!page) return false;
+		const text = String(page.innerText || "");
+		const arabicCount = (text.match(/[\u0600-\u06FF]/g) || []).length;
+		const latinCount = (text.match(/[A-Za-z]/g) || []).length;
+		// Detect an actively Arabic Workspace when stale Desk lang/boot values disagree.
+		// A dominance threshold prevents one untranslated label from forcing RTL in English.
+		return arabicCount >= 8 && (latinCount === 0 || arabicCount >= latinCount * 0.45);
+	}
+
 	function currentLanguage() {
 		const root = document.documentElement;
 		const rootDirection = String(root && root.getAttribute("dir") || "").toLowerCase();
 		const documentLanguage = String(root && root.getAttribute("lang") || "").toLowerCase();
-		const bootLanguage = String(window.frappe && frappe.boot && frappe.boot.lang || "").toLowerCase();
+		const boot = window.frappe && frappe.boot || {};
+		const bootLanguage = String(boot.lang || "").toLowerCase();
+		const bootUser = boot.user || {};
+		const bootUserLanguage = String(
+			bootUser.language || bootUser.language_code ||
+			boot.user_language || boot.user_language_code || ""
+		).toLowerCase();
+		const languages = [documentLanguage, bootLanguage, bootUserLanguage];
 
-		// Arabic locale must win when Desk's lang/boot values say Arabic even if
-		// a stale root dir is still LTR; this was the reason the page stayed LTR.
-		if (rootDirection === "rtl" || documentLanguage.startsWith("ar") || bootLanguage.startsWith("ar")) {
-			if (documentLanguage.startsWith("ar")) return documentLanguage;
-			if (bootLanguage.startsWith("ar")) return bootLanguage;
-			return "ar";
-		}
-		if (documentLanguage.startsWith("en")) return documentLanguage;
-		if (bootLanguage.startsWith("en")) return bootLanguage;
-		if (rootDirection === "ltr") return "en";
-		return documentLanguage || bootLanguage || "en";
+		const arabicLocale = languages.find((value) => value.startsWith("ar"));
+		if (arabicLocale) return arabicLocale;
+		if (hasArabicWorkspaceText()) return "ar";
+
+		const englishLocale = languages.find((value) => value.startsWith("en"));
+		if (englishLocale) return englishLocale;
+		if (rootDirection === "rtl") return "ar";
+		return documentLanguage || bootLanguage || bootUserLanguage || "en";
 	}
 
 	function isEnglish() {
@@ -142,17 +158,42 @@ const salesDashboard = (() => {
 		const page = document.getElementById("page-Workspaces");
 		if (!page) return;
 		const main = page.querySelector(".layout-main-section");
+		const pageHead = page.querySelector(".page-head");
 		const targets = [
 			page,
+			pageHead,
+			pageHead && pageHead.querySelector(".title-area"),
+			pageHead && pageHead.querySelector(".page-title"),
+			pageHead && pageHead.querySelector(".title-text"),
+			pageHead && pageHead.querySelector(".page-actions"),
+			pageHead && pageHead.querySelector(".page-head-actions"),
 			main,
 			main && main.querySelector("#editorjs"),
 			main && main.querySelector("#editorjs .codex-editor__redactor"),
 		].filter(Boolean);
-		if (main) main.querySelectorAll("#editorjs .ce-block").forEach((node) => targets.push(node));
+		if (main) {
+			main.querySelectorAll([
+				"#editorjs .ce-block",
+				"#editorjs .widget",
+				"#editorjs .shortcut-widget-box",
+				"#editorjs .links-widget-box",
+				"#editorjs .number-widget-box",
+				"#editorjs .chart-widget",
+				"#editorjs .widget-head",
+				"#editorjs .widget-title",
+				"#editorjs .link-item",
+				"#editorjs table",
+				"#editorjs th",
+				"#editorjs td",
+			].join(", ")).forEach((node) => targets.push(node));
+		}
 		targets.forEach((node) => {
 			if (!directionTargets.includes(node)) directionTargets.push(node);
 			trackAttribute(node, "dir", "ndsSalesOriginalDir", direction);
 			trackAttribute(node, "data-sales-direction", "ndsSalesOriginalDataSalesDirection", direction);
+			if (node === page) {
+				trackAttribute(page, "data-sales-direction-fix", "ndsSalesOriginalDirectionFix", SALES_DIRECTION_FIX_VERSION);
+			}
 			trackInlineStyle(node, "direction", "ndsSalesOriginalInlineDirection", direction);
 			trackInlineStyle(node, "text-align", "ndsSalesOriginalInlineTextAlign", direction === "rtl" ? "right" : "left");
 			if (language) trackAttribute(node, "lang", "ndsSalesOriginalLang", language);
@@ -163,6 +204,7 @@ const salesDashboard = (() => {
 		directionTargets.forEach((node) => {
 			restoreTrackedAttribute(node, "dir", "ndsSalesOriginalDir");
 			restoreTrackedAttribute(node, "data-sales-direction", "ndsSalesOriginalDataSalesDirection");
+			restoreTrackedAttribute(node, "data-sales-direction-fix", "ndsSalesOriginalDirectionFix");
 			restoreTrackedAttribute(node, "lang", "ndsSalesOriginalLang");
 			restoreInlineStyle(node, "direction", "ndsSalesOriginalInlineDirection");
 			restoreInlineStyle(node, "text-align", "ndsSalesOriginalInlineTextAlign");

@@ -191,6 +191,21 @@ for key in required:
                 "SALES_WORKSPACE_CSS=FAIL:MISSING_MARKERS:" + ",".join(missing)
             )
         print("SALES_WORKSPACE_CSS=PASS")
+        required_sales_direction_css = (
+            "sales-rtl-direction-v3",
+            "[dir=rtl].page-head",
+            "[dir=ltr].page-head",
+            "direction:rtl!important",
+            "text-align:right!important",
+            "direction:ltr!important",
+            "text-align:left!important",
+        )
+        missing = [marker for marker in required_sales_direction_css if marker not in css_compact]
+        if missing:
+            raise SystemExit(
+                "SALES_WORKSPACE_DIRECTION_CSS=FAIL:MISSING_MARKERS:" + ",".join(missing)
+            )
+        print("SALES_WORKSPACE_DIRECTION_CSS=PASS")
         # Validate the actual sales-section styling emitted by the current source.
         # The workspace selector guard used previously did not exist in this stylesheet
         # and incorrectly blocked unrelated UI asset builds.
@@ -332,6 +347,8 @@ for key in required:
             "Reports",
             "ndsSalesOriginalDataSalesDirection",
             "ndsSalesOriginalInlineDirection",
+            "sales-rtl-direction-v3",
+            "data-sales-direction-fix",
         )
         missing = [marker for marker in required_sales_workspace_js if marker not in js]
         if missing:
@@ -520,7 +537,9 @@ sync_once() {
     echo "=== BUILD CURRENT AMIR THEME ASSETS ==="
     run_asset_build_with_lock_retry
     bash apps/amir_theme_v16/scripts/harden_assets.sh
-    bench --site "$SITE" clear-cache >/dev/null 2>&1 || true
+    bench --site "$SITE" clear-cache
+    bench --site "$SITE" clear-website-cache
+    echo "BENCH_CACHE_PURGE=PASS"
     verify_amir_assets
 
     mkdir -p sites

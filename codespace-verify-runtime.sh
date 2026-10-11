@@ -84,6 +84,13 @@ for marker in '.nds-sales-workspace-redesign' '#page-workspaces' '#d4af37'; do
   fi
 done
 echo "BUILT_SALES_WORKSPACE_CSS=PASS"
+for marker in 'sales-rtl-direction-v3' '[dir=rtl].page-head' '[dir=ltr].page-head' 'direction:rtl!important' 'text-align:right!important' 'direction:ltr!important' 'text-align:left!important'; do
+  if ! grep -Fq "$marker" "$LOCAL_CSS"; then
+    echo "BUILT_SALES_WORKSPACE_DIRECTION_CSS=FAIL:MISSING_MARKER:$marker"
+    exit 51
+  fi
+done
+echo "BUILT_SALES_WORKSPACE_DIRECTION_CSS=PASS"
 for marker in '.nds-sales-dashboard' '.nds-sales-kpi-grid' '.nds-sales-revenue-chart' '.nds-sales-channels-chart' '.nds-sales-invoices' '.nds-sales-dashboard[dir=rtl]' '.nds-sales-dashboard[dir=ltr]' 'grid-template-columns:repeat(4,minmax(0,1fr))'; do
   if ! grep -Fq "$marker" "$LOCAL_CSS"; then
     echo "BUILT_SALES_DASHBOARD_CSS=FAIL:MISSING_MARKER:$marker"
@@ -184,6 +191,13 @@ for marker in '.nds-sales-workspace-redesign' '#page-workspaces' '#d4af37'; do
   fi
 done
 echo "SERVED_SALES_WORKSPACE_CSS=PASS"
+for marker in 'sales-rtl-direction-v3' '[dir=rtl].page-head' '[dir=ltr].page-head' 'direction:rtl!important' 'text-align:right!important' 'direction:ltr!important' 'text-align:left!important'; do
+  if ! grep -Fq "$marker" "$LOCAL_CSS"; then
+    echo "SERVED_SALES_WORKSPACE_DIRECTION_CSS=FAIL:MISSING_MARKER:$marker"
+    exit 53
+  fi
+done
+echo "SERVED_SALES_WORKSPACE_DIRECTION_CSS=PASS"
 for marker in '.nds-sales-dashboard' '.nds-sales-kpi-grid' '.nds-sales-revenue-chart' '.nds-sales-channels-chart' '.nds-sales-invoices' '.nds-sales-dashboard[dir=rtl]' '.nds-sales-dashboard[dir=ltr]' 'grid-template-columns:repeat(4,minmax(0,1fr))'; do
   if ! grep -Fq "$marker" "$LOCAL_CSS"; then
     echo "SERVED_SALES_DASHBOARD_CSS=FAIL:MISSING_MARKER:$marker"
@@ -275,7 +289,7 @@ if ! grep -Fq 'nds-sales-workspace-redesign' "$LOCAL_JS_ASSET"; then
   exit 36
 fi
 echo "BUILT_SALES_WORKSPACE_JS=PASS"
-for marker in 'nds-sales-dashboard' 'nds-sales-revenue-chart' 'nds-sales-channels-chart' 'nds-sales-invoices' 'nds-sales-workspace-sections' 'nds-sales-section-card' 'workspace_map' 'data-sales-direction'; do
+for marker in 'nds-sales-dashboard' 'nds-sales-revenue-chart' 'nds-sales-channels-chart' 'nds-sales-invoices' 'nds-sales-workspace-sections' 'nds-sales-section-card' 'workspace_map' 'data-sales-direction' 'sales-rtl-direction-v3' 'data-sales-direction-fix'; do
   if ! grep -Fq "$marker" "$LOCAL_JS_ASSET"; then
     echo "BUILT_SALES_DASHBOARD_JS=FAIL:MISSING_MARKER:$marker"
     exit 44
@@ -360,7 +374,7 @@ if ! grep -Fq 'nds-sales-workspace-redesign' "$SERVED_JS"; then
   exit 37
 fi
 echo "SERVED_SALES_WORKSPACE_JS=PASS"
-for marker in 'nds-sales-dashboard' 'nds-sales-revenue-chart' 'nds-sales-channels-chart' 'nds-sales-invoices' 'nds-sales-workspace-sections' 'nds-sales-section-card' 'workspace_map' 'data-sales-direction'; do
+for marker in 'nds-sales-dashboard' 'nds-sales-revenue-chart' 'nds-sales-channels-chart' 'nds-sales-invoices' 'nds-sales-workspace-sections' 'nds-sales-section-card' 'workspace_map' 'data-sales-direction' 'sales-rtl-direction-v3' 'data-sales-direction-fix'; do
   if ! grep -Fq "$marker" "$SERVED_JS"; then
     echo "SERVED_SALES_DASHBOARD_JS=FAIL:MISSING_MARKER:$marker"
     exit 45
