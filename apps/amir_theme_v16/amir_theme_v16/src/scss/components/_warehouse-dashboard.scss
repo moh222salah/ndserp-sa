@@ -305,3 +305,10 @@ html.nds-warehouse-workspace.nds-warehouse-dashboard-ready #page-Workspaces .nds
   margin: 0;
   text-align: start;
 }
+
+/* Once the new dashboard is mounted, suppress the old EditorJS card layout.
+   Original link widgets are moved into the three cards by warehouse_dashboard.js. */
+html.nds-warehouse-workspace.nds-warehouse-dashboard-ready #page-Workspaces #editorjs .codex-editor__redactor > .ce-block:has(.shortcut-widget-box),
+html.nds-warehouse-workspace.nds-warehouse-dashboard-ready #page-Workspaces #editorjs .codex-editor__redactor > .ce-block:has(.links-widget-box) {
+  display: none;
+}
