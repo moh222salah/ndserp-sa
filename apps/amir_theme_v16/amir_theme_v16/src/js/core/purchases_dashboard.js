@@ -31,7 +31,45 @@ const purchasesDashboard = (() => {
    return names.has(routeName)||names.has(sidebarKey)||names.has(pageTitle)||scoped;
   }catch(_){return false;}
  }
- function syncDir(b){if(b){b.dir=lang()==="ar"?"rtl":"ltr";b.lang=lang();b.setAttribute("data-purchase-direction",b.dir);}}
+ function syncDir(b){
+  const language=lang(),direction=language==="ar"?"rtl":"ltr";
+  const root=document.documentElement,body=document.body;
+  const page=document.querySelector("#page-Workspaces");
+  const header=page&&page.querySelector(".page-head");
+  const navbar=document.querySelector("body .navbar");
+  // Persist the active language on the actual Desk root and header. Styling only
+  // the injected dashboard leaves the native Workspace title and navbar LTR.
+  const targets=[
+   root,body,navbar,
+   navbar&&navbar.querySelector(".container-fluid"),
+   navbar&&navbar.querySelector(".navbar-collapse"),
+   navbar&&navbar.querySelector(".navbar-nav"),
+   page,header,
+   header&&header.querySelector(".page-head-content"),
+   header&&header.querySelector(".title-area"),
+   header&&header.querySelector(".title-text"),
+   header&&header.querySelector(".navbar-breadcrumbs"),
+   header&&header.querySelectorAll(".navbar-breadcrumbs li"),
+   page&&page.querySelector(".layout-main-section"),
+   page&&page.querySelector("#editorjs"),
+   page&&page.querySelector("#editorjs .codex-editor__redactor"),
+   b
+  ];
+  const apply=node=>{
+   if(!node||node.nodeType!==1)return;
+   if(node.getAttribute("dir")!==direction)node.setAttribute("dir",direction);
+   if(node.getAttribute("data-nds-ui-direction")!==direction)node.setAttribute("data-nds-ui-direction",direction);
+  };
+  targets.filter(Boolean).forEach(target=>{
+   if(typeof target.forEach==="function"&&target.nodeType!==1)target.forEach(apply);
+   else apply(target);
+  });
+  if(root&&root.getAttribute("lang")!==language)root.setAttribute("lang",language);
+  if(b){
+   if(b.getAttribute("lang")!==language)b.setAttribute("lang",language);
+   if(b.getAttribute("data-purchase-direction")!==direction)b.setAttribute("data-purchase-direction",direction);
+  }
+ }
  function el(tag,cls,text){const n=document.createElement(tag);if(cls)n.className=cls;if(text!==undefined&&text!==null)n.textContent=String(text);return n;}
  function rpc(method,args){return new Promise((resolve,reject)=>{if(!window.frappe?.call)return reject(new Error("Frappe API unavailable"));frappe.call({method,args,callback:r=>resolve(r?.message),error:e=>reject(e||new Error("Request failed"))});});}
  function list(doctype,fields,filters,extra){return rpc("frappe.client.get_list",Object.assign({doctype,fields,filters:filters||[],limit_page_length:1000},extra||{}));}
