@@ -100,7 +100,7 @@ jobs:
           assert "runtime-sync: bash codespace-runtime-sync.sh" not in Path("codespace-bootstrap.sh").read_text(encoding="utf-8")
           assert "number-widget-box" in css and "dashboard-widget-box" in css
           assert "shortcut-widget-box" in css and "links-widget-box" in css
-          for marker in (".nds-warehouse-dashboard", ".nds-warehouse-kpi-grid", ".nds-warehouse-movement-chart", ".nds-warehouse-distribution-chart", ".nds-warehouse-shortage-table", "grid-template-columns:repeat(4,minmax(0,1fr))"):
+          for marker in (".nds-warehouse-dashboard", ".nds-warehouse-kpi-grid", ".nds-warehouse-movement-chart", ".nds-warehouse-distribution-chart", ".nds-warehouse-shortage-table", "#page-Workspaces[dir=rtl]", "#page-Workspaces[dir=ltr]", "grid-template-columns:repeat(4,minmax(0,1fr))"):
               assert marker in dashboard_css.replace(" ", ""), f"Missing warehouse dashboard CSS marker: {marker}"
           for marker in ("nds-warehouse-dashboard", "nds-warehouse-kpi-grid", "nds-warehouse-movement-chart", "nds-warehouse-distribution-chart", "nds-warehouse-shortage-table", "data-warehouse-dashboard-version", "Warehouse Dashboard", "Current Stock Value", "Stock Ledger Entry", "frappe.client.get_list"):
               assert marker in dashboard_js, f"Missing warehouse dashboard JS marker: {marker}"

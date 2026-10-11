@@ -118,6 +118,8 @@ for key in required:
             ".nds-warehouse-movement-chart",
             ".nds-warehouse-distribution-chart",
             ".nds-warehouse-shortage-table",
+            "#page-workspaces[dir=rtl]",
+            "#page-workspaces[dir=ltr]",
             "grid-template-columns:repeat(4,minmax(0,1fr))",
         )
         missing = [marker for marker in required_warehouse_css if marker not in css_compact]

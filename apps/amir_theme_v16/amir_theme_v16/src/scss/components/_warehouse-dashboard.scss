@@ -114,3 +114,37 @@ html.nds-warehouse-workspace.nds-warehouse-dashboard-ready #page-Workspaces .nds
 html.nds-warehouse-workspace.nds-warehouse-dashboard-ready #page-Workspaces .nds-warehouse-bar,
 html.nds-warehouse-workspace.nds-warehouse-dashboard-ready #page-Workspaces .nds-warehouse-distribution-fill{transition:none;}
 }
+
+
+/* Full Workspace direction for native content in Arabic and English. */
+html.nds-warehouse-workspace #page-Workspaces[dir=rtl],
+html.nds-warehouse-workspace #page-Workspaces[dir=rtl] .page-head,
+html.nds-warehouse-workspace #page-Workspaces[dir=rtl] .layout-main-section,
+html.nds-warehouse-workspace #page-Workspaces[dir=rtl] #editorjs,
+html.nds-warehouse-workspace #page-Workspaces[dir=rtl] #editorjs .codex-editor__redactor,
+html.nds-warehouse-workspace #page-Workspaces[dir=rtl] #editorjs .widget,
+html.nds-warehouse-workspace #page-Workspaces[dir=rtl] #editorjs .widget-head,
+html.nds-warehouse-workspace #page-Workspaces[dir=rtl] #editorjs .widget-body,
+html.nds-warehouse-workspace #page-Workspaces[dir=rtl] #editorjs .shortcut-widget-box,
+html.nds-warehouse-workspace #page-Workspaces[dir=rtl] #editorjs .links-widget-box,
+html.nds-warehouse-workspace #page-Workspaces[dir=rtl] #editorjs .number-widget-box,
+html.nds-warehouse-workspace #page-Workspaces[dir=rtl] #editorjs .chart {
+  direction: rtl;
+  text-align: start;
+}
+
+html.nds-warehouse-workspace #page-Workspaces[dir=ltr],
+html.nds-warehouse-workspace #page-Workspaces[dir=ltr] .page-head,
+html.nds-warehouse-workspace #page-Workspaces[dir=ltr] .layout-main-section,
+html.nds-warehouse-workspace #page-Workspaces[dir=ltr] #editorjs,
+html.nds-warehouse-workspace #page-Workspaces[dir=ltr] #editorjs .codex-editor__redactor,
+html.nds-warehouse-workspace #page-Workspaces[dir=ltr] #editorjs .widget,
+html.nds-warehouse-workspace #page-Workspaces[dir=ltr] #editorjs .widget-head,
+html.nds-warehouse-workspace #page-Workspaces[dir=ltr] #editorjs .widget-body,
+html.nds-warehouse-workspace #page-Workspaces[dir=ltr] #editorjs .shortcut-widget-box,
+html.nds-warehouse-workspace #page-Workspaces[dir=ltr] #editorjs .links-widget-box,
+html.nds-warehouse-workspace #page-Workspaces[dir=ltr] #editorjs .number-widget-box,
+html.nds-warehouse-workspace #page-Workspaces[dir=ltr] #editorjs .chart {
+  direction: ltr;
+  text-align: start;
+}

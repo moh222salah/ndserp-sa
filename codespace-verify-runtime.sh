@@ -63,7 +63,7 @@ for marker in '.amt-quick-actions' '.amt-quick-actions-grid' '.amt-quick-actions
   fi
 done
 echo "BUILT_QUICK_ACTIONS_CSS=PASS"
-for marker in '.nds-warehouse-workspace' 'border-block-start:3pxsolid#0a2342' '.nds-warehouse-dashboard' '.nds-warehouse-kpi-grid' '.nds-warehouse-movement-chart' '.nds-warehouse-distribution-chart' '.nds-warehouse-shortage-table' 'grid-template-columns:repeat(4,minmax(0,1fr))'; do
+for marker in '.nds-warehouse-workspace' 'border-block-start:3pxsolid#0a2342' '.nds-warehouse-dashboard' '.nds-warehouse-kpi-grid' '.nds-warehouse-movement-chart' '.nds-warehouse-distribution-chart' '.nds-warehouse-shortage-table' '#page-workspaces[dir=rtl]' '#page-workspaces[dir=ltr]' 'grid-template-columns:repeat(4,minmax(0,1fr))'; do
   if ! grep -Fq "$marker" "$LOCAL_CSS"; then
     echo "BUILT_WAREHOUSE_WORKSPACE_CSS=FAIL:MISSING_MARKER:$marker"
     exit 26
@@ -163,7 +163,7 @@ for marker in '.amt-quick-actions' '.amt-quick-actions-grid' '.amt-quick-actions
   fi
 done
 echo "SERVED_QUICK_ACTIONS_CSS=PASS"
-for marker in '.nds-warehouse-workspace' 'border-block-start:3pxsolid#0a2342' '.nds-warehouse-dashboard' '.nds-warehouse-kpi-grid' '.nds-warehouse-movement-chart' '.nds-warehouse-distribution-chart' '.nds-warehouse-shortage-table' 'grid-template-columns:repeat(4,minmax(0,1fr))'; do
+for marker in '.nds-warehouse-workspace' 'border-block-start:3pxsolid#0a2342' '.nds-warehouse-dashboard' '.nds-warehouse-kpi-grid' '.nds-warehouse-movement-chart' '.nds-warehouse-distribution-chart' '.nds-warehouse-shortage-table' '#page-workspaces[dir=rtl]' '#page-workspaces[dir=ltr]' 'grid-template-columns:repeat(4,minmax(0,1fr))'; do
   if ! grep -Fq "$marker" "$LOCAL_CSS"; then
     echo "SERVED_WAREHOUSE_WORKSPACE_CSS=FAIL:MISSING_MARKER:$marker"
     exit 27
