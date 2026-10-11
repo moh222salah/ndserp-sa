@@ -5,7 +5,7 @@ web: bench serve --port 8080
 
 socketio: bench socketio
 
-watch: bench watch
+# Production assets are built serially by codespace-runtime-sync.sh.
 
 schedule: bench schedule
 

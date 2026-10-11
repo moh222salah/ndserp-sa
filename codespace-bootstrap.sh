@@ -220,6 +220,8 @@ dst.write_text(json.dumps(cfg, indent=2) + "\n")
 PY
 
 cp bench/Procfile Procfile
+# Runtime sync owns production asset builds; do not run a competing live asset watcher.
+sed -i '/^watch: bench watch$/d' Procfile
 # Runtime sync restarts Bench itself; keep it outside the Bench supervisor.
 sed -i '/^runtime-sync: bash codespace-runtime-sync\.sh$/d' Procfile
 

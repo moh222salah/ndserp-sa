@@ -57,12 +57,17 @@ sudo service mariadb start
 # release Frappe's real lock naturally. Never delete bench_build.lock.
 bash "$ROOT/codespace-quiesce-runtime-sync.sh"
 
-# UI source synchronization and asset compilation must not depend on optional
-# database cleanup. Custom Reports cleanup is a separate backup-first task.
-bash "$ROOT/codespace-runtime-sync.sh" --once
-
-# Never restart or validate an outdated/dirty checkout as if it were current.
+# Synchronize source first, then stop the previous Bench tree before building.
+# Tracked source is aligned to GitHub main; untracked runtime/site/log files are preserved.
 git fetch origin main
+branch="$(git branch --show-current)"
+if [ "$branch" != "main" ]; then
+  git switch --discard-changes -C main origin/main
+elif [ "$(git rev-parse HEAD)" != "$(git rev-parse origin/main)" ] ||
+     ! git diff --quiet || ! git diff --cached --quiet; then
+  git reset --hard origin/main
+fi
+
 SOURCE_HEAD="$(git rev-parse HEAD)"
 GITHUB_MAIN="$(git rev-parse origin/main)"
 echo "CODESPACE_HEAD=$SOURCE_HEAD"
@@ -73,6 +78,31 @@ if [ "$SOURCE_HEAD" != "$GITHUB_MAIN" ]; then
   echo "BENCH_RESTART=BLOCKED_STALE_SOURCE"
   exit 31
 fi
+if ! git diff --quiet || ! git diff --cached --quiet; then
+  echo "SOURCE_SYNC=FAIL_TRACKED_WORKTREE_DIRTY"
+  git status --short
+  exit 32
+fi
+echo "SOURCE_SYNC=PASS"
+
+# Restart now so the updated Procfile takes effect and no old bench watch can race with a build.
+NDS_FORCE_BENCH_RESTART=1 bash "$ROOT/codespace-start-server.sh"
+
+# Compile only after the competing watcher has been removed from the runtime.
+# Custom Reports cleanup remains separate and is never required for UI sync.
+bash "$ROOT/codespace-runtime-sync.sh" --once
+
+# Never serve a build made from an outdated checkout.
+git fetch origin main
+SOURCE_HEAD="$(git rev-parse HEAD)"
+GITHUB_MAIN="$(git rev-parse origin/main)"
+echo "BUILT_CODESPACE_HEAD=$SOURCE_HEAD"
+echo "GITHUB_MAIN_AFTER_BUILD=$GITHUB_MAIN"
+if [ "$SOURCE_HEAD" != "$GITHUB_MAIN" ]; then
+  echo "SOURCE_SYNC=FAIL_HEAD_CHANGED_DURING_BUILD"
+  echo "SAFE_BOUNDARY=NO_STALE_ASSET_RESTART"
+  exit 33
+fi
 if [ -s "$ROOT/sites/.nds-custom-report-cleanup-v1" ]; then
   echo "CUSTOM_REPORT_CLEANUP=PASS"
 else
@@ -80,13 +110,20 @@ else
   echo "CUSTOM_REPORT_DB_WRITE=NO"
 fi
 
-# Restart the local Bench process so Python Hooks/modules are imported from current HEAD.
+# Reload the verified manifest and hooks from the completed build.
 NDS_FORCE_BENCH_RESTART=1 bash "$ROOT/codespace-start-server.sh"
 
 # Verify the assets actually served after the new Frappe process is ready.
 bash "$ROOT/codespace-verify-runtime.sh"
 printf '%s\n' "$(git rev-parse HEAD)" > "$ROOT/sites/.nds-runtime-served-head"
 echo "SERVED_RUNTIME_HEAD=$(cat "$ROOT/sites/.nds-runtime-served-head")"
+
+# Start an independent connection watchdog; a stale PID must not count as running.
+if bash "$ROOT/codespace-connection-watchdog.sh" --start; then
+  echo "CONNECTION_WATCHDOG=READY"
+else
+  echo "CONNECTION_WATCHDOG=START_FAILED_NONBLOCKING"
+fi
 
 # Keep GitHub main synchronized while the Codespace remains open. The sync worker
 # watches source and asset hashes; it does not run database cleanup as part of UI sync.

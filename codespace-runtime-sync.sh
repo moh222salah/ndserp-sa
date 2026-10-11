@@ -30,6 +30,11 @@ if [ "${NDS_RUNTIME_SYNC_LOCK_HELD:-0}" != "1" ]; then
       bash "$ROOT/codespace-runtime-sync.sh" --once; then
       echo "RUNTIME_SYNC_CYCLE=FAIL"
     fi
+    # A forced rebuild request is a one-cycle instruction, never a permanent mode.
+    if [ "${NDS_FORCE_ASSET_REBUILD:-0}" = "1" ]; then
+      unset NDS_FORCE_ASSET_REBUILD
+      echo "ASSET_FORCE_REBUILD_FLAG=CONSUMED"
+    fi
     sleep "$INTERVAL"
   done
 fi
@@ -599,5 +604,10 @@ fi
 
 while true; do
   sync_once || echo "SOURCE_SYNC=ERROR_RETRY"
+  # Consume explicit force requests after one pass, even in direct loop mode.
+  if [ "${NDS_FORCE_ASSET_REBUILD:-0}" = "1" ]; then
+    unset NDS_FORCE_ASSET_REBUILD
+    echo "ASSET_FORCE_REBUILD_FLAG=CONSUMED"
+  fi
   sleep "$INTERVAL"
 done
