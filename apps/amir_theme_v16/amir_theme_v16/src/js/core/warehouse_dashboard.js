@@ -6,7 +6,7 @@ const warehouseDashboard = (() => {
   "use strict";
   const ID = "nds-warehouse-dashboard";
   const READY = "nds-warehouse-dashboard-ready";
-  const TARGETS = ["مخازن NDS ERP", "المخازن NDS ERP", "لوحة المخازن", "Warehouse Dashboard", "Warehouses NDS ERP", "NDS ERP Warehouses"];
+  const TARGETS = ["مخازن NDS ERP", "المخازن NDS ERP", "لوحة المخازن", "المخازن", "المخزون", "المستودعات", "Stock", "Inventory", "Warehouse Dashboard", "Warehouses NDS ERP", "NDS ERP Warehouses"];
   let installed = false, domObserver = null, langObserver = null, observedBody = null, timers = [];
   const TXT = {
     ar: {
@@ -367,7 +367,7 @@ const warehouseDashboard = (() => {
       schedule();if(window.frappe&&frappe.router&&frappe.router.on)frappe.router.on("change",schedule);
       window.addEventListener("popstate",schedule);$(document).on("page-change",schedule);
       if(!langObserver&&document.documentElement){langObserver=new MutationObserver(()=>{const board=document.getElementById(ID);if(board&&isTarget())setDirection(board);schedule();});langObserver.observe(document.documentElement,{attributes:true,attributeFilter:["dir","lang"]});}
-      if(document.body&&observedBody!==document.body){if(domObserver)domObserver.disconnect();observedBody=document.body;domObserver=new MutationObserver((records)=>{const board=document.getElementById(ID);if(isTarget()){if(!board){schedule();return;}const navigationChanged=records.some((record)=>{const target=record.target&&record.target.nodeType===1?record.target:record.target&&record.target.parentElement;return target&&!board.contains(target)&&(target.closest("#editorjs")||Array.from(record.addedNodes||[]).some((node)=>node.nodeType===1&&(node.matches("#editorjs")||node.querySelector("#editorjs"))));});if(navigationChanged)renderNavigation(board);}else if(board)cleanup();});domObserver.observe(document.body,{childList:true,subtree:true});}
+      if(document.body&&observedBody!==document.body){if(domObserver)domObserver.disconnect();observedBody=document.body;domObserver=new MutationObserver((records)=>{const board=document.getElementById(ID);if(isTarget()){if(!board){schedule();return;}const headerChanged=records.some((record)=>{const target=record.target&&record.target.nodeType===1?record.target:record.target&&record.target.parentElement;const added=Array.from(record.addedNodes||[]);return Boolean((target&&target.closest&&target.closest(".navbar,.page-head"))||added.some((node)=>node.nodeType===1&&(node.matches(".navbar,.page-head")||node.querySelector(".navbar,.page-head"))));});if(headerChanged)setDirection(board);const navigationChanged=records.some((record)=>{const target=record.target&&record.target.nodeType===1?record.target:record.target&&record.target.parentElement;return target&&!board.contains(target)&&(target.closest("#editorjs")||Array.from(record.addedNodes||[]).some((node)=>node.nodeType===1&&(node.matches("#editorjs")||node.querySelector("#editorjs"))));});if(navigationChanged)renderNavigation(board);}else if(board)cleanup();});domObserver.observe(document.body,{childList:true,subtree:true});}
     };
     if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",boot,{once:true});else boot();
   }

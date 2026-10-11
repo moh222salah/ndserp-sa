@@ -472,7 +472,7 @@ let scheduled = false;
  * Apply a visual-only CSS scope on the warehouse Workspace route.
  * This never changes Workspace data, metrics, links, permissions or business logic.
  */
-const WAREHOUSE_WORKSPACE_NAMES = ["مخازن NDS ERP", "المخازن NDS ERP", "لوحة المخازن", "Warehouse Dashboard", "Warehouses NDS ERP", "NDS ERP Warehouses"];
+const WAREHOUSE_WORKSPACE_NAMES = ["مخازن NDS ERP", "المخازن NDS ERP", "لوحة المخازن", "المخازن", "المخزون", "المستودعات", "Stock", "Inventory", "Warehouse Dashboard", "Warehouses NDS ERP", "NDS ERP Warehouses"];
 
 function syncWarehouseWorkspaceScope() {
 	let route = [];

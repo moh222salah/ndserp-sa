@@ -74,8 +74,8 @@ jobs:
           grep -Fq 'import { warehouseDashboard } from "./core/warehouse_dashboard.js";' apps/amir_theme_v16/amir_theme_v16/src/js/amir_theme.bundle.js
           grep -Fq 'warehouseDashboard.mount();' apps/amir_theme_v16/amir_theme_v16/src/js/amir_theme.bundle.js
           grep -Fq 'function syncWarehouseWorkspaceScope()' apps/amir_theme_v16/amir_theme_v16/src/js/core/workspace_enhance.js
-          grep -Fq 'const WAREHOUSE_WORKSPACE_NAMES = ["مخازن NDS ERP", "المخازن NDS ERP", "لوحة المخازن", "Warehouse Dashboard", "Warehouses NDS ERP", "NDS ERP Warehouses"];' apps/amir_theme_v16/amir_theme_v16/src/js/core/workspace_enhance.js
-          grep -Fq 'const TARGETS = ["مخازن NDS ERP", "المخازن NDS ERP", "لوحة المخازن", "Warehouse Dashboard", "Warehouses NDS ERP", "NDS ERP Warehouses"];' apps/amir_theme_v16/amir_theme_v16/src/js/core/warehouse_dashboard.js
+          grep -Fq 'const WAREHOUSE_WORKSPACE_NAMES = ["مخازن NDS ERP", "المخازن NDS ERP", "لوحة المخازن", "المخازن", "المخزون", "المستودعات", "Stock", "Inventory", "Warehouse Dashboard", "Warehouses NDS ERP", "NDS ERP Warehouses"];' apps/amir_theme_v16/amir_theme_v16/src/js/core/workspace_enhance.js
+          grep -Fq 'const TARGETS = ["مخازن NDS ERP", "المخازن NDS ERP", "لوحة المخازن", "المخازن", "المخزون", "المستودعات", "Stock", "Inventory", "Warehouse Dashboard", "Warehouses NDS ERP", "NDS ERP Warehouses"];' apps/amir_theme_v16/amir_theme_v16/src/js/core/warehouse_dashboard.js
           ! grep -Eq '^runtime-sync:' Procfile
           ! grep -Fq "runtime-sync: bash codespace-runtime-sync.sh" codespace-bootstrap.sh
           grep -Fq 'WAREHOUSE_WORKSPACE_CSS=PASS' codespace-runtime-sync.sh
@@ -94,9 +94,11 @@ jobs:
           js = Path("apps/amir_theme_v16/amir_theme_v16/src/js/core/workspace_enhance.js").read_text(encoding="utf-8")
           # Only the named workspace receives these layout rules.
           assert 'html.nds-warehouse-workspace [data-page-route="Workspaces"]' in css
-          assert 'const WAREHOUSE_WORKSPACE_NAMES = ["مخازن NDS ERP", "المخازن NDS ERP", "لوحة المخازن", "Warehouse Dashboard", "Warehouses NDS ERP", "NDS ERP Warehouses"];' in js
+          assert 'const WAREHOUSE_WORKSPACE_NAMES = ["مخازن NDS ERP", "المخازن NDS ERP", "لوحة المخازن", "المخازن", "المخزون", "المستودعات", "Stock", "Inventory", "Warehouse Dashboard", "Warehouses NDS ERP", "NDS ERP Warehouses"];' in js
           assert 'data-warehouse-dashboard-version","3"' in dashboard_js
           assert 'data-nds-ui-direction' in dashboard_js
+          assert 'const headerChanged=records.some(' in dashboard_js
+          assert 'if(headerChanged)setDirection(board);' in dashboard_js
           assert 'document.querySelector("body .navbar .navbar-nav")' in dashboard_js
           assert 'const arabic = candidates.some((value) => value.startsWith("ar"));' in dashboard_js
           assert '["name","item_name","stock_uom"]' in dashboard_js
