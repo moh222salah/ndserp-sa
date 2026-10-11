@@ -16,7 +16,7 @@ const warehouseDashboard = (() => {
       distribution:"التوزيع حسب المستودع",distributionNote:"قيمة المخزون حسب المستودع",
       reorder:"أصناف بحاجة لإعادة الطلب",reorderNote:"أصناف ذات كمية متوقعة سالبة وفق سجلات المخزون",
       item:"الصنف",warehouse:"المستودع",actual:"الكمية الفعلية",projected:"الكمية المتوقعة",uom:"الوحدة",
-      navigation:"روابط المخازن",navigationNote:"الاختصارات ومجموعات الروابط الأصلية محفوظة أدناه.",
+      navigation:"أقسام المخازن",navigationNote:"روابط مباشرة مأخوذة من أقسام الصفحة الأصلية.",homeSection:"الرئيسية",reportsSection:"التقارير المخزنية",movementsSection:"الحركات المخزنية",noNavigationLinks:"لا توجد روابط متاحة في القسم الأصلي لهذا القسم.",
       source:"من بيانات المخزون المسجلة",loading:"جارٍ تحميل البيانات...",
       unavailable:"تعذّر تحميل البيانات بسبب الصلاحيات أو الاتصال.",
       noMovement:"لا توجد حركة مخزون مسجلة خلال الفترة المحددة.",noDistribution:"لا توجد قيمة مخزون متاحة للعرض.",
@@ -29,7 +29,7 @@ const warehouseDashboard = (() => {
       distribution:"Distribution by Warehouse",distributionNote:"Stock value by warehouse",
       reorder:"Items Requiring Reorder",reorderNote:"Items with negative projected quantity in stock records",
       item:"Item",warehouse:"Warehouse",actual:"Actual Qty",projected:"Projected Qty",uom:"UOM",
-      navigation:"Warehouse Navigation",navigationNote:"Existing shortcuts and link groups remain available below.",
+      navigation:"Warehouse Sections",navigationNote:"Direct links sourced from the original workspace sections.",homeSection:"Home",reportsSection:"Stock Reports",movementsSection:"Stock Movements",noNavigationLinks:"No links are available in the original section.",
       source:"From recorded inventory data",loading:"Loading data...",
       unavailable:"Data could not be loaded due to permissions or connectivity.",
       noMovement:"No stock movement was recorded during this period.",noDistribution:"No stock value is available to display.",
@@ -136,7 +136,6 @@ const warehouseDashboard = (() => {
     const c = t(), board = el("section","nds-warehouse-dashboard");
     board.id = ID; board.setAttribute("aria-label",c.title); board.setAttribute("data-warehouse-dashboard-version","2"); setDirection(board);
     board.innerHTML =
-      '<header class="nds-warehouse-dashboard-header"><div class="nds-warehouse-dashboard-heading"><h1>'+c.title+'</h1><div class="nds-warehouse-dashboard-breadcrumb"><span>NDS ERP Saudi</span><span aria-hidden="true">/</span><span>'+c.module+'</span><span aria-hidden="true">/</span><span>'+c.overview+'</span></div></div><div class="nds-warehouse-dashboard-period"><span class="nds-warehouse-period-icon" aria-hidden="true">◷</span><span>'+c.period+'</span></div></header>'+
       '<section class="nds-warehouse-kpi-grid" aria-label="'+c.title+'">'+
       '<article class="nds-warehouse-kpi-card" data-kpi="stock-value"><div class="nds-warehouse-kpi-top"><span class="nds-warehouse-kpi-label">'+c.value+'</span><span class="nds-warehouse-kpi-icon" aria-hidden="true">◈</span></div><div class="nds-warehouse-kpi-value" data-kpi-value>—</div><div class="nds-warehouse-kpi-caption" data-kpi-caption>'+c.loading+'</div></article>'+
       '<article class="nds-warehouse-kpi-card" data-kpi="warehouses"><div class="nds-warehouse-kpi-top"><span class="nds-warehouse-kpi-label">'+c.warehouses+'</span><span class="nds-warehouse-kpi-icon" aria-hidden="true">▤</span></div><div class="nds-warehouse-kpi-value" data-kpi-value>—</div><div class="nds-warehouse-kpi-caption" data-kpi-caption>'+c.loading+'</div></article>'+
@@ -146,10 +145,85 @@ const warehouseDashboard = (() => {
       '<article class="nds-warehouse-panel nds-warehouse-movement-chart" aria-labelledby="nds-warehouse-movement-title"><div class="nds-warehouse-panel-heading"><div><h2 id="nds-warehouse-movement-title">'+c.movement+'</h2><p>'+c.movementNote+'</p></div><span class="nds-warehouse-panel-mark" aria-hidden="true">↕</span></div><div class="nds-warehouse-movement-legend"><span><i class="incoming"></i>'+c.incoming+'</span><span><i class="outgoing"></i>'+c.outgoing+'</span></div><div class="nds-warehouse-movement-body" data-movement-chart><div class="nds-warehouse-loading">'+c.loading+'</div></div></article>'+
       '<article class="nds-warehouse-panel nds-warehouse-distribution-chart" aria-labelledby="nds-warehouse-distribution-title"><div class="nds-warehouse-panel-heading"><div><h2 id="nds-warehouse-distribution-title">'+c.distribution+'</h2><p>'+c.distributionNote+'</p></div><span class="nds-warehouse-panel-mark is-blue" aria-hidden="true">▥</span></div><div class="nds-warehouse-distribution-body" data-distribution-chart><div class="nds-warehouse-loading">'+c.loading+'</div></div></article></section>'+
       '<section class="nds-warehouse-panel nds-warehouse-shortage-table" aria-labelledby="nds-warehouse-shortage-title"><div class="nds-warehouse-panel-heading"><div><h2 id="nds-warehouse-shortage-title">'+c.reorder+'</h2><p>'+c.reorderNote+'</p></div><span class="nds-warehouse-panel-mark is-alert" aria-hidden="true">!</span></div><div class="nds-warehouse-table-wrap"><table class="nds-warehouse-table"><thead><tr><th>'+c.item+'</th><th>'+c.warehouse+'</th><th>'+c.actual+'</th><th>'+c.projected+'</th><th>'+c.uom+'</th></tr></thead><tbody data-shortage-rows><tr><td colspan="5" class="nds-warehouse-table-empty">'+c.loading+'</td></tr></tbody></table></div></section>'+
-      '<div class="nds-warehouse-navigation-heading"><div><h2>'+c.navigation+'</h2><p>'+c.navigationNote+'</p></div></div>';
+      '<section class="nds-warehouse-navigation" aria-label="'+c.navigation+'">'+
+      '<div class="nds-warehouse-navigation-heading"><div><h2 data-warehouse-navigation-title>'+c.navigation+'</h2><p data-warehouse-navigation-note>'+c.navigationNote+'</p></div></div>'+
+      '<div class="nds-warehouse-navigation-grid" data-warehouse-navigation-grid>'+
+      '<article class="nds-warehouse-nav-card" data-warehouse-nav-category="home"><div class="nds-warehouse-nav-card-heading"><h3 data-nav-title="home">'+c.homeSection+'</h3><span aria-hidden="true">⌂</span></div><div class="nds-warehouse-nav-links" data-warehouse-nav-links="home"></div></article>'+
+      '<article class="nds-warehouse-nav-card" data-warehouse-nav-category="reports"><div class="nds-warehouse-nav-card-heading"><h3 data-nav-title="reports">'+c.reportsSection+'</h3><span aria-hidden="true">▤</span></div><div class="nds-warehouse-nav-links" data-warehouse-nav-links="reports"></div></article>'+
+      '<article class="nds-warehouse-nav-card" data-warehouse-nav-category="movements"><div class="nds-warehouse-nav-card-heading"><h3 data-nav-title="movements">'+c.movementsSection+'</h3><span aria-hidden="true">↔</span></div><div class="nds-warehouse-nav-links" data-warehouse-nav-links="movements"></div></article>'+
+      '</div></section>';
     return board;
   }
-  function setKpi(board,key,value,failed) {
+  function normalizeNavigationText(value) {
+    return String(value || "").normalize("NFD")
+      .replace(/[\u0300-\u036f\u064B-\u065F\u0670\u0640]/g, "")
+      .toLowerCase().replace(/[_\s-]+/g, " ").trim();
+  }
+  function navigationCategory(value) {
+    const text = normalizeNavigationText(value);
+    if (/(التقارير المخزنية|تقارير المخازن|تقارير المخزون|التقارير|تقارير|stock reports?|warehouse reports?|inventory reports?|^reports?$|stock ledger|stock balance report|stock valuation|inventory report|item ageing|item aging)/i.test(text)) return "reports";
+    if (/(الحركات المخزنية|حركات المخازن|حركات المخزون|الحركات|حركات|stock movements?|inventory movements?|transactions?|stock entries?|stock entry|stock reconciliation|material transfers?|delivery notes?|purchase receipts?|pick lists?|packing slips?|stock issues?|stock receipts?|stock transfers?)/i.test(text)) return "movements";
+    if (/(الرئيسية|الصفحة الرئيسية|^home$|^main$|main menu|warehouse home|^warehouses?$|^مخازن?$|^المخازن?$|^items?$|^الأصناف?$)/i.test(text)) return "home";
+    return null;
+  }
+  function navigationLinkLabel(anchor) {
+    const content = anchor.querySelector(".link-content");
+    return [
+      content ? content.textContent : anchor.textContent,
+      anchor.getAttribute("href"),
+      anchor.getAttribute("data-route"),
+      anchor.getAttribute("title")
+    ].filter(Boolean).join(" ");
+  }
+  function renderNavigation(board) {
+    const c = t();
+    const section = board.querySelector("[data-warehouse-navigation-grid]");
+    if (!section) return;
+    const title = board.querySelector("[data-warehouse-navigation-title]");
+    const note = board.querySelector("[data-warehouse-navigation-note]");
+    if (title) title.textContent = c.navigation;
+    if (note) note.textContent = c.navigationNote;
+    const titles = {home:c.homeSection,reports:c.reportsSection,movements:c.movementsSection};
+    Object.keys(titles).forEach((key) => {
+      const heading = section.querySelector('[data-nav-title="' + key + '"]');
+      if (heading) heading.textContent = titles[key];
+    });
+
+    const source = document.querySelector("#page-Workspaces #editorjs");
+    if (source) {
+      const widgets = Array.from(source.querySelectorAll(".widget.links-widget-box"));
+      widgets.forEach((widget) => {
+        const links = Array.from(widget.querySelectorAll(".widget-body > a.link-item"));
+        if (!links.length) return;
+        const widgetTitle = widget.querySelector(".widget-head .widget-title");
+        const fixedCategory = widgetTitle ? navigationCategory(widgetTitle.textContent) : null;
+        links.forEach((link) => {
+          const category = fixedCategory || navigationCategory(navigationLinkLabel(link)) || "home";
+          const target = section.querySelector('[data-warehouse-nav-links="' + category + '"]');
+          if (!target) return;
+          link.classList.add("nds-warehouse-nav-link");
+          const empty = target.querySelector("[data-nav-empty]");
+          if (empty) empty.remove();
+          if (link.parentElement !== target) target.appendChild(link);
+        });
+        const sourceBlock = widget.closest(".ce-block");
+        if (sourceBlock && !widget.querySelector(".widget-body > a.link-item")) {
+          sourceBlock.classList.add("nds-warehouse-links-consumed");
+        }
+      });
+    }
+    section.querySelectorAll("[data-warehouse-nav-links]").forEach((target) => {
+      if (target.querySelector("a.link-item")) return;
+      if (!target.querySelector("[data-nav-empty]")) {
+        const empty = el("p", "nds-warehouse-nav-empty", c.noNavigationLinks);
+        empty.setAttribute("data-nav-empty", "1");
+        target.replaceChildren(empty);
+      } else {
+        target.querySelector("[data-nav-empty]").textContent = c.noNavigationLinks;
+      }
+    });
+  }
+    function setKpi(board,key,value,failed) {
     const card=board.querySelector('[data-kpi="'+key+'"]'); if(!card)return;
     const valueNode=card.querySelector("[data-kpi-value]"), caption=card.querySelector("[data-kpi-caption]");
     if(valueNode)valueNode.textContent=value===null||value===undefined?"—":String(value);
@@ -248,8 +322,9 @@ const warehouseDashboard = (() => {
     if(!isTarget()){cleanup();return;}if(!document.body)return;
     const host=document.querySelector("#page-Workspaces .layout-main-section");if(!host)return;
     const current=document.getElementById(ID);
-    if(current&&current.isConnected&&current.parentElement===host){setDirection(current);document.documentElement.classList.add(READY);return;}
+    if(current&&current.isConnected&&current.parentElement===host){setDirection(current);renderNavigation(current);document.documentElement.classList.add(READY);return;}
     if(current)current.remove();const board=build();host.insertBefore(board,host.firstChild);document.documentElement.classList.add(READY);
+    renderNavigation(board);
     loadData(board).catch(()=>{renderMovement(board,null,null);renderDistribution(board,null);renderShortages(board,null);});
   }
   function schedule(){timers.forEach((timer)=>window.clearTimeout(timer));timers=[0,120,350,800,1400].map((delay)=>window.setTimeout(mountIfReady,delay));}
@@ -259,7 +334,7 @@ const warehouseDashboard = (() => {
       schedule();if(window.frappe&&frappe.router&&frappe.router.on)frappe.router.on("change",schedule);
       window.addEventListener("popstate",schedule);$(document).on("page-change",schedule);
       if(!langObserver&&document.documentElement){langObserver=new MutationObserver(()=>{const board=document.getElementById(ID);if(board&&isTarget())setDirection(board);schedule();});langObserver.observe(document.documentElement,{attributes:true,attributeFilter:["dir","lang"]});}
-      if(document.body&&observedBody!==document.body){if(domObserver)domObserver.disconnect();observedBody=document.body;domObserver=new MutationObserver(()=>{if(isTarget()&&!document.getElementById(ID))schedule();else if(!isTarget()&&document.getElementById(ID))cleanup();});domObserver.observe(document.body,{childList:true,subtree:true});}
+      if(document.body&&observedBody!==document.body){if(domObserver)domObserver.disconnect();observedBody=document.body;domObserver=new MutationObserver((records)=>{const board=document.getElementById(ID);if(isTarget()){if(!board){schedule();return;}const navigationChanged=records.some((record)=>{const target=record.target&&record.target.nodeType===1?record.target:record.target&&record.target.parentElement;return target&&!board.contains(target)&&(target.closest("#editorjs")||Array.from(record.addedNodes||[]).some((node)=>node.nodeType===1&&(node.matches("#editorjs")||node.querySelector("#editorjs"))));});if(navigationChanged)renderNavigation(board);}else if(board)cleanup();});domObserver.observe(document.body,{childList:true,subtree:true});}
     };
     if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",boot,{once:true});else boot();
   }
