@@ -345,7 +345,7 @@ for key in required:
         if "لوحة المشتريات" in js or "Nexterp v16" in js or "data-purchase-period" in js:
             raise SystemExit("PURCHASE_DASHBOARD_TOP_METADATA=FAIL:STILL_PRESENT")
         print("PURCHASE_DASHBOARD_TOP_METADATA=PASS")
-        required_purchase_dashboard_js = ("nds-purchase-dashboard", "nds-purchase-kpi-grid", "nds-purchase-month-columns", "nds-purchase-orders-table", "Purchase Invoice", "Purchase Receipt", "data-purchase-direction")
+        required_purchase_dashboard_js = ("nds-purchase-dashboard", "nds-purchase-kpi-grid", "nds-purchase-month-columns", "nds-purchase-orders-table", "Purchase Invoice", "Purchase Receipt", "data-purchase-direction", "data-nds-ui-direction")
         missing = [marker for marker in required_purchase_dashboard_js if marker not in js]
         if missing:
             raise SystemExit("PURCHASE_DASHBOARD_JS=FAIL:MISSING_MARKERS:" + ",".join(missing))
