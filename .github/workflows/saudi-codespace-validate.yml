@@ -370,10 +370,10 @@ jobs:
           grep -Fq 'if(routeName&&!names.has(routeName))return false;' apps/amir_theme_v16/amir_theme_v16/src/js/core/purchases_dashboard.js
           grep -Fq 'en: "Home"' apps/amir_theme_v16/amir_theme_v16/src/js/core/sales_dashboard.js
           grep -Fq 'en: "Items & Pricing"' apps/amir_theme_v16/amir_theme_v16/src/js/core/sales_dashboard.js
-          grep -Fq 'en: "Work"' apps/amir_theme_v16/amir_theme_v16/src/js/core/sales_dashboard.js
+          grep -Fq 'en: "Customer"' apps/amir_theme_v16/amir_theme_v16/src/js/core/sales_dashboard.js
           grep -Fq 'en: "Settings"' apps/amir_theme_v16/amir_theme_v16/src/js/core/sales_dashboard.js
           grep -Fq 'en: "Reports"' apps/amir_theme_v16/amir_theme_v16/src/js/core/sales_dashboard.js
-          grep -Fq 'return SALES_SECTION_DEFINITIONS.map((definition) => ({ definition, links: [] }));' apps/amir_theme_v16/amir_theme_v16/src/js/core/sales_dashboard.js
+          grep -Fq 'if (!page) return splitSalesReports(groups);' apps/amir_theme_v16/amir_theme_v16/src/js/core/sales_dashboard.js
           grep -Fq '"frappe.client.get_list"' apps/amir_theme_v16/amir_theme_v16/src/js/core/sales_dashboard.js
           grep -Fq '"Sales Invoice"' apps/amir_theme_v16/amir_theme_v16/src/js/core/sales_dashboard.js
           grep -Fq 'b.innerHTML=' apps/amir_theme_v16/amir_theme_v16/src/js/core/purchases_dashboard.js
