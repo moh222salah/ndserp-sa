@@ -84,9 +84,9 @@ for key in required:
             "body .navbar",
             "58px",
             "#0a2342",
-            'html[dir="rtl"] body .navbar .navbar-nav',
-            'html[dir="rtl"] .page-head .navbar-breadcrumbs',
-            'html[dir="ltr"] body .navbar .navbar-nav',
+            'html[dir=rtl] body .navbar .navbar-nav',
+            'html[dir=rtl] .page-head .navbar-breadcrumbs',
+            'html[dir=ltr] body .navbar .navbar-nav',
         )
         missing = [marker for marker in required_header_markers if marker not in css]
         if missing:
