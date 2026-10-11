@@ -1,3 +1,7 @@
+/* rtlcss guard: this stylesheet declares explicit [dir=rtl] / [dir=ltr] rules and logical
+   properties. rtlcss (css-rtl bundle) would flip every `direction`/`text-align` value and
+   force the Arabic dashboard to LTR, so the whole file is passed through untouched. */
+/*rtl:begin:ignore*/
 /* Purchases Dashboard: modern SaaS UI; keep Frappe global header and native Workspace records. */
 body.nds-purchase-dashboard-ready #page-Workspaces{--nds-purchase-navy:#0A2342;--nds-purchase-blue:#164E8F;--nds-purchase-gold:#D4AF37;--nds-purchase-ink:#172B4D;--nds-purchase-muted:#64748b;--nds-purchase-line:#e5ebf2;background:#f4f7fb;color:var(--nds-purchase-ink)}
 body.nds-purchase-dashboard-ready #page-Workspaces .layout-main-section{box-sizing:border-box;width:100%;max-width:none;padding:14px 18px 28px;border:0;background:transparent;box-shadow:none}
@@ -79,3 +83,4 @@ body.nds-purchase-dashboard-ready #page-Workspaces .nds-purchase-dashboard[dir=l
 @media(max-width:1100px){body.nds-purchase-dashboard-ready #page-Workspaces .nds-purchase-kpi-grid{grid-template-columns:repeat(2,minmax(0,1fr))}body.nds-purchase-dashboard-ready #page-Workspaces .nds-purchase-charts-grid{grid-template-columns:minmax(0,1fr)}}
 @media(max-width:620px){body.nds-purchase-dashboard-ready #page-Workspaces .layout-main-section{padding:10px 8px 20px}body.nds-purchase-dashboard-ready #page-Workspaces .nds-purchase-dashboard-header{align-items:flex-start;flex-direction:column;gap:12px}body.nds-purchase-dashboard-ready #page-Workspaces .nds-purchase-kpi-grid{gap:9px}body.nds-purchase-dashboard-ready #page-Workspaces .nds-purchase-kpi-card{min-height:128px;padding:12px}body.nds-purchase-dashboard-ready #page-Workspaces .nds-purchase-kpi-value{font-size:20px}body.nds-purchase-dashboard-ready #page-Workspaces .nds-purchase-panel-heading{padding:14px 13px 11px}body.nds-purchase-dashboard-ready #page-Workspaces .nds-purchase-category-list{gap:15px;padding:16px 13px 18px}body.nds-purchase-dashboard-ready #page-Workspaces .nds-purchase-monthly-chart{padding:13px 7px 12px}body.nds-purchase-dashboard-ready #page-Workspaces .nds-purchase-month-columns{gap:3px}body.nds-purchase-dashboard-ready #page-Workspaces .nds-purchase-orders-table th,body.nds-purchase-dashboard-ready #page-Workspaces .nds-purchase-orders-table td{padding:11px}}
 @media(prefers-reduced-motion:reduce){body.nds-purchase-dashboard-ready #page-Workspaces .nds-purchase-dashboard *{transition:none}}
+/*rtl:end:ignore*/

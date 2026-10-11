@@ -1,3 +1,7 @@
+/* rtlcss guard: this stylesheet declares explicit [dir=rtl] / [dir=ltr] rules and logical
+   properties. rtlcss (css-rtl bundle) would flip every `direction`/`text-align` value and
+   force the Arabic dashboard to LTR, so the whole file is passed through untouched. */
+/*rtl:begin:ignore*/
 /* NDS ERP Saudi — Sales Workspace visual layer only.
  * Scoped to the Sales Workspace; does not alter Workspace data or ERP behavior.
  */
@@ -1254,3 +1258,4 @@ body.nds-purchase-workspace-redesign #page-Workspaces #editorjs .ce-block:has([c
 body.nds-purchase-workspace-redesign #page-Workspaces #editorjs .widget.links-widget-box .amt-link-lead-arrow {
   display: none;
 }
+/*rtl:end:ignore*/

@@ -1,3 +1,7 @@
+/* rtlcss guard: this stylesheet declares explicit [dir=rtl] / [dir=ltr] rules and logical
+   properties. rtlcss (css-rtl bundle) would flip every `direction`/`text-align` value and
+   force the Arabic dashboard to LTR, so the whole file is passed through untouched. */
+/*rtl:begin:ignore*/
 /*
  * NDS ERP Saudi — warehouse Workspace dashboard. Route-scoped RTL/LTR.
  */
@@ -312,3 +316,4 @@ html.nds-warehouse-workspace.nds-warehouse-dashboard-ready #page-Workspaces #edi
 html.nds-warehouse-workspace.nds-warehouse-dashboard-ready #page-Workspaces #editorjs .codex-editor__redactor > .ce-block:has(.links-widget-box) {
   display: none;
 }
+/*rtl:end:ignore*/
