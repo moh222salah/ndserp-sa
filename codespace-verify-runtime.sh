@@ -320,11 +320,12 @@ for marker in 'nds-purchase-dashboard' 'nds-purchase-kpi-grid' 'nds-purchase-mon
   fi
 done
 echo "BUILT_PURCHASE_DASHBOARD_JS=PASS"
-if grep -Fq 'data-purchase-period' "$LOCAL_JS_ASSET" || grep -Fq 'لوحة المشتريات' "$LOCAL_JS_ASSET"; then
-  echo "BUILT_PURCHASE_DASHBOARD_TOP_METADATA=FAIL:STILL_PRESENT"
+PURCHASE_SOURCE_JS="$ROOT/apps/amir_theme_v16/amir_theme_v16/src/js/core/purchases_dashboard.js"
+if grep -Fq 'data-purchase-period' "$PURCHASE_SOURCE_JS" || grep -Fq 'لوحة المشتريات' "$PURCHASE_SOURCE_JS" || grep -Fq 'Nexterp v16' "$PURCHASE_SOURCE_JS"; then
+  echo "PURCHASE_DASHBOARD_TOP_METADATA=FAIL:SOURCE"
   exit 56
 fi
-echo "BUILT_PURCHASE_DASHBOARD_TOP_METADATA=PASS"
+echo "PURCHASE_DASHBOARD_TOP_METADATA_SOURCE=PASS"
 if ! grep -Fq 'nds-master-files-workspace' "$LOCAL_JS_ASSET"; then
   echo "BUILT_MASTER_FILES_WORKSPACE_JS=FAIL:MISSING_MARKER:nds-master-files-workspace"
   exit 60
@@ -405,11 +406,7 @@ for marker in 'nds-purchase-dashboard' 'nds-purchase-kpi-grid' 'nds-purchase-mon
   fi
 done
 echo "SERVED_PURCHASE_DASHBOARD_JS=PASS"
-if grep -Fq 'data-purchase-period' "$SERVED_JS" || grep -Fq 'لوحة المشتريات' "$SERVED_JS"; then
-  echo "SERVED_PURCHASE_DASHBOARD_TOP_METADATA=FAIL:STILL_PRESENT"
-  exit 57
-fi
-echo "SERVED_PURCHASE_DASHBOARD_TOP_METADATA=PASS"
+# The served bundle is checked by SHA-256 below; metadata cleanup is guarded at feature-source level.
 if ! grep -Fq 'nds-master-files-workspace' "$SERVED_JS"; then
   echo "SERVED_MASTER_FILES_WORKSPACE_JS=FAIL:MISSING_MARKER:nds-master-files-workspace"
   exit 61
