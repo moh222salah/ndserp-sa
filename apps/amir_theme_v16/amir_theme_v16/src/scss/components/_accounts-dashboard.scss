@@ -657,8 +657,17 @@ body.amt-accounts-workspace.nds-accounts-ltr #page-Workspaces .nds-accounts-dash
 
 
 /* Accounts Workspace — native Main Accounts and Financial Reports sections. */
-body.amt-accounts-workspace.nds-accounts-dashboard-ready #page-Workspaces .nds-accounts-navigation-section {
+body.amt-accounts-workspace.nds-accounts-dashboard-ready #page-Workspaces .nds-accounts-navigation-row {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  align-items: start;
+  gap: 16px;
   margin-top: 18px;
+}
+
+body.amt-accounts-workspace.nds-accounts-dashboard-ready #page-Workspaces .nds-accounts-navigation-section {
+  min-width: 0;
+  margin-top: 0;
   overflow: hidden;
   border: 1px solid var(--nds-accounts-line);
   border-top: 3px solid var(--nds-accounts-navy);
@@ -686,10 +695,10 @@ body.amt-accounts-workspace.nds-accounts-dashboard-ready #page-Workspaces .nds-a
 
 body.amt-accounts-workspace.nds-accounts-dashboard-ready #page-Workspaces .nds-accounts-navigation-grid {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-columns: minmax(0, 1fr);
   align-items: stretch;
-  gap: 14px;
-  padding: 14px;
+  gap: 10px;
+  padding: 12px;
 }
 
 body.amt-accounts-workspace.nds-accounts-dashboard-ready #page-Workspaces .nds-accounts-section-card {
@@ -746,9 +755,12 @@ body.amt-accounts-workspace.nds-accounts-dashboard-ready #page-Workspaces .nds-a
 }
 
 @media (max-width: 760px) {
-  body.amt-accounts-workspace.nds-accounts-dashboard-ready #page-Workspaces .nds-accounts-navigation-grid {
+  body.amt-accounts-workspace.nds-accounts-dashboard-ready #page-Workspaces .nds-accounts-navigation-row {
     grid-template-columns: minmax(0, 1fr);
-    gap: 10px;
+    gap: 12px;
+  }
+
+  body.amt-accounts-workspace.nds-accounts-dashboard-ready #page-Workspaces .nds-accounts-navigation-grid {
     padding: 10px;
   }
 }

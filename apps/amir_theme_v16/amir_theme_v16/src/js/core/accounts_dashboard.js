@@ -221,46 +221,86 @@ const accountsDashboard = (() => {
 	}
 
 	function normalizeSectionTitle(value) {
-		return normalize(value).replace(/[\u064B-\u065F\u0670\u0640]/g, "").replace(/[.:：]+$/g, "");
+		return normalize(value)
+			.replace(/[\u064B-\u065F\u0670\u0640]/g, "")
+			.replace(/[.:：]+$/g, "");
+	}
+
+	function isFinancialReportEntry(value) {
+		const text = normalizeSectionTitle(value);
+		return /(?:financial\s+reports?|reports?|query-report|income\s+statement|balance\s+sheet|profit\s+and\s+loss|cash\s+flow|general\s+ledger|trial\s+balance|accounts?\s+(?:receivable|payable)\s+(?:aging|ageing)|receivable\s+aging|payable\s+aging|ledger\s+report|تقرير|تقارير|قائمة\s+الدخل|الميزانية\s+العمومية|ميزان\s+المراجعة|التدفقات\s+النقدية|دفتر\s+الأستاذ|الاستاذ\s+العام|أعمار\s+(?:الذمم|الديون)|اعمار\s+(?:الذمم|الديون)|كشف\s+حساب)/i.test(text)
+			|| /\/(?:query-report|report)(?:\/|$)/i.test(text);
+	}
+
+	function getNativeWidgetTitle(widget) {
+		return String(widget?.querySelector(".widget-title, .widget-head h3, .widget-head h4")?.textContent || "").trim();
 	}
 
 	function collectNativeAccountWidgets(sourceEditor, section) {
 		if (!sourceEditor) return [];
-		const aliases = section.aliases.map(normalizeSectionTitle);
-		const blocks = Array.from(sourceEditor.querySelectorAll(".ce-block"));
-		const blockHeading = (block) => block.querySelector(".ce-header, .ce-header .h4")?.textContent || "";
-		const headingIndex = blocks.findIndex((block) => aliases.includes(normalizeSectionTitle(blockHeading(block))));
 		const widgets = [];
+		const seen = new Set();
+		const blocks = Array.from(sourceEditor.querySelectorAll(".ce-block"));
 
-		if (headingIndex >= 0) {
-			for (let index = headingIndex + 1; index < blocks.length; index += 1) {
-				if (blockHeading(blocks[index]).trim()) break;
-				const widget = blocks[index].querySelector(
-					".widget.links-widget-box, .widget.shortcut-widget-box, .widget.number-widget-box, .widget.dashboard-widget-box"
-				);
-				if (widget && !widgets.some((item) => item === widget)) widgets.push(widget);
-			}
-		}
+		blocks.forEach((block) => {
+			const sourceWidget = block.querySelector(".widget");
+			if (!sourceWidget || seen.has(sourceWidget)) return;
+			seen.add(sourceWidget);
 
-		// Some Workspace versions expose the section title inside the native card rather than a Header block.
-		if (!widgets.length) {
-			for (const block of blocks) {
-				const widget = block.querySelector(
-					".widget.links-widget-box, .widget.shortcut-widget-box, .widget.number-widget-box, .widget.dashboard-widget-box"
+			const title = getNativeWidgetTitle(sourceWidget);
+			const titleIsReport = isFinancialReportEntry(title);
+			const sourceRows = Array.from(
+				sourceWidget.querySelectorAll(".widget-body a.link-item, .widget-body a[data-link-to], .widget-body [data-link-type]")
+			);
+
+			if (sourceRows.length) {
+				const matchingIndexes = new Set();
+				sourceRows.forEach((row, index) => {
+					const rowText = [
+						row.textContent,
+						row.getAttribute("href"),
+						row.getAttribute("data-route"),
+						row.getAttribute("data-link-to"),
+						row.getAttribute("data-link-type"),
+						row.getAttribute("data-doctype"),
+					].filter(Boolean).join(" ");
+					const isReport = titleIsReport || isFinancialReportEntry(rowText);
+					if (section.key === "financial-reports" ? isReport : !isReport) {
+						matchingIndexes.add(index);
+					}
+				});
+
+				if (!matchingIndexes.size) return;
+				const copy = sourceWidget.cloneNode(true);
+				const copyRows = Array.from(
+					copy.querySelectorAll(".widget-body a.link-item, .widget-body a[data-link-to], .widget-body [data-link-type]")
 				);
-				const title = widget?.querySelector(".widget-title")?.textContent || "";
-				if (widget && aliases.includes(normalizeSectionTitle(title))) widgets.push(widget);
+				copyRows.forEach((row, index) => {
+					if (!matchingIndexes.has(index)) row.remove();
+				});
+				copy.classList.add("nds-accounts-native-widget");
+				widgets.push(copy);
+				return;
 			}
-		}
+
+			const text = [title, sourceWidget.textContent].filter(Boolean).join(" ");
+			const isReport = isFinancialReportEntry(text);
+			if (section.key === "financial-reports" ? isReport : !isReport) {
+				const copy = sourceWidget.cloneNode(true);
+				copy.classList.add("nds-accounts-native-widget");
+				widgets.push(copy);
+			}
+		});
 
 		return widgets;
 	}
 
 	function populateNativeAccountSections(board, sourceEditor, language) {
+		if (!board) return;
 		const t = LANGUAGES[language];
 		const sections = [
-			{ key: "main-accounts", label: t.mainAccounts, aliases: ["الحسابات الرئيسية", "الحسابات الرئيسيه", "Main Accounts", "Primary Accounts"] },
-			{ key: "financial-reports", label: t.financialReports, aliases: ["التقارير المالية", "التقارير الماليه", "Financial Reports", "Financial Reporting"] },
+			{ key: "main-accounts", label: t.mainAccounts },
+			{ key: "financial-reports", label: t.financialReports },
 		];
 
 		sections.forEach((section) => {
@@ -269,19 +309,22 @@ const accountsDashboard = (() => {
 			if (title) title.textContent = section.label;
 			if (!grid) return;
 
-			grid.replaceChildren();
 			const sourceWidgets = collectNativeAccountWidgets(sourceEditor, section);
-			sourceWidgets.forEach((sourceWidget) => {
+			const signature = sourceWidgets.map((widget) => {
+				const links = Array.from(widget.querySelectorAll(".link-item"))
+					.map((link) => (link.textContent || "").trim()).join("|");
+				return getNativeWidgetTitle(widget) + ":" + links;
+			}).join("||");
+
+			if (grid.dataset.sourceSignature === signature) return;
+			grid.replaceChildren();
+			sourceWidgets.forEach((widget) => {
 				const card = make("article", "nds-accounts-section-card");
-				const widget = sourceWidget.cloneNode(true);
-				widget.classList.add("nds-accounts-native-widget");
 				card.appendChild(widget);
 				grid.appendChild(card);
 			});
-
-			if (!sourceWidgets.length) {
-				grid.appendChild(make("p", "nds-accounts-section-empty", t.noSectionItems));
-			}
+			grid.dataset.sourceSignature = signature;
+			grid.dataset.sourceCount = String(sourceWidgets.length);
 		});
 	}
 
@@ -341,14 +384,16 @@ const accountsDashboard = (() => {
 					'<tbody data-invoice-rows></tbody>' +
 				'</table></div>' +
 			'</section>' +
-			'<section class="nds-accounts-navigation-section" data-accounts-nav-section="main-accounts">' +
-				'<div class="nds-accounts-navigation-heading"><h2 data-accounts-section-title="main-accounts"></h2></div>' +
-				'<div class="nds-accounts-navigation-grid" data-accounts-section-grid="main-accounts"></div>' +
-			'</section>' +
-			'<section class="nds-accounts-navigation-section" data-accounts-nav-section="financial-reports">' +
-				'<div class="nds-accounts-navigation-heading"><h2 data-accounts-section-title="financial-reports"></h2></div>' +
-				'<div class="nds-accounts-navigation-grid" data-accounts-section-grid="financial-reports"></div>' +
-			'</section>';
+			'<div class="nds-accounts-navigation-row" data-accounts-navigation-row>' +
+				'<section class="nds-accounts-navigation-section" data-accounts-nav-section="main-accounts">' +
+					'<div class="nds-accounts-navigation-heading"><h2 data-accounts-section-title="main-accounts"></h2></div>' +
+					'<div class="nds-accounts-navigation-grid" data-accounts-section-grid="main-accounts"></div>' +
+				'</section>' +
+				'<section class="nds-accounts-navigation-section" data-accounts-nav-section="financial-reports">' +
+					'<div class="nds-accounts-navigation-heading"><h2 data-accounts-section-title="financial-reports"></h2></div>' +
+					'<div class="nds-accounts-navigation-grid" data-accounts-section-grid="financial-reports"></div>' +
+				'</section>' +
+			'</div>';
 
 
 		const kpis = [["profit",t.netProfit],["revenue",t.revenue],["expenses",t.expenses],["receivables",t.receivables]];
@@ -466,6 +511,7 @@ const accountsDashboard = (() => {
 		syncWorkspaceDirection(page, language);
 		const current = document.getElementById(DASHBOARD_ID);
 		if (current && current.isConnected && current.parentElement === host && current.dataset.language === language && current.querySelector('[data-accounts-nav-section="main-accounts"]') && current.querySelector('[data-accounts-nav-section="financial-reports"]')) {
+			populateNativeAccountSections(current, preservedEditor || existingEditor, language);
 			document.body.classList.add(READY_CLASS);
 			syncWorkspaceDirection(page, language);
 			detachWorkspaceEditor(page);

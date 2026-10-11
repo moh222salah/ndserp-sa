@@ -369,6 +369,13 @@ jobs:
           grep -Fq 'function populateNativeAccountSections(' apps/amir_theme_v16/amir_theme_v16/src/js/core/accounts_dashboard.js
           grep -Fq '.nds-accounts-navigation-section' apps/amir_theme_v16/amir_theme_v16/src/scss/components/_accounts-dashboard.scss
           grep -Fq 'grid-template-columns: repeat(2, minmax(0, 1fr));' apps/amir_theme_v16/amir_theme_v16/src/scss/components/_accounts-dashboard.scss
+          grep -Fq 'data-accounts-navigation-row' apps/amir_theme_v16/amir_theme_v16/src/js/core/accounts_dashboard.js
+          grep -Fq 'function isFinancialReportEntry(value)' apps/amir_theme_v16/amir_theme_v16/src/js/core/accounts_dashboard.js
+          grep -Fq 'sourceWidget.querySelectorAll(".widget-body a.link-item' apps/amir_theme_v16/amir_theme_v16/src/js/core/accounts_dashboard.js
+          grep -Fq '.nds-accounts-navigation-row' apps/amir_theme_v16/amir_theme_v16/src/scss/components/_accounts-dashboard.scss
+          grep -Fq 'grid-template-columns: repeat(2, minmax(0, 1fr));' apps/amir_theme_v16/amir_theme_v16/src/scss/components/_accounts-dashboard.scss
+          grep -Fq 'grid-template-columns: minmax(0, 1fr);' apps/amir_theme_v16/amir_theme_v16/src/scss/components/_accounts-dashboard.scss
+          echo "ACCOUNTS_NAVIGATION_DYNAMIC_TWO_COLUMN=PASS"
           echo "ACCOUNTS_NAVIGATION_SECTIONS_SOURCE=PASS"
           echo "ACCOUNTS_WORKSPACE_SOURCE=PASS"
 
