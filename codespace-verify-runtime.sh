@@ -299,7 +299,7 @@ if ! grep -Fq 'nds-purchase-workspace-redesign' "$LOCAL_JS_ASSET"; then
   exit 40
 fi
 echo "BUILT_PURCHASE_WORKSPACE_JS=PASS"
-for marker in 'nds-purchase-dashboard' 'nds-purchase-kpi-grid' 'nds-purchase-month-columns' 'nds-purchase-orders-table' 'Purchase Invoice' 'Purchase Receipt' 'data-purchase-direction'; do
+for marker in 'nds-purchase-dashboard' 'nds-purchase-kpi-grid' 'nds-purchase-month-columns' 'nds-purchase-orders-table' 'Purchase Invoice' 'Purchase Receipt' 'data-purchase-direction' 'data-nds-ui-direction'; do
   if ! grep -Fq "$marker" "$LOCAL_JS_ASSET"; then
     echo "BUILT_PURCHASE_DASHBOARD_JS=FAIL:MISSING_MARKER:$marker"
     exit 55
@@ -384,7 +384,7 @@ if ! grep -Fq 'nds-purchase-workspace-redesign' "$SERVED_JS"; then
   exit 41
 fi
 echo "SERVED_PURCHASE_WORKSPACE_JS=PASS"
-for marker in 'nds-purchase-dashboard' 'nds-purchase-kpi-grid' 'nds-purchase-month-columns' 'nds-purchase-orders-table' 'Purchase Invoice' 'Purchase Receipt' 'data-purchase-direction'; do
+for marker in 'nds-purchase-dashboard' 'nds-purchase-kpi-grid' 'nds-purchase-month-columns' 'nds-purchase-orders-table' 'Purchase Invoice' 'Purchase Receipt' 'data-purchase-direction' 'data-nds-ui-direction'; do
   if ! grep -Fq "$marker" "$SERVED_JS"; then
     echo "SERVED_PURCHASE_DASHBOARD_JS=FAIL:MISSING_MARKER:$marker"
     exit 55
