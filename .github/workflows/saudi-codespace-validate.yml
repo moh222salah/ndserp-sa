@@ -332,6 +332,12 @@ jobs:
           node --check --input-type=module < apps/amir_theme_v16/amir_theme_v16/src/js/core/sales_dashboard.js
           node --check --input-type=module < apps/amir_theme_v16/amir_theme_v16/src/js/core/purchases_dashboard.js
           grep -Fq 'copy("المبيعات NDS ERP", "Sales NDS ERP")' apps/amir_theme_v16/amir_theme_v16/src/js/core/sales_dashboard.js
+          grep -Fq 'documentLanguage.startsWith("ar") || bootLanguage.startsWith("ar")' apps/amir_theme_v16/amir_theme_v16/src/js/core/sales_dashboard.js
+          grep -Fq 'main && main.querySelector("#editorjs .codex-editor__redactor")' apps/amir_theme_v16/amir_theme_v16/src/js/core/sales_dashboard.js
+          grep -Fq 'syncDashboardDirection(board);' apps/amir_theme_v16/amir_theme_v16/src/js/core/sales_dashboard.js
+          grep -Fq '#page-Workspaces[dir=rtl] .page-head' apps/amir_theme_v16/amir_theme_v16/src/scss/components/_sales-workspace-redesign.scss
+          grep -Fq 'direction: inherit;' apps/amir_theme_v16/amir_theme_v16/src/scss/components/_sales-workspace-redesign.scss
+          grep -Fq 'direction: rtl;' apps/amir_theme_v16/amir_theme_v16/src/scss/components/_sales-workspace-redesign.scss
           grep -Fq 'return documentLanguage || bootLanguage || "en";' apps/amir_theme_v16/amir_theme_v16/src/js/core/sales_dashboard.js
           grep -Fq 'if (activeRouteName && !expected.has(activeRouteName)) return false;' apps/amir_theme_v16/amir_theme_v16/src/js/core/sales_dashboard.js
           grep -Fq 'const scoped=Boolean(document.body?.classList.contains("nds-purchase-workspace-redesign"));' apps/amir_theme_v16/amir_theme_v16/src/js/core/purchases_dashboard.js
