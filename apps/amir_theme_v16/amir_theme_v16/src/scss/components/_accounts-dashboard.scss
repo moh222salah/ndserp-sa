@@ -719,3 +719,21 @@ body.amt-accounts-workspace.nds-accounts-dashboard-ready #page-Workspaces .nds-a
     animation: none;
   }
 }
+
+/* Persistent, route-scoped direction for Arabic Accounts Workspace and Desk header. */
+body.amt-accounts-workspace.nds-accounts-rtl #page-Workspaces,
+body.amt-accounts-workspace.nds-accounts-rtl #page-Workspaces .layout-main-section,
+body.amt-accounts-workspace.nds-accounts-rtl #page-Workspaces .page-head,
+body.amt-accounts-workspace.nds-accounts-rtl .navbar,
+body.amt-accounts-workspace.nds-accounts-rtl .navbar .container,
+body.amt-accounts-workspace.nds-accounts-rtl .navbar .container-fluid { direction: rtl; }
+
+body.amt-accounts-workspace.nds-accounts-ltr #page-Workspaces,
+body.amt-accounts-workspace.nds-accounts-ltr #page-Workspaces .layout-main-section,
+body.amt-accounts-workspace.nds-accounts-ltr #page-Workspaces .page-head,
+body.amt-accounts-workspace.nds-accounts-ltr .navbar,
+body.amt-accounts-workspace.nds-accounts-ltr .navbar .container,
+body.amt-accounts-workspace.nds-accounts-ltr .navbar .container-fluid { direction: ltr; }
+
+body.amt-accounts-workspace.nds-accounts-rtl #page-Workspaces .nds-accounts-dashboard,
+body.amt-accounts-workspace.nds-accounts-ltr #page-Workspaces .nds-accounts-dashboard { text-align: start; }
