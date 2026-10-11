@@ -114,6 +114,30 @@ const salesDashboard = (() => {
 		delete node.dataset[key];
 	}
 
+	function trackInlineStyle(node, property, key, value) {
+		if (!node) return;
+		const valueKey = key + "Value";
+		const priorityKey = key + "Priority";
+		if (!Object.prototype.hasOwnProperty.call(node.dataset, valueKey)) {
+			const original = node.style.getPropertyValue(property);
+			node.dataset[valueKey] = original || "__nds_original_inline_style_unset__";
+			node.dataset[priorityKey] = node.style.getPropertyPriority(property);
+		}
+		node.style.setProperty(property, value);
+	}
+
+	function restoreInlineStyle(node, property, key) {
+		if (!node) return;
+		const valueKey = key + "Value";
+		const priorityKey = key + "Priority";
+		if (!Object.prototype.hasOwnProperty.call(node.dataset, valueKey)) return;
+		const original = node.dataset[valueKey];
+		if (original === "__nds_original_inline_style_unset__") node.style.removeProperty(property);
+		else node.style.setProperty(property, original, node.dataset[priorityKey] || "");
+		delete node.dataset[valueKey];
+		delete node.dataset[priorityKey];
+	}
+
 	function syncWorkspaceDirection(direction, language) {
 		const page = document.getElementById("page-Workspaces");
 		if (!page) return;
@@ -125,16 +149,16 @@ const salesDashboard = (() => {
 		const main = page.querySelector(".layout-main-section");
 		const targets = [
 			page,
-			header,
 			main,
 			main && main.querySelector("#editorjs"),
 			main && main.querySelector("#editorjs .codex-editor__redactor"),
-			main && main.querySelector("#editorjs .codex-editor__redactor .ce-block"),
 		].filter(Boolean);
 		targets.forEach((node) => {
 			if (!directionTargets.includes(node)) directionTargets.push(node);
 			trackAttribute(node, "dir", "ndsSalesOriginalDir", direction);
 			trackAttribute(node, "data-sales-direction", "ndsSalesOriginalDataSalesDirection", direction);
+			trackInlineStyle(node, "direction", "ndsSalesOriginalInlineDirection", direction);
+			trackInlineStyle(node, "text-align", "ndsSalesOriginalInlineTextAlign", direction === "rtl" ? "right" : "left");
 			if (language) trackAttribute(node, "lang", "ndsSalesOriginalLang", language);
 		});
 	}
@@ -144,6 +168,8 @@ const salesDashboard = (() => {
 			restoreTrackedAttribute(node, "dir", "ndsSalesOriginalDir");
 			restoreTrackedAttribute(node, "data-sales-direction", "ndsSalesOriginalDataSalesDirection");
 			restoreTrackedAttribute(node, "lang", "ndsSalesOriginalLang");
+			restoreInlineStyle(node, "direction", "ndsSalesOriginalInlineDirection");
+			restoreInlineStyle(node, "text-align", "ndsSalesOriginalInlineTextAlign");
 		});
 		directionTargets = [];
 	}
