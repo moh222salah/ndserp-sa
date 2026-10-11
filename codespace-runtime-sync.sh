@@ -150,6 +150,8 @@ for key in required:
             ".nds-accounts-month-bars",
             ".nds-accounts-invoice-table",
             ".nds-accounts-status.overdue",
+            ".nds-accounts-rtl",
+            ".nds-accounts-ltr",
             "grid-template-columns:repeat(4,minmax(0,1fr))",
         )
         missing = [marker for marker in required_accounts_css if marker not in css_compact]
@@ -305,17 +307,11 @@ for key in required:
             "nds-accounts-kpi-indicator",
             "nds-accounts-invoice-table",
             "Accounts Dashboard",
-            "386,400",
-            "1,284,600",
-            "898,200",
-            "214,500",
-            "12.4%",
-            "4.6%",
-            "SI-2026-0339",
-            "SI-2026-0321",
-            "SI-2026-0330",
-            "SI-2026-0335",
-            "SI-2026-0337",
+            "GL Entry",
+            "Sales Invoice",
+            "frappe.client.get_list",
+            "nds-accounts-rtl",
+            "nds-accounts-ltr",
         )
         missing = [marker for marker in required_accounts_js if marker not in js]
         if missing:

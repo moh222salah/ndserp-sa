@@ -314,6 +314,12 @@ jobs:
           grep -Fq 'ACCOUNTS_WORKSPACE_JS=PASS' codespace-runtime-sync.sh
           grep -Fq 'SERVED_ACCOUNTS_WORKSPACE_CSS=PASS' codespace-verify-runtime.sh
           grep -Fq 'SERVED_ACCOUNTS_WORKSPACE_JS=PASS' codespace-verify-runtime.sh
+          node --check --input-type=module < apps/amir_theme_v16/amir_theme_v16/src/js/core/accounts_dashboard.js
+          grep -Fq 'syncWorkspaceDirection(page, language)' apps/amir_theme_v16/amir_theme_v16/src/js/core/accounts_dashboard.js
+          grep -Fq 'byDate(company,inc,start,now)' apps/amir_theme_v16/amir_theme_v16/src/js/core/accounts_dashboard.js
+          grep -Fq 'nds-accounts-rtl' apps/amir_theme_v16/amir_theme_v16/src/scss/components/_accounts-dashboard.scss
+          grep -Fq 'nds-accounts-ltr' apps/amir_theme_v16/amir_theme_v16/src/scss/components/_accounts-dashboard.scss
+          ! grep -Eq '386,400|1,284,600|898,200|214,500|SI-2026-0339|SI-2026-0321' apps/amir_theme_v16/amir_theme_v16/src/js/core/accounts_dashboard.js
           echo "ACCOUNTS_WORKSPACE_SOURCE=PASS"
 
       - name: Verify purchase workspace source and served-asset gates

@@ -70,7 +70,7 @@ for marker in '.nds-warehouse-workspace' 'border-block-start:3pxsolid#0a2342' '.
   fi
 done
 echo "BUILT_WAREHOUSE_WORKSPACE_CSS=PASS"
-for marker in '.amt-accounts-workspace' '.codex-editor__redactor' 'grid-template-columns:repeat(12,minmax(0,1fr))' '#bd5548' '.nds-accounts-dashboard' '.nds-accounts-kpi-grid' '.nds-accounts-kpi-indicator' '.nds-accounts-analysis-grid' '.nds-accounts-expense-list' '.nds-accounts-expenses-axis' '.nds-accounts-chart-plot' '.nds-accounts-month-bars' '.nds-accounts-invoice-table' '.nds-accounts-status.overdue' 'grid-template-columns:repeat(4,minmax(0,1fr))'; do
+for marker in '.amt-accounts-workspace' '.codex-editor__redactor' 'grid-template-columns:repeat(12,minmax(0,1fr))' '#bd5548' '.nds-accounts-dashboard' '.nds-accounts-kpi-grid' '.nds-accounts-kpi-indicator' '.nds-accounts-analysis-grid' '.nds-accounts-expense-list' '.nds-accounts-expenses-axis' '.nds-accounts-chart-plot' '.nds-accounts-month-bars' '.nds-accounts-invoice-table' '.nds-accounts-status.overdue' '.nds-accounts-rtl' '.nds-accounts-ltr' 'grid-template-columns:repeat(4,minmax(0,1fr))'; do
   if ! grep -Fq "$marker" "$LOCAL_CSS"; then
     echo "BUILT_ACCOUNTS_WORKSPACE_CSS=FAIL:MISSING_MARKER:$marker"
     exit 30
@@ -177,7 +177,7 @@ for marker in '.nds-warehouse-workspace' 'border-block-start:3pxsolid#0a2342' '.
   fi
 done
 echo "SERVED_WAREHOUSE_WORKSPACE_CSS=PASS"
-for marker in '.amt-accounts-workspace' '.codex-editor__redactor' 'grid-template-columns:repeat(12,minmax(0,1fr))' '#bd5548' '.nds-accounts-dashboard' '.nds-accounts-kpi-grid' '.nds-accounts-kpi-indicator' '.nds-accounts-analysis-grid' '.nds-accounts-expense-list' '.nds-accounts-expenses-axis' '.nds-accounts-chart-plot' '.nds-accounts-month-bars' '.nds-accounts-invoice-table' '.nds-accounts-status.overdue' 'grid-template-columns:repeat(4,minmax(0,1fr))'; do
+for marker in '.amt-accounts-workspace' '.codex-editor__redactor' 'grid-template-columns:repeat(12,minmax(0,1fr))' '#bd5548' '.nds-accounts-dashboard' '.nds-accounts-kpi-grid' '.nds-accounts-kpi-indicator' '.nds-accounts-analysis-grid' '.nds-accounts-expense-list' '.nds-accounts-expenses-axis' '.nds-accounts-chart-plot' '.nds-accounts-month-bars' '.nds-accounts-invoice-table' '.nds-accounts-status.overdue' '.nds-accounts-rtl' '.nds-accounts-ltr' 'grid-template-columns:repeat(4,minmax(0,1fr))'; do
   if ! grep -Fq "$marker" "$LOCAL_CSS"; then
     echo "SERVED_ACCOUNTS_WORKSPACE_CSS=FAIL:MISSING_MARKER:$marker"
     exit 31
@@ -278,7 +278,7 @@ for marker in 'nds-warehouse-workspace' 'nds-warehouse-dashboard' 'nds-warehouse
 done
 echo "BUILT_WAREHOUSE_WORKSPACE_JS=PASS"
 # Verify stable Accounts Dashboard UI/data-fetch markers. KPI values and invoice IDs are live DB data and must not be hard-coded in the bundle.
-for marker in 'amt-accounts-workspace' 'nds-accounts-dashboard' 'nds-accounts-kpi-grid' 'nds-accounts-kpi-indicator' 'nds-accounts-invoice-table' 'Accounts Dashboard' 'Net Profit (Month)' 'Expenses by Account' 'Revenue vs. Expenses' 'Unpaid Invoices' 'frappe.client.get_list'; do
+for marker in 'amt-accounts-workspace' 'nds-accounts-dashboard' 'nds-accounts-kpi-grid' 'nds-accounts-kpi-indicator' 'nds-accounts-invoice-table' 'Accounts Dashboard' 'Net Profit (Month)' 'Expenses by Account' 'Revenue vs. Expenses' 'Unpaid Invoices' 'frappe.client.get_list' 'GL Entry' 'Sales Invoice' 'nds-accounts-rtl' 'nds-accounts-ltr'; do
   if ! grep -Fq "$marker" "$LOCAL_JS_ASSET"; then
     echo "BUILT_ACCOUNTS_DASHBOARD_JS=FAIL:MISSING_MARKER:$marker"
     exit 46
@@ -363,7 +363,7 @@ for marker in 'nds-warehouse-workspace' 'nds-warehouse-dashboard' 'nds-warehouse
   fi
 done
 echo "SERVED_WAREHOUSE_WORKSPACE_JS=PASS"
-for marker in 'amt-accounts-workspace' 'nds-accounts-dashboard' 'nds-accounts-kpi-grid' 'nds-accounts-kpi-indicator' 'nds-accounts-invoice-table' 'Accounts Dashboard' 'Net Profit (Month)' 'Expenses by Account' 'Revenue vs. Expenses' 'Unpaid Invoices' 'frappe.client.get_list'; do
+for marker in 'amt-accounts-workspace' 'nds-accounts-dashboard' 'nds-accounts-kpi-grid' 'nds-accounts-kpi-indicator' 'nds-accounts-invoice-table' 'Accounts Dashboard' 'Net Profit (Month)' 'Expenses by Account' 'Revenue vs. Expenses' 'Unpaid Invoices' 'frappe.client.get_list' 'GL Entry' 'Sales Invoice' 'nds-accounts-rtl' 'nds-accounts-ltr'; do
   if ! grep -Fq "$marker" "$SERVED_JS"; then
     echo "SERVED_ACCOUNTS_DASHBOARD_JS=FAIL:MISSING_MARKER:$marker"
     exit 47
