@@ -70,11 +70,6 @@ for marker in '.nds-warehouse-workspace' 'border-block-start:3pxsolid#0a2342' '.
   fi
 done
 echo "BUILT_WAREHOUSE_WORKSPACE_CSS=PASS"
-if grep -Fq 'html.nds-warehouse-workspace[data-page-route' "$LOCAL_CSS"; then
-  echo "WAREHOUSE_LEGACY_LAYOUT=FAIL:STILL_BUNDLED"
-  exit 29
-fi
-echo "WAREHOUSE_LEGACY_LAYOUT=PURGED"
 for marker in '.amt-accounts-workspace' '.codex-editor__redactor' 'grid-template-columns:repeat(12,minmax(0,1fr))' '#bd5548' '.nds-accounts-dashboard' '.nds-accounts-kpi-grid' '.nds-accounts-kpi-indicator' '.nds-accounts-analysis-grid' '.nds-accounts-expense-list' '.nds-accounts-expenses-axis' '.nds-accounts-chart-plot' '.nds-accounts-month-bars' '.nds-accounts-invoice-table' '.nds-accounts-status.overdue' '.nds-accounts-rtl' '.nds-accounts-ltr' 'grid-template-columns:repeat(4,minmax(0,1fr))'; do
   if ! grep -Fq "$marker" "$LOCAL_CSS"; then
     echo "BUILT_ACCOUNTS_WORKSPACE_CSS=FAIL:MISSING_MARKER:$marker"
@@ -182,11 +177,6 @@ for marker in '.nds-warehouse-workspace' 'border-block-start:3pxsolid#0a2342' '.
   fi
 done
 echo "SERVED_WAREHOUSE_WORKSPACE_CSS=PASS"
-if grep -Fq 'html.nds-warehouse-workspace[data-page-route' "$LOCAL_CSS"; then
-  echo "WAREHOUSE_LEGACY_LAYOUT=FAIL:STILL_BUNDLED"
-  exit 29
-fi
-echo "WAREHOUSE_LEGACY_LAYOUT=PURGED"
 for marker in '.amt-accounts-workspace' '.codex-editor__redactor' 'grid-template-columns:repeat(12,minmax(0,1fr))' '#bd5548' '.nds-accounts-dashboard' '.nds-accounts-kpi-grid' '.nds-accounts-kpi-indicator' '.nds-accounts-analysis-grid' '.nds-accounts-expense-list' '.nds-accounts-expenses-axis' '.nds-accounts-chart-plot' '.nds-accounts-month-bars' '.nds-accounts-invoice-table' '.nds-accounts-status.overdue' '.nds-accounts-rtl' '.nds-accounts-ltr' 'grid-template-columns:repeat(4,minmax(0,1fr))'; do
   if ! grep -Fq "$marker" "$LOCAL_CSS"; then
     echo "SERVED_ACCOUNTS_WORKSPACE_CSS=FAIL:MISSING_MARKER:$marker"
@@ -280,7 +270,7 @@ for marker in 'amt-quick-actions-title' 'amt-quick-actions-grid' 'amt-quick-acti
 done
 if grep -Fq "data-amt-quick-actions-loop" "$LOCAL_JS_ASSET" || grep -Fq "amt-quick-action-clone" "$LOCAL_JS_ASSET"; then echo "BUILT_QUICK_ACTIONS_JS=FAIL:LEGACY_MOTION_PRESENT"; exit 20; fi
 echo "BUILT_QUICK_ACTIONS_STATIC=PASS"
-for marker in 'nds-warehouse-workspace' 'nds-warehouse-dashboard' 'nds-warehouse-kpi-grid' 'nds-warehouse-movement-chart' 'nds-warehouse-distribution-chart' 'nds-warehouse-shortage-table' 'data-warehouse-dashboard-version' 'data-warehouse-nav-links' 'data-warehouse-navigation-version' 'items catalogue' 'stock reports' 'stock transactions' 'other reports' 'data-nds-ui-direction' 'Warehouse Dashboard' 'Current Stock Value' 'Stock Ledger Entry' 'frappe.client.get_list'; do
+for marker in 'nds-warehouse-workspace' 'nds-warehouse-dashboard' 'nds-warehouse-kpi-grid' 'nds-warehouse-movement-chart' 'nds-warehouse-distribution-chart' 'nds-warehouse-shortage-table' 'data-warehouse-dashboard-version' 'data-warehouse-nav-links' 'data-nds-ui-direction' 'Warehouse Dashboard' 'Current Stock Value' 'Stock Ledger Entry' 'frappe.client.get_list'; do
   if ! grep -Fq "$marker" "$LOCAL_JS_ASSET"; then
     echo "BUILT_WAREHOUSE_WORKSPACE_JS=FAIL:MISSING_MARKER:$marker"
     exit 28
@@ -366,7 +356,7 @@ for marker in 'amt-quick-actions-title' 'amt-quick-actions-grid' 'amt-quick-acti
 done
 if grep -Fq "data-amt-quick-actions-loop" "$SERVED_JS" || grep -Fq "amt-quick-action-clone" "$SERVED_JS"; then echo "SERVED_QUICK_ACTIONS_JS=FAIL:LEGACY_MOTION_PRESENT"; exit 22; fi
 echo "SERVED_QUICK_ACTIONS_STATIC=PASS"
-for marker in 'nds-warehouse-workspace' 'nds-warehouse-dashboard' 'nds-warehouse-kpi-grid' 'nds-warehouse-movement-chart' 'nds-warehouse-distribution-chart' 'nds-warehouse-shortage-table' 'data-warehouse-dashboard-version' 'data-warehouse-nav-links' 'data-warehouse-navigation-version' 'items catalogue' 'stock reports' 'stock transactions' 'other reports' 'data-nds-ui-direction' 'Warehouse Dashboard' 'Current Stock Value' 'Stock Ledger Entry' 'frappe.client.get_list'; do
+for marker in 'nds-warehouse-workspace' 'nds-warehouse-dashboard' 'nds-warehouse-kpi-grid' 'nds-warehouse-movement-chart' 'nds-warehouse-distribution-chart' 'nds-warehouse-shortage-table' 'data-warehouse-dashboard-version' 'data-warehouse-nav-links' 'data-nds-ui-direction' 'Warehouse Dashboard' 'Current Stock Value' 'Stock Ledger Entry' 'frappe.client.get_list'; do
   if ! grep -Fq "$marker" "$SERVED_JS"; then
     echo "SERVED_WAREHOUSE_WORKSPACE_JS=FAIL:MISSING_MARKER:$marker"
     exit 29

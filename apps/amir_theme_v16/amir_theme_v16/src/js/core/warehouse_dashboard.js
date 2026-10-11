@@ -6,7 +6,7 @@ const warehouseDashboard = (() => {
   "use strict";
   const ID = "nds-warehouse-dashboard";
   const READY = "nds-warehouse-dashboard-ready";
-  const TARGETS = ["مخازن NDS ERP", "المخازن NDS ERP", "لوحة المخازن", "المخازن", "المخزون", "المستودعات", "Stock", "Inventory", "Warehouse Dashboard", "Warehouses NDS ERP", "NDS ERP Warehouses"];
+  const TARGETS = ["مخازن NDS ERP", "المخازن NDS ERP", "لوحة المخازن", "Warehouse Dashboard", "Warehouses NDS ERP", "NDS ERP Warehouses"];
   let installed = false, domObserver = null, langObserver = null, observedBody = null, timers = [];
   const TXT = {
     ar: {
@@ -165,7 +165,7 @@ const warehouseDashboard = (() => {
   }
   function build() {
     const c = t(), board = el("section","nds-warehouse-dashboard");
-    board.id = ID; board.setAttribute("aria-label",c.title); board.setAttribute("data-warehouse-dashboard-version","4"); board.setAttribute("data-warehouse-navigation-version","4"); setDirection(board);
+    board.id = ID; board.setAttribute("aria-label",c.title); board.setAttribute("data-warehouse-dashboard-version","3"); setDirection(board);
     board.innerHTML =
       '<section class="nds-warehouse-kpi-grid" aria-label="'+c.title+'">'+
       '<article class="nds-warehouse-kpi-card" data-kpi="stock-value"><div class="nds-warehouse-kpi-top"><span class="nds-warehouse-kpi-label">'+c.value+'</span><span class="nds-warehouse-kpi-icon" aria-hidden="true">◈</span></div><div class="nds-warehouse-kpi-value" data-kpi-value>—</div><div class="nds-warehouse-kpi-caption" data-kpi-caption>'+c.loading+'</div></article>'+
@@ -192,34 +192,9 @@ const warehouseDashboard = (() => {
   }
   function navigationCategory(value) {
     const text = normalizeNavigationText(value);
-    // Native Frappe Card Break titles define the source groups; links themselves
-    // remain real DOM anchors with their original hrefs, attributes, and handlers.
-    const sectionMap = {
-      "الرئيسية":"home",
-      "الصفحة الرئيسية":"home",
-      "البيانات الرئيسية":"home",
-      "الإعدادات":"home",
-      "items catalogue":"home",
-      "item catalogue":"home",
-      "settings":"home",
-      "serial no and batch":"home",
-      "setup":"home",
-      "stock reports":"reports",
-      "key reports":"reports",
-      "other reports":"reports",
-      "التقارير المخزنية":"reports",
-      "تقارير المخازن":"reports",
-      "تقارير المخزون":"reports",
-      "stock transactions":"movements",
-      "tools":"movements",
-      "الحركات المخزنية":"movements",
-      "حركات المخازن":"movements",
-      "حركات المخزون":"movements"
-    };
-    if (sectionMap[text]) return sectionMap[text];
-    if (/(التقارير المخزنية|تقارير المخازن|تقارير المخزون|التقارير|تقارير|stock reports?|warehouse reports?|inventory reports?|^reports?$|key reports?|other reports?|query report|stock ledger|stock balance report|stock valuation|inventory report|item ageing|item aging|(^|[^a-z])reports?($|[^a-z]))/i.test(text)) return "reports";
-    if (/(الحركات المخزنية|حركات المخازن|حركات المخزون|الحركات|حركات|stock transactions?|inventory movements?|transactions?|stock entries?|stock entry|stock reconciliation|material requests?|material transfers?|delivery notes?|purchase receipts?|pick lists?|packing slips?|stock issues?|stock receipts?|stock transfers?|^tools$)/i.test(text)) return "movements";
-    if (/(الرئيسية|الصفحة الرئيسية|^home$|^main$|main menu|warehouse home|^warehouses?$|^مخازن?$|^المخازن?$|^المخزون$|^المستودعات$|^inventory$|^stock$|^items?$|^الأصناف?$)/i.test(text)) return "home";
+    if (/(التقارير المخزنية|تقارير المخازن|تقارير المخزون|التقارير|تقارير|stock reports?|warehouse reports?|inventory reports?|^reports?$|stock ledger|stock balance report|stock valuation|inventory report|item ageing|item aging)/i.test(text)) return "reports";
+    if (/(الحركات المخزنية|حركات المخازن|حركات المخزون|الحركات|حركات|stock movements?|inventory movements?|transactions?|stock entries?|stock entry|stock reconciliation|material transfers?|delivery notes?|purchase receipts?|pick lists?|packing slips?|stock issues?|stock receipts?|stock transfers?)/i.test(text)) return "movements";
+    if (/(الرئيسية|الصفحة الرئيسية|^home$|^main$|main menu|warehouse home|^warehouses?$|^مخازن?$|^المخازن?$|^items?$|^الأصناف?$)/i.test(text)) return "home";
     return null;
   }
   function navigationLinkLabel(anchor) {
@@ -380,7 +355,7 @@ const warehouseDashboard = (() => {
     if(!isTarget()){cleanup();return;}if(!document.body)return;
     const host=document.querySelector("#page-Workspaces .layout-main-section");if(!host)return;
     const current=document.getElementById(ID);
-    if(current&&current.isConnected&&current.parentElement===host&&current.getAttribute("data-warehouse-dashboard-version")==="4"&&current.getAttribute("data-warehouse-navigation-version")==="4"){setDirection(current);renderNavigation(current);document.documentElement.classList.add(READY);return;}
+    if(current&&current.isConnected&&current.parentElement===host){setDirection(current);renderNavigation(current);document.documentElement.classList.add(READY);return;}
     if(current)current.remove();const board=build();host.insertBefore(board,host.firstChild);document.documentElement.classList.add(READY);
     renderNavigation(board);
     loadData(board).catch(()=>{renderMovement(board,null,null);renderDistribution(board,null);renderShortages(board,null);});

@@ -135,9 +135,6 @@ for key in required:
                 "WAREHOUSE_WORKSPACE_CSS=FAIL:MISSING_MARKERS:" + ",".join(missing)
             )
         print("WAREHOUSE_WORKSPACE_CSS=PASS")
-        if "html.nds-warehouse-workspace[data-page-route" in css_compact:
-            raise SystemExit("WAREHOUSE_LEGACY_LAYOUT=FAIL:STILL_BUNDLED")
-        print("WAREHOUSE_LEGACY_LAYOUT=PURGED")
         required_accounts_css = (
             ".amt-accounts-workspace",
             ".codex-editor__redactor",
@@ -293,11 +290,6 @@ for key in required:
             "nds-warehouse-shortage-table",
             "data-warehouse-dashboard-version",
             "data-warehouse-nav-links",
-            "data-warehouse-navigation-version",
-            "items catalogue",
-            "stock reports",
-            "stock transactions",
-            "other reports",
             "data-nds-ui-direction",
             "Warehouse Dashboard",
             "Current Stock Value",

@@ -69,13 +69,13 @@ jobs:
           test -s apps/amir_theme_v16/amir_theme_v16/src/scss/layouts/_warehouse-workspace.scss
           test -s apps/amir_theme_v16/amir_theme_v16/src/scss/components/_warehouse-dashboard.scss
           test -s apps/amir_theme_v16/amir_theme_v16/src/js/core/warehouse_dashboard.js
-          ! grep -Fq '@import "layouts/warehouse-workspace";' apps/amir_theme_v16/amir_theme_v16/src/scss/amir_theme.bundle.scss
+          grep -Fq '@import "layouts/warehouse-workspace";' apps/amir_theme_v16/amir_theme_v16/src/scss/amir_theme.bundle.scss
           grep -Fq '@import "components/warehouse-dashboard";' apps/amir_theme_v16/amir_theme_v16/src/scss/amir_theme.bundle.scss
           grep -Fq 'import { warehouseDashboard } from "./core/warehouse_dashboard.js";' apps/amir_theme_v16/amir_theme_v16/src/js/amir_theme.bundle.js
           grep -Fq 'warehouseDashboard.mount();' apps/amir_theme_v16/amir_theme_v16/src/js/amir_theme.bundle.js
           grep -Fq 'function syncWarehouseWorkspaceScope()' apps/amir_theme_v16/amir_theme_v16/src/js/core/workspace_enhance.js
-          grep -Fq 'const WAREHOUSE_WORKSPACE_NAMES = ["مخازن NDS ERP", "المخازن NDS ERP", "لوحة المخازن", "المخازن", "المخزون", "المستودعات", "Stock", "Inventory", "Warehouse Dashboard", "Warehouses NDS ERP", "NDS ERP Warehouses"];' apps/amir_theme_v16/amir_theme_v16/src/js/core/workspace_enhance.js
-          grep -Fq 'const TARGETS = ["مخازن NDS ERP", "المخازن NDS ERP", "لوحة المخازن", "المخازن", "المخزون", "المستودعات", "Stock", "Inventory", "Warehouse Dashboard", "Warehouses NDS ERP", "NDS ERP Warehouses"];' apps/amir_theme_v16/amir_theme_v16/src/js/core/warehouse_dashboard.js
+          grep -Fq 'const WAREHOUSE_WORKSPACE_NAMES = ["مخازن NDS ERP", "المخازن NDS ERP", "لوحة المخازن", "Warehouse Dashboard", "Warehouses NDS ERP", "NDS ERP Warehouses"];' apps/amir_theme_v16/amir_theme_v16/src/js/core/workspace_enhance.js
+          grep -Fq 'const TARGETS = ["مخازن NDS ERP", "المخازن NDS ERP", "لوحة المخازن", "Warehouse Dashboard", "Warehouses NDS ERP", "NDS ERP Warehouses"];' apps/amir_theme_v16/amir_theme_v16/src/js/core/warehouse_dashboard.js
           ! grep -Eq '^runtime-sync:' Procfile
           ! grep -Fq "runtime-sync: bash codespace-runtime-sync.sh" codespace-bootstrap.sh
           grep -Fq 'WAREHOUSE_WORKSPACE_CSS=PASS' codespace-runtime-sync.sh
@@ -88,17 +88,14 @@ jobs:
           python3 - <<'PY'
           from pathlib import Path
           css = Path("apps/amir_theme_v16/amir_theme_v16/src/scss/layouts/_warehouse-workspace.scss").read_text(encoding="utf-8")
-          bundle_scss = Path("apps/amir_theme_v16/amir_theme_v16/src/scss/amir_theme.bundle.scss").read_text(encoding="utf-8")
           dashboard_css = Path("apps/amir_theme_v16/amir_theme_v16/src/scss/components/_warehouse-dashboard.scss").read_text(encoding="utf-8")
           dashboard_js = Path("apps/amir_theme_v16/amir_theme_v16/src/js/core/warehouse_dashboard.js").read_text(encoding="utf-8")
           entry_js = Path("apps/amir_theme_v16/amir_theme_v16/src/js/amir_theme.bundle.js").read_text(encoding="utf-8")
           js = Path("apps/amir_theme_v16/amir_theme_v16/src/js/core/workspace_enhance.js").read_text(encoding="utf-8")
           # Only the named workspace receives these layout rules.
           assert 'html.nds-warehouse-workspace [data-page-route="Workspaces"]' in css
-          assert '@import "layouts/warehouse-workspace";' not in bundle_scss
-          assert 'const WAREHOUSE_WORKSPACE_NAMES = ["مخازن NDS ERP", "المخازن NDS ERP", "لوحة المخازن", "المخازن", "المخزون", "المستودعات", "Stock", "Inventory", "Warehouse Dashboard", "Warehouses NDS ERP", "NDS ERP Warehouses"];' in js
-          assert 'data-warehouse-dashboard-version","4"' in dashboard_js
-          assert 'data-warehouse-navigation-version","4"' in dashboard_js
+          assert 'const WAREHOUSE_WORKSPACE_NAMES = ["مخازن NDS ERP", "المخازن NDS ERP", "لوحة المخازن", "Warehouse Dashboard", "Warehouses NDS ERP", "NDS ERP Warehouses"];' in js
+          assert 'data-warehouse-dashboard-version","3"' in dashboard_js
           assert 'data-nds-ui-direction' in dashboard_js
           assert 'document.querySelector("body .navbar .navbar-nav")' in dashboard_js
           assert 'const arabic = candidates.some((value) => value.startsWith("ar"));' in dashboard_js
@@ -114,15 +111,12 @@ jobs:
           modern_header_css = Path("apps/amir_theme_v16/amir_theme_v16/src/scss/components/_modern-header.scss").read_text(encoding="utf-8")
           assert 'html[dir="rtl"] body .navbar .navbar-nav' in modern_header_css
           assert 'html[dir="rtl"] .page-head .navbar-breadcrumbs' in modern_header_css
-          for marker in ("nds-warehouse-dashboard", "nds-warehouse-kpi-grid", "nds-warehouse-movement-chart", "nds-warehouse-distribution-chart", "nds-warehouse-shortage-table", "data-warehouse-dashboard-version", "data-warehouse-nav-links", "data-warehouse-navigation-version", "items catalogue", "stock reports", "stock transactions", "other reports", "Warehouse Dashboard", "Current Stock Value", "Stock Ledger Entry", "frappe.client.get_list"):
+          for marker in ("nds-warehouse-dashboard", "nds-warehouse-kpi-grid", "nds-warehouse-movement-chart", "nds-warehouse-distribution-chart", "nds-warehouse-shortage-table", "data-warehouse-dashboard-version", "data-warehouse-nav-links", "Warehouse Dashboard", "Current Stock Value", "Stock Ledger Entry", "frappe.client.get_list"):
               assert marker in dashboard_js, f"Missing warehouse dashboard JS marker: {marker}"
           assert "warehouseDashboard.mount();" in entry_js
           assert "async function getMovement(company,end,warehouseNames)" in dashboard_js
           assert "async function getShortages(company, warehouseNames)" in dashboard_js
           assert "function renderNavigation(board)" in dashboard_js
-          assert 'const sectionMap = {' in dashboard_js
-          for section_label in ("items catalogue", "stock reports", "key reports", "other reports", "stock transactions", "tools"):
-              assert f'"{section_label}"' in dashboard_js, f"Missing native warehouse section mapping: {section_label}"
           assert 'querySelectorAll(".widget.links-widget-box")' in dashboard_js
           assert "target.appendChild(widget)" in dashboard_js
           assert "target.appendChild(link)" not in dashboard_js
