@@ -221,7 +221,7 @@ const accountsDashboard = (() => {
 	}
 
 	function normalizeSectionTitle(value) {
-		return normalize(value).replace(/[\\u064B-\\u065F\\u0670\\u0640]/g, "").replace(/[.:：]+$/g, "");
+		return normalize(value).replace(/[\u064B-\u065F\u0670\u0640]/g, "").replace(/[.:：]+$/g, "");
 	}
 
 	function collectNativeAccountWidgets(sourceEditor, section) {
