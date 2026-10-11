@@ -134,7 +134,7 @@ const warehouseDashboard = (() => {
   }
   function build() {
     const c = t(), board = el("section","nds-warehouse-dashboard");
-    board.id = ID; board.setAttribute("aria-label",c.title); board.setAttribute("data-warehouse-dashboard-version","2"); setDirection(board);
+    board.id = ID; board.setAttribute("aria-label",c.title); board.setAttribute("data-warehouse-dashboard-version","3"); setDirection(board);
     board.innerHTML =
       '<section class="nds-warehouse-kpi-grid" aria-label="'+c.title+'">'+
       '<article class="nds-warehouse-kpi-card" data-kpi="stock-value"><div class="nds-warehouse-kpi-top"><span class="nds-warehouse-kpi-label">'+c.value+'</span><span class="nds-warehouse-kpi-icon" aria-hidden="true">◈</span></div><div class="nds-warehouse-kpi-value" data-kpi-value>—</div><div class="nds-warehouse-kpi-caption" data-kpi-caption>'+c.loading+'</div></article>'+
