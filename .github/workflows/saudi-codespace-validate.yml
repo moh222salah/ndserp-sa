@@ -109,7 +109,9 @@ jobs:
           assert "async function getShortages(company, warehouseNames)" in dashboard_js
           assert "function renderNavigation(board)" in dashboard_js
           assert 'querySelectorAll(".widget.links-widget-box")' in dashboard_js
-          assert "target.appendChild(link)" in dashboard_js
+          assert "target.appendChild(widget)" in dashboard_js
+          assert "target.appendChild(link)" not in dashboard_js
+          assert "Move the complete native Frappe widget" in dashboard_js
           assert 'data-warehouse-nav-links="home"' in dashboard_js
           assert 'data-warehouse-nav-links="reports"' in dashboard_js
           assert 'data-warehouse-nav-links="movements"' in dashboard_js
