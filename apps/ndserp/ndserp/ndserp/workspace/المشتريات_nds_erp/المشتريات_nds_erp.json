@@ -1,0 +1,215 @@
+{
+ "app": "ndserp",
+ "charts": [],
+ "content": "[{\"id\":\"-RN08SIYvg\",\"type\":\"spacer\",\"data\":{\"col\":12}},{\"id\":\"HuLTv4oxD0\",\"type\":\"card\",\"data\":{\"card_name\":\"\u0627\u0644\u0631\u0626\u064a\u0633\u064a\u0629\",\"col\":4}},{\"id\":\"-y_pF0TU94\",\"type\":\"card\",\"data\":{\"card_name\":\"\u0627\u0644\u062a\u0642\u0627\u0631\u064a\u0631 \u0627\u0644\u0631\u0626\u064a\u0633\u064a\u0629\",\"col\":4}},{\"id\":\"ejLaDMdPMj\",\"type\":\"card\",\"data\":{\"card_name\":\"\u0627\u0644\u0627\u0635\u0646\u0627\u0641 \u0648 \u0627\u0644\u062a\u0633\u0639\u064a\u0631 \",\"col\":4}},{\"id\":\"6XwkBoAS0J\",\"type\":\"card\",\"data\":{\"card_name\":\"\u0627\u0644\u0645\u0648\u0631\u062f\",\"col\":4}}]",
+ "creation": "2026-10-06 22:18:25.938921",
+ "custom_blocks": [],
+ "docstatus": 0,
+ "doctype": "Workspace",
+ "for_user": "",
+ "hide_custom": 0,
+ "icon": "buying",
+ "idx": 0,
+ "indicator_color": "blue",
+ "is_hidden": 0,
+ "label": "\u0627\u0644\u0645\u0634\u062a\u0631\u064a\u0627\u062a NDS ERP",
+ "links": [
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "\u0627\u0644\u0631\u0626\u064a\u0633\u064a\u0629",
+   "link_count": 3,
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Card Break"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "\u0637\u0644\u0628 \u0627\u0644\u0634\u0631\u0627\u0621",
+   "link_count": 0,
+   "link_to": "Material Request",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "\u0627\u0645\u0631 \u0627\u0644\u0634\u0631\u0627\u0621",
+   "link_count": 0,
+   "link_to": "Purchase Order",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "\u0641\u0627\u062a\u0648\u0631\u0629 \u0627\u0644\u0634\u0631\u0627\u0621",
+   "link_count": 0,
+   "link_to": "Purchase Invoice",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "\u0627\u0644\u062a\u0642\u0627\u0631\u064a\u0631 \u0627\u0644\u0631\u0626\u064a\u0633\u064a\u0629",
+   "link_count": 4,
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Card Break"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "\u062a\u062d\u0644\u064a\u0644 \u0627\u0644\u0645\u0634\u062a\u0631\u064a\u0627\u062a",
+   "link_count": 0,
+   "link_to": "Purchase Analytics",
+   "link_type": "Report",
+   "onboard": 0,
+   "report_ref_doctype": "Purchase Order",
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "\u062a\u062d\u0644\u064a\u0644 \u0627\u0648\u0627\u0645\u0631 \u0627\u0644\u0634\u0631\u0627\u0621",
+   "link_count": 0,
+   "link_to": "Purchase Order Analysis",
+   "link_type": "Report",
+   "onboard": 0,
+   "report_ref_doctype": "Purchase Order",
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "\u0627\u0643\u062b\u0631 \u0627\u0644\u0627\u0635\u0646\u0627\u0641 \u0627\u0644\u0645\u0637\u0644\u0648\u0628\u0629",
+   "link_count": 0,
+   "link_to": "Purchase Order Trends",
+   "link_type": "Report",
+   "onboard": 0,
+   "report_ref_doctype": "Purchase Order",
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 1,
+   "label": "\u0627\u0644\u0627\u0635\u0646\u0627\u0641 \u0627\u0644\u062c\u0627\u0647\u0632\u0629 \u0644\u0644\u0623\u0633\u062a\u0644\u0627\u0645",
+   "link_count": 0,
+   "link_to": "Requested Items to Order and Receive",
+   "link_type": "Report",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "\u0627\u0644\u0627\u0635\u0646\u0627\u0641 \u0648 \u0627\u0644\u062a\u0633\u0639\u064a\u0631 ",
+   "link_count": 3,
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Card Break"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "\u0627\u0644\u0635\u0646\u0641",
+   "link_count": 0,
+   "link_to": "Item",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "\u0645\u062c\u0645\u0648\u0639\u0627\u062a \u0627\u0644\u0627\u0635\u0646\u0627\u0641",
+   "link_count": 0,
+   "link_to": "Item Group",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "\u0642\u0627\u0626\u0645\u0629 \u0627\u0644\u062a\u0633\u0639\u064a\u0631",
+   "link_count": 0,
+   "link_to": "Price List",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "\u0627\u0644\u0645\u0648\u0631\u062f",
+   "link_count": 4,
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Card Break"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "\u0627\u0644\u0645\u0648\u0631\u062f",
+   "link_count": 0,
+   "link_to": "Supplier",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "\u0645\u062c\u0645\u0648\u0639\u0627\u062a \u0627\u0644\u0645\u0648\u0631\u062f\u064a\u0646",
+   "link_count": 0,
+   "link_to": "Supplier Group",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "\u0639\u0646\u0627\u0648\u064a\u0646 \u0627\u0644\u0627\u062a\u0635\u0627\u0644",
+   "link_count": 0,
+   "link_to": "Contact",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "\u0627\u0644\u0639\u0646\u0648\u0627\u0646",
+   "link_count": 0,
+   "link_to": "Address",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  }
+ ],
+ "modified": "2026-10-11 00:14:51.513667",
+ "modified_by": "Administrator",
+ "module": "Ndserp",
+ "name": "\u0627\u0644\u0645\u0634\u062a\u0631\u064a\u0627\u062a NDS ERP",
+ "number_cards": [],
+ "owner": "Administrator",
+ "parent_page": "",
+ "public": 1,
+ "quick_lists": [],
+ "roles": [
+  {
+   "role": "\u0627\u0644\u0645\u0634\u062a\u0631\u064a\u0627\u062a NDS ERP"
+  }
+ ],
+ "sequence_id": 44.0,
+ "shortcuts": [],
+ "title": "\u0627\u0644\u0645\u0634\u062a\u0631\u064a\u0627\u062a NDS ERP",
+ "type": "Workspace"
+}
