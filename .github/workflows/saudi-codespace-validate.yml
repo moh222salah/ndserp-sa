@@ -337,6 +337,9 @@ jobs:
           grep -Fq '@import "components/purchase-dashboard";' apps/amir_theme_v16/amir_theme_v16/src/scss/amir_theme.bundle.scss
           grep -Fq '.nds-purchase-dashboard' apps/amir_theme_v16/amir_theme_v16/src/scss/components/_purchase-dashboard.scss
           grep -Fq 'PURCHASE_DASHBOARD_CSS=PASS' codespace-runtime-sync.sh
+          grep -Fq 'PURCHASE_DASHBOARD_TOP_METADATA_SOURCE=PASS' codespace-runtime-sync.sh
+          grep -Fq 'PURCHASE_DASHBOARD_TOP_METADATA_SOURCE=PASS' codespace-verify-runtime.sh
+          grep -Fq 'PURCHASE_SOURCE_JS="$ROOT/apps/amir_theme_v16/amir_theme_v16/src/js/core/purchases_dashboard.js"' codespace-verify-runtime.sh
           grep -Fq 'PURCHASE_DASHBOARD_JS=PASS' codespace-runtime-sync.sh
           grep -Fq 'BUILT_PURCHASE_DASHBOARD_CSS=PASS' codespace-verify-runtime.sh
           grep -Fq 'SERVED_PURCHASE_DASHBOARD_CSS=PASS' codespace-verify-runtime.sh
