@@ -465,9 +465,41 @@ body.nds-sales-workspace-redesign.nds-sales-dashboard-ready #page-Workspaces[dir
   direction: ltr;
   text-align: left;
 }
-/* Preserve the standard header layout; align only its title to the active language. */
-body.nds-sales-workspace-redesign.nds-sales-dashboard-ready #page-Workspaces .page-head {
+/* Keep cards, link rows, chart labels and table contents in the same flow as the page. */
+body.nds-sales-workspace-redesign.nds-sales-dashboard-ready #page-Workspaces[dir=rtl] .layout-main-section .widget,
+body.nds-sales-workspace-redesign.nds-sales-dashboard-ready #page-Workspaces[dir=rtl] .layout-main-section .shortcut-widget-box,
+body.nds-sales-workspace-redesign.nds-sales-dashboard-ready #page-Workspaces[dir=rtl] .layout-main-section .links-widget-box,
+body.nds-sales-workspace-redesign.nds-sales-dashboard-ready #page-Workspaces[dir=rtl] .layout-main-section .number-widget-box,
+body.nds-sales-workspace-redesign.nds-sales-dashboard-ready #page-Workspaces[dir=rtl] .layout-main-section .chart-widget,
+body.nds-sales-workspace-redesign.nds-sales-dashboard-ready #page-Workspaces[dir=rtl] .layout-main-section table {
+  direction: rtl;
+  text-align: right;
+}
+body.nds-sales-workspace-redesign.nds-sales-dashboard-ready #page-Workspaces[dir=ltr] .layout-main-section .widget,
+body.nds-sales-workspace-redesign.nds-sales-dashboard-ready #page-Workspaces[dir=ltr] .layout-main-section .shortcut-widget-box,
+body.nds-sales-workspace-redesign.nds-sales-dashboard-ready #page-Workspaces[dir=ltr] .layout-main-section .links-widget-box,
+body.nds-sales-workspace-redesign.nds-sales-dashboard-ready #page-Workspaces[dir=ltr] .layout-main-section .number-widget-box,
+body.nds-sales-workspace-redesign.nds-sales-dashboard-ready #page-Workspaces[dir=ltr] .layout-main-section .chart-widget,
+body.nds-sales-workspace-redesign.nds-sales-dashboard-ready #page-Workspaces[dir=ltr] .layout-main-section table {
   direction: ltr;
+  text-align: left;
+}
+/* The full Sales Workspace header and content follow the active language direction. */
+body.nds-sales-workspace-redesign.nds-sales-dashboard-ready #page-Workspaces .page-head {
+  direction: inherit;
+  text-align: start;
+}
+body.nds-sales-workspace-redesign.nds-sales-dashboard-ready #page-Workspaces[dir=rtl] .page-head,
+body.nds-sales-workspace-redesign.nds-sales-dashboard-ready #page-Workspaces[dir=rtl] .page-head .page-title,
+body.nds-sales-workspace-redesign.nds-sales-dashboard-ready #page-Workspaces[dir=rtl] .page-head .title-area {
+  direction: rtl;
+  text-align: right;
+}
+body.nds-sales-workspace-redesign.nds-sales-dashboard-ready #page-Workspaces[dir=ltr] .page-head,
+body.nds-sales-workspace-redesign.nds-sales-dashboard-ready #page-Workspaces[dir=ltr] .page-head .page-title,
+body.nds-sales-workspace-redesign.nds-sales-dashboard-ready #page-Workspaces[dir=ltr] .page-head .title-area {
+  direction: ltr;
+  text-align: left;
 }
 body.nds-sales-workspace-redesign.nds-sales-dashboard-ready #page-Workspaces .page-head .title-text[dir=rtl] {
   direction: rtl;
