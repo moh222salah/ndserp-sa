@@ -9,7 +9,7 @@ body.nds-purchase-dashboard-ready #page-Workspaces .nds-purchase-dashboard-bread
 body.nds-purchase-dashboard-ready #page-Workspaces .nds-purchase-dashboard-period{display:inline-flex;align-items:center;gap:9px;flex:0 0 auto;padding:9px 13px;border:1px solid var(--nds-purchase-line);border-radius:12px;background:#fff;color:var(--nds-purchase-ink);font-size:12px;font-weight:650;box-shadow:0 3px 10px rgba(10,35,66,.035)}
 body.nds-purchase-dashboard-ready #page-Workspaces .nds-purchase-kpi-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:15px;margin-bottom:18px}
 body.nds-purchase-dashboard-ready #page-Workspaces .nds-purchase-kpi-card{position:relative;min-width:0;min-height:146px;padding:18px;overflow:hidden;border:1px solid var(--nds-purchase-line);border-radius:15px;background:#fff;box-shadow:0 4px 14px rgba(15,35,65,.045);transition:transform .18s ease,box-shadow .18s ease,border-color .18s ease}
-body.nds-purchase-dashboard-ready #page-Workspaces .nds-purchase-kpi-card:before{position:absolute;inset-block:0;inset-inline-start:0;width:3px;background:var(--nds-purchase-blue);content:""}
+body.nds-purchase-dashboard-ready #page-Workspaces .nds-purchase-kpi-card:before{position:absolute;inset-block-start:0;inset-inline:0;height:3px;background:var(--nds-purchase-blue);content:""}
 body.nds-purchase-dashboard-ready #page-Workspaces .nds-purchase-kpi-card[data-kpi=open]:before{background:var(--nds-purchase-gold)}
 body.nds-purchase-dashboard-ready #page-Workspaces .nds-purchase-kpi-card[data-kpi=suppliers]:before{background:#2d936c}
 body.nds-purchase-dashboard-ready #page-Workspaces .nds-purchase-kpi-card[data-kpi=lead]:before{background:#7b61b3}
