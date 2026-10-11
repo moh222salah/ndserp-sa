@@ -197,23 +197,32 @@ const warehouseDashboard = (() => {
         if (!links.length) return;
         const widgetTitle = widget.querySelector(".widget-head .widget-title");
         const fixedCategory = widgetTitle ? navigationCategory(widgetTitle.textContent) : null;
+        const scores = {home:0,reports:0,movements:0};
         links.forEach((link) => {
-          const category = fixedCategory || navigationCategory(navigationLinkLabel(link)) || "home";
-          const target = section.querySelector('[data-warehouse-nav-links="' + category + '"]');
-          if (!target) return;
-          link.classList.add("nds-warehouse-nav-link");
-          const empty = target.querySelector("[data-nav-empty]");
-          if (empty) empty.remove();
-          if (link.parentElement !== target) target.appendChild(link);
+          const category = navigationCategory(navigationLinkLabel(link));
+          if (category) scores[category] += 1;
         });
+        const inferredCategory = Object.keys(scores).sort((a,b)=>scores[b]-scores[a]).find((key)=>scores[key] > 0);
+        const category = fixedCategory || inferredCategory || "home";
+        const target = section.querySelector('[data-warehouse-nav-links="' + category + '"]');
+        if (!target) return;
+        const empty = target.querySelector("[data-nav-empty]");
+        if (empty) empty.remove();
+
+        // Move the complete native Frappe widget, not its individual anchors.
+        // This preserves the original DOM ancestry, delegated click handlers,
+        // hrefs, data attributes, and all real routes.
         const sourceBlock = widget.closest(".ce-block");
-        if (sourceBlock && !widget.querySelector(".widget-body > a.link-item")) {
+        widget.setAttribute("data-nds-warehouse-nav-source", "1");
+        links.forEach((link) => link.classList.add("nds-warehouse-nav-link"));
+        target.appendChild(widget);
+        if (sourceBlock && !sourceBlock.querySelector(".widget.links-widget-box")) {
           sourceBlock.classList.add("nds-warehouse-links-consumed");
         }
       });
     }
     section.querySelectorAll("[data-warehouse-nav-links]").forEach((target) => {
-      if (target.querySelector("a.link-item")) return;
+      if (target.querySelector(".widget.links-widget-box .widget-body > a.link-item")) return;
       if (!target.querySelector("[data-nav-empty]")) {
         const empty = el("p", "nds-warehouse-nav-empty", c.noNavigationLinks);
         empty.setAttribute("data-nav-empty", "1");
