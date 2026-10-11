@@ -37,9 +37,14 @@ const warehouseDashboard = (() => {
     }
   };
   function t() {
-    const lang = String((window.frappe && frappe.boot && frappe.boot.lang) ||
-      (document.documentElement && document.documentElement.getAttribute("lang")) || "en").toLowerCase();
-    return TXT[lang.startsWith("ar") ? "ar" : "en"];
+    const root = document.documentElement;
+    const documentLanguage = String(root && root.getAttribute("lang") || "").toLowerCase();
+    const bootLanguage = String(window.frappe && frappe.boot && frappe.boot.lang || "").toLowerCase();
+    const candidates = [documentLanguage, bootLanguage];
+    const arabic = candidates.some((value) => value.startsWith("ar"));
+    const english = candidates.some((value) => value.startsWith("en"));
+    const language = arabic ? "ar" : english ? "en" : String(root && root.getAttribute("dir") || "").toLowerCase() === "rtl" ? "ar" : "en";
+    return TXT[language];
   }
   function norm(value) { return String(value || "").trim().toLowerCase().replace(/[_\s]+/g, "-"); }
   function isTarget() {
@@ -59,19 +64,45 @@ const warehouseDashboard = (() => {
   function setDirection(board) {
     const language = t() === TXT.ar ? "ar" : "en";
     const direction = language === "ar" ? "rtl" : "ltr";
-    board.setAttribute("lang", language);
-    board.setAttribute("dir", direction);
-
-    // Apply the language direction to the whole active Workspace, not just
-    // the injected dashboard; remember the previous value for clean teardown.
+    const root = document.documentElement;
+    const body = document.body;
     const page = document.querySelector("#page-Workspaces");
-    if (page) {
-      if (page.dataset.ndsWarehouseDirectionApplied !== "1") {
-        page.dataset.ndsWarehousePreviousDir = page.getAttribute("dir") || "";
-        page.dataset.ndsWarehouseDirectionApplied = "1";
+    const pageHeader = page && page.querySelector(".page-head");
+    const targets = [
+      root,
+      body,
+      document.querySelector("body .navbar"),
+      document.querySelector("body .navbar .container-fluid"),
+      document.querySelector("body .navbar .navbar-collapse"),
+      document.querySelector("body .navbar .navbar-nav"),
+      page,
+      pageHeader,
+      pageHeader && pageHeader.querySelector(".page-head-content"),
+      pageHeader && pageHeader.querySelector(".title-area"),
+      pageHeader && pageHeader.querySelector(".title-text"),
+      pageHeader && pageHeader.querySelector(".navbar-breadcrumbs"),
+      pageHeader && pageHeader.querySelectorAll(".navbar-breadcrumbs li"),
+      page && page.querySelector(".layout-main-section"),
+      page && page.querySelector("#editorjs"),
+      page && page.querySelector("#editorjs .codex-editor__redactor"),
+      board
+    ];
+    const apply = (node) => {
+      if (!node || node.nodeType !== 1) return;
+      if (node.getAttribute("dir") !== direction) node.setAttribute("dir", direction);
+      node.setAttribute("data-nds-ui-direction", direction);
+    };
+    targets.filter(Boolean).forEach((target) => {
+      if (typeof target.forEach === "function" && target.nodeType !== 1) {
+        target.forEach(apply);
+      } else {
+        apply(target);
       }
-      page.setAttribute("dir", direction);
-    }
+    });
+    // Direction is language-wide, not a temporary dashboard style: keep the
+    // Desk root and navbar RTL after reload and on subsequent page navigation.
+    if (root && root.getAttribute("lang") !== language) root.setAttribute("lang", language);
+    if (board) board.setAttribute("lang", language);
   }
   function el(tag, cls, value) {
     const out = document.createElement(tag);
@@ -318,13 +349,6 @@ const warehouseDashboard = (() => {
   function cleanup(){
     const current=document.getElementById(ID);
     if(current)current.remove();
-    const page=document.querySelector("#page-Workspaces");
-    if(page&&page.dataset.ndsWarehouseDirectionApplied==="1"){
-      const previous=page.dataset.ndsWarehousePreviousDir||"";
-      if(previous)page.setAttribute("dir",previous);else page.removeAttribute("dir");
-      delete page.dataset.ndsWarehouseDirectionApplied;
-      delete page.dataset.ndsWarehousePreviousDir;
-    }
     if(document.documentElement)document.documentElement.classList.remove(READY);
   }
   function mountIfReady(){
