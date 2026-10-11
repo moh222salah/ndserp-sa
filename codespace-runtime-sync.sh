@@ -322,6 +322,8 @@ for key in required:
             'en: "Settings"',
             'en: "Reports"',
             "ndsSalesOriginalDataSalesDirection",
+            "trackInlineStyle",
+            "ndsSalesOriginalInlineDirection",
         )
         missing = [marker for marker in required_sales_workspace_js if marker not in js]
         if missing:
