@@ -423,7 +423,8 @@ jobs:
           grep -Fq 'SALES_WORKSPACE_DIRECTION_CSS=PASS' codespace-runtime-sync.sh
           grep -Fq 'SERVED_SALES_WORKSPACE_DIRECTION_CSS=PASS' codespace-verify-runtime.sh
           grep -Fq 'bench --site "$SITE" clear-website-cache' codespace-runtime-sync.sh
-          grep -Fq 'return documentLanguage || bootLanguage || bootUserLanguage || "en";' apps/amir_theme_v16/amir_theme_v16/src/js/core/sales_dashboard.js
+          grep -Fq 'const activeLocale = languages.find((value) => value.startsWith("ar") || value.startsWith("en"));' apps/amir_theme_v16/amir_theme_v16/src/js/core/sales_dashboard.js
+          grep -Fq 'if (activeLocale) return activeLocale;' apps/amir_theme_v16/amir_theme_v16/src/js/core/sales_dashboard.js
           grep -Fq 'if (activeRouteName && !expected.has(activeRouteName)) return false;' apps/amir_theme_v16/amir_theme_v16/src/js/core/sales_dashboard.js
           grep -Fq 'const scoped=Boolean(document.body?.classList.contains("nds-purchase-workspace-redesign"));' apps/amir_theme_v16/amir_theme_v16/src/js/core/purchases_dashboard.js
           grep -Fq 'if(routeName&&!names.has(routeName))return false;' apps/amir_theme_v16/amir_theme_v16/src/js/core/purchases_dashboard.js
