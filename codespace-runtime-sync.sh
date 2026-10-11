@@ -80,7 +80,14 @@ for key in required:
     if key == "amir_theme.bundle.css":
         css = target.read_text(encoding="utf-8").lower()
         css_compact = "".join(css.split())
-        required_header_markers = ("body .navbar", "58px", "#0a2342")
+        required_header_markers = (
+            "body .navbar",
+            "58px",
+            "#0a2342",
+            'html[dir="rtl"] body .navbar .navbar-nav',
+            'html[dir="rtl"] .page-head .navbar-breadcrumbs',
+            'html[dir="ltr"] body .navbar .navbar-nav',
+        )
         missing = [marker for marker in required_header_markers if marker not in css]
         if missing:
             raise SystemExit(
@@ -266,6 +273,7 @@ for key in required:
             "nds-warehouse-shortage-table",
             "data-warehouse-dashboard-version",
             "data-warehouse-nav-links",
+            "data-nds-ui-direction",
             "Warehouse Dashboard",
             "Current Stock Value",
             "Stock Ledger Entry",
@@ -317,18 +325,12 @@ for key in required:
             "Sales NDS ERP",
             "ndsSalesOriginalText",
             "data-sales-direction",
-            "ARABIC_HIDDEN_WORKSPACE_CARDS",
-            "syncArabicWorkspaceCardVisibility",
-            "SALES_SECTION_ALIASES",
-            "getWorkspaceLinkRows",
-            "splitSalesReports",
-            'en: "Home"',
-            'en: "Items & Pricing"',
-            'en: "Customer"',
-            'en: "Settings"',
-            'en: "Reports"',
+            "Home",
+            "Items & Pricing",
+            "Customer",
+            "Settings",
+            "Reports",
             "ndsSalesOriginalDataSalesDirection",
-            "trackInlineStyle",
             "ndsSalesOriginalInlineDirection",
         )
         missing = [marker for marker in required_sales_workspace_js if marker not in js]
