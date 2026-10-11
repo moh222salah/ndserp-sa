@@ -277,7 +277,8 @@ for marker in 'nds-warehouse-workspace' 'nds-warehouse-dashboard' 'nds-warehouse
   fi
 done
 echo "BUILT_WAREHOUSE_WORKSPACE_JS=PASS"
-for marker in 'amt-accounts-workspace' 'nds-accounts-dashboard' 'nds-accounts-kpi-grid' 'nds-accounts-kpi-indicator' 'nds-accounts-invoice-table' 'Accounts Dashboard' '386,400' '1,284,600' '898,200' '214,500' '12.4%' '4.6%' 'SI-2026-0339' 'SI-2026-0321' 'SI-2026-0330' 'SI-2026-0335' 'SI-2026-0337'; do
+# Verify stable Accounts Dashboard UI/data-fetch markers. KPI values and invoice IDs are live DB data and must not be hard-coded in the bundle.
+for marker in 'amt-accounts-workspace' 'nds-accounts-dashboard' 'nds-accounts-kpi-grid' 'nds-accounts-kpi-indicator' 'nds-accounts-invoice-table' 'Accounts Dashboard' 'Net Profit (Month)' 'Expenses by Account' 'Revenue vs. Expenses' 'Unpaid Invoices' 'frappe.client.get_list'; do
   if ! grep -Fq "$marker" "$LOCAL_JS_ASSET"; then
     echo "BUILT_ACCOUNTS_DASHBOARD_JS=FAIL:MISSING_MARKER:$marker"
     exit 46
@@ -362,7 +363,7 @@ for marker in 'nds-warehouse-workspace' 'nds-warehouse-dashboard' 'nds-warehouse
   fi
 done
 echo "SERVED_WAREHOUSE_WORKSPACE_JS=PASS"
-for marker in 'amt-accounts-workspace' 'nds-accounts-dashboard' 'nds-accounts-kpi-grid' 'nds-accounts-kpi-indicator' 'nds-accounts-invoice-table' 'Accounts Dashboard' '386,400' '1,284,600' '898,200' '214,500' '12.4%' '4.6%' 'SI-2026-0339' 'SI-2026-0321' 'SI-2026-0330' 'SI-2026-0335' 'SI-2026-0337'; do
+for marker in 'amt-accounts-workspace' 'nds-accounts-dashboard' 'nds-accounts-kpi-grid' 'nds-accounts-kpi-indicator' 'nds-accounts-invoice-table' 'Accounts Dashboard' 'Net Profit (Month)' 'Expenses by Account' 'Revenue vs. Expenses' 'Unpaid Invoices' 'frappe.client.get_list'; do
   if ! grep -Fq "$marker" "$SERVED_JS"; then
     echo "SERVED_ACCOUNTS_DASHBOARD_JS=FAIL:MISSING_MARKER:$marker"
     exit 47
