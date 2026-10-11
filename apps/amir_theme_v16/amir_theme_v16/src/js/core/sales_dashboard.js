@@ -18,6 +18,9 @@ const salesDashboard = (() => {
 	let observedBody = null;
 	let installStarted = false;
 	let directionTargets = [];
+	const SALES_WORKSPACE_LINK_ROWS = new Map();
+	const SALES_WORKSPACE_LINK_REQUESTS = new Set();
+	const SALES_WORKSPACE_LINK_FAILURES = new Set();
 
 	function routeName(value) {
 		return String(value || "").trim().toLowerCase().replace(/[_\s]+/g, "-");
@@ -476,7 +479,7 @@ const salesDashboard = (() => {
 			try { return JSON.parse(value); } catch (_) { return null; }
 		};
 		let rows = parse(page && page.links);
-		if (Array.isArray(rows)) return rows;
+		if (Array.isArray(rows) && rows.length) return rows;
 		if (rows && typeof rows === "object") {
 			const values = Object.values(rows);
 			if (values.length && values.some((item) => item && (item.type || item.link_to))) return values;
@@ -502,12 +505,80 @@ const salesDashboard = (() => {
 		return [];
 	}
 
+	// Frappe v16 builds Workspace navigation from permission-filtered desktop-page
+	// data. The Workspace list itself contains Editor.js content, not these links.
+	function requestSalesWorkspaceLinkRows(page) {
+		const name = String(page && page.name || "").trim();
+		if (!name || !window.frappe || typeof frappe.call !== "function" ||
+			SALES_WORKSPACE_LINK_ROWS.has(name) ||
+			SALES_WORKSPACE_LINK_REQUESTS.has(name) ||
+			SALES_WORKSPACE_LINK_FAILURES.has(name)) return;
+
+		SALES_WORKSPACE_LINK_REQUESTS.add(name);
+		let request;
+		try {
+			request = frappe.call({
+				method: "frappe.desk.desktop.get_desktop_page",
+				args: {
+					page: {
+						name,
+						title: page.title || name,
+						public: page.public ? 1 : 0,
+					},
+				},
+				type: "GET",
+			});
+		} catch (_) {
+			SALES_WORKSPACE_LINK_REQUESTS.delete(name);
+			SALES_WORKSPACE_LINK_FAILURES.add(name);
+			return;
+		}
+
+		Promise.resolve(request).then((response) => {
+			const cards = response && response.message && response.message.cards &&
+				response.message.cards.items;
+			if (!Array.isArray(cards)) {
+				SALES_WORKSPACE_LINK_FAILURES.add(name);
+				return;
+			}
+			const rows = [];
+			cards.forEach((card) => {
+				if (!card) return;
+				rows.push({
+					type: "Card Break",
+					label: card.label || card.card_name || card.title || "",
+					hidden: card.hidden || 0,
+					only_for: card.only_for || "",
+				});
+				(Array.isArray(card.links) ? card.links : []).forEach((item) => {
+					if (!item || typeof item !== "object") return;
+					rows.push(Object.assign({}, item, { type: item.type || "Link" }));
+				});
+			});
+			SALES_WORKSPACE_LINK_ROWS.set(name, rows);
+		}).catch(() => {
+			SALES_WORKSPACE_LINK_FAILURES.add(name);
+		}).finally(() => {
+			SALES_WORKSPACE_LINK_REQUESTS.delete(name);
+			if (!isSalesWorkspace()) return;
+			const host = document.querySelector("#page-Workspaces .layout-main-section");
+			const board = document.getElementById(DASHBOARD_ID);
+			if (host && board) renderSalesSections(host, board);
+		});
+	}
+
 	function getSalesSectionGroups() {
 		const page = getSalesWorkspaceRecord();
 		const groups = SALES_SECTION_DEFINITIONS.map((definition) => ({ definition, links: [] }));
 		if (!page) return splitSalesReports(groups);
 
-		const links = getWorkspaceLinkRows(page);
+		let links;
+		if (SALES_WORKSPACE_LINK_ROWS.has(page.name)) {
+			links = SALES_WORKSPACE_LINK_ROWS.get(page.name) || [];
+		} else {
+			links = getWorkspaceLinkRows(page);
+			if (!links.length) requestSalesWorkspaceLinkRows(page);
+		}
 		let activeGroup = null;
 		links.forEach((item) => {
 			if (!item) return;
@@ -541,9 +612,27 @@ const salesDashboard = (() => {
 		const splitPoint1 = firstSize;
 		const splitPoint2 = firstSize + secondSize;
 		const reportGroups = [
-			{ definition: { ...reports.definition, key: "reports-1" }, links: reportLinks.slice(0, splitPoint1) },
-			{ definition: { ...reports.definition, key: "reports-2" }, links: reportLinks.slice(splitPoint1, splitPoint2) },
-			{ definition: { ...reports.definition, key: "reports-3" }, links: reportLinks.slice(splitPoint2) },
+			{
+				definition: {
+					...reports.definition, key: "reports-1",
+					ar: "تقارير رئيسية", en: "Main Reports",
+				},
+				links: reportLinks.slice(0, splitPoint1),
+			},
+			{
+				definition: {
+					...reports.definition, key: "reports-2",
+					ar: "تقارير متقدمة", en: "Advanced Reports",
+				},
+				links: reportLinks.slice(splitPoint1, splitPoint2),
+			},
+			{
+				definition: {
+					...reports.definition, key: "reports-3",
+					ar: "تقارير متخصصة", en: "Specialized Reports",
+				},
+				links: reportLinks.slice(splitPoint2),
+			},
 		];
 		return groups.filter((group) => group.definition.key !== "reports").concat(reportGroups);
 	}
@@ -628,7 +717,8 @@ const salesDashboard = (() => {
 		const direction = currentDirection();
 		const language = currentLanguage();
 		const signature = direction + "|" + groups.map((group) =>
-			group.definition.key + ":" + group.links.map((item) => JSON.stringify([
+			group.definition.key + ":" + group.definition.ar + ":" + group.definition.en + ":" +
+			group.links.map((item) => JSON.stringify([
 				item.label || "", item.link_to || "", item.link_type || "", item.url || "",
 				item.filters || "", item.route_options || "", item.hidden || 0, item.only_for || "",
 			])).join(",")
