@@ -82,6 +82,7 @@ jobs:
           grep -Fq 'WAREHOUSE_WORKSPACE_JS=PASS' codespace-runtime-sync.sh
           grep -Fq 'SERVED_WAREHOUSE_WORKSPACE_CSS=PASS' codespace-verify-runtime.sh
           grep -Fq 'SERVED_WAREHOUSE_WORKSPACE_JS=PASS' codespace-verify-runtime.sh
+          grep -Fq 'NDS_FORCE_ASSET_REBUILD=1 NDS_BUILD_LOCK_RETRIES=' codespace-apply-quick-actions-ui.sh
           grep -Fq 'nds-warehouse-dashboard' codespace-runtime-sync.sh
           grep -Fq 'nds-warehouse-dashboard' codespace-verify-runtime.sh
           python3 - <<'PY'
@@ -100,6 +101,8 @@ jobs:
           assert "runtime-sync: bash codespace-runtime-sync.sh" not in Path("codespace-bootstrap.sh").read_text(encoding="utf-8")
           assert "number-widget-box" in css and "dashboard-widget-box" in css
           assert "shortcut-widget-box" in css and "links-widget-box" in css
+          assert "suppress the old EditorJS card layout" in dashboard_css
+          assert ".ce-block:has(.shortcut-widget-box)" in dashboard_css
           for marker in (".nds-warehouse-dashboard", ".nds-warehouse-kpi-grid", ".nds-warehouse-movement-chart", ".nds-warehouse-distribution-chart", ".nds-warehouse-shortage-table", ".nds-warehouse-navigation-grid", ".nds-warehouse-nav-card", ".nds-warehouse-nav-link", "#page-Workspaces[dir=rtl]", "#page-Workspaces[dir=ltr]", "grid-template-columns:repeat(4,minmax(0,1fr))"):
               assert marker in dashboard_css.replace(" ", ""), f"Missing warehouse dashboard CSS marker: {marker}"
           for marker in ("nds-warehouse-dashboard", "nds-warehouse-kpi-grid", "nds-warehouse-movement-chart", "nds-warehouse-distribution-chart", "nds-warehouse-shortage-table", "data-warehouse-dashboard-version", "data-warehouse-nav-links", "Warehouse Dashboard", "Current Stock Value", "Stock Ledger Entry", "frappe.client.get_list"):
