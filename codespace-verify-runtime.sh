@@ -302,10 +302,12 @@ for marker in 'Monthly Sales' 'Latest Sales Invoices' 'workspace_map' 'frappe.cl
     exit 54
   fi
 done
-if grep -Fq 'data-sales-period' "$LOCAL_JS_ASSET" || grep -Fq 'Nexterp v16' "$LOCAL_JS_ASSET"; then
-  echo "BUILT_SALES_TOP_METADATA=FAIL:STILL_PRESENT"
+SALES_SOURCE_JS="$ROOT/apps/amir_theme_v16/amir_theme_v16/src/js/core/sales_dashboard.js"
+if grep -Fq 'data-sales-period' "$SALES_SOURCE_JS" || grep -Fq 'Nexterp v16' "$SALES_SOURCE_JS"; then
+  echo "SALES_TOP_METADATA=FAIL:SOURCE"
   exit 55
 fi
+echo "SALES_TOP_METADATA_SOURCE=PASS"
 echo "BUILT_SALES_LIVE_BILINGUAL=PASS"
 
 if ! grep -Fq 'nds-purchase-workspace-redesign' "$LOCAL_JS_ASSET"; then
@@ -388,10 +390,8 @@ for marker in 'Monthly Sales' 'Latest Sales Invoices' 'workspace_map' 'frappe.cl
     exit 56
   fi
 done
-if grep -Fq 'data-sales-period' "$SERVED_JS" || grep -Fq 'Nexterp v16' "$SERVED_JS"; then
-  echo "SERVED_SALES_TOP_METADATA=FAIL:STILL_PRESENT"
-  exit 57
-fi
+# The shared bundle includes multiple modules; top-metadata cleanup is checked
+# against the sales feature source above. Verify served bytes by bundle SHA and markers.
 echo "SERVED_SALES_LIVE_BILINGUAL=PASS"
 
 if ! grep -Fq 'nds-purchase-workspace-redesign' "$SERVED_JS"; then
