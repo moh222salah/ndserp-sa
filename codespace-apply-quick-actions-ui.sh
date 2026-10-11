@@ -108,7 +108,9 @@ fi
 
 # This one-shot builds and verifies the current sources; serving verification is
 # intentionally deferred until the local Bench server has reloaded its manifest.
-NDS_BUILD_LOCK_RETRIES="${NDS_BUILD_LOCK_RETRIES:-30}" \
+# This is an explicit UI deployment: never trust a matching source marker or cached bundle.
+# Force a fresh hashed asset build, then restart and verify the exact files served over HTTP.
+NDS_FORCE_ASSET_REBUILD=1 NDS_BUILD_LOCK_RETRIES="${NDS_BUILD_LOCK_RETRIES:-30}" \
   bash "$ROOT/codespace-runtime-sync.sh" --once
 
 # Refresh the local Codespace process so it loads the just-built asset manifest.
