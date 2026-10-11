@@ -113,6 +113,10 @@ body .navbar :focus-visible {
 
 /* Arabic Desk direction: apply direction to the actual global header and
    Workspace breadcrumb row, not only to the injected dashboard container. */
+/* rtlcss flips `direction` and `text-align` values (not selectors) when it
+   builds the css-rtl bundle, which would force this header to LTR in Arabic.
+   The guard keeps these declarations exactly as written. */
+/*rtl:begin:ignore*/
 html[dir="rtl"] body .navbar,
 html[dir="rtl"] body .navbar .container-fluid,
 html[dir="rtl"] body .navbar .navbar-collapse,
@@ -134,6 +138,7 @@ html[dir="rtl"] .page-head .navbar-breadcrumbs a {
   direction: rtl;
   text-align: right;
 }
+/*rtl:end:ignore*/
 
 /* Mirror the LTR layout: brand/search at the start (right in Arabic), the
    icon group pushed to the end (left in Arabic). Logical margins flip by
@@ -155,20 +160,26 @@ html[dir="rtl"] .page-head .standard-items-section {
   margin-inline-end: 0;
 }
 
+/*rtl:begin:ignore*/
 html[dir="rtl"] body .navbar .dropdown-menu {
   text-align: right;
 }
+/*rtl:end:ignore*/
 
 html[dir="rtl"] body .navbar .search-bar .search-icon {
   inset-inline-start: 10px;
   inset-inline-end: auto;
 }
 
+/*rtl:begin:ignore*/
 html[dir="rtl"] body .navbar .search-bar input,
 html[dir="rtl"] body .navbar .awesomplete input {
   text-align: right;
 }
+/*rtl:end:ignore*/
 
+
+/*rtl:begin:ignore*/
 html[dir="ltr"] body .navbar,
 html[dir="ltr"] body .navbar .container-fluid,
 html[dir="ltr"] body .navbar .navbar-collapse,
@@ -190,6 +201,7 @@ html[dir="ltr"] .page-head .navbar-breadcrumbs a {
   direction: ltr;
   text-align: left;
 }
+/*rtl:end:ignore*/
 
 html[dir="ltr"] body .navbar .navbar-nav {
   margin-inline-start: auto;
