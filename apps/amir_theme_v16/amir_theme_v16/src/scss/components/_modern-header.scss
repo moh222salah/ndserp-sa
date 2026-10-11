@@ -135,9 +135,33 @@ html[dir="rtl"] .page-head .navbar-breadcrumbs a {
   text-align: right;
 }
 
+/* Mirror the LTR layout: brand/search at the start (right in Arabic), the
+   icon group pushed to the end (left in Arabic). Logical margins flip by
+   themselves, so both directions use the same rule. */
 html[dir="rtl"] body .navbar .navbar-nav {
-  margin-inline-start: 0;
-  margin-inline-end: auto;
+  margin-inline-start: auto;
+  margin-inline-end: 0;
+}
+
+html[dir="rtl"] .page-head .page-head-content,
+html[dir="rtl"] .page-head .standard-items-section,
+html[dir="rtl"] .page-head .page-actions {
+  flex-direction: row;
+}
+
+html[dir="rtl"] .page-head .page-actions,
+html[dir="rtl"] .page-head .standard-items-section {
+  margin-inline-start: auto;
+  margin-inline-end: 0;
+}
+
+html[dir="rtl"] body .navbar .dropdown-menu {
+  text-align: right;
+}
+
+html[dir="rtl"] body .navbar .search-bar .search-icon {
+  inset-inline-start: 10px;
+  inset-inline-end: auto;
 }
 
 html[dir="rtl"] body .navbar .search-bar input,
