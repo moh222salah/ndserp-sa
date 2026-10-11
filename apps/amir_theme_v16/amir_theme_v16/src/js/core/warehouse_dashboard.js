@@ -40,10 +40,9 @@ const warehouseDashboard = (() => {
     const root = document.documentElement;
     const documentLanguage = String(root && root.getAttribute("lang") || "").toLowerCase();
     const bootLanguage = String(window.frappe && frappe.boot && frappe.boot.lang || "").toLowerCase();
-    const candidates = [documentLanguage, bootLanguage];
-    const arabic = candidates.some((value) => value.startsWith("ar"));
-    const english = candidates.some((value) => value.startsWith("en"));
-    const language = arabic ? "ar" : english ? "en" : String(root && root.getAttribute("dir") || "").toLowerCase() === "rtl" ? "ar" : "en";
+    const candidates = [bootLanguage, documentLanguage];
+    const activeLanguage = candidates.find((value) => value.startsWith("ar") || value.startsWith("en"));
+    const language = activeLanguage ? (activeLanguage.startsWith("ar") ? "ar" : "en") : String(root && root.getAttribute("dir") || "").toLowerCase() === "rtl" ? "ar" : "en";
     return TXT[language];
   }
   function norm(value) { return String(value || "").trim().toLowerCase().replace(/[_\s]+/g, "-"); }

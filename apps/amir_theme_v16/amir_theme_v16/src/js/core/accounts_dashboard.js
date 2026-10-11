@@ -112,16 +112,34 @@ const accountsDashboard = (() => {
 	function setScopedDirection(node, direction) {
 		if (!node) return;
 		if (!directionSnapshot.has(node)) directionSnapshot.set(node, { dir: node.hasAttribute("dir") ? node.getAttribute("dir") : null });
-		node.setAttribute("dir", direction);
+		if (node.getAttribute("dir") !== direction) node.setAttribute("dir", direction);
 	}
 	function syncWorkspaceDirection(page, language) {
 		const direction = language === "ar" ? "rtl" : "ltr";
 		document.body?.classList.toggle("nds-accounts-rtl", direction === "rtl");
 		document.body?.classList.toggle("nds-accounts-ltr", direction === "ltr");
+		const header = page?.querySelector(".page-head");
 		const navbar = document.querySelector(".navbar");
 		const navbarContent = navbar?.querySelector(".container, .container-fluid");
-		[page, page?.querySelector(".page-head"), page?.querySelector(".layout-main-section"), navbar, navbarContent]
-			.forEach((node) => setScopedDirection(node, direction));
+		const targets = [
+			document.documentElement,
+			document.body,
+			page,
+			header,
+			header?.querySelector(".page-head-content"),
+			header?.querySelector(".title-area"),
+			header?.querySelector(".title-text"),
+			header?.querySelector(".page-actions"),
+			header?.querySelector(".page-head-actions"),
+			header?.querySelector(".navbar-breadcrumbs"),
+			...(header ? Array.from(header.querySelectorAll(".navbar-breadcrumbs li")) : []),
+			page?.querySelector(".layout-main-section"),
+			navbar,
+			navbarContent,
+			navbar?.querySelector(".navbar-collapse"),
+			navbar?.querySelector(".navbar-nav"),
+		];
+		targets.forEach((node) => setScopedDirection(node, direction));
 		const board = document.getElementById(DASHBOARD_ID);
 		if (board) { board.setAttribute("dir", direction); board.setAttribute("lang", language); board.dataset.language = language; }
 	}
@@ -135,14 +153,22 @@ const accountsDashboard = (() => {
 	}
 
 	function getLanguage() {
+		const root = document.documentElement;
+		const boot = window.frappe && frappe.boot || {};
 		const candidates = [
-			window.frappe && frappe.boot && frappe.boot.lang,
-			window.frappe && frappe.boot && frappe.boot.user && frappe.boot.user.language,
-			document.documentElement.lang,
+			boot.lang,
+			root && root.lang,
+			boot.user && boot.user.language,
+			boot.user && boot.user.language_code,
+			boot.user_language,
+			boot.user_language_code,
 		];
-		if (String(document.documentElement.getAttribute("dir") || "").toLowerCase() === "rtl") return "ar";
-		const candidate = candidates.find((value) => typeof value === "string" && value.trim());
-		return String(candidate || "ar").toLowerCase().startsWith("en") ? "en" : "ar";
+		const candidate = candidates.find((value) => {
+			const language = String(value || "").trim().toLowerCase();
+			return language.startsWith("ar") || language.startsWith("en");
+		});
+		if (candidate) return String(candidate).trim().toLowerCase().startsWith("en") ? "en" : "ar";
+		return String(root && root.getAttribute("dir") || "").toLowerCase() === "ltr" ? "en" : "ar";
 	}
 
 	function normalize(value) {
@@ -424,7 +450,11 @@ const accountsDashboard = (() => {
 				observer = new MutationObserver(() => {
 					if (isAccountsWorkspace()) {
 						if (!document.getElementById(DASHBOARD_ID)) scheduleSync();
-						else detachWorkspaceEditor(document.querySelector("#page-Workspaces"));
+						else {
+							const page = document.querySelector("#page-Workspaces");
+							syncWorkspaceDirection(page, getLanguage());
+							detachWorkspaceEditor(page);
+						}
 					} else if (document.getElementById(DASHBOARD_ID)) {
 						cleanup();
 					}

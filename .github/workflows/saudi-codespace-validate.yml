@@ -100,7 +100,8 @@ jobs:
           assert 'const headerChanged=records.some(' in dashboard_js
           assert 'if(headerChanged)setDirection(board);' in dashboard_js
           assert 'document.querySelector("body .navbar .navbar-nav")' in dashboard_js
-          assert 'const arabic = candidates.some((value) => value.startsWith("ar"));' in dashboard_js
+          assert 'const candidates = [bootLanguage, documentLanguage];' in dashboard_js
+          assert 'const activeLanguage = candidates.find((value) => value.startsWith("ar") || value.startsWith("en"));' in dashboard_js
           assert '["name","item_name","stock_uom"]' in dashboard_js
           assert 'runtime-sync:' not in Path("Procfile").read_text(encoding="utf-8")
           assert "runtime-sync: bash codespace-runtime-sync.sh" not in Path("codespace-bootstrap.sh").read_text(encoding="utf-8")
@@ -137,6 +138,47 @@ jobs:
           print("WAREHOUSE_DASHBOARD_LIVE_DATA_SOURCE=PASS")
           PY
           echo "WAREHOUSE_WORKSPACE_VISUAL_ISOLATION=PASS"
+
+      - name: Verify stable RTL/LTR for all four live Workspaces
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+
+          root = Path("apps/amir_theme_v16/amir_theme_v16/src/js/core")
+          accounts = (root / "accounts_dashboard.js").read_text(encoding="utf-8")
+          purchases = (root / "purchases_dashboard.js").read_text(encoding="utf-8")
+          sales = (root / "sales_dashboard.js").read_text(encoding="utf-8")
+          warehouse = (root / "warehouse_dashboard.js").read_text(encoding="utf-8")
+
+          # Active Frappe locale must win over stale dir/lang state from a previous page.
+          assert "boot.lang" in accounts and "boot.lang" in purchases
+          assert "const languages = [bootLanguage, documentLanguage, bootUserLanguage];" in sales
+          assert "const candidates = [bootLanguage, documentLanguage];" in warehouse
+          assert 'getAttribute("dir") || "").toLowerCase() === "rtl") return "ar";' not in accounts
+          assert 'if(dir==="rtl")return "ar";' not in purchases
+
+          # A replaced native header must receive the same direction as the dashboard.
+          assert "syncWorkspaceDirection(page, getLanguage());" in accounts
+          assert "const headerChanged=records.some(" in purchases
+          assert "if(headerChanged)syncDir(b);" in purchases
+          assert "syncDashboardDirection(board);" in sales
+          assert "const headerChanged=records.some(" in warehouse
+          assert "if(headerChanged)setDirection(board);" in warehouse
+
+          # These four dashboards must remain connected to live Frappe APIs.
+          for name, source in (("accounts", accounts), ("purchases", purchases), ("sales", sales), ("warehouse", warehouse)):
+              assert "frappe.client.get_list" in source, f"{name} dashboard lost its live Frappe API"
+          print("FOUR_WORKSPACE_RTL_LTR_SOURCE=PASS")
+          print("FOUR_WORKSPACE_LIVE_DATA_SOURCE=PASS")
+          PY
+          for file in \
+            apps/amir_theme_v16/amir_theme_v16/src/js/core/accounts_dashboard.js \
+            apps/amir_theme_v16/amir_theme_v16/src/js/core/purchases_dashboard.js \
+            apps/amir_theme_v16/amir_theme_v16/src/js/core/sales_dashboard.js \
+            apps/amir_theme_v16/amir_theme_v16/src/js/core/warehouse_dashboard.js; do
+            node --check --input-type=module < "$file"
+          done
+          echo "FOUR_WORKSPACE_DIRECTION_SYNTAX=PASS"
 
       - name: Verify Custom Reports suppression and backup-first cleanup
         run: |

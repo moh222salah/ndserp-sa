@@ -71,16 +71,13 @@ const salesDashboard = (() => {
 			bootUser.language || bootUser.language_code ||
 			boot.user_language || boot.user_language_code || ""
 		).toLowerCase();
-		const languages = [documentLanguage, bootLanguage, bootUserLanguage];
-
-		const arabicLocale = languages.find((value) => value.startsWith("ar"));
-		if (arabicLocale) return arabicLocale;
+		// Frappe's active boot locale wins over stale root dir/lang left by a
+		// prior Workspace render. The header is re-synchronized after Frappe redraws it.
+		const languages = [bootLanguage, documentLanguage, bootUserLanguage];
+		const activeLocale = languages.find((value) => value.startsWith("ar") || value.startsWith("en"));
+		if (activeLocale) return activeLocale;
 		if (hasArabicWorkspaceText()) return "ar";
-
-		const englishLocale = languages.find((value) => value.startsWith("en"));
-		if (englishLocale) return englishLocale;
-		if (rootDirection === "rtl") return "ar";
-		return documentLanguage || bootLanguage || bootUserLanguage || "en";
+		return rootDirection === "rtl" ? "ar" : "en";
 	}
 
 	function isEnglish() {

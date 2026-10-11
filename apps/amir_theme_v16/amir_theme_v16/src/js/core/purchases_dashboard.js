@@ -6,14 +6,14 @@ const purchasesDashboard = (() => {
  ar:{metrics:"مؤشرات المشتريات",spend:"إجمالي المشتريات (الشهر)",open:"أوامر الشراء المفتوحة",suppliers:"الموردون النشطون",lead:"متوسط مدة التسليم",monthCompare:"مقارنة بالشهر السابق",weekCompare:"مقارنة بالأسبوع الماضي",noCompare:"لا توجد بيانات مقارنة كافية",noActivity:"لا توجد حركة في الفترتين",newActivity:"نشاط جديد في الفترة الحالية",same:"لا تغيير في الفترة المقارنة",orders:"أوامر",days:"يوم",categories:"المشتريات حسب الفئة",share:"النسبة من إجمالي الشهر",monthly:"المشتريات – آخر 6 أشهر",sarCaption:"بالريال السعودي",recent:"أحدث أوامر الشراء",lastFive:"آخر 5 عمليات",orderNo:"رقم الأمر",supplier:"المورد",date:"التاريخ",amount:"المبلغ",status:"الحالة",loading:"جارٍ تحميل البيانات…",loadingChart:"جارٍ تحميل الرسم البياني…",loadingCategories:"جارٍ تحميل تصنيفات الأصناف…",loadingOrders:"جارٍ تحميل أوامر الشراء…",noPurchases:"لا توجد مشتريات مسجلة خلال الفترة المعروضة.",noCategories:"لا توجد مشتريات مصنفة خلال الشهر الحالي.",noOrders:"لا توجد أوامر شراء لعرضها.",dataError:"تعذر تحميل البيانات بسبب الصلاحيات أو الاتصال.",purchaseError:"تعذر تحميل فواتير الشراء. تحقق من الصلاحيات.",categoryError:"تعذر تحميل تصنيفات الأصناف. تحقق من الصلاحيات.",orderError:"تعذر تحميل أوامر الشراء. تحقق من الصلاحيات أو الاتصال.",leadNone:"لا توجد أوامر مكتملة الاستلام في هذه الفترة.",newSupplier:"موردون جدد مضافون هذا الشهر",noData:"غير متاح",unclassified:"غير مصنف",sar:"ر.س",draft:"مسودة",openStatus:"مفتوح",onHold:"معلق",toReceiveBill:"بانتظار الاستلام والفوترة",toReceive:"بانتظار التسليم",toBill:"مستلم بانتظار الفوترة",completed:"مكتمل",closed:"مغلق",cancelled:"ملغاة",delivered:"تم التسليم",overdue:"متأخرة"},
  en:{metrics:"Purchase metrics",spend:"Total Purchases (Month)",open:"Open Purchase Orders",suppliers:"Active Suppliers",lead:"Average Lead Time",monthCompare:"Compared with previous month",weekCompare:"Compared with previous week",noCompare:"Not enough comparison data",noActivity:"No activity in either period",newActivity:"New activity in the current period",same:"No change in the comparison period",orders:"orders",days:"days",categories:"Purchases by Category",share:"Share of this month's total",monthly:"Purchases — Last 6 Months",sarCaption:"In Saudi riyals",recent:"Recent Purchase Orders",lastFive:"Latest 5 records",orderNo:"Order Number",supplier:"Supplier",date:"Date",amount:"Amount",status:"Status",loading:"Loading data…",loadingChart:"Loading chart data…",loadingCategories:"Loading item categories…",loadingOrders:"Loading purchase orders…",noPurchases:"No purchases recorded in this period.",noCategories:"No categorized purchases this month.",noOrders:"No purchase orders to display.",dataError:"Unable to load data because of permissions or connectivity.",purchaseError:"Unable to load purchase invoices. Check read permissions.",categoryError:"Unable to load item categories. Check read permissions.",orderError:"Unable to load purchase orders. Check permissions or connectivity.",leadNone:"No fully received orders found in this period.",newSupplier:"new suppliers added this month",noData:"Unavailable",unclassified:"Unclassified",sar:"SAR",draft:"Draft",openStatus:"Open",onHold:"On Hold",toReceiveBill:"To Receive and Bill",toReceive:"To Receive",toBill:"To Bill",completed:"Completed",closed:"Closed",cancelled:"Cancelled",delivered:"Delivered",overdue:"Overdue"}
  };
- let started=false,observer=null,dirObserver=null,observedBody=null,timers=[];
- const lang=()=>{
+ let started=false,observer=null,dirObserver=null,observedBody=null,timers=[]; const lang=()=>{
   const root=document.documentElement,dir=String(root?.getAttribute("dir")||"").toLowerCase();
-  const pageLang=String(root?.getAttribute("lang")||"").toLowerCase();
   const bootLang=String(window.frappe?.boot?.lang||"").toLowerCase();
-  if(dir==="rtl")return "ar";
-  if(dir==="ltr"&&(pageLang.startsWith("en")||bootLang.startsWith("en")))return "en";
-  return (pageLang||bootLang||"ar").startsWith("en")?"en":"ar";
+  const pageLang=String(root?.getAttribute("lang")||"").toLowerCase();
+  const candidates=[bootLang,pageLang];
+  const candidate=candidates.find(value=>value.startsWith("ar")||value.startsWith("en"));
+  if(candidate)return candidate.startsWith("en")?"en":"ar";
+  return dir==="ltr"?"en":"ar";
  };
  const tr=k=>TXT[lang()][k]||k;
  const norm=v=>String(v||"").trim().toLowerCase().replace(/[_\s]+/g,"-");
@@ -45,6 +45,8 @@ const purchasesDashboard = (() => {
    navbar&&navbar.querySelector(".navbar-collapse"),
    navbar&&navbar.querySelector(".navbar-nav"),
    page,header,
+   header&&header.querySelector(".page-actions"),
+   header&&header.querySelector(".page-head-actions"),
    header&&header.querySelector(".page-head-content"),
    header&&header.querySelector(".title-area"),
    header&&header.querySelector(".title-text"),
@@ -148,7 +150,17 @@ const purchasesDashboard = (() => {
  function cleanup(){const b=document.getElementById(ID);if(b)b.remove();document.body?.classList.remove(READY);}
  function mountIfReady(){if(!active()){cleanup();return;}if(!document.body)return;const host=document.querySelector("#page-Workspaces .layout-main-section");if(!host)return;const curr=document.getElementById(ID);if(curr?.isConnected&&curr.parentElement===host&&curr.dataset.purchaseLanguage===lang()){syncDir(curr);document.body.classList.add(READY);return;}if(curr)curr.remove();const b=build();host.insertBefore(b,host.firstChild);document.body.classList.add(READY);load(b);}
  function schedule(){timers.forEach(t=>window.clearTimeout(t));timers=[0,120,350,800,1400].map(n=>window.setTimeout(mountIfReady,n));}
- function mount(){if(started)return;started=true;const boot=()=>{schedule();if(window.frappe?.router?.on)frappe.router.on("change",schedule);window.addEventListener("popstate",schedule);if(!dirObserver&&document.documentElement){dirObserver=new MutationObserver(()=>{const b=document.getElementById(ID);if(b&&active())syncDir(b);schedule();});dirObserver.observe(document.documentElement,{attributes:true,attributeFilter:["dir","lang"]});}if(document.body&&observedBody!==document.body){observer?.disconnect();observedBody=document.body;observer=new MutationObserver(()=>{if(active()&&!document.getElementById(ID))schedule();else if(!active()&&document.getElementById(ID))cleanup();});observer.observe(document.body,{childList:true,subtree:true});}};if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",boot,{once:true});else boot();}
+ function mount(){if(started)return;started=true;const boot=()=>{schedule();if(window.frappe?.router?.on)frappe.router.on("change",schedule);window.addEventListener("popstate",schedule);if(!dirObserver&&document.documentElement){dirObserver=new MutationObserver(()=>{const b=document.getElementById(ID);if(b&&active())syncDir(b);schedule();});dirObserver.observe(document.documentElement,{attributes:true,attributeFilter:["dir","lang"]});}if(document.body&&observedBody!==document.body){observer?.disconnect();observedBody=document.body;observer=new MutationObserver(records=>{
+ if(!active()){if(document.getElementById(ID))cleanup();return;}
+ const b=document.getElementById(ID);
+ if(!b){schedule();return;}
+ const headerChanged=records.some(record=>{
+  const target=record.target&&record.target.nodeType===1?record.target:record.target&&record.target.parentElement;
+  const added=Array.from(record.addedNodes||[]);
+  return Boolean((target&&target.closest&&target.closest(".navbar,.page-head"))||added.some(node=>node.nodeType===1&&(node.matches(".navbar,.page-head")||node.querySelector(".navbar,.page-head"))));
+ });
+ if(headerChanged)syncDir(b);
+});observer.observe(document.body,{childList:true,subtree:true});}};if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",boot,{once:true});else boot();}
  return{mount};
 })();
 export { purchasesDashboard };
