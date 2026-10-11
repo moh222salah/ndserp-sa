@@ -364,6 +364,12 @@ jobs:
           grep -Fq 'nds-accounts-rtl' apps/amir_theme_v16/amir_theme_v16/src/scss/components/_accounts-dashboard.scss
           grep -Fq 'nds-accounts-ltr' apps/amir_theme_v16/amir_theme_v16/src/scss/components/_accounts-dashboard.scss
           ! grep -Eq '386,400|1,284,600|898,200|214,500|SI-2026-0339|SI-2026-0321' apps/amir_theme_v16/amir_theme_v16/src/js/core/accounts_dashboard.js
+          grep -Fq 'data-accounts-nav-section="main-accounts"' apps/amir_theme_v16/amir_theme_v16/src/js/core/accounts_dashboard.js
+          grep -Fq 'data-accounts-nav-section="financial-reports"' apps/amir_theme_v16/amir_theme_v16/src/js/core/accounts_dashboard.js
+          grep -Fq 'function populateNativeAccountSections(' apps/amir_theme_v16/amir_theme_v16/src/js/core/accounts_dashboard.js
+          grep -Fq '.nds-accounts-navigation-section' apps/amir_theme_v16/amir_theme_v16/src/scss/components/_accounts-dashboard.scss
+          grep -Fq 'grid-template-columns: repeat(2, minmax(0, 1fr));' apps/amir_theme_v16/amir_theme_v16/src/scss/components/_accounts-dashboard.scss
+          echo "ACCOUNTS_NAVIGATION_SECTIONS_SOURCE=PASS"
           echo "ACCOUNTS_WORKSPACE_SOURCE=PASS"
 
       - name: Verify purchase workspace source and served-asset gates

@@ -654,3 +654,101 @@ body.amt-accounts-workspace.nds-accounts-ltr .navbar .container-fluid { directio
 
 body.amt-accounts-workspace.nds-accounts-rtl #page-Workspaces .nds-accounts-dashboard,
 body.amt-accounts-workspace.nds-accounts-ltr #page-Workspaces .nds-accounts-dashboard { text-align: start; }
+
+
+/* Accounts Workspace — native Main Accounts and Financial Reports sections. */
+body.amt-accounts-workspace.nds-accounts-dashboard-ready #page-Workspaces .nds-accounts-navigation-section {
+  margin-top: 18px;
+  overflow: hidden;
+  border: 1px solid var(--nds-accounts-line);
+  border-top: 3px solid var(--nds-accounts-navy);
+  border-radius: 12px;
+  background: #fff;
+  box-shadow: 0 2px 8px rgba(10, 35, 66, .035);
+}
+
+body.amt-accounts-workspace.nds-accounts-dashboard-ready #page-Workspaces .nds-accounts-navigation-heading {
+  display: flex;
+  align-items: center;
+  min-height: 54px;
+  padding: 12px 18px;
+  border-bottom: 1px solid var(--nds-accounts-line);
+  background: #fff;
+}
+
+body.amt-accounts-workspace.nds-accounts-dashboard-ready #page-Workspaces .nds-accounts-navigation-heading h2 {
+  margin: 0;
+  color: var(--nds-accounts-navy);
+  font-size: 16px;
+  font-weight: 800;
+  line-height: 1.5;
+}
+
+body.amt-accounts-workspace.nds-accounts-dashboard-ready #page-Workspaces .nds-accounts-navigation-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  align-items: stretch;
+  gap: 14px;
+  padding: 14px;
+}
+
+body.amt-accounts-workspace.nds-accounts-dashboard-ready #page-Workspaces .nds-accounts-section-card {
+  min-width: 0;
+}
+
+body.amt-accounts-workspace.nds-accounts-dashboard-ready #page-Workspaces .nds-accounts-section-card > .widget {
+  box-sizing: border-box;
+  height: 100%;
+  min-width: 0;
+  margin: 0;
+  overflow: hidden;
+  border: 1px solid #e1e6ee;
+  border-radius: 10px;
+  background: #fff;
+  box-shadow: none;
+}
+
+body.amt-accounts-workspace.nds-accounts-dashboard-ready #page-Workspaces .nds-accounts-section-card .widget-head {
+  padding: 13px 16px 8px;
+}
+
+body.amt-accounts-workspace.nds-accounts-dashboard-ready #page-Workspaces .nds-accounts-section-card .widget-title {
+  color: var(--nds-accounts-navy);
+  font-size: 13px;
+  font-weight: 750;
+}
+
+body.amt-accounts-workspace.nds-accounts-dashboard-ready #page-Workspaces .nds-accounts-section-card .widget-body {
+  padding: 0 12px 12px;
+}
+
+body.amt-accounts-workspace.nds-accounts-dashboard-ready #page-Workspaces .nds-accounts-section-card .link-item {
+  min-height: 38px;
+  padding: 9px 8px;
+  border-radius: 7px;
+  text-align: start;
+}
+
+body.amt-accounts-workspace.nds-accounts-dashboard-ready #page-Workspaces .nds-accounts-section-card .link-item:hover {
+  background: #f2f6fc;
+  color: var(--nds-accounts-blue);
+}
+
+body.amt-accounts-workspace.nds-accounts-dashboard-ready #page-Workspaces .nds-accounts-section-empty {
+  grid-column: 1 / -1;
+  margin: 0;
+  padding: 15px;
+  border: 1px dashed var(--nds-accounts-line);
+  border-radius: 9px;
+  color: var(--nds-accounts-muted);
+  font-size: 12px;
+  text-align: start;
+}
+
+@media (max-width: 760px) {
+  body.amt-accounts-workspace.nds-accounts-dashboard-ready #page-Workspaces .nds-accounts-navigation-grid {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 10px;
+    padding: 10px;
+  }
+}

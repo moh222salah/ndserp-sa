@@ -12,6 +12,9 @@ const accountsDashboard = (() => {
 	const LANGUAGES = {
 		ar: {
 			title: "لوحة الحسابات",
+			mainAccounts: "الحسابات الرئيسية",
+			financialReports: "التقارير المالية",
+			noSectionItems: "لا توجد خانات أصلية مرتبطة بهذا القسم في مساحة العمل الحالية.",
 			breadcrumbModule: "الحسابات",
 			breadcrumbOverview: "نظرة عامة",
 			period: "الفترة الحالية",
@@ -56,6 +59,9 @@ const accountsDashboard = (() => {
 		},
 		en: {
 			title: "Accounts Dashboard",
+			mainAccounts: "Main Accounts",
+			financialReports: "Financial Reports",
+			noSectionItems: "No existing Workspace items were found for this section.",
 			breadcrumbModule: "Accounts",
 			breadcrumbOverview: "Overview",
 			period: "Current period",
@@ -214,7 +220,72 @@ const accountsDashboard = (() => {
 		return node;
 	}
 
-	function buildDashboard(language) {
+	function normalizeSectionTitle(value) {
+		return normalize(value).replace(/[\\u064B-\\u065F\\u0670\\u0640]/g, "").replace(/[.:：]+$/g, "");
+	}
+
+	function collectNativeAccountWidgets(sourceEditor, section) {
+		if (!sourceEditor) return [];
+		const aliases = section.aliases.map(normalizeSectionTitle);
+		const blocks = Array.from(sourceEditor.querySelectorAll(".ce-block"));
+		const blockHeading = (block) => block.querySelector(".ce-header, .ce-header .h4")?.textContent || "";
+		const headingIndex = blocks.findIndex((block) => aliases.includes(normalizeSectionTitle(blockHeading(block))));
+		const widgets = [];
+
+		if (headingIndex >= 0) {
+			for (let index = headingIndex + 1; index < blocks.length; index += 1) {
+				if (blockHeading(blocks[index]).trim()) break;
+				const widget = blocks[index].querySelector(
+					".widget.links-widget-box, .widget.shortcut-widget-box, .widget.number-widget-box, .widget.dashboard-widget-box"
+				);
+				if (widget && !widgets.some((item) => item === widget)) widgets.push(widget);
+			}
+		}
+
+		// Some Workspace versions expose the section title inside the native card rather than a Header block.
+		if (!widgets.length) {
+			for (const block of blocks) {
+				const widget = block.querySelector(
+					".widget.links-widget-box, .widget.shortcut-widget-box, .widget.number-widget-box, .widget.dashboard-widget-box"
+				);
+				const title = widget?.querySelector(".widget-title")?.textContent || "";
+				if (widget && aliases.includes(normalizeSectionTitle(title))) widgets.push(widget);
+			}
+		}
+
+		return widgets;
+	}
+
+	function populateNativeAccountSections(board, sourceEditor, language) {
+		const t = LANGUAGES[language];
+		const sections = [
+			{ key: "main-accounts", label: t.mainAccounts, aliases: ["الحسابات الرئيسية", "الحسابات الرئيسيه", "Main Accounts", "Primary Accounts"] },
+			{ key: "financial-reports", label: t.financialReports, aliases: ["التقارير المالية", "التقارير الماليه", "Financial Reports", "Financial Reporting"] },
+		];
+
+		sections.forEach((section) => {
+			const title = board.querySelector('[data-accounts-section-title="' + section.key + '"]');
+			const grid = board.querySelector('[data-accounts-section-grid="' + section.key + '"]');
+			if (title) title.textContent = section.label;
+			if (!grid) return;
+
+			grid.replaceChildren();
+			const sourceWidgets = collectNativeAccountWidgets(sourceEditor, section);
+			sourceWidgets.forEach((sourceWidget) => {
+				const card = make("article", "nds-accounts-section-card");
+				const widget = sourceWidget.cloneNode(true);
+				widget.classList.add("nds-accounts-native-widget");
+				card.appendChild(widget);
+				grid.appendChild(card);
+			});
+
+			if (!sourceWidgets.length) {
+				grid.appendChild(make("p", "nds-accounts-section-empty", t.noSectionItems));
+			}
+		});
+	}
+
+	function buildDashboard(language, sourceEditor) {
 		const t = LANGUAGES[language];
 		const board = make("section", "nds-accounts-dashboard");
 		board.id = DASHBOARD_ID;
@@ -269,6 +340,14 @@ const accountsDashboard = (() => {
 					'<thead><tr><th data-th="id"></th><th data-th="customer"></th><th data-th="due"></th><th data-th="amount"></th><th data-th="status"></th></tr></thead>' +
 					'<tbody data-invoice-rows></tbody>' +
 				'</table></div>' +
+			'</section>' +
+			'<section class="nds-accounts-navigation-section" data-accounts-nav-section="main-accounts">' +
+				'<div class="nds-accounts-navigation-heading"><h2 data-accounts-section-title="main-accounts"></h2></div>' +
+				'<div class="nds-accounts-navigation-grid" data-accounts-section-grid="main-accounts"></div>' +
+			'</section>' +
+			'<section class="nds-accounts-navigation-section" data-accounts-nav-section="financial-reports">' +
+				'<div class="nds-accounts-navigation-heading"><h2 data-accounts-section-title="financial-reports"></h2></div>' +
+				'<div class="nds-accounts-navigation-grid" data-accounts-section-grid="financial-reports"></div>' +
 			'</section>';
 
 
@@ -298,6 +377,7 @@ const accountsDashboard = (() => {
 		renderExpenses(board,t,null,language);
 		renderMonths(board,t,language,null);
 		renderInvoices(board,t,null,null,"SAR");
+		populateNativeAccountSections(board, sourceEditor, language);
 		return board;
 	}
 
@@ -385,13 +465,13 @@ const accountsDashboard = (() => {
 		const language = getLanguage();
 		syncWorkspaceDirection(page, language);
 		const current = document.getElementById(DASHBOARD_ID);
-		if (current && current.isConnected && current.parentElement === host && current.dataset.language === language) {
+		if (current && current.isConnected && current.parentElement === host && current.dataset.language === language && current.querySelector('[data-accounts-nav-section="main-accounts"]') && current.querySelector('[data-accounts-nav-section="financial-reports"]')) {
 			document.body.classList.add(READY_CLASS);
 			syncWorkspaceDirection(page, language);
 			detachWorkspaceEditor(page);
 			return;
 		}
-		const next = buildDashboard(language);
+		const next = buildDashboard(language, preservedEditor || existingEditor);
 		if (current && current.parentElement) current.replaceWith(next);
 		else host.insertBefore(next, host.firstChild);
 		document.body.classList.add(READY_CLASS);
