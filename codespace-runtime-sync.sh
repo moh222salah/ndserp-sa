@@ -163,7 +163,7 @@ for key in required:
             ".nds-sales-invoices",
             "#page-workspaces[dir=rtl]",
             "#page-workspaces[dir=ltr]",
-            "#page-workspaces.page-head{direction:ltr;",
+            "#page-workspaces.page-head{direction:inherit;",
             ".nds-sales-dashboard[dir=rtl]",
             ".nds-sales-dashboard[dir=ltr]",
             ".nds-sales-workspace-sections",
