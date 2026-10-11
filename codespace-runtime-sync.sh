@@ -265,6 +265,7 @@ for key in required:
             "nds-warehouse-distribution-chart",
             "nds-warehouse-shortage-table",
             "data-warehouse-dashboard-version",
+            "data-warehouse-nav-links",
             "Warehouse Dashboard",
             "Current Stock Value",
             "Stock Ledger Entry",
