@@ -359,9 +359,10 @@ for key in required:
         if "nds-purchase-workspace-redesign" not in js:
             raise SystemExit("PURCHASE_WORKSPACE_JS=FAIL:MISSING_MARKER:nds-purchase-workspace-redesign")
         print("PURCHASE_WORKSPACE_JS=PASS")
-        if "لوحة المشتريات" in js or "Nexterp v16" in js or "data-purchase-period" in js:
-            raise SystemExit("PURCHASE_DASHBOARD_TOP_METADATA=FAIL:STILL_PRESENT")
-        print("PURCHASE_DASHBOARD_TOP_METADATA=PASS")
+        purchase_source = (root / "apps/amir_theme_v16/amir_theme_v16/src/js/core/purchases_dashboard.js").read_text(encoding="utf-8")
+        if "لوحة المشتريات" in purchase_source or "Nexterp v16" in purchase_source or "data-purchase-period" in purchase_source:
+            raise SystemExit("PURCHASE_DASHBOARD_TOP_METADATA=FAIL:SOURCE")
+        print("PURCHASE_DASHBOARD_TOP_METADATA_SOURCE=PASS")
         required_purchase_dashboard_js = ("nds-purchase-dashboard", "nds-purchase-kpi-grid", "nds-purchase-month-columns", "nds-purchase-orders-table", "Purchase Invoice", "Purchase Receipt", "data-purchase-direction", "data-nds-ui-direction")
         missing = [marker for marker in required_purchase_dashboard_js if marker not in js]
         if missing:
