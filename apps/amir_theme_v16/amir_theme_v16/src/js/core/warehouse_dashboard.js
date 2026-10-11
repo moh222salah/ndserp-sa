@@ -58,8 +58,20 @@ const warehouseDashboard = (() => {
   }
   function setDirection(board) {
     const language = t() === TXT.ar ? "ar" : "en";
+    const direction = language === "ar" ? "rtl" : "ltr";
     board.setAttribute("lang", language);
-    board.setAttribute("dir", language === "ar" ? "rtl" : "ltr");
+    board.setAttribute("dir", direction);
+
+    // Apply the language direction to the whole active Workspace, not just
+    // the injected dashboard; remember the previous value for clean teardown.
+    const page = document.querySelector("#page-Workspaces");
+    if (page) {
+      if (page.dataset.ndsWarehouseDirectionApplied !== "1") {
+        page.dataset.ndsWarehousePreviousDir = page.getAttribute("dir") || "";
+        page.dataset.ndsWarehouseDirectionApplied = "1";
+      }
+      page.setAttribute("dir", direction);
+    }
   }
   function el(tag, cls, value) {
     const out = document.createElement(tag);
@@ -220,7 +232,18 @@ const warehouseDashboard = (() => {
     renderDistribution(board,Array.isArray(results[5])?results[5]:null);
     renderShortages(board,Array.isArray(results[6])?results[6]:null);
   }
-  function cleanup(){const current=document.getElementById(ID);if(current)current.remove();if(document.documentElement)document.documentElement.classList.remove(READY);}
+  function cleanup(){
+    const current=document.getElementById(ID);
+    if(current)current.remove();
+    const page=document.querySelector("#page-Workspaces");
+    if(page&&page.dataset.ndsWarehouseDirectionApplied==="1"){
+      const previous=page.dataset.ndsWarehousePreviousDir||"";
+      if(previous)page.setAttribute("dir",previous);else page.removeAttribute("dir");
+      delete page.dataset.ndsWarehouseDirectionApplied;
+      delete page.dataset.ndsWarehousePreviousDir;
+    }
+    if(document.documentElement)document.documentElement.classList.remove(READY);
+  }
   function mountIfReady(){
     if(!isTarget()){cleanup();return;}if(!document.body)return;
     const host=document.querySelector("#page-Workspaces .layout-main-section");if(!host)return;
