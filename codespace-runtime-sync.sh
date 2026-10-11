@@ -320,6 +320,7 @@ for key in required:
             "syncArabicWorkspaceCardVisibility",
             "SALES_SECTION_ALIASES",
             "getWorkspaceLinkRows",
+            "splitSalesReports",
             'en: "Home"',
             'en: "Items & Pricing"',
             'en: "Customer"',
