@@ -151,7 +151,7 @@ jobs:
           warehouse = (root / "warehouse_dashboard.js").read_text(encoding="utf-8")
 
           # Active Frappe locale must win over stale dir/lang state from a previous page.
-          assert "boot.lang" in accounts and "boot.lang" in purchases
+          assert "frappe.boot" in accounts and "boot?.lang" in purchases
           assert "const languages = [bootLanguage, documentLanguage, bootUserLanguage];" in sales
           assert "const candidates = [bootLanguage, documentLanguage];" in warehouse
           assert 'getAttribute("dir") || "").toLowerCase() === "rtl") return "ar";' not in accounts
