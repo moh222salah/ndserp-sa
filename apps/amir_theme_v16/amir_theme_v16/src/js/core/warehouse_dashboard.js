@@ -20,7 +20,7 @@ const warehouseDashboard = (() => {
       source:"من بيانات المخزون المسجلة",loading:"جارٍ تحميل البيانات...",
       unavailable:"تعذّر تحميل البيانات بسبب الصلاحيات أو الاتصال.",
       noMovement:"لا توجد حركة مخزون مسجلة خلال الفترة المحددة.",noDistribution:"لا توجد قيمة مخزون متاحة للعرض.",
-      noShortages:"لا توجد حالات نقص مخزون X مسجلة حاليًا."
+      noShortages:"لا توجد حالات نقص مخزون مسجلة حاليًا."
     },
     en: {
       title:"Warehouse Dashboard",module:"Warehouses",overview:"Overview",period:"Last 6 months",

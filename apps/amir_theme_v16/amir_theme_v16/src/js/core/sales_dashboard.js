@@ -99,7 +99,10 @@ const salesDashboard = (() => {
 		if (!Object.prototype.hasOwnProperty.call(title.dataset, "ndsSalesOriginalText")) {
 			title.dataset.ndsSalesOriginalText = title.textContent || "";
 		}
-		title.textContent = copy("المبيعات NDS ERP", "Sales NDS ERP");
+		// Writing textContent always queues a childList mutation, which re-triggers the
+		// body observer that calls this function. Only write when the label changed.
+		const label = copy("المبيعات NDS ERP", "Sales NDS ERP");
+		if (title.textContent !== label) title.textContent = label;
 		title.setAttribute("dir", currentDirection());
 	}
 
