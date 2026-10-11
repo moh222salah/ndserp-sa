@@ -100,14 +100,27 @@ jobs:
           assert "runtime-sync: bash codespace-runtime-sync.sh" not in Path("codespace-bootstrap.sh").read_text(encoding="utf-8")
           assert "number-widget-box" in css and "dashboard-widget-box" in css
           assert "shortcut-widget-box" in css and "links-widget-box" in css
-          for marker in (".nds-warehouse-dashboard", ".nds-warehouse-kpi-grid", ".nds-warehouse-movement-chart", ".nds-warehouse-distribution-chart", ".nds-warehouse-shortage-table", "#page-Workspaces[dir=rtl]", "#page-Workspaces[dir=ltr]", "grid-template-columns:repeat(4,minmax(0,1fr))"):
+          for marker in (".nds-warehouse-dashboard", ".nds-warehouse-kpi-grid", ".nds-warehouse-movement-chart", ".nds-warehouse-distribution-chart", ".nds-warehouse-shortage-table", ".nds-warehouse-navigation-grid", ".nds-warehouse-nav-card", ".nds-warehouse-nav-link", "#page-Workspaces[dir=rtl]", "#page-Workspaces[dir=ltr]", "grid-template-columns:repeat(4,minmax(0,1fr))"):
               assert marker in dashboard_css.replace(" ", ""), f"Missing warehouse dashboard CSS marker: {marker}"
           for marker in ("nds-warehouse-dashboard", "nds-warehouse-kpi-grid", "nds-warehouse-movement-chart", "nds-warehouse-distribution-chart", "nds-warehouse-shortage-table", "data-warehouse-dashboard-version", "Warehouse Dashboard", "Current Stock Value", "Stock Ledger Entry", "frappe.client.get_list"):
               assert marker in dashboard_js, f"Missing warehouse dashboard JS marker: {marker}"
           assert "warehouseDashboard.mount();" in entry_js
           assert "async function getMovement(company,end,warehouseNames)" in dashboard_js
           assert "async function getShortages(company, warehouseNames)" in dashboard_js
+          assert "function renderNavigation(board)" in dashboard_js
+          assert 'querySelectorAll(".widget.links-widget-box")' in dashboard_js
+          assert "target.appendChild(link)" in dashboard_js
+          assert 'data-warehouse-nav-links="home"' in dashboard_js
+          assert 'data-warehouse-nav-links="reports"' in dashboard_js
+          assert 'data-warehouse-nav-links="movements"' in dashboard_js
+          build = dashboard_js[dashboard_js.index("function build()"):dashboard_js.index("function normalizeNavigationText")]
+          assert "nds-warehouse-dashboard-header" not in build
+          assert "nds-warehouse-dashboard-period" not in build
+          assert "NDS ERP Saudi" not in build
+          assert 'href="/app/' not in build
           print("WAREHOUSE_WORKSPACE_SOURCE_SCOPE=PASS")
+          print("WAREHOUSE_NAVIGATION_DYNAMIC_SOURCE_LINKS=PASS")
+          print("WAREHOUSE_DASHBOARD_HEADER_REMOVED=PASS")
           print("WAREHOUSE_DASHBOARD_LIVE_DATA_SOURCE=PASS")
           PY
           echo "WAREHOUSE_WORKSPACE_VISUAL_ISOLATION=PASS"
