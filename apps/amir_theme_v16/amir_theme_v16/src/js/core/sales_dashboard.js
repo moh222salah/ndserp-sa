@@ -816,6 +816,7 @@ const salesDashboard = (() => {
 			node.dataset.salesWorkspaceData = SALES_WORKSPACE_DATA_FALLBACK_VERSION;
 			node.dataset.salesLinkRetry = SALES_WORKSPACE_LINK_RETRY_VERSION;
 			node.dataset.salesRouteFix = SALES_DIRECT_ROUTE_FIX_VERSION;
+			node.dataset.salesActivePageRouteFix = SALES_ACTIVE_PAGE_ROUTE_FIX_VERSION;
 			node.dataset.salesLinkCount = String(linkCount);
 			node.dataset.salesReportsCount = String(reportColumns);
 		};
