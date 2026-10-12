@@ -14,6 +14,7 @@ const salesDashboard = (() => {
 	const SALES_WORKSPACE_NAME = "المبيعات NDS ERP";
 	const READY_CLASS = "nds-sales-dashboard-ready";
 	const SALES_DIRECTION_FIX_VERSION = "sales-rtl-direction-v3";
+	const SALES_DIRECT_ROUTE_FIX_VERSION = "sales-direct-workspace-route-v1";
 	let settleTimers = [];
 	let observer = null;
 	let directionObserver = null;
@@ -35,24 +36,33 @@ const salesDashboard = (() => {
 	function isSalesWorkspace() {
 		try {
 			const route = window.frappe && typeof frappe.get_route === "function" ? frappe.get_route() : [];
-			if (!Array.isArray(route) || route[0] !== "Workspaces") return false;
-			const target = routeName(SALES_WORKSPACE_NAME);
-			let slug = SALES_WORKSPACE_NAME;
+			if (!Array.isArray(route) || !route.length) return false;
+			const expected = new Set([
+				routeName(SALES_WORKSPACE_NAME),
+				routeName("Sales NDS ERP"),
+			]);
 			try {
 				if (frappe.router && typeof frappe.router.slug === "function") {
-					slug = frappe.router.slug(SALES_WORKSPACE_NAME);
+					expected.add(routeName(frappe.router.slug(SALES_WORKSPACE_NAME)));
+					expected.add(routeName(frappe.router.slug("Sales NDS ERP")));
 				}
 			} catch (_) {
-				// Use the canonical Workspace name when slugging is unavailable.
+				// Known workspace names remain valid when the router slugger is unavailable.
 			}
-			const expected = new Set([target, routeName(slug)]);
+			const firstRouteName = routeName(route[0]);
 			const activeRouteName = routeName(route[1]);
-			// Never let an old sidebar title mount Sales UI on a different concrete Workspace route.
-			if (activeRouteName && !expected.has(activeRouteName)) return false;
 			const key = frappe.app && frappe.app.sidebar && frappe.app.sidebar.sidebar_title;
-			const routeMatches = expected.has(activeRouteName);
 			const keyMatches = expected.has(routeName(key));
-			return routeMatches || keyMatches;
+
+			if (route[0] === "Workspaces") {
+				// Do not mount this UI on a different concrete Workspace route.
+				if (activeRouteName && !expected.has(activeRouteName)) return false;
+				return expected.has(activeRouteName) || (!activeRouteName && keyMatches);
+			}
+
+			// Frappe also opens a Workspace directly as /desk/<workspace-slug>.
+			// Recognize only this exact Sales route so the dashboard cannot leak onto other pages.
+			return expected.has(firstRouteName);
 		} catch (_) {
 			return false;
 		}
@@ -798,6 +808,7 @@ const salesDashboard = (() => {
 		const annotateSections = (node) => {
 			node.dataset.salesWorkspaceData = SALES_WORKSPACE_DATA_FALLBACK_VERSION;
 			node.dataset.salesLinkRetry = SALES_WORKSPACE_LINK_RETRY_VERSION;
+			node.dataset.salesRouteFix = SALES_DIRECT_ROUTE_FIX_VERSION;
 			node.dataset.salesLinkCount = String(linkCount);
 			node.dataset.salesReportsCount = String(reportColumns);
 		};
