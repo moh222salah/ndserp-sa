@@ -297,6 +297,13 @@ for marker in 'nds-sales-dashboard' 'nds-sales-revenue-chart' 'nds-sales-channel
   fi
 done
 echo "BUILT_SALES_DASHBOARD_JS=PASS"
+for marker in 'sales-workspace-api-fallback-v2' 'sales-link-retry-v1' 'scheduleSalesWorkspaceLinkRetry' 'salesWorkspaceData' 'salesLinkCount' 'salesReportsCount'; do
+  if ! grep -Fq "$marker" "$LOCAL_JS_ASSET"; then
+    echo "BUILT_SALES_SECTIONS_RECOVERY_JS=FAIL:MISSING_MARKER:$marker"
+    exit 62
+  fi
+done
+echo "BUILT_SALES_SECTIONS_RECOVERY_JS=PASS"
 for marker in 'Monthly Sales' 'Latest Sales Invoices' 'workspace_map' 'frappe.client.get_list' 'reports-1' 'reports-2' 'reports-3' 'Sales by Channel' 'Unavailable' 'Sales NDS ERP' 'ndsSalesOriginalText' 'Home' 'Items & Pricing' 'Work' 'Settings' 'Reports'; do
   if ! grep -Fq "$marker" "$LOCAL_JS_ASSET"; then
     echo "BUILT_SALES_LIVE_BILINGUAL=FAIL:MISSING_MARKER:$marker"
@@ -385,6 +392,13 @@ for marker in 'nds-sales-dashboard' 'nds-sales-revenue-chart' 'nds-sales-channel
   fi
 done
 echo "SERVED_SALES_DASHBOARD_JS=PASS"
+for marker in 'sales-workspace-api-fallback-v2' 'sales-link-retry-v1' 'scheduleSalesWorkspaceLinkRetry' 'salesWorkspaceData' 'salesLinkCount' 'salesReportsCount'; do
+  if ! grep -Fq "$marker" "$SERVED_JS"; then
+    echo "SERVED_SALES_SECTIONS_RECOVERY_JS=FAIL:MISSING_MARKER:$marker"
+    exit 63
+  fi
+done
+echo "SERVED_SALES_SECTIONS_RECOVERY_JS=PASS"
 for marker in 'Monthly Sales' 'Latest Sales Invoices' 'workspace_map' 'frappe.client.get_list' 'reports-1' 'reports-2' 'reports-3' 'Sales by Channel' 'Unavailable' 'Sales NDS ERP' 'ndsSalesOriginalText' 'Home' 'Items & Pricing' 'Work' 'Settings' 'Reports'; do
   if ! grep -Fq "$marker" "$SERVED_JS"; then
     echo "SERVED_SALES_LIVE_BILINGUAL=FAIL:MISSING_MARKER:$marker"
