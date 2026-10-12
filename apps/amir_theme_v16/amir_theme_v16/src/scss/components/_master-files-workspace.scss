@@ -1,106 +1,257 @@
-/* NDS ERP Saudi — Master Files Workspace card skin.
- * Presentation-only: preserves Workspace records, content, order, links, values,
- * permissions, data sources, and business behavior.
+/* NDS ERP Saudi — Master Files Workspace: dashboard-style navigation cards.
+ *
+ * Presentation-only. Workspace records, content, order, links, counts,
+ * permissions and business behaviour are untouched.
+ *
+ * Each shortcut becomes a horizontal dashboard card:
+ *   [ tinted icon tile ]  Title            [ chevron ]
+ * Direction is fully logical (inset-inline / margin-inline / padding-inline),
+ * so the same rules serve Arabic (RTL) and English (LTR) with no duplication;
+ * only the chevron glyph needs an explicit RTL mirror.
+ *
+ * The icon tile (.nds-mf-icon) is injected by workspace_enhance.js
+ * (enhanceMasterFilesCards); without it the card still renders correctly.
  */
+
+body.nds-master-files-workspace #page-Workspaces {
+  --nds-mf-ink: var(--heading-color, #0a2342);
+  --nds-mf-muted: var(--text-muted, #64748b);
+  --nds-mf-line: var(--border-color, #e5ebf2);
+  --nds-mf-surface: var(--card-bg, #fff);
+  --nds-mf-accent: #164e8f;
+}
+
+/* ---------- Card shell -------------------------------------------------- */
 body.nds-master-files-workspace #page-Workspaces .widget.shortcut-widget-box,
 body.nds-master-files-workspace #page-Workspaces .widget.number-widget-box {
+  --nds-mf-accent-soft: color-mix(in srgb, var(--nds-mf-accent) 12%, transparent);
   position: relative;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  box-sizing: border-box;
   min-width: 0;
+  min-height: 92px;
+  padding: 16px 18px;
   overflow: hidden;
-  border: 1px solid var(--border-color, #e5ebf2);
-  border-top: 0;
-  border-radius: 15px;
-  background: #fff;
-  box-shadow: 0 4px 16px rgba(10, 35, 66, 0.055);
+  border: 1px solid var(--nds-mf-line);
+  border-radius: 16px;
+  background: var(--nds-mf-surface);
+  box-shadow: 0 1px 2px rgba(10, 35, 66, 0.04), 0 6px 18px rgba(10, 35, 66, 0.055);
+  cursor: pointer;
   transition: transform 180ms ease, box-shadow 180ms ease, border-color 180ms ease;
 }
 
-/* Distinct solid accent stripe across the TOP edge of every navigation card. */
+/* Accent bar along the inline-start edge (right in RTL, left in LTR). */
 body.nds-master-files-workspace #page-Workspaces .widget.shortcut-widget-box::before,
 body.nds-master-files-workspace #page-Workspaces .widget.number-widget-box::before {
   position: absolute;
+  inset-block: 0;
+  inset-inline-start: 0;
   z-index: 2;
-  inset-block-start: 0;
-  inset-inline: 0;
-  width: auto;
-  height: 4px;
-  background: var(--nds-master-files-accent, #164e8f);
+  width: 4px;
+  background: linear-gradient(
+    180deg,
+    var(--nds-mf-accent),
+    color-mix(in srgb, var(--nds-mf-accent) 55%, #fff)
+  );
   content: "";
   pointer-events: none;
 }
 
-/* Each existing shortcut keeps its own recognizable accent. */
-body.nds-master-files-workspace #page-Workspaces #editorjs .ce-block:has([shortcut_name="الرئيسية"]) .widget.shortcut-widget-box,
-body.nds-master-files-workspace #page-Workspaces #editorjs .ce-block:has([shortcut_name="Home"]) .widget.shortcut-widget-box {
-  --nds-master-files-accent: #164e8f;
-}
-body.nds-master-files-workspace #page-Workspaces #editorjs .ce-block:has([shortcut_name="الشركة"]) .widget.shortcut-widget-box,
-body.nds-master-files-workspace #page-Workspaces #editorjs .ce-block:has([shortcut_name="Company"]) .widget.shortcut-widget-box {
-  --nds-master-files-accent: #0d9488;
-}
-body.nds-master-files-workspace #page-Workspaces #editorjs .ce-block:has([shortcut_name="الفروع"]) .widget.shortcut-widget-box,
-body.nds-master-files-workspace #page-Workspaces #editorjs .ce-block:has([shortcut_name="Branches"]) .widget.shortcut-widget-box {
-  --nds-master-files-accent: #d4af37;
-}
-body.nds-master-files-workspace #page-Workspaces #editorjs .ce-block:has([shortcut_name="المستخدمين"]) .widget.shortcut-widget-box,
-body.nds-master-files-workspace #page-Workspaces #editorjs .ce-block:has([shortcut_name="Users"]) .widget.shortcut-widget-box {
-  --nds-master-files-accent: #7c3aed;
-}
-body.nds-master-files-workspace #page-Workspaces #editorjs .ce-block:has([shortcut_name="طرق الدفع"]) .widget.shortcut-widget-box,
-body.nds-master-files-workspace #page-Workspaces #editorjs .ce-block:has([shortcut_name="Payment Methods"]) .widget.shortcut-widget-box {
-  --nds-master-files-accent: #16a34a;
-}
-body.nds-master-files-workspace #page-Workspaces #editorjs .ce-block:has([shortcut_name="الصلاحيات"]) .widget.shortcut-widget-box,
-body.nds-master-files-workspace #page-Workspaces #editorjs .ce-block:has([shortcut_name="Permissions"]) .widget.shortcut-widget-box {
-  --nds-master-files-accent: #ea580c;
-}
-body.nds-master-files-workspace #page-Workspaces #editorjs .ce-block:has([shortcut_name="الاعدادات"]) .widget.shortcut-widget-box,
-body.nds-master-files-workspace #page-Workspaces #editorjs .ce-block:has([shortcut_name="الإعدادات"]) .widget.shortcut-widget-box,
-body.nds-master-files-workspace #page-Workspaces #editorjs .ce-block:has([shortcut_name="Settings"]) .widget.shortcut-widget-box {
-  --nds-master-files-accent: #db2777;
-}
-
-/* The native shortcut arrow is decorative; keep the shortcut and its count intact. */
-body.nds-master-files-workspace #page-Workspaces .widget.shortcut-widget-box .widget-control > svg {
-  display: none;
+/* Soft corner glow, the same ambient cue the dashboard KPI cards use. */
+body.nds-master-files-workspace #page-Workspaces .widget.shortcut-widget-box::after,
+body.nds-master-files-workspace #page-Workspaces .widget.number-widget-box::after {
+  position: absolute;
+  inset-block-start: -46px;
+  inset-inline-end: -46px;
+  width: 128px;
+  height: 128px;
+  border-radius: 50%;
+  background: radial-gradient(circle, var(--nds-mf-accent-soft), transparent 70%);
+  content: "";
+  pointer-events: none;
 }
 
 body.nds-master-files-workspace #page-Workspaces .widget.shortcut-widget-box:hover,
 body.nds-master-files-workspace #page-Workspaces .widget.number-widget-box:hover,
 body.nds-master-files-workspace #page-Workspaces .widget.shortcut-widget-box:focus-within,
 body.nds-master-files-workspace #page-Workspaces .widget.number-widget-box:focus-within {
-  transform: translateY(-2px);
-  border-color: color-mix(in srgb, #164e8f 28%, var(--border-color, #e5ebf2));
-  box-shadow: 0 10px 24px rgba(10, 35, 66, 0.095);
+  transform: translateY(-3px);
+  border-color: color-mix(in srgb, var(--nds-mf-accent) 38%, var(--nds-mf-line));
+  box-shadow: 0 12px 28px rgba(10, 35, 66, 0.12);
 }
 
+/* ---------- Per-card accent (Arabic + English labels) ------------------- */
+body.nds-master-files-workspace #page-Workspaces #editorjs .ce-block:has([shortcut_name="الرئيسية"]) .widget.shortcut-widget-box,
+body.nds-master-files-workspace #page-Workspaces #editorjs .ce-block:has([shortcut_name="Home"]) .widget.shortcut-widget-box {
+  --nds-mf-accent: #164e8f;
+}
+body.nds-master-files-workspace #page-Workspaces #editorjs .ce-block:has([shortcut_name="الشركة"]) .widget.shortcut-widget-box,
+body.nds-master-files-workspace #page-Workspaces #editorjs .ce-block:has([shortcut_name="Company"]) .widget.shortcut-widget-box {
+  --nds-mf-accent: #0d9488;
+}
+body.nds-master-files-workspace #page-Workspaces #editorjs .ce-block:has([shortcut_name="الفروع"]) .widget.shortcut-widget-box,
+body.nds-master-files-workspace #page-Workspaces #editorjs .ce-block:has([shortcut_name="Branches"]) .widget.shortcut-widget-box {
+  --nds-mf-accent: #c79a1b;
+}
+body.nds-master-files-workspace #page-Workspaces #editorjs .ce-block:has([shortcut_name="المستخدمين"]) .widget.shortcut-widget-box,
+body.nds-master-files-workspace #page-Workspaces #editorjs .ce-block:has([shortcut_name="Users"]) .widget.shortcut-widget-box {
+  --nds-mf-accent: #7c3aed;
+}
+body.nds-master-files-workspace #page-Workspaces #editorjs .ce-block:has([shortcut_name="طرق الدفع"]) .widget.shortcut-widget-box,
+body.nds-master-files-workspace #page-Workspaces #editorjs .ce-block:has([shortcut_name="Payment Methods"]) .widget.shortcut-widget-box {
+  --nds-mf-accent: #16a34a;
+}
+body.nds-master-files-workspace #page-Workspaces #editorjs .ce-block:has([shortcut_name="الصلاحيات"]) .widget.shortcut-widget-box,
+body.nds-master-files-workspace #page-Workspaces #editorjs .ce-block:has([shortcut_name="Permissions"]) .widget.shortcut-widget-box {
+  --nds-mf-accent: #ea580c;
+}
+body.nds-master-files-workspace #page-Workspaces #editorjs .ce-block:has([shortcut_name="الاعدادات"]) .widget.shortcut-widget-box,
+body.nds-master-files-workspace #page-Workspaces #editorjs .ce-block:has([shortcut_name="الإعدادات"]) .widget.shortcut-widget-box,
+body.nds-master-files-workspace #page-Workspaces #editorjs .ce-block:has([shortcut_name="Settings"]) .widget.shortcut-widget-box {
+  --nds-mf-accent: #db2777;
+}
+
+/* ---------- Icon tile (injected) ---------------------------------------- */
+body.nds-master-files-workspace #page-Workspaces .widget.shortcut-widget-box .nds-mf-icon {
+  position: relative;
+  z-index: 1;
+  display: inline-flex;
+  flex: 0 0 48px;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  border-radius: 14px;
+  color: var(--nds-mf-accent);
+  background: linear-gradient(
+    135deg,
+    color-mix(in srgb, var(--nds-mf-accent) 20%, #fff),
+    color-mix(in srgb, var(--nds-mf-accent) 7%, #fff)
+  );
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--nds-mf-accent) 24%, transparent);
+  transition: transform 180ms ease, background 180ms ease, color 180ms ease;
+}
+
+body.nds-master-files-workspace #page-Workspaces .widget.shortcut-widget-box .nds-mf-icon .icon {
+  width: 22px;
+  height: 22px;
+  stroke: currentColor;
+}
+
+body.nds-master-files-workspace #page-Workspaces .widget.shortcut-widget-box:hover .nds-mf-icon {
+  transform: scale(1.06);
+  color: #fff;
+  background: var(--nds-mf-accent);
+}
+
+/* ---------- Header / label --------------------------------------------- */
 body.nds-master-files-workspace #page-Workspaces .widget.shortcut-widget-box .widget-head,
 body.nds-master-files-workspace #page-Workspaces .widget.number-widget-box .widget-head {
-  padding: 16px 16px 8px;
-  border-bottom-color: color-mix(in srgb, var(--border-color, #e5ebf2) 70%, transparent);
-  background: #fff;
+  position: relative;
+  z-index: 1;
+  flex: 1 1 auto;
+  min-width: 0;
+  padding: 0;
+  border: 0;
+  background: transparent;
 }
 
-body.nds-master-files-workspace #page-Workspaces .widget.shortcut-widget-box .widget-title,
-body.nds-master-files-workspace #page-Workspaces .widget.number-widget-box .widget-title {
-  color: var(--heading-color, #0a2342);
-  font-size: 13px;
+body.nds-master-files-workspace #page-Workspaces .widget.shortcut-widget-box .widget-label,
+body.nds-master-files-workspace #page-Workspaces .widget.shortcut-widget-box .widget-title {
+  min-width: 0;
+}
+
+body.nds-master-files-workspace #page-Workspaces .widget.shortcut-widget-box .widget-title {
+  color: var(--nds-mf-ink);
+  font-size: 15px;
   font-weight: 750;
-  line-height: 1.6;
+  line-height: 1.5;
 }
 
-body.nds-master-files-workspace #page-Workspaces .widget.shortcut-widget-box .widget-body,
-body.nds-master-files-workspace #page-Workspaces .widget.number-widget-box .widget-body {
-  padding: 9px 16px 16px;
-  background: #fff;
+/* The native glyph inside the title is replaced by the icon tile. */
+body.nds-master-files-workspace #page-Workspaces .widget.shortcut-widget-box.nds-mf-has-icon .widget-icon {
+  display: none;
 }
 
-body.nds-master-files-workspace #page-Workspaces .widget.shortcut-widget-box .widget-icon {
-  color: #164e8f;
+body.nds-master-files-workspace #page-Workspaces .widget.shortcut-widget-box .widget-subtitle {
+  color: var(--nds-mf-muted);
+  font-size: 12px;
 }
 
+/* Native diagonal arrow replaced by a direction-aware chevron below. */
+body.nds-master-files-workspace #page-Workspaces .widget.shortcut-widget-box .widget-control > svg {
+  display: none;
+}
+
+/* Count pill (when the shortcut has one) stays visible and tidy. */
+body.nds-master-files-workspace #page-Workspaces .widget.shortcut-widget-box .widget-control {
+  position: relative;
+  z-index: 1;
+}
+body.nds-master-files-workspace #page-Workspaces .widget.shortcut-widget-box .indicator-pill {
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 700;
+}
+
+body.nds-master-files-workspace #page-Workspaces .widget.shortcut-widget-box .widget-body {
+  position: relative;
+  z-index: 1;
+  flex: 0 0 auto;
+  padding: 0;
+  background: transparent;
+}
+body.nds-master-files-workspace #page-Workspaces .widget.shortcut-widget-box .widget-body:empty {
+  display: none;
+}
+
+/* ---------- Chevron (mirrors with direction) ---------------------------- */
+body.nds-master-files-workspace #page-Workspaces .widget.shortcut-widget-box .nds-mf-chevron {
+  position: relative;
+  z-index: 1;
+  display: inline-flex;
+  flex: 0 0 28px;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  color: var(--nds-mf-muted);
+  background: color-mix(in srgb, var(--nds-mf-muted) 10%, transparent);
+  transition: transform 180ms ease, color 180ms ease, background 180ms ease;
+}
+body.nds-master-files-workspace #page-Workspaces .widget.shortcut-widget-box .nds-mf-chevron svg {
+  width: 14px;
+  height: 14px;
+  stroke: currentColor;
+}
+body.nds-master-files-workspace #page-Workspaces[dir="rtl"] .widget.shortcut-widget-box .nds-mf-chevron svg,
+html[dir="rtl"] body.nds-master-files-workspace #page-Workspaces .widget.shortcut-widget-box .nds-mf-chevron svg {
+  transform: scaleX(-1);
+}
+body.nds-master-files-workspace #page-Workspaces .widget.shortcut-widget-box:hover .nds-mf-chevron {
+  color: #fff;
+  background: var(--nds-mf-accent);
+  transform: translateX(3px);
+}
+body.nds-master-files-workspace #page-Workspaces[dir="rtl"] .widget.shortcut-widget-box:hover .nds-mf-chevron,
+html[dir="rtl"] body.nds-master-files-workspace #page-Workspaces .widget.shortcut-widget-box:hover .nds-mf-chevron {
+  transform: translateX(-3px);
+}
+
+/* ---------- Number cards (kept consistent if present) ------------------- */
+body.nds-master-files-workspace #page-Workspaces .widget.number-widget-box {
+  align-items: flex-start;
+}
+body.nds-master-files-workspace #page-Workspaces .widget.number-widget-box .widget-title {
+  color: var(--nds-mf-muted);
+  font-size: 12px;
+  font-weight: 650;
+}
 body.nds-master-files-workspace #page-Workspaces .widget.number-widget-box .number {
-  color: var(--heading-color, #0a2342);
+  color: var(--nds-mf-ink);
   font-size: clamp(22px, 1.7vw, 29px);
   font-weight: 800;
   line-height: 1.28;
@@ -108,45 +259,85 @@ body.nds-master-files-workspace #page-Workspaces .widget.number-widget-box .numb
   font-variant-numeric: tabular-nums;
   overflow-wrap: anywhere;
 }
-
 body.nds-master-files-workspace #page-Workspaces .widget.number-widget-box .card-stats {
   margin-top: 7px;
   font-size: 11px;
   font-weight: 600;
 }
 
+/* ---------- Section heading + hidden spacers (view mode) ---------------- */
+body.nds-master-files-workspace #page-Workspaces #editorjs .ce-block:has(.ce-header) .ce-header .h4 {
+  margin: 0;
+  color: var(--nds-mf-ink);
+  font-size: 22px;
+  font-weight: 800;
+  line-height: 1.45;
+}
+body.nds-master-files-workspace #page-Workspaces .layout-main-section:not(.edit-mode) #editorjs .ce-block:has(.widget.spacer) {
+  display: none;
+}
+
+/* ---------- Focus ------------------------------------------------------- */
 body.nds-master-files-workspace #page-Workspaces .widget.shortcut-widget-box a:focus-visible,
 body.nds-master-files-workspace #page-Workspaces .widget.number-widget-box a:focus-visible {
-  outline: 2px solid #164e8f;
+  outline: 2px solid var(--nds-mf-accent);
   outline-offset: 3px;
-  border-radius: 5px;
+  border-radius: 6px;
+}
+
+/* ---------- Dark theme -------------------------------------------------- */
+[data-theme="dark"] body.nds-master-files-workspace #page-Workspaces .widget.shortcut-widget-box,
+[data-theme="dark"] body.nds-master-files-workspace #page-Workspaces .widget.number-widget-box,
+body.nds-master-files-workspace[data-theme="dark"] #page-Workspaces .widget.shortcut-widget-box,
+body.nds-master-files-workspace[data-theme="dark"] #page-Workspaces .widget.number-widget-box {
+  box-shadow: none;
+}
+[data-theme="dark"] body.nds-master-files-workspace #page-Workspaces .widget.shortcut-widget-box .nds-mf-icon,
+body.nds-master-files-workspace[data-theme="dark"] #page-Workspaces .widget.shortcut-widget-box .nds-mf-icon {
+  background: color-mix(in srgb, var(--nds-mf-accent) 22%, transparent);
+}
+
+/* ---------- Responsive -------------------------------------------------- */
+@media (max-width: 991px) {
+  body.nds-master-files-workspace #page-Workspaces .widget.shortcut-widget-box,
+  body.nds-master-files-workspace #page-Workspaces .widget.number-widget-box {
+    min-height: 84px;
+  }
 }
 
 @media (max-width: 767px) {
   body.nds-master-files-workspace #page-Workspaces .widget.shortcut-widget-box,
   body.nds-master-files-workspace #page-Workspaces .widget.number-widget-box {
+    gap: 12px;
+    min-height: 76px;
+    padding: 13px 14px;
+    border-radius: 13px;
+  }
+
+  body.nds-master-files-workspace #page-Workspaces .widget.shortcut-widget-box .nds-mf-icon {
+    flex-basis: 42px;
+    width: 42px;
+    height: 42px;
     border-radius: 12px;
   }
 
-  body.nds-master-files-workspace #page-Workspaces .widget.shortcut-widget-box .widget-head,
-  body.nds-master-files-workspace #page-Workspaces .widget.number-widget-box .widget-head {
-    padding: 14px 13px 7px;
-  }
-
-  body.nds-master-files-workspace #page-Workspaces .widget.shortcut-widget-box .widget-body,
-  body.nds-master-files-workspace #page-Workspaces .widget.number-widget-box .widget-body {
-    padding: 8px 13px 13px;
+  body.nds-master-files-workspace #page-Workspaces .widget.shortcut-widget-box .widget-title {
+    font-size: 14px;
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
   body.nds-master-files-workspace #page-Workspaces .widget.shortcut-widget-box,
-  body.nds-master-files-workspace #page-Workspaces .widget.number-widget-box {
+  body.nds-master-files-workspace #page-Workspaces .widget.number-widget-box,
+  body.nds-master-files-workspace #page-Workspaces .widget.shortcut-widget-box .nds-mf-icon,
+  body.nds-master-files-workspace #page-Workspaces .widget.shortcut-widget-box .nds-mf-chevron {
     transition: none;
   }
 
   body.nds-master-files-workspace #page-Workspaces .widget.shortcut-widget-box:hover,
-  body.nds-master-files-workspace #page-Workspaces .widget.number-widget-box:hover {
+  body.nds-master-files-workspace #page-Workspaces .widget.number-widget-box:hover,
+  body.nds-master-files-workspace #page-Workspaces .widget.shortcut-widget-box:hover .nds-mf-icon,
+  body.nds-master-files-workspace #page-Workspaces .widget.shortcut-widget-box:hover .nds-mf-chevron {
     transform: none;
   }
 }

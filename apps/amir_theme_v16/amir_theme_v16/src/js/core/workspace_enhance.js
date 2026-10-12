@@ -467,6 +467,65 @@ function syncMasterFilesWorkspaceScope() {
 	);
 }
 
+/*
+ * Master Files cards: add a tinted icon tile before the title and a chevron
+ * after it, so each shortcut reads as a dashboard card. Presentation-only and
+ * idempotent: the shortcut's own markup, link and count are never modified, and
+ * the added nodes are aria-hidden. Icon names are checked against the sprite
+ * actually loaded on the page, so a glyph missing from this Frappe build falls
+ * through to the next candidate instead of rendering an empty tile.
+ */
+const MASTER_FILES_ICONS = [
+	[["الرئيسية", "home"], ["es-line-home", "home"]],
+	[["الشركة", "company"], ["es-line-building", "organization", "building", "es-line-company"]],
+	[["الفروع", "branches", "branch"], ["es-line-branch", "es-line-location", "branch", "map-pin"]],
+	[["المستخدمين", "users", "user"], ["es-line-users", "users", "es-line-user", "users-round"]],
+	[["طرق الدفع", "payment methods", "mode of payment"], ["es-line-credit-card", "es-line-money", "credit-card", "money"]],
+	[["الصلاحيات", "permissions", "user permission"], ["es-line-lock", "lock", "es-line-security", "es-line-shield"]],
+	[["الاعدادات", "الإعدادات", "settings"], ["es-line-settings", "setting-gear", "settings"]],
+];
+const MASTER_FILES_ICON_FALLBACKS = ["es-line-folder-open", "folder-normal", "es-line-file"];
+const MASTER_FILES_CHEVRONS = ["es-line-right-chevron", "arrow-right", "right", "es-line-arrow-right"];
+
+function firstExistingIcon(candidates) {
+	return candidates.find((name) => document.getElementById(`icon-${name}`)) || null;
+}
+
+function enhanceMasterFilesCards() {
+	if (!document.body.classList.contains("nds-master-files-workspace")) return;
+	document
+		.querySelectorAll("#page-Workspaces #editorjs .widget.shortcut-widget-box")
+		.forEach((card) => {
+			if (card.dataset.ndsMfDone) return;
+			const holder = card.closest(".ce-block")?.querySelector("[shortcut_name]");
+			const name = String(holder?.getAttribute("shortcut_name") || card.textContent || "")
+				.trim()
+				.toLowerCase();
+			if (!name) return;
+			card.dataset.ndsMfDone = "1";
+
+			const match = MASTER_FILES_ICONS.find(([names]) => names.some((n) => name === n || name.includes(n)));
+			const iconName = firstExistingIcon([...(match ? match[1] : []), ...MASTER_FILES_ICON_FALLBACKS]);
+			if (iconName) {
+				const tile = document.createElement("span");
+				tile.className = "nds-mf-icon";
+				tile.setAttribute("aria-hidden", "true");
+				tile.innerHTML = iconSvg(iconName, "md");
+				card.insertBefore(tile, card.firstChild);
+				card.classList.add("nds-mf-has-icon");
+			}
+
+			const chevronName = firstExistingIcon(MASTER_FILES_CHEVRONS);
+			if (chevronName) {
+				const chev = document.createElement("span");
+				chev.className = "nds-mf-chevron";
+				chev.setAttribute("aria-hidden", "true");
+				chev.innerHTML = iconSvg(chevronName, "xs");
+				card.appendChild(chev);
+			}
+		});
+}
+
 let scheduled = false;
 /**
  * Apply a visual-only CSS scope on the warehouse Workspace route.
@@ -507,6 +566,7 @@ function run() {
 	try { syncWarehouseWorkspaceScope(); } catch (e) { console.error("[amir_theme] warehouse scope failed:", e); }
 	try { syncSalesWorkspaceScope(); } catch (e) { console.error("[amir_theme] sales workspace scope failed:", e); }
 	try { syncMasterFilesWorkspaceScope(); } catch (e) { console.error("[amir_theme] master-files scope failed:", e); }
+	try { enhanceMasterFilesCards(); } catch (e) { console.error("[amir_theme] master-files cards failed:", e); }
 	try { enhanceSidebar(); } catch (e) { /* eslint-disable-next-line no-console */ console.error("[amir_theme] sidebar-new failed:", e); }
 	try { enhanceCards(); } catch (e) { console.error("[amir_theme] card-icons failed:", e); }
 	try { enhanceLinkArrows(); } catch (e) { console.error("[amir_theme] link-arrow chip failed:", e); }
