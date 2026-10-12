@@ -1,4 +1,4 @@
-# NDS ERP Saudi — GitHub Codespaces
+# NDS ERP Saudi
 
 This repository is the authoritative Saudi NDS ERP source tree.
 
