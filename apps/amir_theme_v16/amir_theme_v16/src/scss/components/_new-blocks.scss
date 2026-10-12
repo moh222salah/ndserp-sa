@@ -42,8 +42,50 @@ body #page-Workspaces .nds-nb-grid {
   align-items: stretch;
 }
 body #page-Workspaces .nds-nb-cell {
+  position: relative;
   grid-column: span var(--nds-nb-col, 4);
   min-width: 0;
+}
+
+// Delete control (only rendered for users who may edit the Workspace). Hidden until
+// the block is hovered or focused; always visible on touch screens.
+body #page-Workspaces .nds-nb-delete {
+  position: absolute;
+  inset-block-start: 8px;
+  inset-inline-end: 8px;
+  z-index: 2;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  padding: 0;
+  border: 1px solid var(--nds-nb-line);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, .96);
+  color: var(--nds-nb-muted);
+  line-height: 1;
+  cursor: pointer;
+  opacity: 0;
+  transition: opacity .15s ease, color .15s ease, background-color .15s ease, border-color .15s ease;
+}
+body #page-Workspaces .nds-nb-cell:hover .nds-nb-delete,
+body #page-Workspaces .nds-nb-cell:focus-within .nds-nb-delete,
+body #page-Workspaces .nds-nb-delete:focus-visible {
+  opacity: 1;
+}
+body #page-Workspaces .nds-nb-delete:hover,
+body #page-Workspaces .nds-nb-delete:focus-visible {
+  border-color: #f3b4b4;
+  background: #fff5f5;
+  color: #c0392b;
+}
+body #page-Workspaces .nds-nb-cell.nds-nb-header .nds-nb-delete,
+body #page-Workspaces .nds-nb-cell.nds-nb-paragraph .nds-nb-delete {
+  inset-block-start: 0;
+}
+@media (hover: none) {
+  body #page-Workspaces .nds-nb-delete { opacity: 1; }
 }
 
 // A header block becomes a section heading with the dashboards' gold accent bar.

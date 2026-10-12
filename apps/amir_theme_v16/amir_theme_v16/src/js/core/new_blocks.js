@@ -101,10 +101,19 @@ const newBlocks = (() => {
 		return window.frappe && frappe.workspace ? frappe.workspace : null;
 	}
 
+	// Frappe keeps `_page.content` as a JSON string until the page is shown, then
+	// replaces it with the parsed array (show_page) — so the steady state while a
+	// dashboard is on screen is an array. Both forms must be read, otherwise the
+	// layer never sees the saved blocks and nothing renders after Save.
 	function rawContent() {
 		const ws = workspace();
 		const page = ws && ws._page;
-		return page && typeof page.content === "string" ? page.content : null;
+		if (!page) return null;
+		if (typeof page.content === "string") return page.content;
+		if (Array.isArray(page.content)) {
+			try { return JSON.stringify(page.content); } catch (_) { return null; }
+		}
+		return null;
 	}
 
 	function isEditMode(host) {
@@ -117,6 +126,42 @@ const newBlocks = (() => {
 		if (lang.startsWith("ar")) return true;
 		if (lang.startsWith("en")) return false;
 		return String(root.getAttribute("dir") || "").toLowerCase() === "rtl";
+	}
+
+	const TEXT = {
+		ar: {
+			remove: "حذف",
+			confirm: (name) => "هل تريد حذف «" + name + "» من هذه الصفحة؟ سيُحذف من مساحة العمل ولا يمكن التراجع عن ذلك.",
+			done: "تم الحذف",
+			failed: "تعذّر الحذف. حاول مرة أخرى.",
+		},
+		en: {
+			remove: "Delete",
+			confirm: (name) => "Delete “" + name + "” from this page? It will be removed from the workspace and this cannot be undone.",
+			done: "Deleted",
+			failed: "Could not delete. Please try again.",
+		},
+	};
+
+	function text() {
+		return isRtl() ? TEXT.ar : TEXT.en;
+	}
+
+	function escapeHtml(value) {
+		return String(value == null ? "" : value)
+			.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+	}
+
+	// Same rule Frappe applies on save: the two injected "Custom ..." cards are
+	// display-only and are never written back into the Workspace content.
+	function isInjectedCard(block) {
+		const name = block && block.type === "card" && block.data ? block.data.card_name : "";
+		return name === "Custom Documents" || name === "Custom Reports";
+	}
+
+	function canEdit() {
+		const ws = workspace();
+		return Boolean(ws && ws._page && ws._page.is_editable);
 	}
 
 	// The host element of whichever redesigned dashboard is on screen, or null.
@@ -324,6 +369,72 @@ const newBlocks = (() => {
 		return true;
 	}
 
+	// --- 4. deleting -------------------------------------------------------
+
+	let deleting = false;
+
+	// Removes one tagged block from the saved Workspace content through Frappe's
+	// own `save_page` endpoint (same call and permission check as the stock Save).
+	// The server's clean-up then drops the matching shortcut / chart / number card /
+	// link rows, and `reload()` re-renders the page so the block disappears at once.
+	function removeBlock(block) {
+		const ws = workspace();
+		const page = ws && ws._page;
+		const t = text();
+		if (deleting || !page || !page.is_editable || !window.frappe) return;
+
+		const signature = blockSignature(block);
+		const content = (parseContent(rawContent()) || []).filter((item) => !isInjectedCard(item));
+		const index = content.findIndex((item) =>
+			item && item.data && Number(item.data[FLAG]) === 1 && blockSignature(item) === signature
+		);
+		if (index === -1) return;
+		content.splice(index, 1);
+
+		deleting = true;
+		frappe.call({
+			method: "frappe.desk.doctype.workspace.workspace.save_page",
+			args: {
+				name: page.name,
+				public: page.public || 0,
+				new_widgets: {},
+				blocks: JSON.stringify(content),
+			},
+			freeze: true,
+			callback: (response) => {
+				deleting = false;
+				if (!response || !response.message) return;
+				try { page.content = JSON.stringify(content); } catch (_) { /* reload refetches it */ }
+				flaggedCache = { raw: null, blocks: [] };
+				removeLayer();
+				Promise.resolve(ws.reload()).catch(() => {});
+				frappe.show_alert({ message: t.done, indicator: "green" });
+			},
+			error: () => {
+				deleting = false;
+				frappe.show_alert({ message: t.failed, indicator: "red" });
+			},
+		});
+	}
+
+	function deleteButton(block) {
+		const t = text();
+		const button = document.createElement("button");
+		button.type = "button";
+		button.className = "nds-nb-delete";
+		button.title = t.remove;
+		button.setAttribute("aria-label", t.remove);
+		button.innerHTML = '<svg viewBox="0 0 16 16" width="14" height="14" aria-hidden="true" focusable="false">' +
+			'<path d="M4 4l8 8M12 4l-8 8" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>';
+		button.addEventListener("click", (event) => {
+			event.preventDefault();
+			event.stopPropagation();
+			const name = plainText(blockName(block));
+			frappe.confirm(escapeHtml(t.confirm(name)), () => removeBlock(block));
+		});
+		return button;
+	}
+
 	function renderLayer(host) {
 		const blocks = flaggedBlocks();
 		const ws = workspace();
@@ -343,7 +454,8 @@ const newBlocks = (() => {
 			const collection = pageData[WIDGET_TYPES[type][0]];
 			return collection && Array.isArray(collection.items) ? collection.items.length : 0;
 		}).join(",");
-		const signature = (rtl ? "rtl" : "ltr") + "|" + sizes + "|" + rawContent();
+		const editable = canEdit();
+		const signature = (rtl ? "rtl" : "ltr") + "|" + (editable ? "edit" : "view") + "|" + sizes + "|" + rawContent();
 		const existing = document.getElementById(LAYER_ID);
 		if (existing && existing.parentElement === host && existing.dataset.signature === signature) return;
 		if (existing) existing.remove();
@@ -381,6 +493,7 @@ const newBlocks = (() => {
 				try { mounted = mountWidget(cell, block, pageData); } catch (_) { mounted = false; }
 				if (!mounted) return;
 			}
+			if (editable) cell.appendChild(deleteButton(block));
 			grid.appendChild(cell);
 		});
 
