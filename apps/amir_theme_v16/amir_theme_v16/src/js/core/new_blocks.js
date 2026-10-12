@@ -558,7 +558,16 @@ const newBlocks = (() => {
 
 	// --- 5. edit-mode controls ---------------------------------------------
 
-	const ADD_TYPES = ["card", "shortcut", "number_card", "chart", "quick_list"];
+	// The blocks the stock Workspace editor offers in its own "+" menu, in its order.
+	const STOCK_ADD_TYPES = [
+		"header", "paragraph", "card", "shortcut", "chart",
+		"number_card", "quick_list", "onboarding", "custom_block", "spacer",
+	];
+	const STOCK_TITLES = {
+		header: "Heading", paragraph: "Text", card: "Card", shortcut: "Shortcut", chart: "Chart",
+		number_card: "Number Card", quick_list: "Quick List", onboarding: "Onboarding",
+		custom_block: "Custom Block", spacer: "Spacer",
+	};
 	const anchors = new Map();
 
 	function editorApi() {
@@ -674,24 +683,28 @@ const newBlocks = (() => {
 		return true;
 	}
 
-	function prefillLabel(hint) {
-		let tries = 0;
-		const attempt = () => {
-			const dialog = window.cur_dialog;
-			const field = dialog && typeof dialog.get_field === "function" ? dialog.get_field("label") : null;
-			if (field) {
-				if (!dialog.get_value("label")) dialog.set_value("label", hint);
-				return;
-			}
-			tries += 1;
-			if (tries < 10) window.setTimeout(attempt, 80);
-		};
-		window.setTimeout(attempt, 80);
+	function translate(value) {
+		try { return typeof __ === "function" ? __(value) : value; } catch (_) { return value; }
+	}
+
+	// Titles come from the stock tools themselves, so the chooser reads exactly like the
+	// editor's own "+" menu (and follows its translations).
+	function addOptions() {
+		const editor = editorApi();
+		const tools = (editor && editor.configuration && editor.configuration.tools) || {};
+		const known = Object.keys(tools).length > 0;
+		return STOCK_ADD_TYPES.filter((type) => !known || tools[type]).map((type) => {
+			const tool = tools[type];
+			const toolClass = tool && (tool.class || tool);
+			const title = toolClass && toolClass.toolbox && toolClass.toolbox.title;
+			return { type, label: translate(title || STOCK_TITLES[type]) };
+		});
 	}
 
 	// Inserts an empty block of the chosen type; the stock block then opens its own
-	// creation dialog, exactly as when it is picked from the editor toolbox.
-	async function insertBlock(type, key, hint) {
+	// creation dialog, exactly as when it is picked from the editor toolbox. Nothing is
+	// pre-filled: a new block never reuses the name of one that was deleted.
+	async function insertBlock(type, key) {
 		try {
 			if (!(await ensureEditing())) return;
 			const editor = editorApi();
@@ -705,15 +718,16 @@ const newBlocks = (() => {
 			}
 			if (key) anchors.delete(key);
 			await editor.blocks.insert(type, {}, {}, index, true);
-			if (type === "card" && hint) prefillLabel(hint);
 			schedule();
 		} catch (_) { /* the stock editor keeps working */ }
 	}
 
-	function openAddDialog(key, hint) {
+	function openAddDialog(key) {
 		if (!window.frappe || !frappe.ui || !frappe.ui.Dialog) return;
 		const t = text();
-		const labels = ADD_TYPES.map((type) => t.types[type]);
+		const options = addOptions();
+		if (!options.length) return;
+		const labels = options.map((option) => option.label);
 		const dialog = new frappe.ui.Dialog({
 			title: t.addTitle,
 			fields: [{
@@ -726,9 +740,9 @@ const newBlocks = (() => {
 			}],
 			primary_action_label: t.addAction,
 			primary_action: (values) => {
-				const type = ADD_TYPES[labels.indexOf(values.kind)];
+				const picked = options[labels.indexOf(values.kind)];
 				dialog.hide();
-				if (type) window.setTimeout(() => insertBlock(type, key, hint), 250);
+				if (picked) window.setTimeout(() => insertBlock(picked.type, key), 250);
 			},
 		});
 		dialog.show();
@@ -763,7 +777,7 @@ const newBlocks = (() => {
 		button.addEventListener("click", (event) => {
 			event.preventDefault();
 			event.stopPropagation();
-			openAddDialog(slotKey(slot), slotHint(slot));
+			openAddDialog(slotKey(slot));
 		});
 		return button;
 	}
@@ -778,7 +792,7 @@ const newBlocks = (() => {
 		tile.innerHTML = plusIcon();
 		tile.addEventListener("click", (event) => {
 			event.preventDefault();
-			openAddDialog(null, "");
+			openAddDialog(null);
 		});
 		return tile;
 	}
@@ -823,9 +837,9 @@ const newBlocks = (() => {
 		}
 	}
 
-	// Edit mode: delete button on every workspace-backed card. Any mode, for people who may
-	// edit: a "+" placeholder where a card is missing. Edit mode only: the "+" tile that ends
-	// the sections. Everything is added only when absent so the DOM observers settle.
+	// Edit mode only: a delete button on every workspace-backed card, a "+" placeholder where
+	// a card is missing, and the "+" tile that ends the sections. View mode shows none of
+	// them. Everything is added only when absent so the DOM observers settle.
 	function decorate(host, editing) {
 		const ws = workspace();
 		const editable = Boolean(ws && ws._page && ws._page.is_editable);
@@ -850,6 +864,12 @@ const newBlocks = (() => {
 			}
 		});
 		syncAddTile(host, Boolean(editing && holders));
+	}
+
+	// View mode: the sections are drawn exactly as the dashboard builds them.
+	function clearSlots(host) {
+		host.querySelectorAll("[" + CARD_ATTR + "]").forEach(clearSlot);
+		host.querySelectorAll(".nds-nb-add-tile").forEach((tile) => tile.remove());
 	}
 
 	function clearDecorations() {
@@ -971,15 +991,16 @@ const newBlocks = (() => {
 		button.addEventListener("click", (event) => {
 			event.preventDefault();
 			event.stopPropagation();
-			const id = node.getAttribute(WIDGET_ATTR);
-			ensureEditing().then((ok) => { if (ok) setWidgetHidden(id, false); }).catch(() => {});
+			openAddDialog(null);
 		});
 		return button;
 	}
 
 	function decorateWidgets(host, editing) {
 		tagWidgets(host);
-		const editable = canEdit();
+		// Controls and placeholders exist in Edit mode only; the dashboard itself just
+		// leaves a deleted widget out.
+		const editable = Boolean(editing) && canEdit();
 		const hidden = effectiveHidden();
 		host.querySelectorAll("[" + WIDGET_ATTR + "]").forEach((node) => {
 			if (!hidden.has(node.getAttribute(WIDGET_ATTR))) {
@@ -1032,7 +1053,7 @@ const newBlocks = (() => {
 			}
 			markNative();
 			renderLayer(host);
-			decorate(host, false);
+			clearSlots(host);
 			decorateWidgets(host, false);
 		} catch (_) { /* never let this layer break the desk */ }
 	}
