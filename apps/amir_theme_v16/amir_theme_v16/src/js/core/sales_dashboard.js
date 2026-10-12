@@ -15,6 +15,7 @@ const salesDashboard = (() => {
 	const READY_CLASS = "nds-sales-dashboard-ready";
 	const SALES_DIRECTION_FIX_VERSION = "sales-rtl-direction-v3";
 	const SALES_DIRECT_ROUTE_FIX_VERSION = "sales-direct-workspace-route-v1";
+	const SALES_ACTIVE_PAGE_ROUTE_FIX_VERSION = "sales-active-workspace-route-v2";
 	let settleTimers = [];
 	let observer = null;
 	let directionObserver = null;
@@ -53,16 +54,22 @@ const salesDashboard = (() => {
 			const activeRouteName = routeName(route[1]);
 			const key = frappe.app && frappe.app.sidebar && frappe.app.sidebar.sidebar_title;
 			const keyMatches = expected.has(routeName(key));
+			const activePage = frappe.workspace && frappe.workspace._page;
+			const activePageMatches = Boolean(activePage && [
+				activePage.name, activePage.title, activePage.route,
+			].filter(Boolean).some((value) => expected.has(routeName(value))));
 
 			if (route[0] === "Workspaces") {
+				// The loaded Workspace record is authoritative when its display route is localized.
+				if (activePageMatches) return true;
 				// Do not mount this UI on a different concrete Workspace route.
 				if (activeRouteName && !expected.has(activeRouteName)) return false;
 				return expected.has(activeRouteName) || (!activeRouteName && keyMatches);
 			}
 
-			// Frappe also opens a Workspace directly as /desk/<workspace-slug>.
-			// Recognize only this exact Sales route so the dashboard cannot leak onto other pages.
-			return expected.has(firstRouteName);
+			// Frappe v16 exposes Workspace routes both directly and through its shared shell.
+			// Require an exact sales slug/name match to avoid leaking the dashboard onto other pages.
+			return expected.has(firstRouteName) || (activePageMatches && expected.has(firstRouteName));
 		} catch (_) {
 			return false;
 		}
