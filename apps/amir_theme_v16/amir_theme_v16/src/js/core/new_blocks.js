@@ -25,6 +25,12 @@
  *     `.nds-new-block-native` and hidden outside Edit mode, and the dashboards'
  *     own section builders skip it through `isNativeNew()` / `flaggedCardLabels()`.
  *
+ *  4. Edit-mode controls. Section cards a dashboard builds from a Workspace card carry
+ *     `data-nds-card-labels`; while editing, each gets a delete button, a deleted (or
+ *     missing) card shows a "+" placeholder, and the end of the sections gets a "+" tile.
+ *     Delete / add act on the stock Editor.js instance, so nothing is stored until the
+ *     stock Save button is pressed, and Save re-renders the dashboards at once.
+ *
  * Every entry point is wrapped so a failure here can never break the desk.
  */
 const newBlocks = (() => {
@@ -50,6 +56,9 @@ const newBlocks = (() => {
 		"card_name", "shortcut_name", "number_card_name", "chart_name",
 		"quick_list_name", "custom_block_name", "text",
 	];
+
+	const CARD_ATTR = "data-nds-card-labels";
+	const fixedCardMatchers = [];
 
 	let started = false;
 	let timer = null;
@@ -134,12 +143,24 @@ const newBlocks = (() => {
 			confirm: (name) => "هل تريد حذف «" + name + "» من هذه الصفحة؟ سيُحذف من مساحة العمل ولا يمكن التراجع عن ذلك.",
 			done: "تم الحذف",
 			failed: "تعذّر الحذف. حاول مرة أخرى.",
+			stageConfirm: (name) => "هل تريد حذف «" + name + "»؟ سيتم الحذف عند الضغط على «حفظ»، ويمكنك التراجع بالضغط على «إهمال».",
+			add: "إضافة جديد",
+			addTitle: "إضافة جديدة",
+			addKind: "ماذا تريد أن تضيف؟",
+			addAction: "إضافة",
+			types: { card: "قسم (كارت روابط)", shortcut: "اختصار", number_card: "كارت رقمي", chart: "مخطط", quick_list: "قائمة سريعة" },
 		},
 		en: {
 			remove: "Delete",
 			confirm: (name) => "Delete “" + name + "” from this page? It will be removed from the workspace and this cannot be undone.",
 			done: "Deleted",
 			failed: "Could not delete. Please try again.",
+			stageConfirm: (name) => "Delete “" + name + "”? It is removed when you press Save, and Discard brings it back.",
+			add: "Add new",
+			addTitle: "Add new",
+			addKind: "What do you want to add?",
+			addAction: "Add",
+			types: { card: "Section (link card)", shortcut: "Shortcut", number_card: "Number card", chart: "Chart", quick_list: "Quick list" },
 		},
 	};
 
@@ -189,6 +210,20 @@ const newBlocks = (() => {
 
 	// --- 1. tagging --------------------------------------------------------
 
+	function registerFixedCards(matcher) {
+		if (typeof matcher === "function") fixedCardMatchers.push(matcher);
+	}
+
+	// A card that maps onto one of a dashboard's own fixed sections is rendered there,
+	// so it must not also be tagged as a new block.
+	function isFixedCard(block) {
+		if (!block || block.type !== "card") return false;
+		const name = plainText(blockName(block));
+		return fixedCardMatchers.some((matcher) => {
+			try { return Boolean(matcher(name)); } catch (_) { return false; }
+		});
+	}
+
 	// Tags the blocks Editor.js is about to save. `previousRaw` is the content
 	// that was saved before this edit session.
 	function tagOutput(output, previousRaw) {
@@ -213,9 +248,28 @@ const newBlocks = (() => {
 			const known = pool.get(signature);
 			// Seen before → inherit its status. Not seen → added in this session.
 			const flagged = known && known.length ? known.shift() : true;
-			if (flagged) block.data[FLAG] = 1;
+			if (flagged && !isFixedCard(block)) block.data[FLAG] = 1;
 			else delete block.data[FLAG];
 		});
+	}
+
+	// Instance-level wrapper around Workspace#reload: Save and Discard both end in a
+	// reload, so this is the moment the dashboards must rebuild from the new content.
+	function patchReload() {
+		const ws = workspace();
+		if (!ws || ws.__ndsReloadPatched || typeof ws.reload !== "function") return;
+		const original = ws.reload;
+		ws.reload = function () {
+			const result = original.apply(this, arguments);
+			Promise.resolve(result).then(() => {
+				anchors.clear();
+				flaggedCache = { raw: null, blocks: [] };
+				try { document.dispatchEvent(new CustomEvent("nds-workspace-reloaded")); } catch (_) { /* optional */ }
+				schedule();
+			}).catch(() => {});
+			return result;
+		};
+		ws.__ndsReloadPatched = true;
 	}
 
 	// Instance-level wrapper around Workspace#save_page: the stock method calls
@@ -500,22 +554,327 @@ const newBlocks = (() => {
 		if (!grid.children.length) layer.remove();
 	}
 
+	// --- 5. edit-mode controls ---------------------------------------------
+
+	const ADD_TYPES = ["card", "shortcut", "number_card", "chart", "quick_list"];
+	const anchors = new Map();
+
+	function editorApi() {
+		const ws = workspace();
+		const editor = ws && ws.editor;
+		return editor && editor.blocks && typeof editor.blocks.getBlocksCount === "function" ? editor : null;
+	}
+
+	function blockHolders(editor) {
+		try {
+			const holders = [];
+			const count = editor.blocks.getBlocksCount();
+			for (let index = 0; index < count; index += 1) {
+				const api = editor.blocks.getBlockByIndex(index);
+				holders.push(api && api.holder ? api.holder : null);
+			}
+			return holders;
+		} catch (_) {
+			return null;
+		}
+	}
+
+	function cardName(holder) {
+		const node = holder && holder.querySelector ? holder.querySelector("[card_name]") : null;
+		return node ? node.getAttribute("card_name") : null;
+	}
+
+	// A name as stored and as translated: link rows come back from the server translated,
+	// while card blocks keep the stored name.
+	function nameVariants(name) {
+		const out = new Set([normalize(name)]);
+		try { out.add(normalize(__(name))); } catch (_) { /* untranslated is fine */ }
+		out.delete("");
+		return out;
+	}
+
+	function labelSet(labels) {
+		const set = new Set();
+		(labels || []).forEach((label) => nameVariants(label).forEach((value) => set.add(value)));
+		return set;
+	}
+
+	function matchesLabels(name, set) {
+		for (const value of nameVariants(name)) {
+			if (set.has(value)) return true;
+		}
+		return false;
+	}
+
+	function findCardIndex(holders, set) {
+		return holders.findIndex((holder) => {
+			const name = cardName(holder);
+			return name != null && matchesLabels(name, set);
+		});
+	}
+
+	function slotLabels(slot) {
+		try {
+			const labels = JSON.parse(slot.getAttribute(CARD_ATTR));
+			return Array.isArray(labels) ? labels : [];
+		} catch (_) {
+			return [];
+		}
+	}
+
+	function slotHint(slot) {
+		return slot.getAttribute("data-nds-card-hint") || slotLabels(slot)[0] || "";
+	}
+
+	function slotKey(slot) {
+		return normalize(slotHint(slot));
+	}
+
+	function toggleClass(node, className, on) {
+		if (node.classList.contains(className) !== on) node.classList.toggle(className, on);
+	}
+
+	function plusIcon() {
+		return '<svg viewBox="0 0 16 16" width="20" height="20" aria-hidden="true" focusable="false">' +
+			'<path d="M8 3v10M3 8h10" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>';
+	}
+
+	// Staged delete: removes the card block from the stock editor. Nothing is stored
+	// until the stock Save button runs `save_page`, and Discard restores it.
+	async function stageDelete(slot) {
+		const editor = editorApi();
+		const set = labelSet(slotLabels(slot));
+		if (!editor || !set.size) return;
+		let holders = blockHolders(editor);
+		if (!holders) return;
+		let index = findCardIndex(holders, set);
+		if (index === -1) return;
+		anchors.set(slotKey(slot), holders[index + 1] || null);
+		while (index !== -1) {
+			await editor.blocks.delete(index);
+			holders = blockHolders(editor) || [];
+			index = findCardIndex(holders, set);
+		}
+		schedule();
+	}
+
+	// Same steps as the stock "Edit" menu item, so a "+" shown in view mode can start editing.
+	async function ensureEditing() {
+		const ws = workspace();
+		if (!ws || !ws._page || !ws._page.is_editable || !ws.editor) return false;
+		if (!ws.is_read_only) return true;
+		if (!ws.editor.readOnly || typeof ws.editor.readOnly.toggle !== "function") return false;
+		ws.is_read_only = false;
+		await ws.editor.readOnly.toggle();
+		await ws.editor.isReady;
+		ws.setup_customization_buttons(ws._page);
+		if (typeof ws.make_blocks_sortable === "function") ws.make_blocks_sortable();
+		return true;
+	}
+
+	function prefillLabel(hint) {
+		let tries = 0;
+		const attempt = () => {
+			const dialog = window.cur_dialog;
+			const field = dialog && typeof dialog.get_field === "function" ? dialog.get_field("label") : null;
+			if (field) {
+				if (!dialog.get_value("label")) dialog.set_value("label", hint);
+				return;
+			}
+			tries += 1;
+			if (tries < 10) window.setTimeout(attempt, 80);
+		};
+		window.setTimeout(attempt, 80);
+	}
+
+	// Inserts an empty block of the chosen type; the stock block then opens its own
+	// creation dialog, exactly as when it is picked from the editor toolbox.
+	async function insertBlock(type, key, hint) {
+		try {
+			if (!(await ensureEditing())) return;
+			const editor = editorApi();
+			if (!editor) return;
+			const holders = blockHolders(editor) || [];
+			let index = holders.length;
+			const anchor = key ? anchors.get(key) : null;
+			if (anchor) {
+				const found = holders.indexOf(anchor);
+				if (found !== -1) index = found;
+			}
+			if (key) anchors.delete(key);
+			await editor.blocks.insert(type, {}, {}, index, true);
+			if (type === "card" && hint) prefillLabel(hint);
+			schedule();
+		} catch (_) { /* the stock editor keeps working */ }
+	}
+
+	function openAddDialog(key, hint) {
+		if (!window.frappe || !frappe.ui || !frappe.ui.Dialog) return;
+		const t = text();
+		const labels = ADD_TYPES.map((type) => t.types[type]);
+		const dialog = new frappe.ui.Dialog({
+			title: t.addTitle,
+			fields: [{
+				fieldname: "kind",
+				fieldtype: "Select",
+				label: t.addKind,
+				options: labels.join("\n"),
+				default: labels[0],
+				reqd: 1,
+			}],
+			primary_action_label: t.addAction,
+			primary_action: (values) => {
+				const type = ADD_TYPES[labels.indexOf(values.kind)];
+				dialog.hide();
+				if (type) window.setTimeout(() => insertBlock(type, key, hint), 250);
+			},
+		});
+		dialog.show();
+	}
+
+	function slotDeleteButton(slot) {
+		const t = text();
+		const button = document.createElement("button");
+		button.type = "button";
+		button.className = "nds-nb-slot-delete";
+		button.title = t.remove;
+		button.setAttribute("aria-label", t.remove);
+		button.innerHTML = '<svg viewBox="0 0 16 16" width="14" height="14" aria-hidden="true" focusable="false">' +
+			'<path d="M4 4l8 8M12 4l-8 8" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>';
+		button.addEventListener("click", (event) => {
+			event.preventDefault();
+			event.stopPropagation();
+			const name = plainText(slotHint(slot));
+			frappe.confirm(escapeHtml(text().stageConfirm(name)), () => stageDelete(slot));
+		});
+		return button;
+	}
+
+	function slotAddButton(slot) {
+		const t = text();
+		const button = document.createElement("button");
+		button.type = "button";
+		button.className = "nds-nb-slot-add";
+		button.title = t.add;
+		button.setAttribute("aria-label", t.add);
+		button.innerHTML = plusIcon();
+		button.addEventListener("click", (event) => {
+			event.preventDefault();
+			event.stopPropagation();
+			openAddDialog(slotKey(slot), slotHint(slot));
+		});
+		return button;
+	}
+
+	function addTile() {
+		const t = text();
+		const tile = document.createElement("button");
+		tile.type = "button";
+		tile.className = "nds-nb-add-tile";
+		tile.title = t.add;
+		tile.setAttribute("aria-label", t.add);
+		tile.innerHTML = plusIcon();
+		tile.addEventListener("click", (event) => {
+			event.preventDefault();
+			openAddDialog(null, "");
+		});
+		return tile;
+	}
+
+	function ensureChild(slot, className, build) {
+		if (!slot.querySelector(":scope > ." + className)) slot.appendChild(build(slot));
+	}
+
+	function dropChild(slot, className) {
+		const child = slot.querySelector(":scope > ." + className);
+		if (child) child.remove();
+	}
+
+	function clearSlot(slot) {
+		toggleClass(slot, "nds-nb-slot-empty", false);
+		dropChild(slot, "nds-nb-slot-delete");
+		dropChild(slot, "nds-nb-slot-add");
+	}
+
+	function syncAddTile(host, show) {
+		const grid = host.querySelector("[data-nds-add-grid]");
+		let tile = host.querySelector(".nds-nb-add-tile");
+		if (!show) {
+			if (tile) tile.remove();
+			return;
+		}
+		if (tile && grid && tile.parentElement !== grid) {
+			tile.remove();
+			tile = null;
+		}
+		if (!tile) tile = addTile();
+		if (grid) {
+			toggleClass(tile, "is-bar", false);
+			if (grid.lastElementChild !== tile) grid.appendChild(tile);
+			return;
+		}
+		toggleClass(tile, "is-bar", true);
+		const anchor = host.querySelector(".editor-js-container");
+		const parent = anchor ? anchor.parentNode : host;
+		if (tile.parentNode !== parent || (anchor && tile.nextElementSibling !== anchor)) {
+			parent.insertBefore(tile, anchor || null);
+		}
+	}
+
+	// Edit mode: delete button on every workspace-backed card. Any mode, for people who may
+	// edit: a "+" placeholder where a card is missing. Edit mode only: the "+" tile that ends
+	// the sections. Everything is added only when absent so the DOM observers settle.
+	function decorate(host, editing) {
+		const ws = workspace();
+		const editable = Boolean(ws && ws._page && ws._page.is_editable);
+		const editor = editable ? editorApi() : null;
+		const holders = editor ? blockHolders(editor) : null;
+		const known = Boolean(holders && holders.some((holder) => cardName(holder) != null));
+		host.querySelectorAll("[" + CARD_ATTR + "]").forEach((slot) => {
+			if (!known) {
+				clearSlot(slot);
+				return;
+			}
+			const labels = slotLabels(slot);
+			const exists = labels.length > 0 && findCardIndex(holders, labelSet(labels)) !== -1;
+			toggleClass(slot, "nds-nb-slot-empty", !exists);
+			if (exists) {
+				dropChild(slot, "nds-nb-slot-add");
+				if (editing) ensureChild(slot, "nds-nb-slot-delete", slotDeleteButton);
+				else dropChild(slot, "nds-nb-slot-delete");
+			} else {
+				dropChild(slot, "nds-nb-slot-delete");
+				ensureChild(slot, "nds-nb-slot-add", slotAddButton);
+			}
+		});
+		syncAddTile(host, Boolean(editing && holders));
+	}
+
+	function clearDecorations() {
+		document.querySelectorAll("#page-Workspaces [" + CARD_ATTR + "]").forEach(clearSlot);
+		document.querySelectorAll("#page-Workspaces .nds-nb-add-tile").forEach((tile) => tile.remove());
+	}
+
 	// --- driver ------------------------------------------------------------
 
 	function sync() {
 		try {
 			patchWorkspace();
+			patchReload();
 			const host = dashboardHost();
 			if (!host) {
 				removeLayer();
+				clearDecorations();
 				return;
 			}
 			if (isEditMode(host)) {
 				removeLayer();
+				decorate(host, true);
 				return;
 			}
 			markNative();
 			renderLayer(host);
+			decorate(host, false);
 		} catch (_) { /* never let this layer break the desk */ }
 	}
 
@@ -554,7 +913,7 @@ const newBlocks = (() => {
 		}
 	}
 
-	return { mount: install, isNativeNew, flaggedCardLabels };
+	return { mount: install, isNativeNew, flaggedCardLabels, registerFixedCards, CARD_ATTR };
 })();
 
 export { newBlocks };

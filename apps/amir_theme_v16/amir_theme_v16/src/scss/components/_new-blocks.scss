@@ -211,3 +211,91 @@ body #page-Workspaces .nds-nb .dashboard-widget-box { padding-bottom: 12px; }
 @media (max-width: 640px) {
   body #page-Workspaces .nds-nb-cell { grid-column: 1 / -1; }
 }
+
+// Edit-mode controls on the dashboards' own section cards: a delete button on every
+// Workspace-backed card, a "+" placeholder where a card is missing, and a "+" tile
+// that ends the sections. Logical properties keep them mirrored correctly in RTL.
+body #page-Workspaces [data-nds-card-labels] {
+  position: relative;
+}
+body #page-Workspaces .nds-nb-slot-delete {
+  position: absolute;
+  inset-block-start: 10px;
+  inset-inline-start: 10px;
+  z-index: 3;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  border: 1px solid #f3b4b4;
+  border-radius: 8px;
+  background: #fff5f5;
+  color: #c0392b;
+  line-height: 1;
+  cursor: pointer;
+  transition: background-color .15s ease, color .15s ease, border-color .15s ease;
+}
+body #page-Workspaces .nds-nb-slot-delete:hover,
+body #page-Workspaces .nds-nb-slot-delete:focus-visible {
+  border-color: #c0392b;
+  background: #c0392b;
+  color: #fff;
+}
+
+body #page-Workspaces [data-nds-card-labels].nds-nb-slot-empty {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 150px;
+  border: 2px dashed #c5d5e8;
+  background: #f8fafd;
+  box-shadow: none;
+}
+body #page-Workspaces [data-nds-card-labels].nds-nb-slot-empty > *:not(.nds-nb-slot-add) {
+  display: none !important;
+}
+
+body #page-Workspaces .nds-nb-slot-add,
+body #page-Workspaces .nds-nb-add-tile {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  border: 2px dashed #9db6d3;
+  background: #fff;
+  color: #164E8F;
+  line-height: 1;
+  cursor: pointer;
+  transition: background-color .15s ease, border-color .15s ease, color .15s ease;
+}
+body #page-Workspaces .nds-nb-slot-add {
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+}
+body #page-Workspaces .nds-nb-add-tile {
+  min-height: 150px;
+  border-radius: 14px;
+  background: #f8fafd;
+}
+body #page-Workspaces .nds-nb-add-tile.is-bar {
+  display: flex;
+  width: 100%;
+  min-height: 72px;
+  margin: 18px 0;
+}
+body #page-Workspaces .nds-nb-slot-add:hover,
+body #page-Workspaces .nds-nb-slot-add:focus-visible,
+body #page-Workspaces .nds-nb-add-tile:hover,
+body #page-Workspaces .nds-nb-add-tile:focus-visible {
+  border-color: #164E8F;
+  background: #eef4fb;
+  color: #0A2342;
+}
+body #page-Workspaces .nds-nb-slot-add svg,
+body #page-Workspaces .nds-nb-add-tile svg {
+  width: 26px;
+  height: 26px;
+}

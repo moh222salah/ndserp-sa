@@ -571,7 +571,7 @@ const salesDashboard = (() => {
 
 	function getSalesSectionGroups() {
 		const page = getSalesWorkspaceRecord();
-		const groups = SALES_SECTION_DEFINITIONS.map((definition) => ({ definition, links: [] }));
+		const groups = SALES_SECTION_DEFINITIONS.map((definition) => ({ definition, links: [], labels: [] }));
 		if (!page) return splitSalesReports(groups);
 
 		let links;
@@ -600,6 +600,8 @@ const salesDashboard = (() => {
 				// Do not silently discard real native links if a legacy heading uses an unknown alias.
 				activeGroup = (definition && groups.find((group) => group.definition.key === definition.key))
 					|| groups.find((group) => group.definition.key === "home");
+				// Remember which Workspace card feeds this section so Edit mode can delete / re-add it.
+				if (definition && activeGroup.definition.key === definition.key) activeGroup.labels.push(String(label));
 				return;
 			}
 			if (skippingNewCard) return;
@@ -618,6 +620,7 @@ const salesDashboard = (() => {
 	function splitSalesReports(groups) {
 		const reports = groups.find((group) => group.definition.key === "reports");
 		if (!reports) return groups;
+		if (!reports.links.length && !reports.labels.length) return groups;
 		const reportLinks = reports.links.slice();
 		const firstSize = Math.floor(reportLinks.length / 3) + (reportLinks.length % 3 > 0 ? 1 : 0);
 		const secondSize = Math.floor(reportLinks.length / 3) + (reportLinks.length % 3 > 1 ? 1 : 0);
@@ -630,6 +633,7 @@ const salesDashboard = (() => {
 					ar: "تقارير رئيسية", en: "Main Reports",
 				},
 				links: reportLinks.slice(0, splitPoint1),
+				labels: reports.labels,
 			},
 			{
 				definition: {
@@ -637,6 +641,7 @@ const salesDashboard = (() => {
 					ar: "تقارير متقدمة", en: "Advanced Reports",
 				},
 				links: reportLinks.slice(splitPoint1, splitPoint2),
+				labels: reports.labels,
 			},
 			{
 				definition: {
@@ -644,6 +649,7 @@ const salesDashboard = (() => {
 					ar: "تقارير متخصصة", en: "Specialized Reports",
 				},
 				links: reportLinks.slice(splitPoint2),
+				labels: reports.labels,
 			},
 		];
 		return groups.filter((group) => group.definition.key !== "reports").concat(reportGroups);
@@ -733,7 +739,7 @@ const salesDashboard = (() => {
 			group.links.map((item) => JSON.stringify([
 				item.label || "", item.link_to || "", item.link_type || "", item.url || "",
 				item.filters || "", item.route_options || "", item.hidden || 0, item.only_for || "",
-			])).join(",")
+			])).join(",") + "~" + group.labels.join("^")
 		).join("|");
 		const existing = document.getElementById(SALES_SECTIONS_ID);
 		if (existing && existing.parentElement === host && existing.dataset.salesSignature === signature) {
@@ -763,11 +769,17 @@ const salesDashboard = (() => {
 		sections.appendChild(header);
 
 		const grid = make("div", "nds-sales-section-grid");
+		grid.setAttribute("data-nds-add-grid", "1");
 		groups.forEach((group) => {
 			const definition = group.definition;
 			const card = make("article", "nds-sales-section-card");
 			card.setAttribute("dir", direction);
 			card.setAttribute("data-sales-section", definition.key);
+			// Edit mode puts a delete button on a Workspace-backed card, or a "+" where it is missing.
+			if (group.labels.length || !group.links.length) {
+				card.setAttribute(newBlocks.CARD_ATTR, JSON.stringify(group.labels));
+				if (!group.labels.length) card.setAttribute("data-nds-card-hint", definition.ar);
+			}
 
 			const cardHeader = make("div", "nds-sales-section-card-head");
 			cardHeader.setAttribute("dir", direction);
@@ -1217,7 +1229,14 @@ const salesDashboard = (() => {
 	function install() {
 		if (installStarted) return;
 		installStarted = true;
+		newBlocks.registerFixedCards((label) => Boolean(sectionDefinition(label)));
 		const boot = () => {
+			document.addEventListener("nds-workspace-reloaded", () => {
+				// Save / Discard changed the Workspace: the cached link rows are out of date.
+				SALES_WORKSPACE_LINK_ROWS.clear();
+				SALES_WORKSPACE_LINK_FAILURES.clear();
+				scheduleSync();
+			});
 			scheduleSync();
 			if (window.frappe && frappe.router && typeof frappe.router.on === "function") {
 				frappe.router.on("change", scheduleSync);
