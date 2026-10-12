@@ -435,6 +435,7 @@ function syncSalesWorkspaceScope() {
 
 /* Mark only the Master Files Workspace for isolated, presentation-only card styling. */
 const MASTER_FILES_WORKSPACE_NAME = "الملفات الرئيسية NDS ERP";
+const MASTER_FILES_ROUTE_FIX_VERSION = "master-files-direct-route-v1";
 
 function syncMasterFilesWorkspaceScope() {
 	let route = [];
@@ -443,28 +444,55 @@ function syncMasterFilesWorkspaceScope() {
 	} catch (e) {
 		route = [];
 	}
-	const routeKind = String(route[0] || "").trim().toLowerCase();
-	const routeName = String(route[1] || "").trim();
-	let expectedSlug = MASTER_FILES_WORKSPACE_NAME;
+	if (!Array.isArray(route)) route = [];
+
+	const normalize = (value) => {
+		let text = String(value || "").trim();
+		try {
+			text = decodeURIComponent(text);
+		} catch (e) {
+			// Keep the raw segment when it is not percent-encoded.
+		}
+		return text.toLowerCase().replace(/[_\s]+/g, "-");
+	};
+
+	const expected = new Set([
+		normalize(MASTER_FILES_WORKSPACE_NAME),
+		normalize("Master Files NDS ERP"),
+	]);
 	try {
 		if (frappe.router && typeof frappe.router.slug === "function") {
-			expectedSlug = frappe.router.slug(MASTER_FILES_WORKSPACE_NAME);
+			expected.add(normalize(frappe.router.slug(MASTER_FILES_WORKSPACE_NAME)));
 		}
 	} catch (e) {
-		// Keep the canonical Workspace name as a fallback.
+		// The canonical Workspace name remains a valid fallback.
 	}
-	const activeTitle = document.querySelector(".workspace-title")?.textContent?.trim() || "";
-	const activeKey = currentWorkspaceKey() || "";
-	const expectedNames = [
-		MASTER_FILES_WORKSPACE_NAME.toLowerCase(),
-		String(expectedSlug).toLowerCase(),
-	];
-	const nameMatches = [routeName, activeTitle, activeKey]
-		.some((value) => expectedNames.includes(String(value).trim().toLowerCase()));
-	document.body.classList.toggle(
-		"nds-master-files-workspace",
-		routeKind === "workspaces" && nameMatches
-	);
+
+	const first = normalize(route[0]);
+	const second = normalize(route[1]);
+	let active = false;
+	if (first === "workspaces") {
+		// Classic route: /desk/workspaces/<name>. A concrete name in the URL is
+		// authoritative, so a stale sidebar title can never light up another page.
+		if (second) {
+			active = expected.has(second);
+		} else {
+			const activeTitle = document.querySelector(".workspace-title")?.textContent || "";
+			active = [activeTitle, currentWorkspaceKey()].some((value) => expected.has(normalize(value)));
+		}
+	} else {
+		// Frappe v16 also opens a Workspace directly as /desk/<workspace-slug>, where
+		// get_route() returns [<slug>] with no "Workspaces" segment. Only this exact
+		// Workspace is recognised, so the card styling cannot leak onto other pages.
+		active = expected.has(first);
+	}
+
+	document.body.classList.toggle("nds-master-files-workspace", active);
+	if (active) {
+		document.body.dataset.ndsMfRouteFix = MASTER_FILES_ROUTE_FIX_VERSION;
+	} else {
+		delete document.body.dataset.ndsMfRouteFix;
+	}
 }
 
 /*
@@ -496,13 +524,14 @@ function enhanceMasterFilesCards() {
 	document
 		.querySelectorAll("#page-Workspaces #editorjs .widget.shortcut-widget-box")
 		.forEach((card) => {
-			if (card.dataset.ndsMfDone) return;
+			// Idempotent on the injected nodes themselves (not a one-shot flag), so a
+			// card whose inner markup Frappe re-renders is enhanced again.
+			if (card.querySelector(":scope > .nds-mf-icon, :scope > .nds-mf-chevron")) return;
 			const holder = card.closest(".ce-block")?.querySelector("[shortcut_name]");
 			const name = String(holder?.getAttribute("shortcut_name") || card.textContent || "")
 				.trim()
 				.toLowerCase();
 			if (!name) return;
-			card.dataset.ndsMfDone = "1";
 
 			const match = MASTER_FILES_ICONS.find(([names]) => names.some((n) => name === n || name.includes(n)));
 			const iconName = firstExistingIcon([...(match ? match[1] : []), ...MASTER_FILES_ICON_FALLBACKS]);

@@ -336,10 +336,12 @@ if grep -Fq 'data-purchase-period' "$PURCHASE_SOURCE_JS" || grep -Fq 'لوحة �
   exit 56
 fi
 echo "PURCHASE_DASHBOARD_TOP_METADATA_SOURCE=PASS"
-if ! grep -Fq 'nds-master-files-workspace' "$LOCAL_JS_ASSET"; then
-  echo "BUILT_MASTER_FILES_WORKSPACE_JS=FAIL:MISSING_MARKER:nds-master-files-workspace"
-  exit 60
-fi
+for marker in 'nds-master-files-workspace' 'master-files-direct-route-v1' 'ndsMfRouteFix'; do
+  if ! grep -Fq "$marker" "$LOCAL_JS_ASSET"; then
+    echo "BUILT_MASTER_FILES_WORKSPACE_JS=FAIL:MISSING_MARKER:$marker"
+    exit 60
+  fi
+done
 echo "BUILT_MASTER_FILES_WORKSPACE_JS=PASS"
 SERVED_JS="$(mktemp)"
 trap 'rm -f "$LOCAL_CSS" "$SERVED_CSS" "$SERVED_JS"' EXIT
@@ -422,10 +424,12 @@ for marker in 'nds-purchase-dashboard' 'nds-purchase-kpi-grid' 'nds-purchase-mon
 done
 echo "SERVED_PURCHASE_DASHBOARD_JS=PASS"
 # The served bundle is checked by SHA-256 below; metadata cleanup is guarded at feature-source level.
-if ! grep -Fq 'nds-master-files-workspace' "$SERVED_JS"; then
-  echo "SERVED_MASTER_FILES_WORKSPACE_JS=FAIL:MISSING_MARKER:nds-master-files-workspace"
-  exit 61
-fi
+for marker in 'nds-master-files-workspace' 'master-files-direct-route-v1' 'ndsMfRouteFix'; do
+  if ! grep -Fq "$marker" "$SERVED_JS"; then
+    echo "SERVED_MASTER_FILES_WORKSPACE_JS=FAIL:MISSING_MARKER:$marker"
+    exit 61
+  fi
+done
 echo "SERVED_MASTER_FILES_WORKSPACE_JS=PASS"
 if [ "$(sha256sum "$LOCAL_JS_ASSET" | awk '{print $1}')" != "$(sha256sum "$SERVED_JS" | awk '{print $1}')" ]; then
   echo "SERVED_QUICK_ACTIONS_JS=FAIL:HASH_MISMATCH"

@@ -369,8 +369,9 @@ for key in required:
         if missing:
             raise SystemExit("PURCHASE_DASHBOARD_JS=FAIL:MISSING_MARKERS:" + ",".join(missing))
         print("PURCHASE_DASHBOARD_JS=PASS")
-        if "nds-master-files-workspace" not in js:
-            raise SystemExit("MASTER_FILES_WORKSPACE_JS=FAIL:MISSING_MARKER:nds-master-files-workspace")
+        for marker in ("nds-master-files-workspace", "master-files-direct-route-v1", "ndsMfRouteFix"):
+            if marker not in js:
+                raise SystemExit("MASTER_FILES_WORKSPACE_JS=FAIL:MISSING_MARKER:" + marker)
         print("MASTER_FILES_WORKSPACE_JS=PASS")
 
 print("ASSET_SERVE_TREE=PASS")
