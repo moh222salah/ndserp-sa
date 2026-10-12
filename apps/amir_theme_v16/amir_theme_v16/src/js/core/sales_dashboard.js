@@ -589,7 +589,7 @@ const salesDashboard = (() => {
 		Promise.resolve(request).then((response) => {
 			const cards = response && response.message && response.message.cards &&
 				response.message.cards.items;
-			if (!Array.isArray(cards)) throw new Error("Sales Workspace link response is unavailable");
+			if (!Array.isArray(cards) || !cards.length) throw new Error("Sales Workspace links are not ready yet");
 			const rows = [];
 			cards.forEach((card) => {
 				if (!card) return;
