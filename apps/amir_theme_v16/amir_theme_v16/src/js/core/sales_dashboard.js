@@ -793,11 +793,20 @@ const salesDashboard = (() => {
 				item.filters || "", item.route_options || "", item.hidden || 0, item.only_for || "",
 			])).join(",") + "~" + group.labels.join("^")
 		).join("|");
+		const linkCount = groups.reduce((total, group) => total + group.links.length, 0);
+		const reportColumns = groups.filter((group) => /^reports-[123]$/.test(group.definition.key)).length;
+		const annotateSections = (node) => {
+			node.dataset.salesWorkspaceData = SALES_WORKSPACE_DATA_FALLBACK_VERSION;
+			node.dataset.salesLinkRetry = SALES_WORKSPACE_LINK_RETRY_VERSION;
+			node.dataset.salesLinkCount = String(linkCount);
+			node.dataset.salesReportsCount = String(reportColumns);
+		};
 		const existing = document.getElementById(SALES_SECTIONS_ID);
 		if (existing && existing.parentElement === host && existing.dataset.salesSignature === signature) {
 			existing.setAttribute("dir", direction);
 			existing.setAttribute("data-sales-direction", direction);
 			if (language) existing.setAttribute("lang", language);
+			annotateSections(existing);
 			return true;
 		}
 		if (existing) existing.remove();
@@ -809,6 +818,7 @@ const salesDashboard = (() => {
 		sections.setAttribute("aria-label", direction === "rtl" ? "أقسام المبيعات" : "Sales sections");
 		if (language) sections.setAttribute("lang", language);
 		sections.dataset.salesSignature = signature;
+		annotateSections(sections);
 
 		const header = make("header", "nds-sales-sections-header");
 		header.setAttribute("dir", direction);
@@ -1287,6 +1297,9 @@ const salesDashboard = (() => {
 				// Save / Discard changed the Workspace: the cached link rows are out of date.
 				SALES_WORKSPACE_LINK_ROWS.clear();
 				SALES_WORKSPACE_LINK_FAILURES.clear();
+				SALES_WORKSPACE_LINK_RETRIES.clear();
+				SALES_WORKSPACE_LINK_RETRY_TIMERS.forEach((timer) => window.clearTimeout(timer));
+				SALES_WORKSPACE_LINK_RETRY_TIMERS.clear();
 				scheduleSync();
 			});
 			scheduleSync();
