@@ -23,6 +23,10 @@ const salesDashboard = (() => {
 	const SALES_WORKSPACE_LINK_ROWS = new Map();
 	const SALES_WORKSPACE_LINK_REQUESTS = new Set();
 	const SALES_WORKSPACE_LINK_FAILURES = new Set();
+	const SALES_WORKSPACE_LINK_RETRIES = new Map();
+	const SALES_WORKSPACE_LINK_RETRY_TIMERS = new Map();
+	const SALES_WORKSPACE_DATA_FALLBACK_VERSION = "sales-workspace-api-fallback-v2";
+	const SALES_WORKSPACE_LINK_RETRY_VERSION = "sales-link-retry-v1";
 
 	function routeName(value) {
 		return String(value || "").trim().toLowerCase().replace(/[_\s]+/g, "-");
@@ -455,7 +459,6 @@ const salesDashboard = (() => {
 	function getSalesWorkspaceRecord() {
 		try {
 			const map = window.frappe && frappe.workspace_map;
-			if (!map) return null;
 			const expected = new Set([routeName(SALES_WORKSPACE_NAME), routeName("Sales NDS ERP")]);
 			try {
 				if (frappe.router && typeof frappe.router.slug === "function") {
@@ -464,14 +467,40 @@ const salesDashboard = (() => {
 			} catch (_) {
 				// Canonical names still work when slugging is unavailable.
 			}
-			for (const [key, page] of Object.entries(map)) {
-				if (!page) continue;
-				const candidates = [key, page.name, page.title, page.label, page.route].filter(Boolean);
-				if (candidates.some((value) => expected.has(routeName(value)))) return page;
+			if (map && typeof map === "object") {
+				for (const [key, page] of Object.entries(map)) {
+					if (!page) continue;
+					const candidates = [key, page.name, page.title, page.label, page.route].filter(Boolean);
+					if (candidates.some((value) => expected.has(routeName(value)))) {
+						// Keep a stable document name even if the client map exposes only its route/title.
+						return Object.assign({}, page, {
+							name: String(page.name || SALES_WORKSPACE_NAME),
+							title: String(page.title || SALES_WORKSPACE_NAME),
+						});
+					}
+				}
+			}
+			// Frappe can paint the active route before its optional workspace_map cache is ready.
+			// The canonical name lets the permission-filtered read API load the real Workspace links.
+			if (isSalesWorkspace()) {
+				return {
+					name: SALES_WORKSPACE_NAME,
+					title: SALES_WORKSPACE_NAME,
+					public: 0,
+					links: [],
+					content: [],
+				};
 			}
 			return null;
 		} catch (_) {
-			return null;
+			if (!isSalesWorkspace()) return null;
+			return {
+				name: SALES_WORKSPACE_NAME,
+				title: SALES_WORKSPACE_NAME,
+				public: 0,
+				links: [],
+				content: [],
+			};
 		}
 	}
 
@@ -507,13 +536,34 @@ const salesDashboard = (() => {
 		return [];
 	}
 
-	// Frappe v16 builds Workspace navigation from permission-filtered desktop-page
-	// data. The Workspace list itself contains Editor.js content, not these links.
+	function scheduleSalesWorkspaceLinkRetry(name) {
+		if (!name || SALES_WORKSPACE_LINK_RETRY_TIMERS.has(name) || SALES_WORKSPACE_LINK_ROWS.has(name)) return;
+		const attempts = (SALES_WORKSPACE_LINK_RETRIES.get(name) || 0) + 1;
+		if (attempts > 4) {
+			SALES_WORKSPACE_LINK_FAILURES.add(name);
+			return;
+		}
+		SALES_WORKSPACE_LINK_RETRIES.set(name, attempts);
+		const delay = Math.min(750 * (2 ** (attempts - 1)), 6000);
+		const timer = window.setTimeout(() => {
+			SALES_WORKSPACE_LINK_RETRY_TIMERS.delete(name);
+			if (!isSalesWorkspace()) return;
+			const host = document.querySelector("#page-Workspaces .layout-main-section");
+			const board = document.getElementById(DASHBOARD_ID);
+			if (host && board) renderSalesSections(host, board);
+		}, delay);
+		SALES_WORKSPACE_LINK_RETRY_TIMERS.set(name, timer);
+	}
+
+	// Frappe v16 exposes permission-filtered Workspace navigation through this read-only API.
+	// Cache recovery and short bounded retries prevent one transient request/cache miss from
+	// leaving every custom section empty for the rest of the Desk session.
 	function requestSalesWorkspaceLinkRows(page) {
-		const name = String(page && page.name || "").trim();
+		const name = String(page && (page.name || page.title) || SALES_WORKSPACE_NAME).trim();
 		if (!name || !window.frappe || typeof frappe.call !== "function" ||
 			SALES_WORKSPACE_LINK_ROWS.has(name) ||
 			SALES_WORKSPACE_LINK_REQUESTS.has(name) ||
+			SALES_WORKSPACE_LINK_RETRY_TIMERS.has(name) ||
 			SALES_WORKSPACE_LINK_FAILURES.has(name)) return;
 
 		SALES_WORKSPACE_LINK_REQUESTS.add(name);
@@ -522,27 +572,24 @@ const salesDashboard = (() => {
 			request = frappe.call({
 				method: "frappe.desk.desktop.get_desktop_page",
 				args: {
-					page: {
+					page: JSON.stringify({
 						name,
-						title: page.title || name,
-						public: page.public ? 1 : 0,
-					},
+						title: String(page && page.title || SALES_WORKSPACE_NAME),
+						public: page && page.public ? 1 : 0,
+					}),
 				},
 				type: "GET",
 			});
 		} catch (_) {
 			SALES_WORKSPACE_LINK_REQUESTS.delete(name);
-			SALES_WORKSPACE_LINK_FAILURES.add(name);
+			scheduleSalesWorkspaceLinkRetry(name);
 			return;
 		}
 
 		Promise.resolve(request).then((response) => {
 			const cards = response && response.message && response.message.cards &&
 				response.message.cards.items;
-			if (!Array.isArray(cards)) {
-				SALES_WORKSPACE_LINK_FAILURES.add(name);
-				return;
-			}
+			if (!Array.isArray(cards)) throw new Error("Sales Workspace link response is unavailable");
 			const rows = [];
 			cards.forEach((card) => {
 				if (!card) return;
@@ -558,8 +605,13 @@ const salesDashboard = (() => {
 				});
 			});
 			SALES_WORKSPACE_LINK_ROWS.set(name, rows);
+			SALES_WORKSPACE_LINK_FAILURES.delete(name);
+			SALES_WORKSPACE_LINK_RETRIES.delete(name);
+			const pendingRetry = SALES_WORKSPACE_LINK_RETRY_TIMERS.get(name);
+			if (pendingRetry) window.clearTimeout(pendingRetry);
+			SALES_WORKSPACE_LINK_RETRY_TIMERS.delete(name);
 		}).catch(() => {
-			SALES_WORKSPACE_LINK_FAILURES.add(name);
+			scheduleSalesWorkspaceLinkRetry(name);
 		}).finally(() => {
 			SALES_WORKSPACE_LINK_REQUESTS.delete(name);
 			if (!isSalesWorkspace()) return;
