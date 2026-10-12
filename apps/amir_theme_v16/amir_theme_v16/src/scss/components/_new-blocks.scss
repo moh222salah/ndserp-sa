@@ -299,3 +299,28 @@ body #page-Workspaces .nds-nb-add-tile svg {
   width: 26px;
   height: 26px;
 }
+
+// Fixed dashboard widgets (KPI cards, charts, tables): same delete / "+" controls as the
+// section cards. The delete button sits at the inline end so it never covers a label.
+body #page-Workspaces [data-nds-widget] {
+  position: relative;
+}
+body #page-Workspaces [data-nds-widget] > .nds-nb-slot-delete {
+  inset-inline-start: auto;
+  inset-inline-end: 10px;
+}
+body #page-Workspaces [data-nds-widget].nds-nb-slot-empty {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 120px;
+  border: 2px dashed #c5d5e8;
+  background: #f8fafd;
+  box-shadow: none;
+}
+body #page-Workspaces [data-nds-widget].nds-nb-slot-empty > *:not(.nds-nb-slot-add) {
+  display: none !important;
+}
+body #page-Workspaces [data-nds-widget].nds-widget-gone {
+  display: none !important;
+}

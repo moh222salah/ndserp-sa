@@ -263,6 +263,7 @@ const newBlocks = (() => {
 			const result = original.apply(this, arguments);
 			Promise.resolve(result).then(() => {
 				anchors.clear();
+				pendingHidden = null;
 				flaggedCache = { raw: null, blocks: [] };
 				try { document.dispatchEvent(new CustomEvent("nds-workspace-reloaded")); } catch (_) { /* optional */ }
 				schedule();
@@ -290,6 +291,7 @@ const newBlocks = (() => {
 					editor.save = function () {
 						return Promise.resolve(realSave.apply(this, arguments)).then((output) => {
 							try { tagOutput(output, previous); } catch (_) { /* keep the save */ }
+								try { writeHidden(output, previous); } catch (_) { /* keep the save */ }
 							return output;
 						});
 					};
@@ -855,6 +857,160 @@ const newBlocks = (() => {
 		document.querySelectorAll("#page-Workspaces .nds-nb-add-tile").forEach((tile) => tile.remove());
 	}
 
+	// --- 6. fixed widgets: KPI cards, charts and tables ---------------------
+	//
+	// Every dashboard draws its KPI cards, chart panels and latest-documents table in
+	// code, so none of them is a Workspace block. They get the same Edit-mode controls
+	// as the section cards: "x" hides one (staged), a dashed "+" shows where it was and
+	// brings it back. The hidden ids ride along on the first block of the saved
+	// Workspace content (`data.nds_hidden`), exactly like the "new block" tag, so they
+	// are stored by the stock Save button and thrown away by Discard.
+
+	const HIDDEN_KEY = "nds_hidden";
+	const WIDGET_ATTR = "data-nds-widget";
+	const KPI_SELECTOR = '[class*="-kpi-card"][data-kpi]';
+	const PANEL_SELECTOR = ".nds-sales-panel, .nds-purchase-panel, .nds-warehouse-panel, .nds-accounts-panel";
+
+	let pendingHidden = null;
+	let pendingPage = null;
+	let hiddenCache = { raw: null, ids: new Set() };
+
+	function parseHidden(raw) {
+		const ids = new Set();
+		(parseContent(raw) || []).forEach((block) => {
+			const value = block && block.data ? block.data[HIDDEN_KEY] : null;
+			if (typeof value !== "string") return;
+			value.split(",").forEach((id) => {
+				const clean = id.trim();
+				if (clean) ids.add(clean);
+			});
+		});
+		return ids;
+	}
+
+	function savedHidden() {
+		const raw = rawContent();
+		if (raw !== hiddenCache.raw) hiddenCache = { raw, ids: parseHidden(raw) };
+		return hiddenCache.ids;
+	}
+
+	function currentPageName() {
+		const ws = workspace();
+		return ws && ws._page ? ws._page.name || null : null;
+	}
+
+	// Staged ids while editing, otherwise the saved ones. A staged set never leaks
+	// onto another workspace page.
+	function effectiveHidden() {
+		if (pendingHidden && pendingPage !== currentPageName()) pendingHidden = null;
+		return pendingHidden || savedHidden();
+	}
+
+	function setWidgetHidden(id, hide) {
+		const next = new Set(effectiveHidden());
+		if (hide) next.add(id);
+		else next.delete(id);
+		pendingHidden = next;
+		pendingPage = currentPageName();
+		schedule();
+	}
+
+	// Called while the stock editor saves: writes the ids onto the first block.
+	function writeHidden(output, previousRaw) {
+		if (!output || !Array.isArray(output.blocks)) return;
+		const ids = pendingHidden && pendingPage === currentPageName() ? pendingHidden : parseHidden(previousRaw);
+		output.blocks.forEach((block) => {
+			if (block && block.data) delete block.data[HIDDEN_KEY];
+		});
+		if (!ids.size) return;
+		const first = output.blocks.find((block) => block && block.data);
+		if (first) first.data[HIDDEN_KEY] = Array.from(ids).sort().join(",");
+	}
+
+	function tagWidgets(host) {
+		host.querySelectorAll(KPI_SELECTOR).forEach((node) => {
+			const id = "kpi:" + node.getAttribute("data-kpi");
+			if (node.getAttribute(WIDGET_ATTR) !== id) node.setAttribute(WIDGET_ATTR, id);
+		});
+		// Panels have no unique class of their own, so their position is the id. Hidden
+		// panels stay in the DOM, which keeps the positions stable.
+		let index = 0;
+		host.querySelectorAll(PANEL_SELECTOR).forEach((node) => {
+			if (node.parentElement && node.parentElement.closest("[" + WIDGET_ATTR + "]")) return;
+			const id = "panel:" + index;
+			index += 1;
+			if (node.getAttribute(WIDGET_ATTR) !== id) node.setAttribute(WIDGET_ATTR, id);
+		});
+	}
+
+	function widgetLabel(node) {
+		const heading = node.querySelector('[class*="-kpi-label"], h2, h3');
+		return plainText(heading ? heading.textContent : "") || node.getAttribute(WIDGET_ATTR) || "";
+	}
+
+	function widgetDeleteButton(node) {
+		const button = slotDeleteButton(node);
+		const fresh = button.cloneNode(true);
+		fresh.addEventListener("click", (event) => {
+			event.preventDefault();
+			event.stopPropagation();
+			const id = node.getAttribute(WIDGET_ATTR);
+			frappe.confirm(escapeHtml(text().stageConfirm(widgetLabel(node))), () => setWidgetHidden(id, true));
+		});
+		return fresh;
+	}
+
+	function widgetAddButton(node) {
+		const t = text();
+		const button = document.createElement("button");
+		button.type = "button";
+		button.className = "nds-nb-slot-add";
+		button.title = t.add;
+		button.setAttribute("aria-label", t.add);
+		button.innerHTML = plusIcon();
+		button.addEventListener("click", (event) => {
+			event.preventDefault();
+			event.stopPropagation();
+			const id = node.getAttribute(WIDGET_ATTR);
+			ensureEditing().then((ok) => { if (ok) setWidgetHidden(id, false); }).catch(() => {});
+		});
+		return button;
+	}
+
+	function decorateWidgets(host, editing) {
+		tagWidgets(host);
+		const editable = canEdit();
+		const hidden = effectiveHidden();
+		host.querySelectorAll("[" + WIDGET_ATTR + "]").forEach((node) => {
+			if (!hidden.has(node.getAttribute(WIDGET_ATTR))) {
+				toggleClass(node, "nds-widget-gone", false);
+				toggleClass(node, "nds-nb-slot-empty", false);
+				dropChild(node, "nds-nb-slot-add");
+				if (editing && editable) ensureChild(node, "nds-nb-slot-delete", widgetDeleteButton);
+				else dropChild(node, "nds-nb-slot-delete");
+				return;
+			}
+			dropChild(node, "nds-nb-slot-delete");
+			if (!editable) {
+				toggleClass(node, "nds-widget-gone", true);
+				toggleClass(node, "nds-nb-slot-empty", false);
+				dropChild(node, "nds-nb-slot-add");
+				return;
+			}
+			toggleClass(node, "nds-widget-gone", false);
+			toggleClass(node, "nds-nb-slot-empty", true);
+			ensureChild(node, "nds-nb-slot-add", widgetAddButton);
+		});
+	}
+
+	function clearWidgets() {
+		pendingHidden = null;
+		document.querySelectorAll("#page-Workspaces [" + WIDGET_ATTR + "]").forEach((node) => {
+			toggleClass(node, "nds-widget-gone", false);
+			clearSlot(node);
+		});
+	}
+
 	// --- driver ------------------------------------------------------------
 
 	function sync() {
@@ -865,16 +1021,19 @@ const newBlocks = (() => {
 			if (!host) {
 				removeLayer();
 				clearDecorations();
+				clearWidgets();
 				return;
 			}
 			if (isEditMode(host)) {
 				removeLayer();
 				decorate(host, true);
+				decorateWidgets(host, true);
 				return;
 			}
 			markNative();
 			renderLayer(host);
 			decorate(host, false);
+			decorateWidgets(host, false);
 		} catch (_) { /* never let this layer break the desk */ }
 	}
 
