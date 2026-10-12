@@ -121,13 +121,8 @@
  },
  {
   "app": "ndserp",
-  "charts": [
-   {
-    "chart_name": "Profit and Loss",
-    "label": "الربح و الخسارة"
-   }
-  ],
-  "content": "[{\"id\":\"a1XLIBGVyZ\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\">حسابات</span>\",\"col\":12}},{\"id\":\"ndsUsersSc01\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"المستخدمين\",\"col\":3}},{\"id\":\"KXVyaWo65h\",\"type\":\"chart\",\"data\":{\"chart_name\":\"الربح و الخسارة\",\"col\":12}},{\"id\":\"IK3ruYgq_-\",\"type\":\"number_card\",\"data\":{\"number_card_name\":\"اجمالي فواتير الشراء\",\"col\":4}},{\"id\":\"drZ0jXJ-j_\",\"type\":\"number_card\",\"data\":{\"number_card_name\":\"اجمالي فواتير البيع\",\"col\":4}},{\"id\":\"H6lE_BpcSU\",\"type\":\"number_card\",\"data\":{\"number_card_name\":\"اجمالي فواتير البيع المدفوعة\",\"col\":4}},{\"id\":\"ojK4y9yMGV\",\"type\":\"number_card\",\"data\":{\"number_card_name\":\"اجمالي فواتير الشراء المدفوعة\",\"col\":4}},{\"id\":\"Pm_PmJ1ZcW\",\"type\":\"spacer\",\"data\":{\"col\":12}},{\"id\":\"haaDgfrO2n\",\"type\":\"card\",\"data\":{\"card_name\":\"الحسابات الرئيسية\",\"col\":4}},{\"id\":\"fw0xSJRE8s\",\"type\":\"card\",\"data\":{\"card_name\":\"التقارير المالية\",\"col\":4}}]",
+  "charts": [],
+  "content": "[{\"id\":\"a1XLIBGVyZ\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\">حسابات</span>\",\"col\":12}},{\"id\":\"ndsUsersSc01\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"المستخدمين\",\"col\":3}},{\"id\":\"IK3ruYgq_-\",\"type\":\"number_card\",\"data\":{\"number_card_name\":\"اجمالي فواتير الشراء\",\"col\":4}},{\"id\":\"drZ0jXJ-j_\",\"type\":\"number_card\",\"data\":{\"number_card_name\":\"اجمالي فواتير البيع\",\"col\":4}},{\"id\":\"H6lE_BpcSU\",\"type\":\"number_card\",\"data\":{\"number_card_name\":\"اجمالي فواتير البيع المدفوعة\",\"col\":4}},{\"id\":\"ojK4y9yMGV\",\"type\":\"number_card\",\"data\":{\"number_card_name\":\"اجمالي فواتير الشراء المدفوعة\",\"col\":4}},{\"id\":\"Pm_PmJ1ZcW\",\"type\":\"spacer\",\"data\":{\"col\":12}},{\"id\":\"haaDgfrO2n\",\"type\":\"card\",\"data\":{\"card_name\":\"الحسابات الرئيسية\",\"col\":4}},{\"id\":\"fw0xSJRE8s\",\"type\":\"card\",\"data\":{\"card_name\":\"التقارير المالية\",\"col\":4}}]",
   "custom_blocks": [],
   "docstatus": 0,
   "doctype": "Workspace",
