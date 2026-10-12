@@ -297,7 +297,7 @@ for marker in 'nds-sales-dashboard' 'nds-sales-revenue-chart' 'nds-sales-channel
   fi
 done
 echo "BUILT_SALES_DASHBOARD_JS=PASS"
-for marker in 'sales-workspace-api-fallback-v2' 'sales-link-retry-v1' 'salesWorkspaceData' 'salesLinkCount' 'salesReportsCount'; do
+for marker in 'sales-workspace-api-fallback-v2' 'sales-link-retry-v1' 'sales-direct-workspace-route-v1' 'salesRouteFix' 'salesWorkspaceData' 'salesLinkCount' 'salesReportsCount'; do
   if ! grep -Fq "$marker" "$LOCAL_JS_ASSET"; then
     echo "BUILT_SALES_SECTIONS_RECOVERY_JS=FAIL:MISSING_MARKER:$marker"
     exit 62
@@ -392,7 +392,7 @@ for marker in 'nds-sales-dashboard' 'nds-sales-revenue-chart' 'nds-sales-channel
   fi
 done
 echo "SERVED_SALES_DASHBOARD_JS=PASS"
-for marker in 'sales-workspace-api-fallback-v2' 'sales-link-retry-v1' 'salesWorkspaceData' 'salesLinkCount' 'salesReportsCount'; do
+for marker in 'sales-workspace-api-fallback-v2' 'sales-link-retry-v1' 'sales-direct-workspace-route-v1' 'salesRouteFix' 'salesWorkspaceData' 'salesLinkCount' 'salesReportsCount'; do
   if ! grep -Fq "$marker" "$SERVED_JS"; then
     echo "SERVED_SALES_SECTIONS_RECOVERY_JS=FAIL:MISSING_MARKER:$marker"
     exit 63
