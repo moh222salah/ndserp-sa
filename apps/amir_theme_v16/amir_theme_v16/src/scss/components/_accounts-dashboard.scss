@@ -32,7 +32,8 @@ body.amt-accounts-workspace.nds-accounts-dashboard-ready #page-Workspaces .layou
   box-shadow: none;
 }
 
-body.amt-accounts-workspace.nds-accounts-dashboard-ready #page-Workspaces #editorjs {
+/* Hidden only in view mode: the stock editor must be usable while the Workspace is being edited. */
+body.amt-accounts-workspace.nds-accounts-dashboard-ready #page-Workspaces .layout-main-section:not(.edit-mode) #editorjs {
   display: none !important;
 }
 

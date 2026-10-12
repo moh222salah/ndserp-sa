@@ -2,6 +2,8 @@
  * NDS ERP Saudi — Warehouse Workspace dashboard.
  * UI-only. Reads inventory through standard Frappe list APIs and never writes records.
  */
+import { newBlocks } from "./new_blocks.js";
+
 const warehouseDashboard = (() => {
   "use strict";
   const ID = "nds-warehouse-dashboard";
@@ -219,9 +221,13 @@ const warehouseDashboard = (() => {
       if (heading) heading.textContent = titles[key];
     });
 
-    const source = document.querySelector("#page-Workspaces #editorjs");
+    // While the Workspace is being edited the stock editor must stay intact (moving its
+    // widgets out would make added sections invisible), so navigation is only rebuilt in view mode.
+    const editing = document.querySelector("#page-Workspaces .layout-main-section.edit-mode");
+    const source = editing ? null : document.querySelector("#page-Workspaces #editorjs");
     if (source) {
-      const widgets = Array.from(source.querySelectorAll(".widget.links-widget-box"));
+      // Cards added later in Edit mode are rendered by the new-blocks layer, not folded into these fixed sections.
+      const widgets = Array.from(source.querySelectorAll(".widget.links-widget-box")).filter((widget) => !newBlocks.isNativeNew(widget));
       widgets.forEach((widget) => {
         const links = Array.from(widget.querySelectorAll(".widget-body > a.link-item"));
         if (!links.length) return;

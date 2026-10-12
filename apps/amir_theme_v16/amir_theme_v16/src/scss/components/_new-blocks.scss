@@ -1,0 +1,171 @@
+// ---------------------------------------------------------------------------
+// New-blocks layer — sections / cards / shortcuts / number cards / charts that a
+// manager adds through Workspace "Edit" mode on the redesigned dashboards
+// (Sales, Purchases, Warehouse, Accounts). Rendered by core/new_blocks.js inside
+// #nds-new-blocks using Frappe's own widgets; this file only skins them so they
+// match the new dashboard design instead of the stock ERP look.
+//
+// Tokens mirror the dashboards' shared palette (navy / blue / gold, soft lines).
+// ---------------------------------------------------------------------------
+
+// The stock editor copy of a block that the layer renders is hidden in view
+// mode only — in Edit mode the stock editor is the thing being edited.
+body #page-Workspaces .layout-main-section:not(.edit-mode) #editorjs .ce-block.nds-new-block-native {
+  display: none !important;
+}
+
+body #page-Workspaces .nds-nb {
+  --nds-nb-navy: #0A2342;
+  --nds-nb-blue: #164E8F;
+  --nds-nb-gold: #D4AF37;
+  --nds-nb-teal: #439789;
+  --nds-nb-ink: #172B4D;
+  --nds-nb-muted: #64748b;
+  --nds-nb-line: #e5ebf2;
+  --nds-nb-surface: #ffffff;
+
+  box-sizing: border-box;
+  width: 100%;
+  margin: 22px 0 0;
+  padding: 4px 0 20px;
+  color: var(--nds-nb-ink);
+  font-family: inherit;
+  line-height: 1.55;
+}
+body #page-Workspaces .nds-nb[dir=rtl] { direction: rtl; text-align: right; }
+body #page-Workspaces .nds-nb[dir=ltr] { direction: ltr; text-align: left; }
+
+body #page-Workspaces .nds-nb-grid {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  gap: 16px;
+  align-items: stretch;
+}
+body #page-Workspaces .nds-nb-cell {
+  grid-column: span var(--nds-nb-col, 4);
+  min-width: 0;
+}
+
+// A header block becomes a section heading with the dashboards' gold accent bar.
+body #page-Workspaces .nds-nb-cell.nds-nb-header {
+  grid-column: 1 / -1;
+  margin-top: 6px;
+}
+body #page-Workspaces .nds-nb-heading {
+  margin: 0;
+  padding-inline-start: 12px;
+  border-inline-start: 3px solid var(--nds-nb-gold);
+  color: var(--nds-nb-navy);
+  font-size: 18px;
+  font-weight: 800;
+  line-height: 1.45;
+}
+body #page-Workspaces .nds-nb-cell.nds-nb-paragraph { grid-column: 1 / -1; }
+body #page-Workspaces .nds-nb-note {
+  margin: 0;
+  padding-inline-start: 15px;
+  color: var(--nds-nb-muted);
+  font-size: 13px;
+}
+
+// Frappe widgets inside the layer.
+body #page-Workspaces .nds-nb .widget {
+  box-sizing: border-box;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 16px 18px;
+  border: 1px solid var(--nds-nb-line);
+  border-radius: 14px;
+  background: var(--nds-nb-surface);
+  box-shadow: 0 3px 12px rgba(15, 35, 65, .045);
+  overflow: hidden;
+  transition: box-shadow .18s ease, transform .18s ease, border-color .18s ease;
+}
+body #page-Workspaces .nds-nb .widget:hover {
+  transform: translateY(-2px);
+  border-color: #c5d5e8;
+  box-shadow: 0 8px 22px rgba(15, 50, 90, .09);
+}
+body #page-Workspaces .nds-nb .widget-head {
+  margin: 0 0 10px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid #edf1f6;
+}
+body #page-Workspaces .nds-nb .widget-title {
+  color: var(--nds-nb-navy);
+  font-size: 15px;
+  font-weight: 700;
+}
+
+// Link cards: a list of tidy rows with a gold hover edge.
+body #page-Workspaces .nds-nb .links-widget-box .link-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 7px 10px;
+  border-radius: 8px;
+  color: var(--nds-nb-ink);
+  font-size: 13px;
+  text-decoration: none;
+  transition: background-color .15s ease, color .15s ease;
+}
+body #page-Workspaces .nds-nb .links-widget-box .link-item:hover {
+  background: #f3f6fb;
+  color: var(--nds-nb-blue);
+}
+body #page-Workspaces .nds-nb .links-widget-box .link-item:not(:first-child) {
+  margin-top: 2px;
+}
+
+// Number cards: same teal top rule as the dashboards' KPI cards.
+body #page-Workspaces .nds-nb .number-widget-box {
+  border-top: 3px solid var(--nds-nb-teal);
+  border-radius: 10px;
+}
+body #page-Workspaces .nds-nb .number-widget-box .widget-head {
+  border-bottom: 0;
+  padding-bottom: 0;
+}
+body #page-Workspaces .nds-nb .number-widget-box .widget-title {
+  color: var(--nds-nb-muted);
+  font-size: 13px;
+  font-weight: 600;
+}
+body #page-Workspaces .nds-nb .number-widget-box .number {
+  color: var(--nds-nb-navy);
+  font-size: 26px;
+  font-weight: 750;
+  letter-spacing: -.02em;
+}
+
+// Shortcuts: compact tile with the card title in navy.
+body #page-Workspaces .nds-nb .shortcut-widget-box {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-height: 74px;
+  cursor: pointer;
+}
+body #page-Workspaces .nds-nb .shortcut-widget-box .widget-head {
+  margin: 0;
+  padding: 0;
+  border-bottom: 0;
+}
+body #page-Workspaces .nds-nb .shortcut-widget-box .widget-title {
+  color: var(--nds-nb-navy);
+}
+
+// Charts keep Frappe's own sizing; only the surface changes.
+body #page-Workspaces .nds-nb .dashboard-widget-box { padding-bottom: 12px; }
+
+@media (max-width: 1024px) {
+  body #page-Workspaces .nds-nb-cell { grid-column: span 6; }
+  body #page-Workspaces .nds-nb-cell.nds-nb-header,
+  body #page-Workspaces .nds-nb-cell.nds-nb-paragraph,
+  body #page-Workspaces .nds-nb-cell.nds-nb-chart,
+  body #page-Workspaces .nds-nb-cell.nds-nb-custom-block { grid-column: 1 / -1; }
+}
+@media (max-width: 640px) {
+  body #page-Workspaces .nds-nb-cell { grid-column: 1 / -1; }
+}

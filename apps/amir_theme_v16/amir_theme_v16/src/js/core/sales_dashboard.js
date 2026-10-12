@@ -3,6 +3,8 @@
  * Presentation-only: reads permission-filtered ERPNext records and adds a dashboard
  * surface to the Sales Workspace without changing Workspace records or sales logic.
  */
+import { newBlocks } from "./new_blocks.js";
+
 const salesDashboard = (() => {
 	"use strict";
 
@@ -580,17 +582,27 @@ const salesDashboard = (() => {
 			if (!links.length) requestSalesWorkspaceLinkRows(page);
 		}
 		let activeGroup = null;
+		// Cards added later in Edit mode are rendered by the new-blocks layer as their own
+		// new-design section, so they must not also be merged into a fixed section here.
+		const newCardLabels = new Set(newBlocks.flaggedCardLabels().map(normalizeSectionLabel));
+		let skippingNewCard = false;
 		links.forEach((item) => {
 			if (!item) return;
 			const type = String(item.type || "").toLowerCase().trim();
 			if (type === "card break" || type === "card_break" || type === "cardbreak") {
 				const label = item.label || item.card_name || item.title || item.heading || item.name || "";
+				skippingNewCard = newCardLabels.has(normalizeSectionLabel(label));
+				if (skippingNewCard) {
+					activeGroup = null;
+					return;
+				}
 				const definition = sectionDefinition(label);
 				// Do not silently discard real native links if a legacy heading uses an unknown alias.
 				activeGroup = (definition && groups.find((group) => group.definition.key === definition.key))
 					|| groups.find((group) => group.definition.key === "home");
 				return;
 			}
+			if (skippingNewCard) return;
 			if (type !== "link" && !item.link_to) return;
 			if (!activeGroup) activeGroup = groups.find((group) => group.definition.key === "home");
 			if (Number(item.hidden || 0) === 1 || !item.link_to || !item.link_type) return;

@@ -3,6 +3,8 @@
  * UI-only implementation of the user-provided dashboard specification.
  * It does not read, write, or modify ERP records or existing Workspace logic.
  */
+import { newBlocks } from "./new_blocks.js";
+
 const accountsDashboard = (() => {
 	"use strict";
 
@@ -243,6 +245,8 @@ const accountsDashboard = (() => {
 		const blocks = Array.from(sourceEditor.querySelectorAll(".ce-block"));
 
 		blocks.forEach((block) => {
+			// Blocks added later in Edit mode are rendered by the new-blocks layer.
+			if (newBlocks.isNativeNew(block)) return;
 			const sourceWidget = block.querySelector(".widget");
 			if (!sourceWidget || seen.has(sourceWidget)) return;
 			seen.add(sourceWidget);
@@ -526,6 +530,12 @@ const accountsDashboard = (() => {
 
 
 	function detachWorkspaceEditor(page) {
+		// The stock editor must be present and visible while the Workspace is being edited,
+		// otherwise sections, cards and shortcuts cannot be added on this page.
+		if (page && page.querySelector(".layout-main-section.edit-mode")) {
+			restoreWorkspaceEditor();
+			return;
+		}
 		const editor = page && page.querySelector("#editorjs");
 		if (!editor || !editor.parentNode || editor === preservedEditor) return;
 		if (preservedEditor && editorPlaceholder && editorPlaceholder.parentNode) {

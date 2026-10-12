@@ -10,6 +10,7 @@ import { salesDashboard } from "./core/sales_dashboard.js";
 import { purchasesDashboard } from "./core/purchases_dashboard.js";
 import { accountsDashboard } from "./core/accounts_dashboard.js";
 import { warehouseDashboard } from "./core/warehouse_dashboard.js";
+import { newBlocks } from "./core/new_blocks.js";
 import { smartSubmitActions } from "./core/smart_submit_actions.js";
 import { translationToggle } from "./core/translation_toggle.js";
 import { progressBar } from "./core/progress_bar.js";
@@ -1098,6 +1099,8 @@ $(document).ready(function () {
 	accountsDashboard.mount();
 	// Live stock KPIs, stock movement, distribution and shortage list.
 	warehouseDashboard.mount();
+	// Sections / cards / shortcuts added in Workspace Edit mode render in the new design on all four dashboards.
+	newBlocks.mount();
 	// Save & Final Submit / Revert to Draft / Cancel & Delete on submittable
 	// doctypes with no active Workflow — see core/smart_submit_actions.js.
 	if (amtEnabled("enable_smart_actions")) smartSubmitActions.mount();
