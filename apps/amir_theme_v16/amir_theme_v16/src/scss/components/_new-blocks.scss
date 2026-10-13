@@ -396,10 +396,6 @@ body #page-Workspaces .nds-nb-add-tile svg {
 body #page-Workspaces [data-nds-widget] {
   position: relative;
 }
-body #page-Workspaces [data-nds-widget] > .nds-nb-slot-delete {
-  inset-inline-start: auto;
-  inset-inline-end: 10px;
-}
 body #page-Workspaces [data-nds-widget].nds-nb-slot-empty {
   display: flex;
   align-items: center;
@@ -415,3 +411,59 @@ body #page-Workspaces [data-nds-widget].nds-nb-slot-empty > *:not(.nds-nb-slot-a
 body #page-Workspaces [data-nds-widget].nds-widget-gone {
   display: none !important;
 }
+
+// Edit-mode controls on the fixed widgets and section cards: drag handle, "..." menu and the
+// lane "+". The menu is fixed-position so a panel's overflow can never clip it.
+body #page-Workspaces [data-nds-widget],
+body #page-Workspaces [data-nds-card-labels] {
+  position: relative;
+}
+body #page-Workspaces [data-nds-widget] > .nds-nb-handle,
+body #page-Workspaces [data-nds-card-labels] > .nds-nb-handle,
+body #page-Workspaces [data-nds-widget] > .nds-nb-more,
+body #page-Workspaces [data-nds-card-labels] > .nds-nb-more {
+  inset-block-start: 8px;
+  width: 24px;
+  height: 24px;
+  opacity: .92;
+}
+body #page-Workspaces [data-nds-widget] > .nds-nb-handle,
+body #page-Workspaces [data-nds-card-labels] > .nds-nb-handle { inset-inline-start: 8px; }
+body #page-Workspaces [data-nds-widget] > .nds-nb-more,
+body #page-Workspaces [data-nds-card-labels] > .nds-nb-more { inset-inline-end: 8px; }
+body #page-Workspaces .nds-nb-menu.is-floating {
+  position: fixed;
+  inset-block-start: auto;
+  inset-inline-end: auto;
+  z-index: 10050;
+}
+body #page-Workspaces .nds-wd-dragging { opacity: .45; }
+body #page-Workspaces .nds-wd-left { box-shadow: -4px 0 0 0 var(--nds-nb-blue, #164E8F); }
+body #page-Workspaces .nds-wd-right { box-shadow: 4px 0 0 0 var(--nds-nb-blue, #164E8F); }
+body #page-Workspaces .nds-wd-top { box-shadow: 0 -4px 0 0 var(--nds-nb-blue, #164E8F); }
+body #page-Workspaces .nds-wd-bottom { box-shadow: 0 4px 0 0 var(--nds-nb-blue, #164E8F); }
+
+body #page-Workspaces .nds-nb-lane-add {
+  grid-column: 1 / -1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  min-height: 44px;
+  padding: 0;
+  border: 2px dashed #9db6d3;
+  border-radius: 14px;
+  background: #fff;
+  color: #164E8F;
+  line-height: 1;
+  cursor: pointer;
+  order: 9999;
+  transition: background-color .15s ease, border-color .15s ease, color .15s ease;
+}
+body #page-Workspaces .nds-nb-lane-add:hover,
+body #page-Workspaces .nds-nb-lane-add:focus-visible {
+  border-color: #164E8F;
+  background: #eef4fb;
+  color: #0A2342;
+}
+body #page-Workspaces .nds-nb-lane-add svg { width: 22px; height: 22px; }

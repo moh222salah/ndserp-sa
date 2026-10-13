@@ -163,6 +163,9 @@ const newBlocks = (() => {
 			drag: "اسحب لنقل العنصر",
 			rowAdd: "إضافة في هذا الصف",
 			newRow: "صف جديد",
+				earlier: "تقديم",
+				later: "تأخير",
+				laneAdd: "إضافة عنصر جديد",
 			noEditor: "تعذّر فتح التعديل لهذا العنصر.",
 			addTitle: "إضافة جديدة",
 			addKind: "ماذا تريد أن تضيف؟",
@@ -183,6 +186,9 @@ const newBlocks = (() => {
 			drag: "Drag to move",
 			rowAdd: "Add to this row",
 			newRow: "New row",
+				earlier: "Move earlier",
+				later: "Move later",
+				laneAdd: "Add a new item",
 			noEditor: "This item cannot be edited here.",
 			addTitle: "Add new",
 			addKind: "What do you want to add?",
@@ -307,6 +313,7 @@ const newBlocks = (() => {
 			Promise.resolve(result).then(() => {
 				anchors.clear();
 				pendingHidden = null;
+				pendingLayout = null;
 				pendingRows.clear();
 				pendingCols.clear();
 				pendingAdd = null;
@@ -338,6 +345,7 @@ const newBlocks = (() => {
 						return Promise.resolve(realSave.apply(this, arguments)).then((output) => {
 							try { tagOutput(output, previous); } catch (_) { /* keep the save */ }
 								try { writeHidden(output, previous); } catch (_) { /* keep the save */ }
+								try { writeLayout(output, previous); } catch (_) { /* keep the save */ }
 							return output;
 						});
 					};
@@ -1246,8 +1254,7 @@ const newBlocks = (() => {
 			toggleClass(slot, "nds-nb-slot-empty", !exists);
 			if (exists) {
 				dropChild(slot, "nds-nb-slot-add");
-				if (editing) ensureChild(slot, "nds-nb-slot-delete", slotDeleteButton);
-				else dropChild(slot, "nds-nb-slot-delete");
+				dropChild(slot, "nds-nb-slot-delete");
 			} else {
 				dropChild(slot, "nds-nb-slot-delete");
 				ensureChild(slot, "nds-nb-slot-add", slotAddButton);
@@ -1397,8 +1404,7 @@ const newBlocks = (() => {
 				toggleClass(node, "nds-widget-gone", false);
 				toggleClass(node, "nds-nb-slot-empty", false);
 				dropChild(node, "nds-nb-slot-add");
-				if (editing && editable) ensureChild(node, "nds-nb-slot-delete", widgetDeleteButton);
-				else dropChild(node, "nds-nb-slot-delete");
+				dropChild(node, "nds-nb-slot-delete");
 				return;
 			}
 			dropChild(node, "nds-nb-slot-delete");
@@ -1416,11 +1422,410 @@ const newBlocks = (() => {
 
 	function clearWidgets() {
 		pendingHidden = null;
+		pendingLayout = null;
+		clearLayout(document);
 		document.querySelectorAll("#page-Workspaces [" + WIDGET_ATTR + "]").forEach((node) => {
 			toggleClass(node, "nds-widget-gone", false);
 			clearSlot(node);
 		});
 	}
+
+	// --- 7. layout of the fixed widgets: lanes, drag, "..." menu, "+" ---------
+	//
+	// KPI cards, chart panels, the latest-documents table and the dashboards' section cards
+	// get the same Edit-mode controls as the new-block layer: a drag handle, a "..." menu
+	// (Wider / Narrower / Move earlier / Move later / Delete) and a "+" that ends every lane.
+	// A lane is the container a group of such widgets sits in. Order and width are applied
+	// with CSS (`order`, `grid-column`), never by moving DOM nodes, so the dashboards can
+	// rebuild themselves at any time. Both ride along on the first block of the saved
+	// Workspace content (`data.nds_layout`), exactly like `nds_hidden`: the stock Save
+	// button stores them and Discard / reload throws the staged change away.
+	// Order needs a grid or flex lane; a plain block container keeps only Delete.
+
+	const LAYOUT_KEY = "nds_layout";
+	const MOVABLE_SELECTOR = "[" + WIDGET_ATTR + "], [" + CARD_ATTR + "]";
+
+	let pendingLayout = null;
+	let pendingLayoutPage = null;
+	let layoutCache = { raw: null, layout: { o: {}, w: {} } };
+	let dragWidget = null;
+
+	function emptyLayout() {
+		return { o: {}, w: {} };
+	}
+
+	function cloneLayout(layout) {
+		const copy = emptyLayout();
+		Object.keys(layout.o).forEach((key) => { copy.o[key] = layout.o[key].slice(); });
+		Object.keys(layout.w).forEach((key) => { copy.w[key] = layout.w[key]; });
+		return copy;
+	}
+
+	function parseLayout(raw) {
+		const layout = emptyLayout();
+		(parseContent(raw) || []).forEach((block) => {
+			const value = block && block.data ? block.data[LAYOUT_KEY] : null;
+			if (typeof value !== "string" || !value) return;
+			try {
+				const parsed = JSON.parse(value);
+				if (parsed && parsed.o && typeof parsed.o === "object") {
+					Object.keys(parsed.o).forEach((key) => {
+						if (Array.isArray(parsed.o[key])) layout.o[key] = parsed.o[key].map(String);
+					});
+				}
+				if (parsed && parsed.w && typeof parsed.w === "object") {
+					Object.keys(parsed.w).forEach((key) => {
+						const span = parseInt(parsed.w[key], 10);
+						if (Number.isFinite(span) && span >= 1 && span <= 12) layout.w[key] = span;
+					});
+				}
+			} catch (_) { /* a damaged value is ignored */ }
+		});
+		return layout;
+	}
+
+	function savedLayout() {
+		const raw = rawContent();
+		if (raw !== layoutCache.raw) layoutCache = { raw, layout: parseLayout(raw) };
+		return layoutCache.layout;
+	}
+
+	function effectiveLayout() {
+		if (pendingLayout && pendingLayoutPage !== currentPageName()) pendingLayout = null;
+		return pendingLayout || savedLayout();
+	}
+
+	function changeLayout(mutate) {
+		const next = cloneLayout(effectiveLayout());
+		mutate(next);
+		pendingLayout = next;
+		pendingLayoutPage = currentPageName();
+		schedule();
+	}
+
+	// Called while the stock editor saves: writes the layout onto the first block.
+	function writeLayout(output, previousRaw) {
+		if (!output || !Array.isArray(output.blocks)) return;
+		const layout = pendingLayout && pendingLayoutPage === currentPageName() ? pendingLayout : parseLayout(previousRaw);
+		output.blocks.forEach((block) => {
+			if (block && block.data) delete block.data[LAYOUT_KEY];
+		});
+		if (!Object.keys(layout.o).length && !Object.keys(layout.w).length) return;
+		const first = output.blocks.find((block) => block && block.data);
+		if (first) first.data[LAYOUT_KEY] = JSON.stringify(layout);
+	}
+
+	function movableId(node) {
+		if (node.hasAttribute(WIDGET_ATTR)) return node.getAttribute(WIDGET_ATTR);
+		return "card:" + slotKey(node);
+	}
+
+	function movableNodes(host) {
+		return Array.from(host.querySelectorAll(MOVABLE_SELECTOR)).filter((node) => {
+			const outer = node.parentElement ? node.parentElement.closest(MOVABLE_SELECTOR) : null;
+			return !outer && (node.hasAttribute(WIDGET_ATTR) || slotKey(node));
+		});
+	}
+
+	// Groups the widgets by their container, in document order. Lane numbers are positions,
+	// which stay stable because order is applied with CSS and nodes are never moved.
+	function collectLanes(host) {
+		const lanes = [];
+		movableNodes(host).forEach((node) => {
+			const parent = node.parentElement;
+			if (!parent) return;
+			let lane = lanes.find((candidate) => candidate.parent === parent);
+			if (!lane) {
+				lane = { parent, index: lanes.length, nodes: [] };
+				lanes.push(lane);
+			}
+			lane.nodes.push(node);
+		});
+		return lanes;
+	}
+
+	function laneKind(parent) {
+		const display = window.getComputedStyle(parent).display || "";
+		if (display.indexOf("grid") !== -1) return "grid";
+		if (display.indexOf("flex") !== -1) return "flex";
+		return "block";
+	}
+
+	function laneColumns(parent) {
+		if (laneKind(parent) !== "grid") return 0;
+		const tracks = String(window.getComputedStyle(parent).gridTemplateColumns || "").split(/\s+/).filter(Boolean);
+		return tracks.length;
+	}
+
+	// Widget ids of a lane in the order they are shown: the stored order first, then any
+	// widget the stored order does not know yet, in document order.
+	function laneOrder(lane, layout) {
+		const present = lane.nodes.map(movableId);
+		const stored = (layout.o["L" + lane.index] || []).filter((id) => present.includes(id));
+		return stored.concat(present.filter((id) => !stored.includes(id)));
+	}
+
+	function parseSpan(node) {
+		const end = String(window.getComputedStyle(node).gridColumnEnd || "");
+		const match = end.match(/span\s+(\d+)/);
+		return match ? parseInt(match[1], 10) : 1;
+	}
+
+	function applyLane(lane, layout) {
+		const kind = laneKind(lane.parent);
+		const order = laneOrder(lane, layout);
+		const byId = new Map(lane.nodes.map((node) => [movableId(node), node]));
+		// The widgets swap places among themselves; everything else in the lane (the "+"
+		// tile, other content) keeps its own position.
+		const children = Array.from(lane.parent.children);
+		const slots = children.filter((child) => lane.nodes.includes(child));
+		const shown = new Map();
+		slots.forEach((child, index) => shown.set(byId.get(order[index]), children.indexOf(child)));
+		children.forEach((child, index) => {
+			const position = shown.has(child) ? shown.get(child) : index;
+			const value = kind === "block" ? "" : String(position);
+			if (child.style.order !== value) child.style.order = value;
+		});
+		const columns = laneColumns(lane.parent);
+		lane.nodes.forEach((node) => {
+			const span = layout.w[movableId(node)];
+			const value = span && columns ? "span " + Math.min(span, columns) : "";
+			if (node.style.gridColumn !== value) node.style.gridColumn = value;
+		});
+	}
+
+	function moveWithin(lane, id, to) {
+		changeLayout((layout) => {
+			const order = laneOrder(lane, layout).filter((item) => item !== id);
+			order.splice(Math.max(0, Math.min(order.length, to)), 0, id);
+			layout.o["L" + lane.index] = order;
+		});
+	}
+
+	function resizeWidget(lane, node, direction) {
+		const columns = laneColumns(lane.parent);
+		if (!columns) return;
+		const id = movableId(node);
+		const now = effectiveLayout().w[id] || parseSpan(node);
+		const next = Math.max(1, Math.min(columns, now + direction));
+		changeLayout((layout) => { layout.w[id] = next; });
+	}
+
+	function deleteWidget(node) {
+		if (node.hasAttribute(WIDGET_ATTR)) {
+			const id = node.getAttribute(WIDGET_ATTR);
+			frappe.confirm(escapeHtml(text().stageConfirm(widgetLabel(node))), () => setWidgetHidden(id, true));
+			return;
+		}
+		frappe.confirm(escapeHtml(text().stageConfirm(plainText(slotHint(node)))), () => stageDelete(node));
+	}
+
+	function laneOf(node) {
+		const host = dashboardHost();
+		if (!host) return null;
+		return collectLanes(host).find((lane) => lane.parent === node.parentElement) || null;
+	}
+
+	function placeFloatingMenu(menu, button) {
+		const rect = button.getBoundingClientRect();
+		const width = menu.offsetWidth || 160;
+		const height = menu.offsetHeight || 160;
+		let left = isRtl() ? rect.left : rect.right - width;
+		left = Math.max(8, Math.min(window.innerWidth - width - 8, left));
+		let top = rect.bottom + 6;
+		if (top + height > window.innerHeight - 8) top = Math.max(8, rect.top - height - 6);
+		menu.style.left = left + "px";
+		menu.style.top = top + "px";
+	}
+
+	function toggleWidgetMenu(node, button) {
+		const wasOpen = Boolean(openMenu) && openMenu.parentElement === node;
+		closeMenu();
+		if (wasOpen) return;
+		const t = text();
+		const lane = laneOf(node);
+		const menu = document.createElement("div");
+		menu.className = "nds-nb-menu is-floating";
+		menu.setAttribute("role", "menu");
+		if (lane) {
+			const id = movableId(node);
+			const order = laneOrder(lane, effectiveLayout());
+			const at = order.indexOf(id);
+			if (laneKind(lane.parent) !== "block" && order.length > 1) {
+				if (at > 0) menu.appendChild(menuItem(t.earlier, () => moveWithin(lane, id, at - 1)));
+				if (at < order.length - 1) menu.appendChild(menuItem(t.later, () => moveWithin(lane, id, at + 1)));
+			}
+			if (laneColumns(lane.parent) > 1) {
+				menu.appendChild(menuItem(t.wider, () => resizeWidget(lane, node, 1)));
+				menu.appendChild(menuItem(t.narrower, () => resizeWidget(lane, node, -1)));
+			}
+		}
+		menu.appendChild(menuItem(t.remove, () => deleteWidget(node), true));
+		node.appendChild(menu);
+		placeFloatingMenu(menu, button);
+		button.setAttribute("aria-expanded", "true");
+		openMenu = menu;
+	}
+
+	function widgetMoreButton(node) {
+		const button = moreButton(node, null);
+		const fresh = button.cloneNode(true);
+		fresh.addEventListener("click", (event) => {
+			event.preventDefault();
+			event.stopPropagation();
+			toggleWidgetMenu(node, fresh);
+		});
+		return fresh;
+	}
+
+	function dropSide(event, target) {
+		const rect = target.getBoundingClientRect();
+		const source = dragWidget
+			? Array.from(document.querySelectorAll(MOVABLE_SELECTOR)).find((candidate) => movableId(candidate) === dragWidget.id)
+			: null;
+		const from = source ? source.getBoundingClientRect() : null;
+		const stacked = from && (rect.top >= from.bottom - 2 || rect.bottom <= from.top + 2);
+		if (stacked) {
+			const upper = event.clientY < rect.top + rect.height / 2;
+			return { visual: upper ? "top" : "bottom", side: upper ? "before" : "after" };
+		}
+		const left = event.clientX < rect.left + rect.width / 2;
+		return { visual: left ? "left" : "right", side: left === !isRtl() ? "before" : "after" };
+	}
+
+	function clearWidgetDragMarks() {
+		document.querySelectorAll(".nds-wd-top, .nds-wd-bottom, .nds-wd-left, .nds-wd-right")
+			.forEach((node) => node.classList.remove("nds-wd-top", "nds-wd-bottom", "nds-wd-left", "nds-wd-right"));
+	}
+
+	function endWidgetDrag() {
+		dragWidget = null;
+		clearWidgetDragMarks();
+		document.querySelectorAll(".nds-wd-dragging").forEach((node) => node.classList.remove("nds-wd-dragging"));
+	}
+
+	function bindWidgetDrop(node) {
+		if (node.__ndsWidgetDrop) return;
+		node.__ndsWidgetDrop = true;
+		node.addEventListener("dragover", (event) => {
+			if (!dragWidget || dragWidget.parent !== node.parentElement || movableId(node) === dragWidget.id) return;
+			event.preventDefault();
+			event.stopPropagation();
+			if (event.dataTransfer) event.dataTransfer.dropEffect = "move";
+			clearWidgetDragMarks();
+			node.classList.add("nds-wd-" + dropSide(event, node).visual);
+		});
+		node.addEventListener("dragleave", (event) => {
+			if (!node.contains(event.relatedTarget)) clearWidgetDragMarks();
+		});
+		node.addEventListener("drop", (event) => {
+			if (!dragWidget || dragWidget.parent !== node.parentElement) return;
+			event.preventDefault();
+			event.stopPropagation();
+			const moved = dragWidget.id;
+			const side = dropSide(event, node).side;
+			const targetId = movableId(node);
+			endWidgetDrag();
+			if (moved === targetId) return;
+			const lane = laneOf(node);
+			if (!lane) return;
+			const order = laneOrder(lane, effectiveLayout()).filter((id) => id !== moved);
+			const at = order.indexOf(targetId);
+			if (at === -1) return;
+			moveWithin(lane, moved, at + (side === "after" ? 1 : 0));
+		});
+	}
+
+	function widgetHandle(node) {
+		const t = text();
+		const handle = document.createElement("span");
+		handle.className = "nds-nb-handle";
+		handle.setAttribute("role", "button");
+		handle.setAttribute("tabindex", "-1");
+		handle.setAttribute("draggable", "true");
+		handle.title = t.drag;
+		handle.setAttribute("aria-label", t.drag);
+		handle.innerHTML = iconSvg('<g fill="currentColor"><circle cx="5.5" cy="4" r="1.3"/><circle cx="10.5" cy="4" r="1.3"/><circle cx="5.5" cy="8" r="1.3"/><circle cx="10.5" cy="8" r="1.3"/><circle cx="5.5" cy="12" r="1.3"/><circle cx="10.5" cy="12" r="1.3"/></g>');
+		handle.addEventListener("dragstart", (event) => {
+			closeMenu();
+			dragWidget = { id: movableId(node), parent: node.parentElement };
+			node.classList.add("nds-wd-dragging");
+			if (event.dataTransfer) {
+				event.dataTransfer.effectAllowed = "move";
+				try { event.dataTransfer.setData("text/plain", dragWidget.id); } catch (_) { /* optional */ }
+				try { event.dataTransfer.setDragImage(node, 24, 24); } catch (_) { /* optional */ }
+			}
+		});
+		handle.addEventListener("dragend", endWidgetDrag);
+		return handle;
+	}
+
+	function laneAddButton() {
+		const t = text();
+		const button = document.createElement("button");
+		button.type = "button";
+		button.className = "nds-nb-lane-add";
+		button.title = t.laneAdd;
+		button.setAttribute("aria-label", t.laneAdd);
+		button.innerHTML = plusIcon();
+		button.addEventListener("click", (event) => {
+			event.preventDefault();
+			openAddDialog(null);
+		});
+		return button;
+	}
+
+	function clearLayout(root) {
+		root.querySelectorAll("#page-Workspaces .nds-nb-lane-add, #page-Workspaces [" + WIDGET_ATTR + "] > .nds-nb-handle, #page-Workspaces [" + WIDGET_ATTR + "] > .nds-nb-more, #page-Workspaces [" + CARD_ATTR + "] > .nds-nb-handle, #page-Workspaces [" + CARD_ATTR + "] > .nds-nb-more")
+			.forEach((node) => node.remove());
+		root.querySelectorAll("#page-Workspaces [data-nds-lane]").forEach((lane) => {
+			lane.removeAttribute("data-nds-lane");
+			Array.from(lane.children).forEach((child) => {
+				if (child.style.order) child.style.order = "";
+				if (child.style.gridColumn && (child.hasAttribute(WIDGET_ATTR) || child.hasAttribute(CARD_ATTR))) child.style.gridColumn = "";
+			});
+		});
+	}
+
+	function decorateLayout(host, editing) {
+		const layout = effectiveLayout();
+		const editable = Boolean(editing) && canEdit();
+		const lanes = collectLanes(host);
+		lanes.forEach((lane) => {
+			lane.parent.setAttribute("data-nds-lane", String(lane.index));
+			applyLane(lane, layout);
+			const movable = laneKind(lane.parent) !== "block";
+			let visible = 0;
+			lane.nodes.forEach((node) => {
+				const idle = node.classList.contains("nds-nb-slot-empty") || node.classList.contains("nds-widget-gone");
+				if (!idle) visible += 1;
+				const show = editable && !idle;
+				if (show) {
+					if (movable) {
+						ensureChild(node, "nds-nb-handle", widgetHandle);
+						bindWidgetDrop(node);
+					} else {
+						dropChild(node, "nds-nb-handle");
+					}
+					ensureChild(node, "nds-nb-more", widgetMoreButton);
+				} else {
+					dropChild(node, "nds-nb-handle");
+					dropChild(node, "nds-nb-more");
+				}
+			});
+			if (editable && movable && visible) {
+				ensureChild(lane.parent, "nds-nb-lane-add", laneAddButton);
+			} else {
+				dropChild(lane.parent, "nds-nb-lane-add");
+			}
+		});
+		// Lanes that no longer hold any widget lose their controls.
+		host.querySelectorAll(".nds-nb-lane-add").forEach((button) => {
+			const parent = button.parentElement;
+			if (!parent || !lanes.some((lane) => lane.parent === parent)) button.remove();
+		});
+	}
+
 
 	// --- driver ------------------------------------------------------------
 
@@ -1440,12 +1845,14 @@ const newBlocks = (() => {
 				renderLayer(host, true);
 				decorate(host, true);
 				decorateWidgets(host, true);
+				decorateLayout(host, true);
 				return;
 			}
 			markNative();
 			renderLayer(host, false);
 			clearSlots(host);
 			decorateWidgets(host, false);
+			decorateLayout(host, false);
 		} catch (_) { /* never let this layer break the desk */ }
 	}
 
@@ -1474,6 +1881,9 @@ const newBlocks = (() => {
 			document.addEventListener("keydown", (event) => {
 				if (event.key === "Escape") closeMenu();
 			});
+			window.addEventListener("scroll", () => {
+				if (openMenu && openMenu.classList.contains("is-floating")) closeMenu();
+			}, true);
 			if (window.$) $(document).on("page-change", schedule);
 			if (document.body) {
 				// Structure changes (render / re-render) and the Edit-mode class toggle.
