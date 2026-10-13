@@ -31,6 +31,11 @@
  *     Delete / add act on the stock Editor.js instance, so nothing is stored until the
  *     stock Save button is pressed, and Save re-renders the dashboards at once.
  *
+ *  5. Layout. The layer is a stack of rows. In Edit mode it is also the editing surface:
+ *     blocks drag between rows, a "..." menu edits / resizes / deletes one, and every row
+ *     ends with a "+". Row and width are stored on the block (`data.row`, `data.col`) by
+ *     the stock Save button; nothing is stored before that, Discard throws it away.
+ *
  * Every entry point is wrapped so a failure here can never break the desk.
  */
 const newBlocks = (() => {
@@ -59,6 +64,12 @@ const newBlocks = (() => {
 
 	const CARD_ATTR = "data-nds-card-labels";
 	const fixedCardMatchers = [];
+
+	// Layout edits made in Edit mode, applied by the stock Save (tagOutput) and dropped by
+	// the reload that follows Save / Discard.
+	const pendingRows = new Map();
+	const pendingCols = new Map();
+	let pendingAdd = null;
 
 	let started = false;
 	let timer = null;
@@ -145,6 +156,14 @@ const newBlocks = (() => {
 			failed: "تعذّر الحذف. حاول مرة أخرى.",
 			stageConfirm: (name) => "هل تريد حذف «" + name + "»؟ سيتم الحذف عند الضغط على «حفظ»، ويمكنك التراجع بالضغط على «إهمال».",
 			add: "إضافة جديد",
+			options: "خيارات",
+			edit: "تعديل",
+			wider: "توسيع",
+			narrower: "تضييق",
+			drag: "اسحب لنقل العنصر",
+			rowAdd: "إضافة في هذا الصف",
+			newRow: "صف جديد",
+			noEditor: "تعذّر فتح التعديل لهذا العنصر.",
 			addTitle: "إضافة جديدة",
 			addKind: "ماذا تريد أن تضيف؟",
 			addAction: "إضافة",
@@ -157,6 +176,14 @@ const newBlocks = (() => {
 			failed: "Could not delete. Please try again.",
 			stageConfirm: (name) => "Delete “" + name + "”? It is removed when you press Save, and Discard brings it back.",
 			add: "Add new",
+			options: "Options",
+			edit: "Edit",
+			wider: "Wider",
+			narrower: "Narrower",
+			drag: "Drag to move",
+			rowAdd: "Add to this row",
+			newRow: "New row",
+			noEditor: "This item cannot be edited here.",
 			addTitle: "Add new",
 			addKind: "What do you want to add?",
 			addAction: "Add",
@@ -171,13 +198,6 @@ const newBlocks = (() => {
 	function escapeHtml(value) {
 		return String(value == null ? "" : value)
 			.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
-	}
-
-	// Same rule Frappe applies on save: the two injected "Custom ..." cards are
-	// display-only and are never written back into the Workspace content.
-	function isInjectedCard(block) {
-		const name = block && block.type === "card" && block.data ? block.data.card_name : "";
-		return name === "Custom Documents" || name === "Custom Reports";
 	}
 
 	function canEdit() {
@@ -226,8 +246,13 @@ const newBlocks = (() => {
 		});
 	}
 
-	// Tags the blocks Editor.js is about to save. `previousRaw` is the content
-	// that was saved before this edit session.
+	function savedRow(block) {
+		const row = parseInt(block && block.data && block.data.row, 10);
+		return Number.isFinite(row) && row >= 0 ? row : null;
+	}
+
+	// Tags the blocks Editor.js is about to save and writes their layout (row, width).
+	// `previousRaw` is the content that was saved before this edit session.
 	function tagOutput(output, previousRaw) {
 		const previous = parseContent(previousRaw);
 		// Unknown previous content: tag nothing rather than risk resurfacing
@@ -239,7 +264,10 @@ const newBlocks = (() => {
 			if (!block || UNTAGGED_TYPES.has(block.type)) return;
 			const signature = blockSignature(block);
 			if (!pool.has(signature)) pool.set(signature, []);
-			pool.get(signature).push(Boolean(block.data && Number(block.data[FLAG]) === 1));
+			pool.get(signature).push({
+				flagged: Boolean(block.data && Number(block.data[FLAG]) === 1),
+				row: savedRow(block),
+			});
 		});
 
 		output.blocks.forEach((block) => {
@@ -248,11 +276,24 @@ const newBlocks = (() => {
 			const signature = blockSignature(block);
 			if (!blockName(block)) return;
 			const known = pool.get(signature);
+			const entry = known && known.length ? known.shift() : null;
 			// Seen before → inherit its status. Not seen → added in this session.
-			const flagged = known && known.length ? known.shift() : true;
-			if (flagged && !isFixedCard(block)) block.data[FLAG] = 1;
-			else delete block.data[FLAG];
+			const flagged = entry ? entry.flagged : true;
+			if (flagged && !isFixedCard(block)) {
+				block.data[FLAG] = 1;
+				let row = null;
+				if (pendingRows.has(signature)) row = pendingRows.get(signature);
+				else if (entry) row = entry.row;
+				else if (pendingAdd && (!pendingAdd.type || pendingAdd.type === block.type)) row = pendingAdd.row;
+				if (row != null) block.data.row = row;
+				else delete block.data.row;
+				if (pendingCols.has(signature)) block.data.col = pendingCols.get(signature);
+			} else {
+				delete block.data[FLAG];
+				delete block.data.row;
+			}
 		});
+		pendingAdd = null;
 	}
 
 	// Instance-level wrapper around Workspace#reload: Save and Discard both end in a
@@ -266,6 +307,9 @@ const newBlocks = (() => {
 			Promise.resolve(result).then(() => {
 				anchors.clear();
 				pendingHidden = null;
+				pendingRows.clear();
+				pendingCols.clear();
+				pendingAdd = null;
 				flaggedCache = { raw: null, blocks: [] };
 				try { document.dispatchEvent(new CustomEvent("nds-workspace-reloaded")); } catch (_) { /* optional */ }
 				schedule();
@@ -427,79 +471,396 @@ const newBlocks = (() => {
 		return true;
 	}
 
-	// --- 4. deleting -------------------------------------------------------
+	// --- 4. layout: rows, drag and drop, per-block menu ---------------------
 
-	let deleting = false;
+	const SPAN_STEPS = [3, 4, 6, 8, 12];
+	let currentRows = [];
+	let dragSig = null;
+	let openMenu = null;
+	let layoutPage = null;
 
-	// Removes one tagged block from the saved Workspace content through Frappe's
-	// own `save_page` endpoint (same call and permission check as the stock Save).
-	// The server's clean-up then drops the matching shortcut / chart / number card /
-	// link rows, and `reload()` re-renders the page so the block disappears at once.
-	function removeBlock(block) {
-		const ws = workspace();
-		const page = ws && ws._page;
-		const t = text();
-		if (deleting || !page || !page.is_editable || !window.frappe) return;
-
+	function spanOf(block) {
 		const signature = blockSignature(block);
-		const content = (parseContent(rawContent()) || []).filter((item) => !isInjectedCard(item));
-		const index = content.findIndex((item) =>
-			item && item.data && Number(item.data[FLAG]) === 1 && blockSignature(item) === signature
-		);
-		if (index === -1) return;
-		content.splice(index, 1);
-
-		deleting = true;
-		frappe.call({
-			method: "frappe.desk.doctype.workspace.workspace.save_page",
-			args: {
-				name: page.name,
-				public: page.public || 0,
-				new_widgets: {},
-				blocks: JSON.stringify(content),
-			},
-			freeze: true,
-			callback: (response) => {
-				deleting = false;
-				if (!response || !response.message) return;
-				try { page.content = JSON.stringify(content); } catch (_) { /* reload refetches it */ }
-				flaggedCache = { raw: null, blocks: [] };
-				removeLayer();
-				Promise.resolve(ws.reload()).catch(() => {});
-				frappe.show_alert({ message: t.done, indicator: "green" });
-			},
-			error: () => {
-				deleting = false;
-				frappe.show_alert({ message: t.failed, indicator: "red" });
-			},
-		});
+		return pendingCols.has(signature) ? pendingCols.get(signature) : columnSpan(block);
 	}
 
-	function deleteButton(block) {
+	// Order of the blocks in the stock editor, by signature. The stock editor is what gets
+	// saved, so while editing it decides which blocks still exist and in which order.
+	function liveOrder() {
+		const editor = editorApi();
+		const holders = editor ? blockHolders(editor) : null;
+		if (!holders) return null;
+		const order = new Map();
+		holders.forEach((holder, index) => {
+			const signature = nativeSignature(holder);
+			if (signature && !order.has(signature)) order.set(signature, index);
+		});
+		return order;
+	}
+
+	function layerBlocks(editing) {
+		const saved = flaggedBlocks();
+		if (!editing) return saved;
+		const live = liveOrder();
+		if (!live) return saved;
+		return saved
+			.filter((block) => live.has(blockSignature(block)))
+			.sort((a, b) => live.get(blockSignature(a)) - live.get(blockSignature(b)));
+	}
+
+	// Rows with an explicit number keep it; blocks without one (saved before rows existed)
+	// flow into rows of 12 columns after them, which is how the grid used to place them.
+	function buildRows(blocks) {
+		const explicit = new Map();
+		const loose = [];
+		blocks.forEach((block) => {
+			const signature = blockSignature(block);
+			const row = pendingRows.has(signature) ? pendingRows.get(signature) : savedRow(block);
+			if (row == null) {
+				loose.push(block);
+				return;
+			}
+			if (!explicit.has(row)) explicit.set(row, []);
+			explicit.get(row).push(block);
+		});
+		const rows = Array.from(explicit.keys()).sort((a, b) => a - b).map((key) => explicit.get(key));
+		let current = [];
+		let used = 0;
+		loose.forEach((block) => {
+			const span = spanOf(block);
+			if (current.length && used + span > 12) {
+				rows.push(current);
+				current = [];
+				used = 0;
+			}
+			current.push(block);
+			used += span;
+		});
+		if (current.length) rows.push(current);
+		return rows;
+	}
+
+	// Pins the rows being shown, so every block has an explicit row when Save stores them.
+	function normalizeRows() {
+		currentRows.forEach((row, index) => row.forEach((signature) => pendingRows.set(signature, index)));
+	}
+
+	function holderIndex(signature) {
+		const editor = editorApi();
+		const holders = editor ? blockHolders(editor) : null;
+		if (!holders) return -1;
+		return holders.findIndex((holder) => nativeSignature(holder) === signature);
+	}
+
+	function moveInEditor(signature, target) {
+		const editor = editorApi();
+		if (!editor || !target || typeof editor.blocks.move !== "function") return;
+		const from = holderIndex(signature);
+		const at = holderIndex(target.signature);
+		if (from === -1 || at === -1) return;
+		const to = target.side === "before" ? (from < at ? at - 1 : at) : (from < at ? at : at + 1);
+		if (to !== from) editor.blocks.move(to, from);
+	}
+
+	// target: { type: "cell", signature, side } | { type: "row", index } | { type: "new" }
+	function moveBlockTo(signature, target) {
+		const rows = currentRows.map((row) => row.slice());
+		rows.forEach((row) => {
+			const at = row.indexOf(signature);
+			if (at !== -1) row.splice(at, 1);
+		});
+		let editorTarget = null;
+		if (target.type === "cell") {
+			if (target.signature === signature) return;
+			const row = rows.find((candidate) => candidate.includes(target.signature));
+			if (!row) return;
+			row.splice(row.indexOf(target.signature) + (target.side === "after" ? 1 : 0), 0, signature);
+			editorTarget = { signature: target.signature, side: target.side };
+		} else if (target.type === "row") {
+			const row = rows[target.index];
+			if (!row) return;
+			row.push(signature);
+			if (row.length > 1) editorTarget = { signature: row[row.length - 2], side: "after" };
+		} else {
+			rows.push([signature]);
+		}
+		rows.filter((row) => row.length).forEach((row, index) => row.forEach((item) => pendingRows.set(item, index)));
+		try { moveInEditor(signature, editorTarget); } catch (_) { /* the row change still applies */ }
+		schedule();
+	}
+
+	function resizeBlock(block, direction) {
+		const signature = blockSignature(block);
+		const now = spanOf(block);
+		let index = SPAN_STEPS.findIndex((step) => step >= now);
+		if (index === -1) index = SPAN_STEPS.length - 1;
+		const next = SPAN_STEPS[Math.max(0, Math.min(SPAN_STEPS.length - 1, index + direction))];
+		pendingCols.set(signature, next);
+		schedule();
+	}
+
+	// Staged delete: removes the block from the stock editor. Nothing is stored until the
+	// stock Save button runs `save_page`, and Discard brings the block back.
+	async function stageDeleteBlock(signature) {
+		const editor = editorApi();
+		const index = holderIndex(signature);
+		if (!editor || index === -1) return;
+		await editor.blocks.delete(index);
+		pendingRows.delete(signature);
+		pendingCols.delete(signature);
+		schedule();
+	}
+
+	// The stock widget keeps its own edit dialog behind a (hidden) control of its editor block.
+	function editBlock(signature) {
+		const editor = editorApi();
+		const holders = editor ? blockHolders(editor) : null;
+		const holder = holders && holders[holderIndex(signature)];
+		const control = holder && holder.querySelector(".widget-control .edit-button, .edit-button");
+		if (control) {
+			control.click();
+			return;
+		}
+		if (window.frappe && typeof frappe.show_alert === "function") {
+			frappe.show_alert({ message: text().noEditor, indicator: "orange" });
+		}
+	}
+
+	function closeMenu() {
+		if (!openMenu) return;
+		const button = openMenu.parentElement && openMenu.parentElement.querySelector(".nds-nb-more");
+		if (button) button.setAttribute("aria-expanded", "false");
+		openMenu.remove();
+		openMenu = null;
+	}
+
+	function menuItem(label, run, danger) {
+		const item = document.createElement("button");
+		item.type = "button";
+		item.className = "nds-nb-menu-item" + (danger ? " is-danger" : "");
+		item.setAttribute("role", "menuitem");
+		item.textContent = label;
+		item.addEventListener("click", (event) => {
+			event.preventDefault();
+			event.stopPropagation();
+			closeMenu();
+			run();
+		});
+		return item;
+	}
+
+	function toggleMenu(cell, block, button) {
+		const wasOpen = Boolean(openMenu) && openMenu.parentElement === cell;
+		closeMenu();
+		if (wasOpen) return;
+		const t = text();
+		const signature = blockSignature(block);
+		const menu = document.createElement("div");
+		menu.className = "nds-nb-menu";
+		menu.setAttribute("role", "menu");
+		if (WIDGET_TYPES[block.type]) {
+			menu.appendChild(menuItem(t.edit, () => editBlock(signature)));
+			menu.appendChild(menuItem(t.wider, () => resizeBlock(block, 1)));
+			menu.appendChild(menuItem(t.narrower, () => resizeBlock(block, -1)));
+		}
+		menu.appendChild(menuItem(t.remove, () => {
+			frappe.confirm(escapeHtml(t.stageConfirm(plainText(blockName(block)))), () => stageDeleteBlock(signature));
+		}, true));
+		cell.appendChild(menu);
+		button.setAttribute("aria-expanded", "true");
+		openMenu = menu;
+	}
+
+	function dragSide(event, cell) {
+		const rect = cell.getBoundingClientRect();
+		const left = event.clientX < rect.left + rect.width / 2;
+		const rtl = isRtl();
+		return { visual: left ? "left" : "right", side: left === !rtl ? "before" : "after" };
+	}
+
+	function clearDragMarks() {
+		document.querySelectorAll("#" + LAYER_ID + " .drop-left, #" + LAYER_ID + " .drop-right, #" + LAYER_ID + " .is-drop-target")
+			.forEach((node) => node.classList.remove("drop-left", "drop-right", "is-drop-target"));
+	}
+
+	function endDrag() {
+		dragSig = null;
+		clearDragMarks();
+		document.querySelectorAll("#" + LAYER_ID + " .is-dragging").forEach((node) => node.classList.remove("is-dragging"));
+	}
+
+	function iconSvg(path) {
+		return '<svg viewBox="0 0 16 16" width="14" height="14" aria-hidden="true" focusable="false">' + path + "</svg>";
+	}
+
+	function handleButton(cell, block) {
+		const t = text();
+		const signature = blockSignature(block);
+		const handle = document.createElement("span");
+		handle.className = "nds-nb-handle";
+		handle.setAttribute("role", "button");
+		handle.setAttribute("tabindex", "-1");
+		handle.setAttribute("draggable", "true");
+		handle.title = t.drag;
+		handle.setAttribute("aria-label", t.drag);
+		handle.innerHTML = iconSvg('<g fill="currentColor"><circle cx="5.5" cy="4" r="1.3"/><circle cx="10.5" cy="4" r="1.3"/><circle cx="5.5" cy="8" r="1.3"/><circle cx="10.5" cy="8" r="1.3"/><circle cx="5.5" cy="12" r="1.3"/><circle cx="10.5" cy="12" r="1.3"/></g>');
+		handle.addEventListener("dragstart", (event) => {
+			closeMenu();
+			dragSig = signature;
+			cell.classList.add("is-dragging");
+			if (event.dataTransfer) {
+				event.dataTransfer.effectAllowed = "move";
+				try { event.dataTransfer.setData("text/plain", signature); } catch (_) { /* optional */ }
+				try { event.dataTransfer.setDragImage(cell, 24, 24); } catch (_) { /* optional */ }
+			}
+		});
+		handle.addEventListener("dragend", endDrag);
+		return handle;
+	}
+
+	function moreButton(cell, block) {
 		const t = text();
 		const button = document.createElement("button");
 		button.type = "button";
-		button.className = "nds-nb-delete";
-		button.title = t.remove;
-		button.setAttribute("aria-label", t.remove);
-		button.innerHTML = '<svg viewBox="0 0 16 16" width="14" height="14" aria-hidden="true" focusable="false">' +
-			'<path d="M4 4l8 8M12 4l-8 8" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>';
+		button.className = "nds-nb-more";
+		button.title = t.options;
+		button.setAttribute("aria-label", t.options);
+		button.setAttribute("aria-haspopup", "menu");
+		button.setAttribute("aria-expanded", "false");
+		button.innerHTML = iconSvg('<g fill="currentColor"><circle cx="3" cy="8" r="1.4"/><circle cx="8" cy="8" r="1.4"/><circle cx="13" cy="8" r="1.4"/></g>');
 		button.addEventListener("click", (event) => {
 			event.preventDefault();
 			event.stopPropagation();
-			const name = plainText(blockName(block));
-			frappe.confirm(escapeHtml(t.confirm(name)), () => removeBlock(block));
+			toggleMenu(cell, block, button);
 		});
 		return button;
 	}
 
-	function renderLayer(host) {
-		const blocks = flaggedBlocks();
+	function bindCellDrop(cell, signature) {
+		cell.addEventListener("dragover", (event) => {
+			if (!dragSig || dragSig === signature) return;
+			event.preventDefault();
+			event.stopPropagation();
+			if (event.dataTransfer) event.dataTransfer.dropEffect = "move";
+			clearDragMarks();
+			cell.classList.add("drop-" + dragSide(event, cell).visual);
+		});
+		cell.addEventListener("dragleave", () => cell.classList.remove("drop-left", "drop-right"));
+		cell.addEventListener("drop", (event) => {
+			if (!dragSig) return;
+			event.preventDefault();
+			event.stopPropagation();
+			const moved = dragSig;
+			const side = dragSide(event, cell).side;
+			endDrag();
+			moveBlockTo(moved, { type: "cell", signature, side });
+		});
+	}
+
+	function bindZoneDrop(zone, target) {
+		zone.addEventListener("dragover", (event) => {
+			if (!dragSig) return;
+			event.preventDefault();
+			if (event.dataTransfer) event.dataTransfer.dropEffect = "move";
+			clearDragMarks();
+			zone.classList.add("is-drop-target");
+		});
+		zone.addEventListener("dragleave", (event) => {
+			if (!zone.contains(event.relatedTarget)) zone.classList.remove("is-drop-target");
+		});
+		zone.addEventListener("drop", (event) => {
+			if (!dragSig) return;
+			event.preventDefault();
+			const moved = dragSig;
+			endDrag();
+			moveBlockTo(moved, target);
+		});
+	}
+
+	// "+" asks what to add, then the stock creation dialog runs; Save places the new block
+	// in `row` (an existing row number, or one past the last for a new row).
+	function startRowAdd(row) {
+		normalizeRows();
+		openAddDialog(null, { row });
+	}
+
+	function rowAddButton(rowIndex) {
+		const t = text();
+		const button = document.createElement("button");
+		button.type = "button";
+		button.className = "nds-nb-row-add";
+		button.title = t.rowAdd;
+		button.setAttribute("aria-label", t.rowAdd);
+		button.innerHTML = plusIcon();
+		button.addEventListener("click", (event) => {
+			event.preventDefault();
+			startRowAdd(rowIndex);
+		});
+		return button;
+	}
+
+	function newRowButton() {
+		const t = text();
+		const button = document.createElement("button");
+		button.type = "button";
+		button.className = "nds-nb-row-new";
+		button.title = t.newRow;
+		button.setAttribute("aria-label", t.newRow);
+		button.innerHTML = plusIcon() + "<span>" + escapeHtml(t.newRow) + "</span>";
+		button.addEventListener("click", (event) => {
+			event.preventDefault();
+			startRowAdd(currentRows.length);
+		});
+		bindZoneDrop(button, { type: "new" });
+		return button;
+	}
+
+	function buildCell(block, pageData, editing) {
+		const cell = document.createElement("div");
+		cell.className = "nds-nb-cell nds-nb-" + block.type.replace(/_/g, "-");
+		cell.dataset.sig = blockSignature(block);
+		cell.style.setProperty("--nds-nb-col", String(spanOf(block)));
+
+		if (block.type === "header") {
+			const heading = document.createElement("h3");
+			heading.className = "nds-nb-heading";
+			heading.textContent = plainText(block.data.text);
+			cell.appendChild(heading);
+		} else if (block.type === "paragraph") {
+			const note = document.createElement("p");
+			note.className = "nds-nb-note";
+			note.textContent = plainText(block.data.text);
+			cell.appendChild(note);
+		} else {
+			let mounted = false;
+			try { mounted = mountWidget(cell, block, pageData); } catch (_) { mounted = false; }
+			if (!mounted) return null;
+		}
+		if (editing) {
+			cell.appendChild(handleButton(cell, block));
+			cell.appendChild(moreButton(cell, block));
+			bindCellDrop(cell, blockSignature(block));
+		}
+		return cell;
+	}
+
+	function renderLayer(host, editing) {
 		const ws = workspace();
 		const pageData = ws && ws.page_data;
 		const rtl = isRtl();
+
+		const pageName = currentPageName();
+		if (layoutPage !== pageName) {
+			pendingRows.clear();
+			pendingCols.clear();
+			pendingAdd = null;
+			layoutPage = pageName;
+		}
+
+		const blocks = layerBlocks(editing);
 		if (!blocks.length || !pageData) {
 			removeLayer();
+			currentRows = [];
 			return;
 		}
 
@@ -508,54 +869,56 @@ const newBlocks = (() => {
 		const current = ws.pages && ws._page ? ws.pages[ws._page.name] : null;
 		if (current && current !== pageData) return;
 
+		const rows = buildRows(blocks);
+		currentRows = rows.map((row) => row.map(blockSignature));
+
 		const sizes = Object.keys(WIDGET_TYPES).map((type) => {
 			const collection = pageData[WIDGET_TYPES[type][0]];
 			return collection && Array.isArray(collection.items) ? collection.items.length : 0;
 		}).join(",");
-		const editable = canEdit();
-		const signature = (rtl ? "rtl" : "ltr") + "|" + (editable ? "edit" : "view") + "|" + sizes + "|" + rawContent();
+		const signature = [
+			rtl ? "rtl" : "ltr", editing ? "edit" : "view", sizes, rawContent(),
+			JSON.stringify(currentRows), JSON.stringify(Array.from(pendingCols)),
+		].join("|");
 		const existing = document.getElementById(LAYER_ID);
 		if (existing && existing.parentElement === host && existing.dataset.signature === signature) return;
+		closeMenu();
 		if (existing) existing.remove();
 
 		const layer = document.createElement("section");
 		layer.id = LAYER_ID;
-		layer.className = "nds-nb";
+		layer.className = "nds-nb" + (editing ? " is-editing" : "");
 		layer.dataset.signature = signature;
 		layer.setAttribute("dir", rtl ? "rtl" : "ltr");
 		layer.setAttribute("lang", rtl ? "ar" : "en");
 
-		const grid = document.createElement("div");
-		grid.className = "nds-nb-grid";
-		layer.appendChild(grid);
+		const stack = document.createElement("div");
+		stack.className = "nds-nb-grid";
+		layer.appendChild(stack);
 		// Attach before building the widgets: charts size themselves from the DOM.
 		host.appendChild(layer);
 
-		blocks.forEach((block) => {
-			const cell = document.createElement("div");
-			cell.className = "nds-nb-cell nds-nb-" + block.type.replace(/_/g, "-");
-			cell.style.setProperty("--nds-nb-col", String(columnSpan(block)));
-
-			if (block.type === "header") {
-				const heading = document.createElement("h3");
-				heading.className = "nds-nb-heading";
-				heading.textContent = plainText(block.data.text);
-				cell.appendChild(heading);
-			} else if (block.type === "paragraph") {
-				const note = document.createElement("p");
-				note.className = "nds-nb-note";
-				note.textContent = plainText(block.data.text);
-				cell.appendChild(note);
-			} else {
-				let mounted = false;
-				try { mounted = mountWidget(cell, block, pageData); } catch (_) { mounted = false; }
-				if (!mounted) return;
+		rows.forEach((row, rowIndex) => {
+			const wrap = document.createElement("div");
+			wrap.className = "nds-nb-row-wrap";
+			wrap.dataset.row = String(rowIndex);
+			const grid = document.createElement("div");
+			grid.className = "nds-nb-row";
+			wrap.appendChild(grid);
+			row.forEach((block) => {
+				const cell = buildCell(block, pageData, editing);
+				if (cell) grid.appendChild(cell);
+			});
+			if (!grid.children.length) return;
+			if (editing) {
+				wrap.appendChild(rowAddButton(rowIndex));
+				bindZoneDrop(wrap, { type: "row", index: rowIndex });
 			}
-			if (editable) cell.appendChild(deleteButton(block));
-			grid.appendChild(cell);
+			stack.appendChild(wrap);
 		});
+		if (editing && stack.children.length) stack.appendChild(newRowButton());
 
-		if (!grid.children.length) layer.remove();
+		if (!stack.children.length) layer.remove();
 	}
 
 	// --- 5. edit-mode controls ---------------------------------------------
@@ -748,7 +1111,7 @@ const newBlocks = (() => {
 		} catch (_) { /* the stock editor keeps working */ }
 	}
 
-	function openAddDialog(key) {
+	function openAddDialog(key, context) {
 		if (!window.frappe || !frappe.ui || !frappe.ui.Dialog) return;
 		const t = text();
 		const options = addOptions();
@@ -768,6 +1131,7 @@ const newBlocks = (() => {
 			primary_action: (values) => {
 				const picked = options[labels.indexOf(values.kind)];
 				dialog.hide();
+				if (picked && context) pendingAdd = { row: context.row, type: picked.type };
 				if (picked) window.setTimeout(() => insertBlock(picked.type, key), 250);
 			},
 		});
@@ -1072,13 +1436,14 @@ const newBlocks = (() => {
 				return;
 			}
 			if (isEditMode(host)) {
-				removeLayer();
+				markNative();
+				renderLayer(host, true);
 				decorate(host, true);
 				decorateWidgets(host, true);
 				return;
 			}
 			markNative();
-			renderLayer(host);
+			renderLayer(host, false);
 			clearSlots(host);
 			decorateWidgets(host, false);
 		} catch (_) { /* never let this layer break the desk */ }
@@ -1101,6 +1466,14 @@ const newBlocks = (() => {
 				frappe.router.on("change", schedule);
 			}
 			window.addEventListener("popstate", schedule);
+			// The row "..." menu closes on any click outside it and on Escape.
+			document.addEventListener("click", (event) => {
+				const target = event.target;
+				if (openMenu && !openMenu.contains(target) && !(target && target.closest && target.closest(".nds-nb-more"))) closeMenu();
+			}, true);
+			document.addEventListener("keydown", (event) => {
+				if (event.key === "Escape") closeMenu();
+			});
 			if (window.$) $(document).on("page-change", schedule);
 			if (document.body) {
 				// Structure changes (render / re-render) and the Edit-mode class toggle.
