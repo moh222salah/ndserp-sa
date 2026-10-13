@@ -10,6 +10,8 @@ import { salesDashboard } from "./core/sales_dashboard.js";
 import { purchasesDashboard } from "./core/purchases_dashboard.js";
 import { accountsDashboard } from "./core/accounts_dashboard.js";
 import { warehouseDashboard } from "./core/warehouse_dashboard.js";
+import { assetsDashboard } from "./core/assets_dashboard.js";
+import { hrDashboard } from "./core/hr_dashboard.js";
 import { newBlocks } from "./core/new_blocks.js";
 import { smartSubmitActions } from "./core/smart_submit_actions.js";
 import { translationToggle } from "./core/translation_toggle.js";
@@ -1099,6 +1101,9 @@ $(document).ready(function () {
 	accountsDashboard.mount();
 	// Live stock KPIs, stock movement, distribution and shortage list.
 	warehouseDashboard.mount();
+	// Assets and HR dashboards (shared engine in core/workspace_dashboard_kit.js).
+	assetsDashboard.mount();
+	hrDashboard.mount();
 	// Sections / cards / shortcuts added in Workspace Edit mode render in the new design on all four dashboards.
 	newBlocks.mount();
 	// Save & Final Submit / Revert to Draft / Cancel & Delete on submittable

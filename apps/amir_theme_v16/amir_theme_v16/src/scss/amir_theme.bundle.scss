@@ -70,6 +70,9 @@
 // Live bilingual Purchases Dashboard; preserve the standard Frappe header.
 @import "components/purchase-dashboard";
 
+// Assets + HR dashboards — same KPI / chart / sections design as the other dashboards.
+@import "components/workspace-dashboards";
+
 // Master Files Workspace — isolated, presentation-only card styling.
 @import "components/master-files-workspace";
 

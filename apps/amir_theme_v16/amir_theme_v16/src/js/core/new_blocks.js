@@ -197,7 +197,9 @@ const newBlocks = (() => {
 				body.classList.contains("nds-sales-dashboard-ready") ||
 				body.classList.contains("nds-purchase-dashboard-ready") ||
 				body.classList.contains("nds-accounts-dashboard-ready") ||
-				root.classList.contains("nds-warehouse-dashboard-ready");
+				root.classList.contains("nds-warehouse-dashboard-ready") ||
+				root.classList.contains("nds-assets-dashboard-ready") ||
+				root.classList.contains("nds-hr-dashboard-ready");
 			if (!ready) return null;
 			const route = window.frappe && typeof frappe.get_route === "function" ? frappe.get_route() : [];
 			if (!Array.isArray(route) || route[0] !== "Workspaces") return null;
@@ -889,7 +891,7 @@ const newBlocks = (() => {
 	const HIDDEN_KEY = "nds_hidden";
 	const WIDGET_ATTR = "data-nds-widget";
 	const KPI_SELECTOR = '[class*="-kpi-card"][data-kpi]';
-	const PANEL_SELECTOR = ".nds-sales-panel, .nds-purchase-panel, .nds-warehouse-panel, .nds-accounts-panel";
+	const PANEL_SELECTOR = ".nds-sales-panel, .nds-purchase-panel, .nds-warehouse-panel, .nds-accounts-panel, .nds-assets-panel, .nds-hr-panel";
 
 	let pendingHidden = null;
 	let pendingPage = null;

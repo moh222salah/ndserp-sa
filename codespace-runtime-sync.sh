@@ -140,6 +140,18 @@ for key in required:
                 "WAREHOUSE_WORKSPACE_CSS=FAIL:MISSING_MARKERS:" + ",".join(missing)
             )
         print("WAREHOUSE_WORKSPACE_CSS=PASS")
+        required_assets_hr_css = (
+            ".nds-assets-workspace",
+            ".nds-assets-kpi-card",
+            ".nds-assets-nav-card",
+            ".nds-hr-workspace",
+            ".nds-hr-kpi-card",
+            ".nds-hr-nav-card",
+        )
+        missing = [marker for marker in required_assets_hr_css if marker not in css_compact]
+        if missing:
+            raise SystemExit("ASSETS_HR_DASHBOARDS_CSS=FAIL:MISSING_MARKERS:" + ",".join(missing))
+        print("ASSETS_HR_DASHBOARDS_CSS=PASS")
         required_accounts_css = (
             ".amt-accounts-workspace",
             ".codex-editor__redactor",
@@ -305,6 +317,11 @@ for key in required:
         if missing:
             raise SystemExit("WAREHOUSE_WORKSPACE_JS=FAIL:MISSING_MARKERS:" + ",".join(missing))
         print("WAREHOUSE_WORKSPACE_JS=PASS")
+        required_assets_hr_js = ("data-nds-dashboard-kit", "Assets Dashboard", "HR Dashboard", "Net Book Value", "Active Employees", "value_after_depreciation", "Leave Application", "frappe.client.get_list")
+        missing = [marker for marker in required_assets_hr_js if marker not in js]
+        if missing:
+            raise SystemExit("ASSETS_HR_DASHBOARDS_JS=FAIL:MISSING_MARKERS:" + ",".join(missing))
+        print("ASSETS_HR_DASHBOARDS_JS=PASS")
         required_accounts_js = (
             "amt-accounts-workspace",
             "nds-accounts-dashboard",

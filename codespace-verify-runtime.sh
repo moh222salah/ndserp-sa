@@ -277,6 +277,13 @@ for marker in 'nds-warehouse-workspace' 'nds-warehouse-dashboard' 'nds-warehouse
   fi
 done
 echo "BUILT_WAREHOUSE_WORKSPACE_JS=PASS"
+for marker in 'data-nds-dashboard-kit' 'Assets Dashboard' 'HR Dashboard' 'Net Book Value' 'Active Employees' 'value_after_depreciation' 'Leave Application' 'frappe.client.get_list'; do
+  if ! grep -Fq "$marker" "$LOCAL_JS_ASSET"; then
+    echo "BUILT_ASSETS_HR_DASHBOARDS_JS=FAIL:MISSING_MARKER:$marker"
+    exit 64
+  fi
+done
+echo "BUILT_ASSETS_HR_DASHBOARDS_JS=PASS"
 # Verify stable Accounts Dashboard UI/data-fetch markers. KPI values and invoice IDs are live DB data and must not be hard-coded in the bundle.
 for marker in 'amt-accounts-workspace' 'nds-accounts-dashboard' 'nds-accounts-kpi-grid' 'nds-accounts-kpi-indicator' 'nds-accounts-invoice-table' 'Accounts Dashboard' 'Net Profit (Month)' 'Expenses by Account' 'Revenue vs. Expenses' 'Unpaid Invoices' 'frappe.client.get_list' 'GL Entry' 'Sales Invoice' 'nds-accounts-rtl' 'nds-accounts-ltr'; do
   if ! grep -Fq "$marker" "$LOCAL_JS_ASSET"; then
@@ -372,6 +379,13 @@ for marker in 'nds-warehouse-workspace' 'nds-warehouse-dashboard' 'nds-warehouse
   fi
 done
 echo "SERVED_WAREHOUSE_WORKSPACE_JS=PASS"
+for marker in 'data-nds-dashboard-kit' 'Assets Dashboard' 'HR Dashboard' 'Net Book Value' 'Active Employees' 'value_after_depreciation' 'Leave Application' 'frappe.client.get_list'; do
+  if ! grep -Fq "$marker" "$SERVED_JS"; then
+    echo "SERVED_ASSETS_HR_DASHBOARDS_JS=FAIL:MISSING_MARKER:$marker"
+    exit 65
+  fi
+done
+echo "SERVED_ASSETS_HR_DASHBOARDS_JS=PASS"
 for marker in 'amt-accounts-workspace' 'nds-accounts-dashboard' 'nds-accounts-kpi-grid' 'nds-accounts-kpi-indicator' 'nds-accounts-invoice-table' 'Accounts Dashboard' 'Net Profit (Month)' 'Expenses by Account' 'Revenue vs. Expenses' 'Unpaid Invoices' 'frappe.client.get_list' 'GL Entry' 'Sales Invoice' 'nds-accounts-rtl' 'nds-accounts-ltr'; do
   if ! grep -Fq "$marker" "$SERVED_JS"; then
     echo "SERVED_ACCOUNTS_DASHBOARD_JS=FAIL:MISSING_MARKER:$marker"
