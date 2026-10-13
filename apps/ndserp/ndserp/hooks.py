@@ -172,6 +172,10 @@ doc_events = {
 	"Report": {
 		"validate": "ndserp.setup.custom_report_policy.reject_nonstandard_report",
 	},
+	"Sales Invoice": {
+		"validate": "ndserp.setup.sales_invoice_payment.validate",
+		"on_submit": "ndserp.setup.sales_invoice_payment.on_submit",
+	},
 }
 
 # Module managers only list/open Users in their module packs (plus themselves),
@@ -189,6 +193,7 @@ has_permission = {
 # Desk JS: filter Role Profiles on User form for module managers.
 doctype_js = {
 	"User": "public/js/user.js",
+	"Sales Invoice": "public/js/sales_invoice.js",
 }
 
 jinja = {

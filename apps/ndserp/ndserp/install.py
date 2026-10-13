@@ -59,6 +59,13 @@ def after_migrate():
 		frappe.log_error(title="ndserp: workspace fixture re-sync failed", message=frappe.get_traceback())
 
 	try:
+		from ndserp.setup import sales_invoice_payment
+
+		sales_invoice_payment.ensure_custom_fields()
+	except Exception:
+		frappe.log_error(title="ndserp: sales invoice custom fields failed", message=frappe.get_traceback())
+
+	try:
 		# Show/hide the POS workspace and retire English POSNext when pos_next
 		# is installed (no-op hide of the Ndserp POS tile when it is not).
 		workspace_policy.ensure_pos_workspace(verbose=False)
