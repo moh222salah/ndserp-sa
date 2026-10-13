@@ -166,6 +166,9 @@ const newBlocks = (() => {
 				earlier: "تقديم",
 				later: "تأخير",
 				laneAdd: "إضافة عنصر جديد",
+				editTitle: "تعديل العنوان",
+				titleLabel: "العنوان",
+				apply: "تطبيق",
 			noEditor: "تعذّر فتح التعديل لهذا العنصر.",
 			addTitle: "إضافة جديدة",
 			addKind: "ماذا تريد أن تضيف؟",
@@ -189,6 +192,9 @@ const newBlocks = (() => {
 				earlier: "Move earlier",
 				later: "Move later",
 				laneAdd: "Add a new item",
+				editTitle: "Edit title",
+				titleLabel: "Title",
+				apply: "Apply",
 			noEditor: "This item cannot be edited here.",
 			addTitle: "Add new",
 			addKind: "What do you want to add?",
@@ -485,6 +491,8 @@ const newBlocks = (() => {
 	let currentRows = [];
 	let dragSig = null;
 	let openMenu = null;
+	let openOwner = null;
+	let openButton = null;
 	let layoutPage = null;
 
 	function spanOf(block) {
@@ -636,10 +644,11 @@ const newBlocks = (() => {
 
 	function closeMenu() {
 		if (!openMenu) return;
-		const button = openMenu.parentElement && openMenu.parentElement.querySelector(".nds-nb-more");
-		if (button) button.setAttribute("aria-expanded", "false");
+		if (openButton) openButton.setAttribute("aria-expanded", "false");
 		openMenu.remove();
 		openMenu = null;
+		openOwner = null;
+		openButton = null;
 	}
 
 	function menuItem(label, run, danger) {
@@ -658,7 +667,7 @@ const newBlocks = (() => {
 	}
 
 	function toggleMenu(cell, block, button) {
-		const wasOpen = Boolean(openMenu) && openMenu.parentElement === cell;
+		const wasOpen = Boolean(openMenu) && openOwner === cell;
 		closeMenu();
 		if (wasOpen) return;
 		const t = text();
@@ -677,6 +686,8 @@ const newBlocks = (() => {
 		cell.appendChild(menu);
 		button.setAttribute("aria-expanded", "true");
 		openMenu = menu;
+		openOwner = cell;
+		openButton = button;
 	}
 
 	function dragSide(event, cell) {
@@ -1434,30 +1445,34 @@ const newBlocks = (() => {
 	//
 	// KPI cards, chart panels, the latest-documents table and the dashboards' section cards
 	// get the same Edit-mode controls as the new-block layer: a drag handle, a "..." menu
-	// (Wider / Narrower / Move earlier / Move later / Delete) and a "+" that ends every lane.
+	// (Edit / Move / Wider / Narrower / Delete) and a "+" that ends every lane.
 	// A lane is the container a group of such widgets sits in. Order and width are applied
 	// with CSS (`order`, `grid-column`), never by moving DOM nodes, so the dashboards can
-	// rebuild themselves at any time. Both ride along on the first block of the saved
-	// Workspace content (`data.nds_layout`), exactly like `nds_hidden`: the stock Save
-	// button stores them and Discard / reload throws the staged change away.
-	// Order needs a grid or flex lane; a plain block container keeps only Delete.
+	// rebuild themselves at any time. Order, width and edited titles ride along on the first
+	// block of the saved Workspace content (`data.nds_layout`), exactly like `nds_hidden`:
+	// the stock Save button stores them and the reload that follows draws them at once;
+	// Discard / reload throws a staged change away. Dragging uses pointer events (mouse and
+	// touch) and re-orders live while the pointer moves.
+	// Order needs a grid or flex lane; a plain block container keeps Edit / Delete only.
 
 	const LAYOUT_KEY = "nds_layout";
 	const MOVABLE_SELECTOR = "[" + WIDGET_ATTR + "], [" + CARD_ATTR + "]";
+	const HEADING_SELECTOR = '[class*="-kpi-label"], h2, h3';
 
 	let pendingLayout = null;
 	let pendingLayoutPage = null;
-	let layoutCache = { raw: null, layout: { o: {}, w: {} } };
+	let layoutCache = { raw: null, layout: { o: {}, w: {}, t: {} } };
 	let dragWidget = null;
 
 	function emptyLayout() {
-		return { o: {}, w: {} };
+		return { o: {}, w: {}, t: {} };
 	}
 
 	function cloneLayout(layout) {
 		const copy = emptyLayout();
 		Object.keys(layout.o).forEach((key) => { copy.o[key] = layout.o[key].slice(); });
 		Object.keys(layout.w).forEach((key) => { copy.w[key] = layout.w[key]; });
+		Object.keys(layout.t).forEach((key) => { copy.t[key] = layout.t[key]; });
 		return copy;
 	}
 
@@ -1479,6 +1494,11 @@ const newBlocks = (() => {
 						if (Number.isFinite(span) && span >= 1 && span <= 12) layout.w[key] = span;
 					});
 				}
+				if (parsed && parsed.t && typeof parsed.t === "object") {
+					Object.keys(parsed.t).forEach((key) => {
+						if (typeof parsed.t[key] === "string" && parsed.t[key].trim()) layout.t[key] = parsed.t[key].trim();
+					});
+				}
 			} catch (_) { /* a damaged value is ignored */ }
 		});
 		return layout;
@@ -1495,12 +1515,13 @@ const newBlocks = (() => {
 		return pendingLayout || savedLayout();
 	}
 
+	// Stages a layout change and draws it straight away.
 	function changeLayout(mutate) {
 		const next = cloneLayout(effectiveLayout());
 		mutate(next);
 		pendingLayout = next;
 		pendingLayoutPage = currentPageName();
-		schedule();
+		sync();
 	}
 
 	// Called while the stock editor saves: writes the layout onto the first block.
@@ -1510,7 +1531,7 @@ const newBlocks = (() => {
 		output.blocks.forEach((block) => {
 			if (block && block.data) delete block.data[LAYOUT_KEY];
 		});
-		if (!Object.keys(layout.o).length && !Object.keys(layout.w).length) return;
+		if (!Object.keys(layout.o).length && !Object.keys(layout.w).length && !Object.keys(layout.t).length) return;
 		const first = output.blocks.find((block) => block && block.data);
 		if (first) first.data[LAYOUT_KEY] = JSON.stringify(layout);
 	}
@@ -1571,6 +1592,21 @@ const newBlocks = (() => {
 		return match ? parseInt(match[1], 10) : 1;
 	}
 
+	// An edited title replaces the heading's text; removing the edit restores the original.
+	function applyLabel(node, layout) {
+		if (!node.hasAttribute(WIDGET_ATTR)) return;
+		const heading = node.querySelector(HEADING_SELECTOR);
+		if (!heading) return;
+		const wanted = layout.t[movableId(node)];
+		if (wanted) {
+			if (heading.dataset.ndsOriginal === undefined) heading.dataset.ndsOriginal = heading.textContent;
+			if (heading.textContent !== wanted) heading.textContent = wanted;
+		} else if (heading.dataset.ndsOriginal !== undefined) {
+			heading.textContent = heading.dataset.ndsOriginal;
+			delete heading.dataset.ndsOriginal;
+		}
+	}
+
 	function applyLane(lane, layout) {
 		const kind = laneKind(lane.parent);
 		const order = laneOrder(lane, layout);
@@ -1591,6 +1627,7 @@ const newBlocks = (() => {
 			const span = layout.w[movableId(node)];
 			const value = span && columns ? "span " + Math.min(span, columns) : "";
 			if (node.style.gridColumn !== value) node.style.gridColumn = value;
+			applyLabel(node, layout);
 		});
 	}
 
@@ -1620,6 +1657,42 @@ const newBlocks = (() => {
 		frappe.confirm(escapeHtml(text().stageConfirm(plainText(slotHint(node)))), () => stageDelete(node));
 	}
 
+	// Fixed widgets have no stock edit dialog, so "Edit" changes the title; a section card
+	// opens the stock dialog of its Workspace card block.
+	function editWidget(node) {
+		if (node.hasAttribute(WIDGET_ATTR)) {
+			if (!window.frappe || !frappe.ui || !frappe.ui.Dialog) return;
+			const t = text();
+			const id = node.getAttribute(WIDGET_ATTR);
+			const dialog = new frappe.ui.Dialog({
+				title: t.editTitle,
+				fields: [{ fieldname: "title", fieldtype: "Data", label: t.titleLabel, default: widgetLabel(node) }],
+				primary_action_label: t.apply,
+				primary_action: (values) => {
+					dialog.hide();
+					const value = String((values && values.title) || "").trim();
+					changeLayout((layout) => {
+						if (value) layout.t[id] = value;
+						else delete layout.t[id];
+					});
+				},
+			});
+			dialog.show();
+			return;
+		}
+		const editor = editorApi();
+		const holders = editor ? blockHolders(editor) : null;
+		const index = holders ? findCardIndex(holders, labelSet(slotLabels(node))) : -1;
+		const control = index === -1 ? null : holders[index].querySelector(".widget-control .edit-button, .edit-button");
+		if (control) {
+			control.click();
+			return;
+		}
+		if (window.frappe && typeof frappe.show_alert === "function") {
+			frappe.show_alert({ message: text().noEditor, indicator: "orange" });
+		}
+	}
+
 	function laneOf(node) {
 		const host = dashboardHost();
 		if (!host) return null;
@@ -1638,8 +1711,10 @@ const newBlocks = (() => {
 		menu.style.top = top + "px";
 	}
 
+	// The menu lives on <body>: a dashboard card has `overflow: hidden` and lifts with a
+	// `transform` on hover, which would clip it and break fixed positioning.
 	function toggleWidgetMenu(node, button) {
-		const wasOpen = Boolean(openMenu) && openMenu.parentElement === node;
+		const wasOpen = Boolean(openMenu) && openOwner === node;
 		closeMenu();
 		if (wasOpen) return;
 		const t = text();
@@ -1647,6 +1722,8 @@ const newBlocks = (() => {
 		const menu = document.createElement("div");
 		menu.className = "nds-nb-menu is-floating";
 		menu.setAttribute("role", "menu");
+		menu.setAttribute("dir", isRtl() ? "rtl" : "ltr");
+		menu.appendChild(menuItem(t.edit, () => editWidget(node)));
 		if (lane) {
 			const id = movableId(node);
 			const order = laneOrder(lane, effectiveLayout());
@@ -1661,10 +1738,12 @@ const newBlocks = (() => {
 			}
 		}
 		menu.appendChild(menuItem(t.remove, () => deleteWidget(node), true));
-		node.appendChild(menu);
+		document.body.appendChild(menu);
 		placeFloatingMenu(menu, button);
 		button.setAttribute("aria-expanded", "true");
 		openMenu = menu;
+		openOwner = node;
+		openButton = button;
 	}
 
 	function widgetMoreButton(node) {
@@ -1678,62 +1757,32 @@ const newBlocks = (() => {
 		return fresh;
 	}
 
-	function dropSide(event, target) {
-		const rect = target.getBoundingClientRect();
-		const source = dragWidget
-			? Array.from(document.querySelectorAll(MOVABLE_SELECTOR)).find((candidate) => movableId(candidate) === dragWidget.id)
-			: null;
-		const from = source ? source.getBoundingClientRect() : null;
-		const stacked = from && (rect.top >= from.bottom - 2 || rect.bottom <= from.top + 2);
-		if (stacked) {
-			const upper = event.clientY < rect.top + rect.height / 2;
-			return { visual: upper ? "top" : "bottom", side: upper ? "before" : "after" };
-		}
-		const left = event.clientX < rect.left + rect.width / 2;
-		return { visual: left ? "left" : "right", side: left === !isRtl() ? "before" : "after" };
-	}
-
-	function clearWidgetDragMarks() {
-		document.querySelectorAll(".nds-wd-top, .nds-wd-bottom, .nds-wd-left, .nds-wd-right")
-			.forEach((node) => node.classList.remove("nds-wd-top", "nds-wd-bottom", "nds-wd-left", "nds-wd-right"));
-	}
-
 	function endWidgetDrag() {
 		dragWidget = null;
-		clearWidgetDragMarks();
 		document.querySelectorAll(".nds-wd-dragging").forEach((node) => node.classList.remove("nds-wd-dragging"));
 	}
 
-	function bindWidgetDrop(node) {
-		if (node.__ndsWidgetDrop) return;
-		node.__ndsWidgetDrop = true;
-		node.addEventListener("dragover", (event) => {
-			if (!dragWidget || dragWidget.parent !== node.parentElement || movableId(node) === dragWidget.id) return;
-			event.preventDefault();
-			event.stopPropagation();
-			if (event.dataTransfer) event.dataTransfer.dropEffect = "move";
-			clearWidgetDragMarks();
-			node.classList.add("nds-wd-" + dropSide(event, node).visual);
-		});
-		node.addEventListener("dragleave", (event) => {
-			if (!node.contains(event.relatedTarget)) clearWidgetDragMarks();
-		});
-		node.addEventListener("drop", (event) => {
-			if (!dragWidget || dragWidget.parent !== node.parentElement) return;
-			event.preventDefault();
-			event.stopPropagation();
-			const moved = dragWidget.id;
-			const side = dropSide(event, node).side;
-			const targetId = movableId(node);
-			endWidgetDrag();
-			if (moved === targetId) return;
-			const lane = laneOf(node);
-			if (!lane) return;
-			const order = laneOrder(lane, effectiveLayout()).filter((id) => id !== moved);
-			const at = order.indexOf(targetId);
-			if (at === -1) return;
-			moveWithin(lane, moved, at + (side === "after" ? 1 : 0));
-		});
+	// Pointer-based drag: the handle follows the pointer, and whenever the pointer is over
+	// another widget of the same lane the dragged one takes its place at once.
+	function dragOver(event) {
+		if (!dragWidget) return;
+		const stack = document.elementsFromPoint(event.clientX, event.clientY);
+		let target = null;
+		for (const element of stack) {
+			const candidate = element.closest ? element.closest(MOVABLE_SELECTOR) : null;
+			if (candidate && candidate.parentElement === dragWidget.parent && movableId(candidate) !== dragWidget.id) {
+				target = candidate;
+				break;
+			}
+		}
+		if (!target) return;
+		const lane = laneOf(target);
+		if (!lane) return;
+		const order = laneOrder(lane, effectiveLayout());
+		const from = order.indexOf(dragWidget.id);
+		const to = order.indexOf(movableId(target));
+		if (from === -1 || to === -1 || from === to) return;
+		moveWithin(lane, dragWidget.id, to);
 	}
 
 	function widgetHandle(node) {
@@ -1742,21 +1791,22 @@ const newBlocks = (() => {
 		handle.className = "nds-nb-handle";
 		handle.setAttribute("role", "button");
 		handle.setAttribute("tabindex", "-1");
-		handle.setAttribute("draggable", "true");
 		handle.title = t.drag;
 		handle.setAttribute("aria-label", t.drag);
 		handle.innerHTML = iconSvg('<g fill="currentColor"><circle cx="5.5" cy="4" r="1.3"/><circle cx="10.5" cy="4" r="1.3"/><circle cx="5.5" cy="8" r="1.3"/><circle cx="10.5" cy="8" r="1.3"/><circle cx="5.5" cy="12" r="1.3"/><circle cx="10.5" cy="12" r="1.3"/></g>');
-		handle.addEventListener("dragstart", (event) => {
+		handle.addEventListener("pointerdown", (event) => {
+			if (event.pointerType === "mouse" && event.button !== 0) return;
+			event.preventDefault();
+			event.stopPropagation();
 			closeMenu();
 			dragWidget = { id: movableId(node), parent: node.parentElement };
 			node.classList.add("nds-wd-dragging");
-			if (event.dataTransfer) {
-				event.dataTransfer.effectAllowed = "move";
-				try { event.dataTransfer.setData("text/plain", dragWidget.id); } catch (_) { /* optional */ }
-				try { event.dataTransfer.setDragImage(node, 24, 24); } catch (_) { /* optional */ }
-			}
+			try { handle.setPointerCapture(event.pointerId); } catch (_) { /* optional */ }
 		});
-		handle.addEventListener("dragend", endWidgetDrag);
+		handle.addEventListener("pointermove", dragOver);
+		handle.addEventListener("pointerup", endWidgetDrag);
+		handle.addEventListener("pointercancel", endWidgetDrag);
+		handle.addEventListener("lostpointercapture", endWidgetDrag);
 		return handle;
 	}
 
@@ -1783,6 +1833,11 @@ const newBlocks = (() => {
 			Array.from(lane.children).forEach((child) => {
 				if (child.style.order) child.style.order = "";
 				if (child.style.gridColumn && (child.hasAttribute(WIDGET_ATTR) || child.hasAttribute(CARD_ATTR))) child.style.gridColumn = "";
+				const heading = child.querySelector ? child.querySelector(HEADING_SELECTOR) : null;
+				if (heading && heading.dataset.ndsOriginal !== undefined) {
+					heading.textContent = heading.dataset.ndsOriginal;
+					delete heading.dataset.ndsOriginal;
+				}
 			});
 		});
 	}
@@ -1801,12 +1856,8 @@ const newBlocks = (() => {
 				if (!idle) visible += 1;
 				const show = editable && !idle;
 				if (show) {
-					if (movable) {
-						ensureChild(node, "nds-nb-handle", widgetHandle);
-						bindWidgetDrop(node);
-					} else {
-						dropChild(node, "nds-nb-handle");
-					}
+					if (movable) ensureChild(node, "nds-nb-handle", widgetHandle);
+					else dropChild(node, "nds-nb-handle");
 					ensureChild(node, "nds-nb-more", widgetMoreButton);
 				} else {
 					dropChild(node, "nds-nb-handle");
@@ -1825,7 +1876,6 @@ const newBlocks = (() => {
 			if (!parent || !lanes.some((lane) => lane.parent === parent)) button.remove();
 		});
 	}
-
 
 	// --- driver ------------------------------------------------------------
 
@@ -1853,7 +1903,10 @@ const newBlocks = (() => {
 			clearSlots(host);
 			decorateWidgets(host, false);
 			decorateLayout(host, false);
-		} catch (_) { /* never let this layer break the desk */ }
+		} catch (error) {
+			// Never let this layer break the desk, but leave a trace for the console.
+			try { console.error("[nds-new-blocks]", error); } catch (_) { /* optional */ }
+		}
 	}
 
 	function schedule() {

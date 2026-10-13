@@ -412,8 +412,9 @@ body #page-Workspaces [data-nds-widget].nds-widget-gone {
   display: none !important;
 }
 
-// Edit-mode controls on the fixed widgets and section cards: drag handle, "..." menu and the
-// lane "+". The menu is fixed-position so a panel's overflow can never clip it.
+// Edit-mode controls on the fixed widgets and section cards: drag handle and "..." menu sit
+// together at the top centre of the card, clear of the title (inline start) and the icon
+// (inline end). Physical `left` is deliberate: the pair is centred in both directions.
 body #page-Workspaces [data-nds-widget],
 body #page-Workspaces [data-nds-card-labels] {
   position: relative;
@@ -422,26 +423,53 @@ body #page-Workspaces [data-nds-widget] > .nds-nb-handle,
 body #page-Workspaces [data-nds-card-labels] > .nds-nb-handle,
 body #page-Workspaces [data-nds-widget] > .nds-nb-more,
 body #page-Workspaces [data-nds-card-labels] > .nds-nb-more {
-  inset-block-start: 8px;
-  width: 24px;
-  height: 24px;
-  opacity: .92;
+  inset-block-start: 5px;
+  inset-inline-start: auto;
+  inset-inline-end: auto;
+  width: 22px;
+  height: 22px;
+  opacity: .95;
+  touch-action: none;
+  user-select: none;
 }
 body #page-Workspaces [data-nds-widget] > .nds-nb-handle,
-body #page-Workspaces [data-nds-card-labels] > .nds-nb-handle { inset-inline-start: 8px; }
+body #page-Workspaces [data-nds-card-labels] > .nds-nb-handle { left: calc(50% - 25px); cursor: grab; }
 body #page-Workspaces [data-nds-widget] > .nds-nb-more,
-body #page-Workspaces [data-nds-card-labels] > .nds-nb-more { inset-inline-end: 8px; }
-body #page-Workspaces .nds-nb-menu.is-floating {
+body #page-Workspaces [data-nds-card-labels] > .nds-nb-more { left: calc(50% + 3px); }
+body #page-Workspaces .nds-wd-dragging { opacity: .55; box-shadow: 0 0 0 2px var(--nds-nb-blue, #164E8F); }
+
+// The "..." menu of a fixed widget is a child of <body> (a card clips and transforms its
+// children), so it carries its own styling.
+body > .nds-nb-menu.is-floating {
   position: fixed;
-  inset-block-start: auto;
-  inset-inline-end: auto;
   z-index: 10050;
+  display: flex;
+  flex-direction: column;
+  min-width: 160px;
+  padding: 6px;
+  border: 1px solid #d6e0ec;
+  border-radius: 12px;
+  background: #fff;
+  box-shadow: 0 10px 28px rgba(10, 35, 66, .18);
 }
-body #page-Workspaces .nds-wd-dragging { opacity: .45; }
-body #page-Workspaces .nds-wd-left { box-shadow: -4px 0 0 0 var(--nds-nb-blue, #164E8F); }
-body #page-Workspaces .nds-wd-right { box-shadow: 4px 0 0 0 var(--nds-nb-blue, #164E8F); }
-body #page-Workspaces .nds-wd-top { box-shadow: 0 -4px 0 0 var(--nds-nb-blue, #164E8F); }
-body #page-Workspaces .nds-wd-bottom { box-shadow: 0 4px 0 0 var(--nds-nb-blue, #164E8F); }
+body > .nds-nb-menu.is-floating .nds-nb-menu-item {
+  display: block;
+  width: 100%;
+  padding: 8px 12px;
+  border: 0;
+  border-radius: 8px;
+  background: transparent;
+  color: #0A2342;
+  font: inherit;
+  font-size: 13px;
+  text-align: start;
+  cursor: pointer;
+}
+body > .nds-nb-menu.is-floating .nds-nb-menu-item:hover,
+body > .nds-nb-menu.is-floating .nds-nb-menu-item:focus-visible { background: #eef4fb; color: #164E8F; }
+body > .nds-nb-menu.is-floating .nds-nb-menu-item.is-danger { color: #c0392b; }
+body > .nds-nb-menu.is-floating .nds-nb-menu-item.is-danger:hover,
+body > .nds-nb-menu.is-floating .nds-nb-menu-item.is-danger:focus-visible { background: #fff5f5; color: #c0392b; }
 
 body #page-Workspaces .nds-nb-lane-add {
   grid-column: 1 / -1;
