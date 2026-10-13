@@ -1,6 +1,6 @@
 """Sales Invoice: payment type + paid value captured on the invoice itself.
 
-* Adds two fields to the Details tab (right after "Payment Due Date"):
+* Adds two fields to the Details tab (in the column under the invoice title):
   `nds_mode_of_payment` (نوع الدفع) and `nds_paid_amount` (القيمة المدفوعة).
 * On submit, a non-zero paid value is settled with a submitted Payment Entry
   (Receive) allocated to this invoice, using the chosen Mode of Payment's account.
@@ -20,7 +20,7 @@ CUSTOM_FIELDS = {
 			"label": "نوع الدفع",
 			"fieldtype": "Link",
 			"options": "Mode of Payment",
-			"insert_after": "due_date",
+			"insert_after": "title",
 			"no_copy": 1,
 			"allow_on_submit": 0,
 		},
