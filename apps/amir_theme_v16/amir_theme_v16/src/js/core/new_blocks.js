@@ -703,6 +703,29 @@ const newBlocks = (() => {
 		});
 	}
 
+	// A new widget block is complete once its stock creation dialog has filled in the
+	// block's name attribute. The stock Save button then runs, so the addition is stored
+	// and drawn on the dashboard at once. Closing the dialog removes the block: nothing is saved.
+	function saveWhenFilled(holder, type) {
+		const spec = WIDGET_TYPES[type];
+		const ws = workspace();
+		if (!spec || !holder || !ws) return;
+		const startedAt = Date.now();
+		const watch = window.setInterval(() => {
+			if (!holder.isConnected || ws.is_read_only || Date.now() - startedAt > 600000) {
+				window.clearInterval(watch);
+				return;
+			}
+			const node = holder.querySelector("[" + spec[2] + "]");
+			if (!node || !node.getAttribute(spec[2])) return;
+			window.clearInterval(watch);
+			window.setTimeout(() => {
+				const button = ws.page && ws.page.btn_primary;
+				if (button && button.length && !ws.is_read_only) button.trigger("click");
+			}, 350);
+		}, 300);
+	}
+
 	// Inserts an empty block of the chosen type; the stock block then opens its own
 	// creation dialog, exactly as when it is picked from the editor toolbox. Nothing is
 	// pre-filled: a new block never reuses the name of one that was deleted.
@@ -720,6 +743,7 @@ const newBlocks = (() => {
 			}
 			if (key) anchors.delete(key);
 			await editor.blocks.insert(type, {}, {}, index, true);
+			saveWhenFilled((blockHolders(editor) || [])[index], type);
 			schedule();
 		} catch (_) { /* the stock editor keeps working */ }
 	}
